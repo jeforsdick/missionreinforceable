@@ -56,7 +56,7 @@ function setPoints(v){
 function addPoints(n){ setPoints(points + n); }
 
 function percentScore(){ return maxPossible>0 ? Math.round((points/maxPossible)*100) : 0; }
-function summaryMessage(pct){ return pct>=75 ? "Amazing! Now let's go put it into practice." : "You are missing some important components. Please review the BIP and try again."; }
+function summaryMessage(pct){ return pct>=75 ? "Amazing, now let's go put it into practice." : "You are missing a few key components, please review the BIP and try again."; }
 
 function clearSummary(){
   const el = document.getElementById('session-summary');
@@ -76,7 +76,7 @@ function showSummary(){
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
 }
 
-/***** Content *****/
+/***** Content (has to include node id:1 with options) *****/
 const textNodes = [
   {
     id: 1,
@@ -205,4 +205,74 @@ const textNodes = [
   { id: 20, text: "Alex is thrilled with his chart move and reward. He completes the lesson without elopement. You win!",
     options: [ { text: "Play again", nextText: 1 } ] },
   {
-    id:
+    id: 21,
+    text: "Alex works well for 20 minutes. During transition he looks anxious again.",
+    options: [
+      { text: "Show the next activity on his schedule and offer another earning opportunity.", nextText: 20, correctness: 1 },
+      { text: "Rush the transition to save time.", nextText: 19, correctness: 0 }
+    ]
+  }
+];
+
+/***** Engine *****/
+function showTextNode(textNodeId) {
+  const textNode = textNodes.find(n => n.id === textNodeId);
+  if (!textNode) return;
+
+  if (textNodeId === 1) clearSummary(); // clear on start
+
+  storyText.textContent = textNode.text;
+
+  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+
+  textNode.options.forEach(option => {
+    const btn = document.createElement('button');
+    btn.textContent = option.text;
+    btn.addEventListener('click', () => selectOption(textNode, option));
+    choicesDiv.appendChild(btn);
+  });
+
+  // show summary when entering a terminal node
+  if (textNode.options.some(o => /restart|play again/i.test(o.text))) {
+    if (summaryShownForNodeId !== textNode.id) {
+      summaryShownForNodeId = textNode.id;
+      showSummary();
+    }
+  }
+}
+
+function selectOption(currentNode, option) {
+  const nextTextNodeId = option.nextText;
+  const correctness = typeof option.correctness !== 'undefined' ? option.correctness : null;
+
+  let award = 0;
+  if (correctness === 1) award = 10;
+  else if (correctness === 0.5) award = 5;
+
+  if (correctness !== null) maxPossible += 10;
+  addPoints(award);
+
+  logEvent({
+    nodeId: currentNode.id,
+    choiceText: option.text,
+    nextId: nextTextNodeId,
+    correctness,
+    points_awarded: award,
+    points_total: points
+  });
+
+  if (nextTextNodeId === 1) {
+    setPoints(0);
+    maxPossible = 0;
+    clearSummary();
+  }
+
+  showTextNode(nextTextNodeId);
+}
+
+/***** Start *****/
+window.addEventListener('load', () => {
+  if (scenarioTitle) scenarioTitle.textContent = "Mission: Reinforceable";
+  setPoints(0);
+  showTextNode(1);
+});
