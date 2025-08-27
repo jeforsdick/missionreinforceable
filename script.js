@@ -75,9 +75,13 @@ function percentScore() {
   return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
 }
 function summaryMessage(pct) {
-  if (pct >= 80) return "You crushed it! Your plan is strong—keep it up.";
-  if (pct >= 50) return "Nice work—solid start. A few steps could be tightened.";
-  return "Needs review. Revisit the BIP steps and try again.";
+  if (pct >= 80) {
+    return "Amazing job! Now let's go put it into practice!";
+  } else {
+    return "Review the BIP and try again.";
+  }
+}
+
 }
 function showSummary() {
   const old = document.getElementById('session-summary');
