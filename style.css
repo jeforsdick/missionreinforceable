@@ -88,3 +88,5 @@ h2 {
   100% { transform: scale(1); }
 }
 
+#session-summary strong { color: #16f3f8; }
+
