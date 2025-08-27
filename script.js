@@ -1,4 +1,4 @@
-/***** Tiny error banner so we can see issues on the page *****/
+/***** Error banner so problems are visible on-page (handy while editing) *****/
 window.addEventListener('error', (e) => {
   const box = document.createElement('div');
   box.style.cssText = 'position:sticky;top:0;z-index:9999;background:#b00020;color:#fff;padding:8px 12px;border-radius:8px;margin-bottom:8px;font-weight:700';
@@ -11,7 +11,6 @@ const storyText = document.getElementById('story-text');
 const choicesDiv = document.getElementById('choices');
 const scenarioTitle = document.getElementById('scenario-title');
 const teacherCodeEl = document.getElementById('teacher-code');
-const downloadBtn = document.getElementById('download-csv');
 const pointsEl = document.getElementById('points');
 
 /***** Teacher code from URL (?t=CODE) *****/
@@ -19,39 +18,15 @@ const params = new URLSearchParams(window.location.search);
 const TEACHER_CODE = (params.get('t') || 'TEST').toUpperCase();
 if (teacherCodeEl) teacherCodeEl.textContent = TEACHER_CODE;
 
-/***** Session + CSV log *****/
+/***** Session + event log *****/
 const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
 let eventLog = [];
-function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=0, points_total=0}){
-  eventLog.push({
-    ts:new Date().toISOString(),
-    session_id:SESSION_ID,
-    teacher_code:TEACHER_CODE,
-    node_id:nodeId, choice_text:choiceText, next_id:nextId,
-    correctness, points_awarded, points_total
-  });
-}
-function toCSV(rows){
-  if(!rows.length) return '';
-  const headers = Object.keys(rows[0]);
-  const esc = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
-  return [headers.join(','), ...rows.map(r => headers.map(h => esc(r[h])).join(','))].join('\n');
-}
-function downloadCSV(){
-  if(!eventLog.length){ alert('No events yet—make a choice first!'); return; }
-  const blob = new Blob([toCSV(eventLog)], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url;
-  a.download = `bip_game_${TEACHER_CODE}_${SESSION_ID}.csv`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-if(downloadBtn) downloadBtn.addEventListener('click', downloadCSV);
 
-/***** Points + summary *****/
+/***** Points + summary tracking *****/
 let points = 0;
 let maxPossible = 0;              // +10 per graded click (has correctness)
-let summaryShownForNodeId = null; // prevent duplicate box
+let summaryShownForNodeId = null; // prevents duplicate box
+let resultsSent = false;          // email once per session end
 
 function setPoints(v){
   points = v;
@@ -71,6 +46,55 @@ function clearSummary(){
   if(el) el.remove();
   summaryShownForNodeId = null;
 }
+
+/***** EMAIL RESULTS (via Google Apps Script) *****/
+// 1) Create a Google Apps Script web app using the snippet I gave you.
+// 2) Deploy and paste its URL below:
+const RESULTS_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+// This is the email the Apps Script will send to:
+const TO_EMAIL = 'jess.olson@utah.edu'; // informational only—actual send happens in your Apps Script
+
+async function sendResultsIfNeeded() {
+  if (resultsSent || !RESULTS_ENDPOINT || RESULTS_ENDPOINT.startsWith('PASTE_')) return;
+  resultsSent = true;
+
+  const payload = {
+    teacher_code: TEACHER_CODE,
+    session_id: SESSION_ID,
+    points,
+    max_possible: maxPossible,
+    percent: percentScore(),
+    timestamp: new Date().toISOString(),
+    to_email: TO_EMAIL,   // your Apps Script can read this, or just hardcode there
+    log: eventLog
+  };
+
+  try {
+    await fetch(RESULTS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const s = document.getElementById('session-summary');
+    if (s) {
+      const p = document.createElement('div');
+      p.style.marginTop = '6px'; p.style.opacity = '0.85';
+      p.textContent = 'Results sent. Thank you!';
+      s.appendChild(p);
+    }
+  } catch (err) {
+    const s = document.getElementById('session-summary');
+    if (s) {
+      const p = document.createElement('div');
+      p.style.marginTop = '6px'; p.style.opacity = '0.85';
+      p.textContent = 'Could not send results (maybe offline).';
+      s.appendChild(p);
+    }
+    resultsSent = false; // allow retry if they hit another end
+  }
+}
+
+/***** Show summary *****/
 function showSummary(){
   clearSummary();
   const pct = percentScore();
@@ -82,9 +106,23 @@ function showSummary(){
     <div style="margin-top:6px;">${summaryMessage(pct)}</div>
   `;
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
+
+  // Send results once per end screen
+  sendResultsIfNeeded();
 }
 
-/***** Content (COMPLETE & WELL-FORMED) *****/
+/***** Log helper *****/
+function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=0, points_total=0}){
+  eventLog.push({
+    ts:new Date().toISOString(),
+    session_id:SESSION_ID,
+    teacher_code:TEACHER_CODE,
+    node_id:nodeId, choice_text:choiceText, next_id:nextId,
+    correctness, points_awarded, points_total
+  });
+}
+
+/***** Content *****/
 const textNodes = [
   {
     id: 1,
@@ -273,6 +311,7 @@ function selectOption(currentNode, option) {
     setPoints(0);
     maxPossible = 0;
     clearSummary();
+    resultsSent = false; // new run can send again
   }
 
   showTextNode(nextTextNodeId);
