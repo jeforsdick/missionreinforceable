@@ -22,21 +22,14 @@ function setPoints(v){
   points = v;
   if (pointsEl){
     pointsEl.textContent = points;
-    // tiny pop animation if CSS class exists
     pointsEl.classList.remove('flash');
-    requestAnimationFrame(() => pointsEl.classList.add('flash'));
+    requestAnimationFrame(() => pointsEl.classList.add('flash')); // tiny pop animation
   }
 }
 function addPoints(n){ setPoints(points + n); }
 
-function clearSummary() {
-  const el = document.getElementById('session-summary');
-  if (el) el.remove();
-  summaryShownForNodeId = null;
-}
-
 /***** Summary tracking *****/
-let maxPossible = 0;   // 10 per graded step
+let maxPossible = 0;   // +10 per graded step (any option with correctness defined)
 let gradedSteps = 0;
 let summaryShownForNodeId = null;
 
@@ -81,18 +74,17 @@ function percentScore() {
   return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
 }
 function summaryMessage(pct) {
-  if (pct >= 80) {
-    return "Amazing job! Now let's go put it into practice!";
-  } else {
-    return "Review the BIP and try again.";
-  }
+  return pct >= 80
+    ? "Good job! Your plan is strong—keep it up."
+    : "Review the BIP and try again.";
 }
-
+function clearSummary() {
+  const el = document.getElementById('session-summary');
+  if (el) el.remove();
+  summaryShownForNodeId = null;
 }
 function showSummary() {
-  const old = document.getElementById('session-summary');
-  if (old) old.remove();
-
+  clearSummary(); // ensure only one box exists
   const pct = percentScore();
   const wrap = document.createElement('div');
   wrap.id = 'session-summary';
@@ -101,17 +93,15 @@ function showSummary() {
   wrap.style.border = '1px solid #444';
   wrap.style.borderRadius = '10px';
   wrap.style.background = '#2a2a2a';
-
   wrap.innerHTML = `
     <div style="font-weight:700; margin-bottom:6px;">Session Summary</div>
     <div>Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div>
     <div style="margin-top:6px;">${summaryMessage(pct)}</div>
   `;
-  // Insert above the buttons
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
 }
 
-/***** Content (you can edit text/options; correctness drives points) *****/
+/***** Content (edit freely; correctness drives points) *****/
 const textNodes = [
   {
     id: 1,
@@ -254,6 +244,9 @@ function showTextNode(textNodeId) {
   const textNode = textNodes.find(n => n.id === textNodeId);
   if (!textNode) return;
 
+  // Clear summary on the start node
+  if (textNodeId === 1) clearSummary();
+
   storyText.textContent = textNode.text;
 
   // Clear choices
@@ -301,12 +294,15 @@ function selectOption(currentNode, option) {
     points_total: points
   });
 
-  // Reset scoring if they are restarting (going back to node 1)
- if (nextTextNodeId === 1) {
-  setPoints(0);
-  maxPossible = 0;
-  gradedSteps = 0;
-  clearSummary();      // ← hides the box on Restart/Play again
+  // If restarting, reset state and hide summary
+  if (nextTextNodeId === 1) {
+    setPoints(0);
+    maxPossible = 0;
+    gradedSteps = 0;
+    clearSummary();
+  }
+
+  showTextNode(nextTextNodeId);
 }
 
 /***** Start *****/
