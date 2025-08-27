@@ -1,142 +1,35 @@
-/* ===== Base page ===== */
-:root {
-  --bg:#111; 
-  --panel:#222; 
-  --panel-2:#2a2a2a;
-  --text:#f4f4f4;
-  --accent:#1e90ff;
-  --accent-2:#16f3f8;
-  --glow: rgba(255, 0, 0, 0.7);     /* red outer glow from your original */
-  --btn-shadow: rgba(0, 255, 255, 0.3);
+:root{
+  --bg:#111; --panel:#222; --panel2:#2a2a2a; --text:#f4f4f4;
+  --accent:#1e90ff; --accent2:#16f3f8; --glow: rgba(255,0,0,.7);
 }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; padding:20px; background:var(--bg); color:var(--text);
+  font-family:'Courier New',monospace; line-height:1.6; display:flex; justify-content:center;
+}
+#game-container{
+  width:100%; max-width:900px; background:var(--panel); padding:28px; border-radius:12px;
+  box-shadow:0 0 15px var(--glow);
+}
+h1{margin:0 0 6px 0; text-align:center; text-shadow:0 0 6px #fdd;}
+h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6px #0ff}
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+#toolbar{display:flex; align-items:center; gap:12px; justify-content:space-between; margin-bottom:16px}
+#teacher-badge,#score-badge{background:#333; padding:8px 12px; border:1px solid #444; border-radius:10px; font-weight:700}
+#download-csv{padding:10px 12px; border-radius:10px; border:2px solid #222; background:var(--accent); color:#fff; font-weight:700; cursor:pointer}
+#download-csv:hover{background:var(--accent2); color:#000}
 
-body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: 'Courier New', Courier, monospace; /* original monospace vibe */
-  padding: 20px;
-  line-height: 1.6;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+#story-text{background:#333; padding:18px; border-radius:10px; min-height:110px; margin-bottom:14px}
+#choices{display:grid; gap:10px}
+#choices button{
+  background:var(--accent); border:2px solid #111; color:#fff; padding:12px 14px; border-radius:10px;
+  text-align:left; font-weight:700; cursor:pointer; transition:transform .12s ease, background .12s ease
 }
+#choices button:hover{background:var(--accent2); color:#000; transform:translateY(-2px)}
 
-/* ===== Main container ===== */
-#game-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: var(--panel);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px var(--glow);
-}
+#points.flash{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.25)}100%{transform:scale(1)}}
 
-/* ===== Headings ===== */
-h1 {
-  text-align: center;
-  margin: 0 0 6px 0;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
-  font-size: clamp(22px, 4vw, 36px);
-}
-
-h2 {
-  text-align: center;
-  color: var(--accent-2);
-  margin: 0 0 20px 0;
-  font-weight: 700;
-  text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5);
-}
-
-/* ===== Toolbar (teacher, points, CSV) ===== */
-#toolbar{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-#teacher-badge,
-#score-badge{
-  background:#333;
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:700;
-  border:1px solid #444;
-}
-
-#download-csv{
-  padding:10px 12px;
-  border-radius:10px;
-  border:2px solid #222;
-  font-weight:700;
-  cursor:pointer;
-  background:var(--accent);
-  color:#fff;
-  transition: all .15s ease;
-}
-#download-csv:hover{
-  background:var(--accent-2);
-  color:#000;
-  transform: translateY(-1px);
-}
-
-/* Points pop animation (triggered by JS adding .flash) */
-#points.flash { animation: pop .35s ease; }
-@keyframes pop {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
-
-/* ===== Story area ===== */
-#story-text {
-  background-color: #333;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  min-height: 100px;
-  font-size: 18px;
-}
-
-/* ===== Choices ===== */
-#choices {
-  display: grid;
-  gap: 10px;
-}
-
-#choices button,
-button {
-  padding: 12px 15px;
-  background-color: var(--accent);
-  border: 2px solid #222;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  text-align: left;
-}
-#choices button:hover,
-button:hover {
-  background-color: var(--accent-2);
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px var(--btn-shadow);
-}
-
-/* ===== Session Summary box ===== */
-#session-summary {
-  background: var(--panel-2);
-  border: 1px solid #444;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin: 14px 0 10px 0;
-}
-#session-summary strong { color: var(--accent-2); }
+#session-summary{background:var(--panel2); border:1px solid #444; border-radius:10px; padding:12px 14px; margin:14px 0 10px}
+#session-summary strong{color:var(--accent2)}
