@@ -1,20 +1,19 @@
-/***** Toolbar + teacher code + logging + CSV *****/
+/***** DOM refs *****/
 const storyText = document.getElementById('story-text');
 const choicesDiv = document.getElementById('choices');
 const scenarioTitle = document.getElementById('scenario-title');
 const teacherCodeEl = document.getElementById('teacher-code');
 const downloadBtn = document.getElementById('download-csv');
 
-// Teacher code from URL (?t=JESS01)
+/***** Teacher code from URL (?t=JESS01) *****/
 const params = new URLSearchParams(window.location.search);
 const TEACHER_CODE = (params.get('t') || 'TEST').toUpperCase();
-teacherCodeEl.textContent = TEACHER_CODE;
+if (teacherCodeEl) teacherCodeEl.textContent = TEACHER_CODE;
 
-// Session + event log
+/***** Session + logging for CSV *****/
 const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
 let eventLog = []; // rows: {ts, session_id, teacher_code, node_id, choice_text, next_id, correctness}
 
-// Log helper
 function logEvent({nodeId, choiceText, nextId, correctness=null}) {
   eventLog.push({
     ts: new Date().toISOString(),
@@ -26,8 +25,6 @@ function logEvent({nodeId, choiceText, nextId, correctness=null}) {
     correctness
   });
 }
-
-// CSV helpers
 function toCSV(rows){
   if (!rows.length) return '';
   const headers = Object.keys(rows[0]);
@@ -36,22 +33,21 @@ function toCSV(rows){
   return lines.join('\n');
 }
 function downloadCSV(){
-  if (eventLog.length === 0){ alert('No events yet—make a choice first!'); return; }
-  const csv = toCSV(eventLog);
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  if (!eventLog.length) { alert('No events yet—make a choice first!'); return; }
+  const blob = new Blob([toCSV(eventLog)], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = `bip_game_${TEACHER_CODE}_${SESSION_ID}.csv`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
-downloadBtn.addEventListener('click', downloadCSV);
+if (downloadBtn) downloadBtn.addEventListener('click', downloadCSV);
 
-/***** Game content *****/
+/***** Game state *****/
 let state = {};
 let currentScenario = 'reinforcement';
 
-// Minimal textNodes; you can keep expanding
+/***** Content (your original story, with optional correctness flags) *****/
 const textNodes = [
   {
     id: 1,
@@ -177,4 +173,53 @@ const textNodes = [
   },
   { id: 19, text: "Alex becomes upset and runs out of the classroom. Your proactive plan failed. Game over.",
     options: [ { text: "Restart", nextText: 1 } ] },
-  { id: 20, text: "Alex is thrilled with his chart move and reward. He completes the les
+  { id: 20, text: "Alex is thrilled with his chart move and reward. He completes the lesson without elopement. You win!",
+    options: [ { text: "Play again", nextText: 1 } ] },
+  {
+    id: 21,
+    text: "Alex works well for 20 minutes. During transition he looks anxious again.",
+    options: [
+      { text: "Show the next activity on his schedule and offer another earning opportunity.", nextText: 20, correctness: 1 },
+      { text: "Rush the transition to save time.", nextText: 19, correctness: 0 }
+    ]
+  }
+];
+
+/***** Engine (this is the part that fixes clicking) *****/
+function showTextNode(textNodeId) {
+  const textNode = textNodes.find(n => n.id === textNodeId);
+  if (!textNode) return;
+  storyText.textContent = textNode.text;
+
+  // Clear old choices
+  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+
+  // Render buttons and attach handler that passes the CURRENT NODE
+  textNode.options.forEach(option => {
+    const btn = document.createElement('button');
+    btn.textContent = option.text;
+    btn.addEventListener('click', () => selectOption(textNode, option));
+    choicesDiv.appendChild(btn);
+  });
+}
+
+function selectOption(currentNode, option) {
+  const nextTextNodeId = option.nextText;
+  const correctness = typeof option.correctness !== 'undefined' ? option.correctness : null;
+
+  // Log the click for CSV
+  logEvent({
+    nodeId: currentNode.id,
+    choiceText: option.text,
+    nextId: nextTextNodeId,
+    correctness
+  });
+
+  showTextNode(nextTextNodeId);
+}
+
+/***** Start *****/
+window.addEventListener('load', () => {
+  if (scenarioTitle) scenarioTitle.textContent = "Mission: Reinforceable";
+  showTextNode(1);
+});
