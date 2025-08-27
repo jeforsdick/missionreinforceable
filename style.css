@@ -1,13 +1,74 @@
+/* Page base */
+:root {
+  --bg:#111; --panel:#1e1e1e; --panel-2:#222; --text:#f4f4f4; --accent:#1e90ff; --accent-2:#16f3f8;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; padding: 16px;
+  background: var(--bg); color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* Toolbar */
 #toolbar{
-  max-width: 700px; margin: 0 auto 12px auto;
+  width: 100%; max-width: 800px;
   display: flex; align-items: center; gap: 10px;
+  margin: 0 auto 12px auto;
 }
 #teacher-badge{
-  background:#333; padding:8px 12px; border-radius:8px; font-weight:700;
+  background:#333; padding:8px 12px; border-radius:10px; font-weight:700;
 }
 #toolbar .spacer{ flex:1; }
 #download-csv{
-  padding:10px 12px; border-radius:6px; border:2px solid #222;
-  font-weight:700; cursor:pointer; background:#1e90ff; color:#fff;
+  padding:10px 12px; border-radius:10px; border:2px solid #222;
+  font-weight:700; cursor:pointer; background:var(--accent); color:#fff;
 }
-#download-csv:hover{ background:#16f3f8; color:#000; }
+#download-csv:hover{ background:var(--accent-2); color:#000; }
+
+/* Container */
+#game-container {
+  width: 100%; max-width: 800px;
+  margin: 0 auto;
+  background: var(--panel-2);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(22, 243, 248, 0.15);
+}
+
+/* Headings */
+h1 {
+  text-align: center; margin: 0 0 6px 0;
+  font-size: clamp(22px, 4vw, 36px);
+}
+h2 {
+  text-align: center; margin: 0 0 18px 0;
+  color: var(--accent-2); font-weight: 600;
+}
+
+/* Story + choices */
+#story-text {
+  background: #2a2a2a;
+  padding: 16px;
+  border-radius: 12px;
+  min-height: 100px;
+  font-size: clamp(16px, 2.5vw, 18px);
+  margin-bottom: 16px;
+}
+
+#choices { display: grid; gap: 10px; }
+#choices button {
+  padding: 12px 14px;
+  background: var(--accent);
+  border: 2px solid #111;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 12px;
+  font-size: 16px;
+  text-align: left;
+  transition: transform .12s ease, background .12s ease, color .12s ease;
+}
+#choices button:hover { background: var(--accent-2); color:#000; transform: translateY(-1px); }
