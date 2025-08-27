@@ -29,48 +29,10 @@ function setPoints(v){
 }
 function addPoints(n){ setPoints(points + n); }
 
-// Track how many points were possible based on graded steps (correctness present)
+/***** Summary tracking *****/
 let maxPossible = 0;   // 10 per graded step
-let gradedSteps = 0;   // number of graded choices made
-
-function isTerminalNode(node) {
-  if (!node || !node.options) return false;
-  return node.options.some(o => /restart|play again/i.test(o.text));
-}
-
-function percentScore() {
-  return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
-}
-
-function summaryMessage(pct) {
-  if (pct >= 80) return "You crushed it! Your plan is strong—keep it up.";
-  if (pct >= 50) return "Nice work—solid start. A few steps could be tightened.";
-  return "Needs review. Revisit the BIP steps and try again.";
-}
-
-function showSummary() {
-  // remove any previous summary
-  const old = document.getElementById('session-summary');
-  if (old) old.remove();
-
-  const pct = percentScore();
-  const wrap = document.createElement('div');
-  wrap.id = 'session-summary';
-  wrap.style.margin = '14px 0 0';
-  wrap.style.padding = '12px 14px';
-  wrap.style.border = '1px solid #444';
-  wrap.style.borderRadius = '10px';
-  wrap.style.background = '#2a2a2a';
-
-  wrap.innerHTML = `
-    <div style="font-weight:700; margin-bottom:6px;">Session Summary</div>
-    <div>Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div>
-    <div style="margin-top:6px;">${summaryMessage(pct)}</div>
-  `;
-  // insert above the buttons
-  choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
-}
-
+let gradedSteps = 0;
+let summaryShownForNodeId = null;
 
 /***** CSV helpers *****/
 function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=0, points_total=points}) {
@@ -104,9 +66,40 @@ function downloadCSV(){
 }
 if (downloadBtn) downloadBtn.addEventListener('click', downloadCSV);
 
-/***** Game state *****/
-let state = {};
-let currentScenario = 'reinforcement';
+/***** Helpers for terminal detection + summary *****/
+function isTerminalNode(node) {
+  if (!node || !node.options) return false;
+  return node.options.some(o => /restart|play again/i.test(o.text));
+}
+function percentScore() {
+  return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
+}
+function summaryMessage(pct) {
+  if (pct >= 80) return "You crushed it! Your plan is strong—keep it up.";
+  if (pct >= 50) return "Nice work—solid start. A few steps could be tightened.";
+  return "Needs review. Revisit the BIP steps and try again.";
+}
+function showSummary() {
+  const old = document.getElementById('session-summary');
+  if (old) old.remove();
+
+  const pct = percentScore();
+  const wrap = document.createElement('div');
+  wrap.id = 'session-summary';
+  wrap.style.margin = '14px 0 0';
+  wrap.style.padding = '12px 14px';
+  wrap.style.border = '1px solid #444';
+  wrap.style.borderRadius = '10px';
+  wrap.style.background = '#2a2a2a';
+
+  wrap.innerHTML = `
+    <div style="font-weight:700; margin-bottom:6px;">Session Summary</div>
+    <div>Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div>
+    <div style="margin-top:6px;">${summaryMessage(pct)}</div>
+  `;
+  // Insert above the buttons
+  choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
+}
 
 /***** Content (you can edit text/options; correctness drives points) *****/
 const textNodes = [
@@ -250,6 +243,7 @@ const textNodes = [
 function showTextNode(textNodeId) {
   const textNode = textNodes.find(n => n.id === textNodeId);
   if (!textNode) return;
+
   storyText.textContent = textNode.text;
 
   // Clear choices
@@ -262,6 +256,12 @@ function showTextNode(textNodeId) {
     btn.addEventListener('click', () => selectOption(textNode, option));
     choicesDiv.appendChild(btn);
   });
+
+  // If we just entered a terminal node, show the summary (once per node)
+  if (isTerminalNode(textNode) && summaryShownForNodeId !== textNode.id) {
+    summaryShownForNodeId = textNode.id;
+    showSummary();
+  }
 }
 
 function selectOption(currentNode, option) {
@@ -273,7 +273,7 @@ function selectOption(currentNode, option) {
   if (correctness === 1) award = 10;
   else if (correctness === 0.5) award = 5;
 
-  // Count this as a graded step if correctness was provided
+  // Count graded step
   if (correctness !== null) {
     maxPossible += 10;
     gradedSteps += 1;
@@ -281,7 +281,7 @@ function selectOption(currentNode, option) {
 
   addPoints(award);
 
-  // Log click (with points)
+  // Log click
   logEvent({
     nodeId: currentNode.id,
     choiceText: option.text,
@@ -291,15 +291,15 @@ function selectOption(currentNode, option) {
     points_total: points
   });
 
-  // Look ahead at the next node to see if it's terminal
-  const nextNode = textNodes.find(n => n.id === nextTextNodeId);
+  // Reset scoring if they are restarting (going back to node 1)
+  if (nextTextNodeId === 1) {
+    setPoints(0);
+    maxPossible = 0;
+    gradedSteps = 0;
+    summaryShownForNodeId = null;
+  }
 
   showTextNode(nextTextNodeId);
-
-  // If this was the last screen (has Restart/Play again), show summary box
-  if (isTerminalNode(nextNode)) {
-    showSummary();
-  }
 }
 
 /***** Start *****/
