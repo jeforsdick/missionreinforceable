@@ -56,7 +56,7 @@ function setPoints(v){
 function addPoints(n){ setPoints(points + n); }
 
 function percentScore(){ return maxPossible>0 ? Math.round((points/maxPossible)*100) : 0; }
-function summaryMessage(pct){ return pct>=75 ? "Amazing! Now let's go put it into practice." : "You are missing a few important components, Review the BIP and try again."; }
+function summaryMessage(pct){ return pct>=75 ? "Amazing! Now let's go put it into practice." : "You are missing some important components. Please review the BIP and try again."; }
 
 function clearSummary(){
   const el = document.getElementById('session-summary');
