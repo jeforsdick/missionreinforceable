@@ -1,0 +1,13 @@
+#toolbar{
+  max-width: 700px; margin: 0 auto 12px auto;
+  display: flex; align-items: center; gap: 10px;
+}
+#teacher-badge{
+  background:#333; padding:8px 12px; border-radius:8px; font-weight:700;
+}
+#toolbar .spacer{ flex:1; }
+#download-csv{
+  padding:10px 12px; border-radius:6px; border:2px solid #222;
+  font-weight:700; cursor:pointer; background:#1e90ff; color:#fff;
+}
+#download-csv:hover{ background:#16f3f8; color:#000; }
