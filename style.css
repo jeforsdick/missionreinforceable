@@ -72,3 +72,19 @@ h2 {
   transition: transform .12s ease, background .12s ease, color .12s ease;
 }
 #choices button:hover { background: var(--accent-2); color:#000; transform: translateY(-1px); }
+
+#score-badge{
+  background:#2c2c2c;
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:700;
+  border:1px solid #444;
+}
+
+#points.flash { animation: pop .35s ease; }
+@keyframes pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
