@@ -14,7 +14,6 @@ if (teacherCodeEl) teacherCodeEl.textContent = TEACHER_CODE;
 /***** Session + logging *****/
 const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
 let eventLog = [];
-// rows: {ts, session_id, teacher_code, node_id, choice_text, next_id, correctness, points_awarded, points_total}
 
 /***** Points (UI + helpers) *****/
 let points = 0;
@@ -23,14 +22,13 @@ function setPoints(v){
   if (pointsEl){
     pointsEl.textContent = points;
     pointsEl.classList.remove('flash');
-    requestAnimationFrame(() => pointsEl.classList.add('flash')); // tiny pop animation
+    requestAnimationFrame(() => pointsEl.classList.add('flash'));
   }
 }
 function addPoints(n){ setPoints(points + n); }
 
 /***** Summary tracking *****/
-let maxPossible = 0;   // +10 per graded step (any option with correctness defined)
-let gradedSteps = 0;
+let maxPossible = 0;   // +10 per graded step
 let summaryShownForNodeId = null;
 
 /***** CSV helpers *****/
@@ -65,10 +63,9 @@ function downloadCSV(){
 }
 if (downloadBtn) downloadBtn.addEventListener('click', downloadCSV);
 
-/***** Helpers for terminal detection + summary *****/
+/***** Helpers for summary *****/
 function isTerminalNode(node) {
-  if (!node || !node.options) return false;
-  return node.options.some(o => /restart|play again/i.test(o.text));
+  return node && node.options && node.options.some(o => /restart|play again/i.test(o.text));
 }
 function percentScore() {
   return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
@@ -84,7 +81,7 @@ function clearSummary() {
   summaryShownForNodeId = null;
 }
 function showSummary() {
-  clearSummary(); // ensure only one box exists
+  clearSummary();
   const pct = percentScore();
   const wrap = document.createElement('div');
   wrap.id = 'session-summary';
@@ -101,7 +98,7 @@ function showSummary() {
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
 }
 
-/***** Content (edit freely; correctness drives points) *****/
+/***** Game content (abbreviated for clarity) *****/
 const textNodes = [
   {
     id: 1,
@@ -113,130 +110,16 @@ const textNodes = [
   },
   {
     id: 2,
-    text: "You're in your classroom when a student bolts out the door. It's Alex, a child with autism known to elope when overstimulated. What do you do?",
+    text: "Alex bolts out the door. What do you do?",
     options: [
       { text: "Run after Alex immediately.", nextText: 3, correctness: 0 },
       { text: "Call the office for backup first.", nextText: 4, correctness: 1 }
     ]
   },
-  {
-    id: 3,
-    text: "You sprint after Alex, but they're fast. They reach the exit doors before you. What now?",
-    options: [
-      { text: "Use Alex's name and a calming voice.", nextText: 5, correctness: 1 },
-      { text: "Physically block the door.", nextText: 6, correctness: 0 }
-    ]
-  },
-  {
-    id: 4,
-    text: "You radio for help. While waiting, Alex gets farther. You exit your room to see where they are.",
-    options: [
-      { text: "Split up with another teacher to search.", nextText: 7, correctness: 1 },
-      { text: "Check the playground area alone.", nextText: 8, correctness: 0 }
-    ]
-  },
-  {
-    id: 5,
-    text: "Alex slows down slightly and looks at you. You recall his favorite song and hum it.",
-    options: [
-      { text: "Approach slowly while singing.", nextText: 9, correctness: 1 },
-      { text: "Try to grab him now.", nextText: 10, correctness: 0 }
-    ]
-  },
-  { id: 6, text: "You block the door. Alex panics, pushes you hard, and runs. The situation escalates. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  {
-    id: 7,
-    text: "You find Alex near the parking lot. He's crying and seems overwhelmed.",
-    options: [
-      { text: "Sit at a distance and wait.", nextText: 9, correctness: 1 },
-      { text: "Approach quickly and grab him.", nextText: 10, correctness: 0 }
-    ]
-  },
-  { id: 8, text: "No sign of Alex. You get a call — he's out the front gate. The elopement wasn't contained in time. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  { id: 9, text: "Alex calms down and lets you near him. You gently guide him back inside using his visual schedule. Crisis averted. You win!",
-    options: [ { text: "Play again", nextText: 1 } ] },
-  { id: 10, text: "Alex panics at your sudden approach and runs away. The situation worsens. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-
-  // Proactive path
-  {
-    id: 11,
-    text: "Before class, you prepare a chart move system for Alex and place visual boundaries in the classroom. How do you start the day?",
-    options: [
-      { text: "Give Alex a clear visual schedule for the day.", nextText: 12, correctness: 1 },
-      { text: "Jump straight into the lesson without preparation.", nextText: 13, correctness: 0 }
-    ]
-  },
-  {
-    id: 12,
-    text: "Alex smiles when he sees his schedule. 'I know what's happening today!' he says with relief.",
-    options: [
-      { text: "Remind him about earning chart moves for staying in designated areas.", nextText: 14, correctness: 1 },
-      { text: "Start the first activity without mentioning the reward system.", nextText: 15, correctness: 0 }
-    ]
-  },
-  {
-    id: 13,
-    text: "Alex looks confused and anxious. He starts rocking and looking at the door.",
-    options: [
-      { text: "Stop and provide his visual schedule now.", nextText: 12, correctness: 1 },
-      { text: "Ignore the warning signs and continue teaching.", nextText: 16, correctness: 0 }
-    ]
-  },
-  {
-    id: 14,
-    text: "Alex points to his chair. 'If I stay here during math, I get a chart move, right?' He seems engaged with the system.",
-    options: [
-      { text: "Enthusiastically confirm and praise his understanding.", nextText: 17, correctness: 1 },
-      { text: "Simply nod and begin teaching without emphasis.", nextText: 15, correctness: 0 }
-    ]
-  },
-  {
-    id: 15,
-    text: "Alex stays in his seat but looks frequently at the door. He's not fully engaged in the lesson.",
-    options: [
-      { text: "Give specific praise and a chart move for staying in his area.", nextText: 17, correctness: 1 },
-      { text: "Continue teaching without acknowledging his appropriate behavior.", nextText: 16, correctness: 0 }
-    ]
-  },
-  {
-    id: 16,
-    text: "Alex stands up suddenly and walks toward the door. This is a precursor to elopement.",
-    options: [
-      { text: "Calmly remind him about earning chart moves and redirect.", nextText: 18, correctness: 1 },
-      { text: "Tell him firmly to sit down immediately.", nextText: 19, correctness: 0 }
-    ]
-  },
-  {
-    id: 17,
-    text: "'Alex, great job staying in your learning space! That's a chart move!' He smiles and continues working.",
-    options: [
-      { text: "Let him spin the reward wheel since he reached a special symbol.", nextText: 20, correctness: 1 },
-      { text: "Continue with the lesson, maintaining the positive momentum.", nextText: 21, correctness: 1 }
-    ]
-  },
-  {
-    id: 18,
-    text: "Alex hesitates, then returns to his seat. 'Can I get a chart move for coming back?' he asks.",
-    options: [
-      { text: "Yes! Immediately reinforce this replacement behavior.", nextText: 20, correctness: 1 },
-      { text: "No, only rewards for never leaving.", nextText: 19, correctness: 0 }
-    ]
-  },
-  { id: 19, text: "Alex becomes upset and runs out of the classroom. Your proactive plan failed. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  { id: 20, text: "Alex is thrilled with his chart move and reward. He completes the lesson without elopement. You win!",
-    options: [ { text: "Play again", nextText: 1 } ] },
-  {
-    id: 21,
-    text: "Alex works well for 20 minutes. During transition he looks anxious again.",
-    options: [
-      { text: "Show the next activity on his schedule and offer another earning opportunity.", nextText: 20, correctness: 1 },
-      { text: "Rush the transition to save time.", nextText: 19, correctness: 0 }
-    ]
-  }
+  // … keep your other nodes here with correctness: 1 or 0 …
+  { id: 6, text: "Game over.", options: [ { text: "Restart", nextText: 1 } ] },
+  { id: 9, text: "Crisis averted. You win!", options: [ { text: "Play again", nextText: 1 } ] },
+  // etc.
 ];
 
 /***** Engine *****/
@@ -244,15 +127,11 @@ function showTextNode(textNodeId) {
   const textNode = textNodes.find(n => n.id === textNodeId);
   if (!textNode) return;
 
-  // Clear summary on the start node
-  if (textNodeId === 1) clearSummary();
+  if (textNodeId === 1) clearSummary();  // remove summary on restart
 
   storyText.textContent = textNode.text;
-
-  // Clear choices
   while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
 
-  // Render choices
   textNode.options.forEach(option => {
     const btn = document.createElement('button');
     btn.textContent = option.text;
@@ -260,7 +139,6 @@ function showTextNode(textNodeId) {
     choicesDiv.appendChild(btn);
   });
 
-  // If we just entered a terminal node, show the summary (once per node)
   if (isTerminalNode(textNode) && summaryShownForNodeId !== textNode.id) {
     summaryShownForNodeId = textNode.id;
     showSummary();
@@ -271,20 +149,13 @@ function selectOption(currentNode, option) {
   const nextTextNodeId = option.nextText;
   const correctness = typeof option.correctness !== 'undefined' ? option.correctness : null;
 
-  // Scoring: correct +10, partial +5, incorrect +0
   let award = 0;
   if (correctness === 1) award = 10;
   else if (correctness === 0.5) award = 5;
 
-  // Count graded step
-  if (correctness !== null) {
-    maxPossible += 10;
-    gradedSteps += 1;
-  }
-
+  if (correctness !== null) maxPossible += 10;
   addPoints(award);
 
-  // Log click
   logEvent({
     nodeId: currentNode.id,
     choiceText: option.text,
@@ -294,11 +165,9 @@ function selectOption(currentNode, option) {
     points_total: points
   });
 
-  // If restarting, reset state and hide summary
   if (nextTextNodeId === 1) {
     setPoints(0);
     maxPossible = 0;
-    gradedSteps = 0;
     clearSummary();
   }
 
