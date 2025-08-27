@@ -29,6 +29,12 @@ function setPoints(v){
 }
 function addPoints(n){ setPoints(points + n); }
 
+function clearSummary() {
+  const el = document.getElementById('session-summary');
+  if (el) el.remove();
+  summaryShownForNodeId = null;
+}
+
 /***** Summary tracking *****/
 let maxPossible = 0;   // 10 per graded step
 let gradedSteps = 0;
@@ -296,14 +302,11 @@ function selectOption(currentNode, option) {
   });
 
   // Reset scoring if they are restarting (going back to node 1)
-  if (nextTextNodeId === 1) {
-    setPoints(0);
-    maxPossible = 0;
-    gradedSteps = 0;
-    summaryShownForNodeId = null;
-  }
-
-  showTextNode(nextTextNodeId);
+ if (nextTextNodeId === 1) {
+  setPoints(0);
+  maxPossible = 0;
+  gradedSteps = 0;
+  clearSummary();      // ← hides the box on Restart/Play again
 }
 
 /***** Start *****/
