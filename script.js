@@ -1,20 +1,36 @@
-/***** DOM refs *****/
+/***** DOM handles *****/
 const storyText = document.getElementById('story-text');
 const choicesDiv = document.getElementById('choices');
 const scenarioTitle = document.getElementById('scenario-title');
 const teacherCodeEl = document.getElementById('teacher-code');
 const downloadBtn = document.getElementById('download-csv');
+const pointsEl = document.getElementById('points');
 
 /***** Teacher code from URL (?t=JESS01) *****/
 const params = new URLSearchParams(window.location.search);
 const TEACHER_CODE = (params.get('t') || 'TEST').toUpperCase();
 if (teacherCodeEl) teacherCodeEl.textContent = TEACHER_CODE;
 
-/***** Session + logging for CSV *****/
+/***** Session + logging *****/
 const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-let eventLog = []; // rows: {ts, session_id, teacher_code, node_id, choice_text, next_id, correctness}
+let eventLog = [];
+// rows: {ts, session_id, teacher_code, node_id, choice_text, next_id, correctness, points_awarded, points_total}
 
-function logEvent({nodeId, choiceText, nextId, correctness=null}) {
+/***** Points (UI + helpers) *****/
+let points = 0;
+function setPoints(v){
+  points = v;
+  if (pointsEl){
+    pointsEl.textContent = points;
+    // tiny pop animation if CSS class exists
+    pointsEl.classList.remove('flash');
+    requestAnimationFrame(() => pointsEl.classList.add('flash'));
+  }
+}
+function addPoints(n){ setPoints(points + n); }
+
+/***** CSV helpers *****/
+function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=0, points_total=points}) {
   eventLog.push({
     ts: new Date().toISOString(),
     session_id: SESSION_ID,
@@ -22,7 +38,9 @@ function logEvent({nodeId, choiceText, nextId, correctness=null}) {
     node_id: nodeId,
     choice_text: choiceText,
     next_id: nextId,
-    correctness
+    correctness,
+    points_awarded,
+    points_total
   });
 }
 function toCSV(rows){
@@ -33,7 +51,7 @@ function toCSV(rows){
   return lines.join('\n');
 }
 function downloadCSV(){
-  if (!eventLog.length) { alert('No events yet—make a choice first!'); return; }
+  if (!eventLog.length){ alert('No events yet—make a choice first!'); return; }
   const blob = new Blob([toCSV(eventLog)], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -47,7 +65,7 @@ if (downloadBtn) downloadBtn.addEventListener('click', downloadCSV);
 let state = {};
 let currentScenario = 'reinforcement';
 
-/***** Content (your original story, with optional correctness flags) *****/
+/***** Content (you can edit text/options; correctness drives points) *****/
 const textNodes = [
   {
     id: 1,
@@ -185,16 +203,16 @@ const textNodes = [
   }
 ];
 
-/***** Engine (this is the part that fixes clicking) *****/
+/***** Engine *****/
 function showTextNode(textNodeId) {
   const textNode = textNodes.find(n => n.id === textNodeId);
   if (!textNode) return;
   storyText.textContent = textNode.text;
 
-  // Clear old choices
+  // Clear choices
   while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
 
-  // Render buttons and attach handler that passes the CURRENT NODE
+  // Render choices
   textNode.options.forEach(option => {
     const btn = document.createElement('button');
     btn.textContent = option.text;
@@ -207,12 +225,21 @@ function selectOption(currentNode, option) {
   const nextTextNodeId = option.nextText;
   const correctness = typeof option.correctness !== 'undefined' ? option.correctness : null;
 
-  // Log the click for CSV
+  // Scoring: correct +10, partial +5, incorrect +0
+  let award = 0;
+  if (correctness === 1) award = 10;
+  else if (correctness === 0.5) award = 5;
+
+  addPoints(award);
+
+  // Log click (with points)
   logEvent({
     nodeId: currentNode.id,
     choiceText: option.text,
     nextId: nextTextNodeId,
-    correctness
+    correctness,
+    points_awarded: award,
+    points_total: points
   });
 
   showTextNode(nextTextNodeId);
@@ -221,5 +248,6 @@ function selectOption(currentNode, option) {
 /***** Start *****/
 window.addEventListener('load', () => {
   if (scenarioTitle) scenarioTitle.textContent = "Mission: Reinforceable";
+  setPoints(0);
   showTextNode(1);
 });
