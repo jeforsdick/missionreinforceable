@@ -1,3 +1,11 @@
+/***** Tiny error banner so we can see issues on the page *****/
+window.addEventListener('error', (e) => {
+  const box = document.createElement('div');
+  box.style.cssText = 'position:sticky;top:0;z-index:9999;background:#b00020;color:#fff;padding:8px 12px;border-radius:8px;margin-bottom:8px;font-weight:700';
+  box.textContent = 'JavaScript error: ' + e.message;
+  document.body.prepend(box);
+});
+
 /***** DOM *****/
 const storyText = document.getElementById('story-text');
 const choicesDiv = document.getElementById('choices');
@@ -56,7 +64,7 @@ function setPoints(v){
 function addPoints(n){ setPoints(points + n); }
 
 function percentScore(){ return maxPossible>0 ? Math.round((points/maxPossible)*100) : 0; }
-function summaryMessage(pct){ return pct>=75 ? "Amazing, now let's go put it into practice." : "You are missing a few key components, please review the BIP and try again."; }
+function summaryMessage(pct){ return pct>=80 ? "Good job! Your plan is strong—keep it up." : "Review the BIP and try again."; }
 
 function clearSummary(){
   const el = document.getElementById('session-summary');
@@ -76,7 +84,7 @@ function showSummary(){
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
 }
 
-/***** Content (has to include node id:1 with options) *****/
+/***** Content (COMPLETE & WELL-FORMED) *****/
 const textNodes = [
   {
     id: 1,
