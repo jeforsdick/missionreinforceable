@@ -71,7 +71,7 @@ function percentScore() {
   return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
 }
 function summaryMessage(pct) {
-  return pct >= 80
+  return pct >= 75
     ? "Good job! Your plan is strong—keep it up."
     : "Review the BIP and try again.";
 }
