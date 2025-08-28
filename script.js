@@ -69,12 +69,26 @@ async function sendResultsIfNeeded() {
     log: eventLog
   };
 
-  try {
-    await fetch(RESULTS_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+  // safer send that works with Google Apps Script
+const json = JSON.stringify(payload);
+
+// Try sendBeacon first (very CORS-friendly)
+let queued = false;
+if (navigator.sendBeacon) {
+  const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
+  queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
+}
+
+// If beacon didn’t queue, fallback to fetch + no-cors
+if (!queued) {
+  await fetch(RESULTS_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+    body: json
+  });
+}
+
     const s = document.getElementById('session-summary');
     if (s) {
       const p = document.createElement('div');
