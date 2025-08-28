@@ -48,12 +48,11 @@ function clearSummary(){
 }
 
 /***** EMAIL RESULTS (via Google Apps Script) *****/
-// 1) Create a Google Apps Script web app using the snippet I gave you.
-// 2) Deploy and paste its URL below:
+// Paste your deployed Web App /exec URL here:
 const RESULTS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw0rHoBv6deNoy6avedLj5fj4JpCqt6r8B39UJmaNMeOYhRQfH6vbWKTgmTrhnC7cIy/exec';
-// This is the email the Apps Script will send to:
-const TO_EMAIL = 'jess.olson@utah.edu'; // informational only—actual send happens in your Apps Script
+const TO_EMAIL = 'jess.olson@utah.edu'; // informational (Apps Script uses its own TO)
 
+/***** Robust sender: beacon first, then fetch(no-cors) *****/
 async function sendResultsIfNeeded() {
   if (resultsSent || !RESULTS_ENDPOINT || RESULTS_ENDPOINT.startsWith('PASTE_')) return;
   resultsSent = true;
@@ -65,22 +64,34 @@ async function sendResultsIfNeeded() {
     max_possible: maxPossible,
     percent: percentScore(),
     timestamp: new Date().toISOString(),
-    to_email: TO_EMAIL,   // informational; Apps Script uses its own TO
+    to_email: TO_EMAIL,
     log: eventLog
   };
 
+  // ensure a status line in the summary
+  let statusLine = document.getElementById('send-status');
+  if (!statusLine) {
+    const s = document.getElementById('session-summary');
+    statusLine = document.createElement('div');
+    statusLine.id = 'send-status';
+    statusLine.style.marginTop = '6px';
+    statusLine.style.opacity = '0.85';
+    s && s.appendChild(statusLine);
+  }
+  const setStatus = (t) => { if (statusLine) statusLine.textContent = t; };
+
   try {
-    // CORS-friendly send: beacon first, then fetch(no-cors)
     const json = JSON.stringify(payload);
 
-    // Try sendBeacon (bypasses CORS)
+    // Try sendBeacon (very CORS-friendly)
     let queued = false;
     if (navigator.sendBeacon) {
       const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
       queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
+      if (queued) setStatus('Results queued via beacon.');
     }
 
-    // Fallback: fetch with no-cors and text/plain
+    // Fallback to fetch + no-cors (simple request with text/plain)
     if (!queued) {
       await fetch(RESULTS_ENDPOINT, {
         method: 'POST',
@@ -88,24 +99,21 @@ async function sendResultsIfNeeded() {
         headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
         body: json
       });
-    }
-
-    const s = document.getElementById('session-summary');
-    if (s) {
-      const p = document.createElement('div');
-      p.style.marginTop = '6px'; p.style.opacity = '0.85';
-      p.textContent = 'Results sent. Thank you!';
-      s.appendChild(p);
+      setStatus('Results sent via fetch(no-cors).');
     }
   } catch (err) {
-    const s = document.getElementById('session-summary');
-    if (s) {
-      const p = document.createElement('div');
-      p.style.marginTop = '6px'; p.style.opacity = '0.85';
-      p.textContent = 'Could not send results (maybe offline).';
-      s.appendChild(p);
-    }
-    resultsSent = false; // allow retry if they hit another end
+    setStatus('Could not send results: ' + (err?.message || String(err)));
+    resultsSent = false; // allow retry on another end screen
+    return;
+  }
+
+  // show completion note (we can't read response in no-cors; this confirms we fired)
+  const s = document.getElementById('session-summary');
+  if (s) {
+    const p = document.createElement('div');
+    p.style.marginTop = '6px'; p.style.opacity = '0.85';
+    p.textContent = 'Results attempt completed. Check inbox & Apps Script → Executions.';
+    s.appendChild(p);
   }
 }
 
