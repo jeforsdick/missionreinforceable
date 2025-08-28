@@ -112,7 +112,7 @@ async function sendResultsIfNeeded() {
   if (s) {
     const p = document.createElement('div');
     p.style.marginTop = '6px'; p.style.opacity = '0.85';
-    p.textContent = 'Results sent.';
+    p.textContent = 'Thank You.';
     s.appendChild(p);
   }
 }
