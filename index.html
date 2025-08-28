@@ -1,31 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Behavioral Intervention Simulator</title>
-  <link rel="stylesheet" href="style.css?v=8" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mission: Behavioral Interventions</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="frame">
-    <!-- Title + Mission -->
-    <h1 class="app-title">Behavioral Intervention Simulator</h1>
-    <h2 id="scenario-title" class="app-mission">Mission: Reinforceable</h2>
+  <div id="game-container">
+    <h1>Behavioral Intervention Simulator</h1>
+    <h2 id="scenario-title">Mission: Reinforceable</h2>
 
-    <!-- Top badges row -->
-    <div class="top-row">
-      <div class="pill">Teacher: <span id="teacher-code">—</span></div>
-      <div class="pill">Points: <span id="points">0</span></div>
+    <!-- Toolbar (CSV removed) -->
+    <div id="toolbar">
+      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
+      <div id="score-badge">Points: <span id="points">0</span></div>
     </div>
 
-    <!-- Story card -->
-    <section class="card">
-      <div id="story-text" class="story"></div>
-      <div id="choices" class="choices"></div>
-    </section>
+    <!-- Game area -->
+    <div id="story-text"></div>
+    <div id="choices"></div>
   </div>
 
-  <!-- Keep at end so DOM exists before JS runs -->
+  <!-- Keep script tag last so DOM elements exist -->
   <script src="script.js"></script>
 </body>
 </html>
