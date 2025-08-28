@@ -88,7 +88,7 @@ async function sendResultsIfNeeded() {
     if (navigator.sendBeacon) {
       const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
       queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
-      if (queued) setStatus('Results queued via beacon.');
+      if (queued) setStatus('Results sent.');
     }
 
     // Fallback to fetch + no-cors (simple request with text/plain)
@@ -99,7 +99,7 @@ async function sendResultsIfNeeded() {
         headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
         body: json
       });
-      setStatus('Results sent via fetch(no-cors).');
+      setStatus('Results sent.');
     }
   } catch (err) {
     setStatus('Could not send results: ' + (err?.message || String(err)));
@@ -112,7 +112,7 @@ async function sendResultsIfNeeded() {
   if (s) {
     const p = document.createElement('div');
     p.style.marginTop = '6px'; p.style.opacity = '0.85';
-    p.textContent = 'Results attempt completed. Check inbox & Apps Script → Executions.';
+    p.textContent = 'Results sent.';
     s.appendChild(p);
   }
 }
