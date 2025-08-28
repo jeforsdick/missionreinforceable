@@ -50,7 +50,7 @@ function clearSummary(){
 /***** EMAIL RESULTS (via Google Apps Script) *****/
 // 1) Create a Google Apps Script web app using the snippet I gave you.
 // 2) Deploy and paste its URL below:
-const RESULTS_ENDPOINT = https://script.google.com/macros/s/AKfycbwSS0fPFw9LOzyTBkME9gNgAepSPqEd2K45qxM3Yb9jZFdUM6zMWHbr2YkaTr7J3CHo/exec;
+const RESULTS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxex-Oxdog4qvvITF2C-PJjrfQbptLYEUK9FlQ4ddxK1M7fqJkTGox6S82ysm7FSVOJ/exec';
 // This is the email the Apps Script will send to:
 const TO_EMAIL = 'jess.olson@utah.edu'; // informational only—actual send happens in your Apps Script
 
