@@ -88,7 +88,7 @@ async function sendResultsIfNeeded() {
     if (navigator.sendBeacon) {
       const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
       queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
-      if (queued) setStatus('Results sent.');
+      if (queued) setStatus('Thank You. Results sent.');
     }
 
     // Fallback to fetch + no-cors (simple request with text/plain)
