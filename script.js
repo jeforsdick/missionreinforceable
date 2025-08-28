@@ -39,7 +39,7 @@ function setPoints(v){
 function addPoints(n){ setPoints(points + n); }
 
 function percentScore(){ return maxPossible>0 ? Math.round((points/maxPossible)*100) : 0; }
-function summaryMessage(pct){ return pct>=80 ? "Good job! Your plan is strong—keep it up." : "Review the BIP and try again."; }
+function summaryMessage(pct){ return pct>=75 ? "Amazing! Now let's go put it into practice." : "You are missing some core components, please review the BIP and try again."; }
 
 function clearSummary(){
   const el = document.getElementById('session-summary');
@@ -50,7 +50,7 @@ function clearSummary(){
 /***** EMAIL RESULTS (via Google Apps Script) *****/
 // 1) Create a Google Apps Script web app using the snippet I gave you.
 // 2) Deploy and paste its URL below:
-const RESULTS_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const RESULTS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx54zjdmq5844qUohINMdQSdRvm3uLJj5-3eXmPHvV1DQxCbQd35L-hBOO6aX1Pck1X/exec';
 // This is the email the Apps Script will send to:
 const TO_EMAIL = 'jess.olson@utah.edu'; // informational only—actual send happens in your Apps Script
 
