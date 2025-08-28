@@ -65,29 +65,30 @@ async function sendResultsIfNeeded() {
     max_possible: maxPossible,
     percent: percentScore(),
     timestamp: new Date().toISOString(),
-    to_email: TO_EMAIL,   // your Apps Script can read this, or just hardcode there
+    to_email: TO_EMAIL,   // informational; Apps Script uses its own TO
     log: eventLog
   };
 
-  // safer send that works with Google Apps Script
-const json = JSON.stringify(payload);
+  try {
+    // CORS-friendly send: beacon first, then fetch(no-cors)
+    const json = JSON.stringify(payload);
 
-// Try sendBeacon first (very CORS-friendly)
-let queued = false;
-if (navigator.sendBeacon) {
-  const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
-  queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
-}
+    // Try sendBeacon (bypasses CORS)
+    let queued = false;
+    if (navigator.sendBeacon) {
+      const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
+      queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
+    }
 
-// If beacon didn’t queue, fallback to fetch + no-cors
-if (!queued) {
-  await fetch(RESULTS_ENDPOINT, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: json
-  });
-}
+    // Fallback: fetch with no-cors and text/plain
+    if (!queued) {
+      await fetch(RESULTS_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: json
+      });
+    }
 
     const s = document.getElementById('session-summary');
     if (s) {
