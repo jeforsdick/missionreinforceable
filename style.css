@@ -1,8 +1,16 @@
 :root{
-  --bg:#0f0f10; --card:#1c1d1f; --cardBorder:#2a2b2f;
-  --text:#eef1f3; --cyan:#35eaff; --accent:#1e80ff; --accentBorder:#0e62c3;
-  --shadow:0 0 24px rgba(0,0,0,.45);
+  --bg:#0d0e10;
+  --card:#242529;
+  --cardBorder:#2e3035;
+  --text:#e9edf0;
+  --muted:#c2c9d1;
+  --accent:#1f84ff;
+  --accentBorder:#0f63c8;
+  --cyan:#2ee5ff;
+  --glow:rgba(255,255,255,.14);
+  --drop:0 0 26px rgba(0,0,0,.45);
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -10,29 +18,77 @@ body{
   font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
-.wrap{max-width:1100px;margin:40px auto 72px;padding:0 20px}
-.title{
-  margin:0 0 8px; font-size:48px; font-weight:900; letter-spacing:.01em;
-  text-shadow:0 0 20px rgba(255,255,255,.08), 0 0 4px rgba(255,255,255,.08);
+
+.frame{
+  max-width:1100px;
+  margin:40px auto 80px;
+  padding:0 22px 22px;
+  border-radius:22px;
+  box-shadow:inset 0 0 0 2px #2a2a2a, 0 0 40px rgba(255,0,0,.15);
 }
-.subtitle{
-  margin:6px 0 22px; font-size:28px; font-weight:800; color:var(--cyan);
-  text-shadow:0 0 10px rgba(53,234,255,.35);
+
+.app-title{
+  margin:0 0 6px;
+  font-size:52px; font-weight:900; letter-spacing:.02em;
+  text-shadow:0 0 22px var(--glow), 0 0 6px var(--glow);
 }
-.badges{display:flex;gap:12px;justify-content:space-between;align-items:center;margin:10px 0 18px;flex-wrap:wrap}
-.badge{background:#232428;border:2px solid #2c2d32;border-radius:14px;padding:12px 18px;font-weight:800;box-shadow:var(--shadow)}
-.panel{background:var(--card);border:2px solid var(--cardBorder);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
-#story-text{font-size:22px;line-height:1.6;margin:0 0 18px;color:#e5e8eb}
-#choices{display:flex;flex-direction:column;gap:14px}
-#choices button{
-  appearance:none;background:var(--accent);color:#fff;border:2px solid var(--accentBorder);
-  border-radius:14px;padding:16px 18px;font-weight:900;font-size:18px;text-align:left;cursor:pointer;
-  box-shadow:0 6px 16px rgba(30,128,255,.25);transition:transform .06s, filter .15s, box-shadow .15s;
+.app-mission{
+  margin:4px 0 18px;
+  font-size:30px; font-weight:900; color:var(--cyan);
+  text-shadow:0 0 12px rgba(46,229,255,.35);
 }
-#choices button:hover{filter:brightness(1.06)}
-#choices button:active{transform:translateY(1px)}
-#points{transition:transform .15s} #points.flash{transform:scale(1.08)}
-#session-summary{background:#181a1d;border:2px solid #2a2b2f;border-radius:14px;padding:14px;margin:14px 0 0;color:#dfe4ea}
+
+.top-row{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; margin:12px 0 18px;
+  flex-wrap:wrap;
+}
+.pill{
+  background:#1a1b1f; color:var(--text);
+  border:2px solid #2a2c31; border-radius:14px;
+  padding:12px 18px; font-weight:900;
+  box-shadow:var(--drop);
+}
+
+.card{
+  background:var(--card);
+  border:2px solid var(--cardBorder);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:var(--drop);
+}
+
+.story{
+  font-size:22px; line-height:1.65; color:#e4e8ec;
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background:#2a2c31; border:2px solid #343740; border-radius:12px;
+  padding:18px; margin-bottom:16px;
+}
+
+.choices{display:flex; flex-direction:column; gap:14px}
+.choices button{
+  appearance:none; cursor:pointer; text-align:left;
+  background:var(--accent); color:#fff;
+  border:2px solid var(--accentBorder); border-radius:14px;
+  padding:16px 18px; font-weight:900; font-size:18px;
+  box-shadow:0 10px 22px rgba(31,132,255,.25);
+  transition:filter .15s ease, transform .06s ease, box-shadow .15s ease;
+}
+.choices button:hover{filter:brightness(1.06)}
+.choices button:active{transform:translateY(1px)}
+
+#points{transition:transform .15s ease}
+#points.flash{transform:scale(1.08)}
+
+#session-summary{
+  background:#1a1c20; border:2px solid #2a2c31;
+  border-radius:14px; padding:14px; margin-top:14px;
+}
+
+/* phones */
 @media (max-width:720px){
-  .title{font-size:34px} .subtitle{font-size:22px} #story-text{font-size:18px} #choices button{font-size:16px;padding:14px}
+  .app-title{font-size:36px}
+  .app-mission{font-size:22px}
+  .story{font-size:18px}
+  .choices button{font-size:16px; padding:14px}
 }
