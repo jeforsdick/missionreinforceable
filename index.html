@@ -1,28 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mission: Behavioral Interventions</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Behavioral Intervention Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* minimal guards in case style.css is different */
+    body{background:#111;color:#e7e7e7;font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif}
+    .wrap{max-width:1100px;margin:32px auto;padding:16px}
+    .title{font-size:44px;font-weight:800;letter-spacing:.02em;text-shadow:0 0 10px rgba(255,255,255,.15)}
+    .subtitle{font-size:28px;color:#6ff;opacity:.9;margin:8px 0 20px}
+    .badges{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:10px 0 16px}
+    .badge{background:#262626;border:2px solid #333;border-radius:14px;padding:12px 18px;font-weight:800}
+    .panel{background:#222;border:2px solid #333;border-radius:14px;padding:18px}
+    #story-text{font-size:20px;line-height:1.6;margin-bottom:18px;min-height:48px}
+    #choices{display:flex;flex-direction:column;gap:12px}
+    #choices button{
+      background:#1482ff;color:#fff;border:2px solid #0e62c3;border-radius:12px;
+      padding:14px 18px;font-weight:800;font-size:16px;cursor:pointer;text-align:left;
+    }
+    #choices button:hover{filter:brightness(1.07)}
+    #points{transition:transform .15s} #points.flash{transform:scale(1.07)}
+    #session-summary{background:#1c1c1c;border:2px solid #333;border-radius:12px;padding:14px;margin:14px 0}
+  </style>
 </head>
 <body>
-  <div id="game-container">
-    <h1>Behavioral Intervention Simulator</h1>
-    <h2 id="scenario-title">Mission: Reinforceable</h2>
+  <div class="wrap">
+    <div class="title">Behavioral Intervention Simulator</div>
+    <div id="scenario-title" class="subtitle">Mission: Reinforceable</div>
 
-    <!-- Toolbar (CSV removed) -->
-    <div id="toolbar">
-      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
-      <div id="score-badge">Points: <span id="points">0</span></div>
+    <div class="badges">
+      <div class="badge">Teacher: <span id="teacher-code">—</span></div>
+      <div class="badge">Points: <span id="points">0</span></div>
     </div>
 
-    <!-- Game area -->
-    <div id="story-text"></div>
-    <div id="choices"></div>
+    <!-- 🔴 These two elements are REQUIRED by your script.js -->
+    <div class="panel" id="story-card">
+      <div id="story-text"></div>
+      <div id="choices" class="choices"></div>
+    </div>
   </div>
 
-  <!-- Keep script tag last so DOM elements exist -->
+  <!-- Keep script at the END of body so DOM exists before JS runs -->
   <script src="script.js"></script>
 </body>
 </html>
