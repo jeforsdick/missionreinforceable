@@ -236,7 +236,7 @@ function showHome(){
   resultsSent = false;
 
   scenarioTitle && (scenarioTitle.textContent = "Choose a Scenario");
-  storyText.innerHTML = `<p>Each scenario now has <strong>3 steps</strong>. Pick one to practice, or try a <em>Random Mix</em> (3 scenarios × 3 steps each).</p>`;
+  storyText.innerHTML = `<p>Each scenario now has <strong>3 steps</strong>. Pick one to practice, or try a <em>Random Mix</em>.</p>`;
 
   // Clear choices and render home buttons
   while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
@@ -253,8 +253,7 @@ function showHome(){
   // Random mix option
   const mix = document.createElement('button');
   mix.classList.add('home-card','accent');
-  mix.innerHTML = `<div class="home-title">Random Mix</div>
-                   <div class="home-sub">3 scenarios • 3 steps each (total 9)</div>`;
+  mix.innerHTML = `<div class="home-title">Random Mix</div>`;
   mix.addEventListener('click', () => startGame({ mode:'mix' }));
   choicesDiv.appendChild(mix);
 }
