@@ -127,25 +127,25 @@ const SCENARIOS = [
       {
         prompt: "Step 1 — Early signs: Alex fidgets and glances at the door as math begins.",
         answers: [
-          { label: "Briefly review expectations and offer first chance to earn. (+10)", delta: +10, quality: "best" },
-          { label: "Ignore and start the lesson quickly. (-10)", delta: -10, quality: "wrong" },
-          { label: "Ask the class to settle while you observe. (0)", delta: 0, quality: "meh" },
+          { label: "Briefly review expectations and offer first chance to earn.", delta: +10, quality: "best" },
+          { label: "Ignore and start the lesson quickly.", delta: -10, quality: "wrong" },
+          { label: "Ask the class to settle while you observe.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 2 — Escalation: Alex stands and moves toward the door.",
         answers: [
-          { label: "Use calm voice + visual: “Let’s earn a move—sit with me, then break.” (+10)", delta: +10, quality: "best" },
-          { label: "Block the door and raise your voice. (-10)", delta: -10, quality: "wrong" },
-          { label: "Stand nearby and wait him out. (0)", delta: 0, quality: "meh" },
+          { label: "Use calm voice + visual: “Let’s earn a move—sit with me, then break.”", delta: +10, quality: "best" },
+          { label: "Block the door and raise your voice.", delta: -10, quality: "wrong" },
+          { label: "Stand nearby and wait him out.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 3 — Recovery: He pauses and looks back at you.",
         answers: [
-          { label: "Praise the pause, guide to seat, deliver the earned move. (+10)", delta: +10, quality: "best" },
-          { label: "Lecture about safety for a minute. (-10)", delta: -10, quality: "wrong" },
-          { label: "Quietly resume class without comment. (0)", delta: 0, quality: "meh" },
+          { label: "Praise the pause, guide to seat, deliver the earned move.", delta: +10, quality: "best" },
+          { label: "Lecture about safety for a minute.", delta: -10, quality: "wrong" },
+          { label: "Quietly resume class without comment.", delta: 0, quality: "meh" },
         ]
       }
     ]
@@ -157,25 +157,25 @@ const SCENARIOS = [
       {
         prompt: "Step 1 — Arrival: You greet Alex at the door.",
         answers: [
-          { label: "Connect, preview schedule, and cue first earning opportunity. (+10)", delta: +10, quality: "best" },
-          { label: "Jump right into instructions to save time. (-10)", delta: -10, quality: "wrong" },
-          { label: "Say hi and let him find his desk. (0)", delta: 0, quality: "meh" },
+          { label: "Connect, preview schedule, and cue first earning opportunity.", delta: +10, quality: "best" },
+          { label: "Jump right into instructions to save time.", delta: -10, quality: "wrong" },
+          { label: "Say hi and let him find his desk.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 2 — Materials: Alex hesitates to get out his notebook.",
         answers: [
-          { label: "Offer choice + prompt: “Notebook or folder first to earn.” (+10)", delta: +10, quality: "best" },
-          { label: "Tell him to hurry because bell work is late. (-10)", delta: -10, quality: "wrong" },
-          { label: "Place materials on desk and walk away. (0)", delta: 0, quality: "meh" },
+          { label: "Offer choice + prompt: “Notebook or folder first to earn.”", delta: +10, quality: "best" },
+          { label: "Tell him to hurry because bell work is late.", delta: -10, quality: "wrong" },
+          { label: "Place materials on desk and walk away.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 3 — Momentum: He begins, then slows as peers chat.",
         answers: [
-          { label: "Reinforce early starts, add brief goal: “Two lines, then check‑in.” (+10)", delta: +10, quality: "best" },
-          { label: "Remind the class sternly to be quiet. (-10)", delta: -10, quality: "wrong" },
-          { label: "Ignore the chatter; he’ll re‑engage. (0)", delta: 0, quality: "meh" },
+          { label: "Reinforce early starts, add brief goal: “Two lines, then check‑in.”", delta: +10, quality: "best" },
+          { label: "Remind the class sternly to be quiet.", delta: -10, quality: "wrong" },
+          { label: "Ignore the chatter; he’ll re‑engage.", delta: 0, quality: "meh" },
         ]
       }
     ]
@@ -187,25 +187,25 @@ const SCENARIOS = [
       {
         prompt: "Step 1 — Pre‑transition: The next activity is P.E.; Alex tenses up.",
         answers: [
-          { label: "Preview the plan + coping option + earning chance. (+10)", delta: +10, quality: "best" },
-          { label: "Announce the transition and line up now. (-10)", delta: -10, quality: "wrong" },
-          { label: "Ask a peer to lead him to the line. (0)", delta: 0, quality: "meh" },
+          { label: "Preview the plan + coping option + earning chance.", delta: +10, quality: "best" },
+          { label: "Announce the transition and line up now.", delta: -10, quality: "wrong" },
+          { label: "Ask a peer to lead him to the line.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 2 — Lining up: He lags behind and looks toward the hallway.",
         answers: [
-          { label: "Give a brief prompt with choice + count of steps to earn. (+10)", delta: +10, quality: "best" },
-          { label: "Warn that he’ll lose recess if he doesn’t hurry. (-10)", delta: -10, quality: "wrong" },
-          { label: "Move the class forward and let him catch up. (0)", delta: 0, quality: "meh" },
+          { label: "Give a brief prompt with choice + count of steps to earn.", delta: +10, quality: "best" },
+          { label: "Warn that he’ll lose recess if he doesn’t hurry.", delta: -10, quality: "wrong" },
+          { label: "Move the class forward and let him catch up.", delta: 0, quality: "meh" },
         ]
       },
       {
         prompt: "Step 3 — At the door: He takes a deep breath.",
         answers: [
-          { label: "Reinforce the coping, then deliver the promised earn item. (+10)", delta: +10, quality: "best" },
-          { label: "Remind him how hard this is and to be brave. (-10)", delta: -10, quality: "wrong" },
-          { label: "Give a thumbs up and proceed. (0)", delta: 0, quality: "meh" },
+          { label: "Reinforce the coping, then deliver the promised earn item.", delta: +10, quality: "best" },
+          { label: "Remind him how hard this is and to be brave.", delta: -10, quality: "wrong" },
+          { label: "Give a thumbs up and proceed.", delta: 0, quality: "meh" },
         ]
       }
     ]
