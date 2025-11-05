@@ -1,30 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mission: Reinforceable — Multi‑Step Scenarios</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <div id="game-container">
-    <h1>Behavioral Intervention Simulator</h1>
-    <h2 id="scenario-title">Mission: Reinforceable</h2>
+<!-- Shared engine -->
+<script src="/engine.js" defer></script>
 
-    <!-- Toolbar -->
-    <div id="toolbar">
-      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
-      <div id="score-badge">Points: <span id="points">0</span></div>
-      <div class="spacer"></div>
-      <button id="home-btn" class="ghost">Home</button>
-    </div>
+<!-- Dynamic per-teacher script loader -->
+<script>
+(function(){
+  const url = new URL(window.location.href);
 
-    <!-- Game area -->
-    <div id="story-text"></div>
-    <div id="choices"></div>
-  </div>
+  // teacher key from /path OR from ?game=
+  let key = url.searchParams.get('game');
+  if (!key) {
+    const seg = url.pathname.replace(/\/+$/,'').split('/').filter(Boolean).pop();
+    key = seg || 'example'; // default
+  }
 
-  <!-- Keep script tag last so DOM elements exist -->
-  <script src="script.js"></script>
-</body>
-</html>
+  const s = document.createElement('script');
+  s.defer = true;
+  s.src = `/scripts/${key}.js?v=${Date.now()}`; // cache-bust while testing
+
+  // Fallback to example if missing
+  s.onerror = () => {
+    const f = document.createElement('script');
+    f.defer = true;
+    f.src = `/scripts/example.js?v=${Date.now()}`;
+    document.body.appendChild(f);
+  };
+
+  document.body.appendChild(s);
+})();
+</script>
