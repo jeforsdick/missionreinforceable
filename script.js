@@ -12,6 +12,7 @@ const choicesDiv = document.getElementById('choices');
 const scenarioTitle = document.getElementById('scenario-title');
 const teacherCodeEl = document.getElementById('teacher-code');
 const pointsEl = document.getElementById('points');
+const homeBtn = document.getElementById('home-btn');
 
 /***** Teacher code from URL (?t=CODE) *****/
 const params = new URLSearchParams(window.location.search);
@@ -24,8 +25,7 @@ let eventLog = [];
 
 /***** Points + summary tracking *****/
 let points = 0;
-let maxPossible = 0;              // +10 per graded click (has correctness)
-let summaryShownForNodeId = null; // prevents duplicate box
+let maxPossible = 0;              // +10 per step (best answers are +10)
 let resultsSent = false;          // email once per session end
 
 function setPoints(v){
@@ -44,7 +44,6 @@ function summaryMessage(pct){ return pct>=75 ? "Amazing! Now let's go put it int
 function clearSummary(){
   const el = document.getElementById('session-summary');
   if(el) el.remove();
-  summaryShownForNodeId = null;
 }
 
 /***** EMAIL RESULTS (via Google Apps Script) *****/
@@ -117,8 +116,247 @@ async function sendResultsIfNeeded() {
   }
 }
 
-/***** Show summary *****/
-function showSummary(){
+/***** Multi‑step scenarios *****/
+
+// Each scenario now has 3 steps. Each step has exactly three answers: best (+10), meh (0), wrong (-10).
+const SCENARIOS = [
+  {
+    id: "elope_crisis",
+    title: "Elopement During Math",
+    steps: [
+      {
+        prompt: "Step 1 — Early signs: Alex fidgets and glances at the door as math begins.",
+        answers: [
+          { label: "Briefly review expectations and offer first chance to earn. (+10)", delta: +10, quality: "best" },
+          { label: "Ignore and start the lesson quickly. (-10)", delta: -10, quality: "wrong" },
+          { label: "Ask the class to settle while you observe. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 2 — Escalation: Alex stands and moves toward the door.",
+        answers: [
+          { label: "Use calm voice + visual: “Let’s earn a move—sit with me, then break.” (+10)", delta: +10, quality: "best" },
+          { label: "Block the door and raise your voice. (-10)", delta: -10, quality: "wrong" },
+          { label: "Stand nearby and wait him out. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 3 — Recovery: He pauses and looks back at you.",
+        answers: [
+          { label: "Praise the pause, guide to seat, deliver the earned move. (+10)", delta: +10, quality: "best" },
+          { label: "Lecture about safety for a minute. (-10)", delta: -10, quality: "wrong" },
+          { label: "Quietly resume class without comment. (0)", delta: 0, quality: "meh" },
+        ]
+      }
+    ]
+  },
+  {
+    id: "proactive_start",
+    title: "Proactive Morning Setup",
+    steps: [
+      {
+        prompt: "Step 1 — Arrival: You greet Alex at the door.",
+        answers: [
+          { label: "Connect, preview schedule, and cue first earning opportunity. (+10)", delta: +10, quality: "best" },
+          { label: "Jump right into instructions to save time. (-10)", delta: -10, quality: "wrong" },
+          { label: "Say hi and let him find his desk. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 2 — Materials: Alex hesitates to get out his notebook.",
+        answers: [
+          { label: "Offer choice + prompt: “Notebook or folder first to earn.” (+10)", delta: +10, quality: "best" },
+          { label: "Tell him to hurry because bell work is late. (-10)", delta: -10, quality: "wrong" },
+          { label: "Place materials on desk and walk away. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 3 — Momentum: He begins, then slows as peers chat.",
+        answers: [
+          { label: "Reinforce early starts, add brief goal: “Two lines, then check‑in.” (+10)", delta: +10, quality: "best" },
+          { label: "Remind the class sternly to be quiet. (-10)", delta: -10, quality: "wrong" },
+          { label: "Ignore the chatter; he’ll re‑engage. (0)", delta: 0, quality: "meh" },
+        ]
+      }
+    ]
+  },
+  {
+    id: "transition_jitters",
+    title: "Transition Jitters",
+    steps: [
+      {
+        prompt: "Step 1 — Pre‑transition: The next activity is P.E.; Alex tenses up.",
+        answers: [
+          { label: "Preview the plan + coping option + earning chance. (+10)", delta: +10, quality: "best" },
+          { label: "Announce the transition and line up now. (-10)", delta: -10, quality: "wrong" },
+          { label: "Ask a peer to lead him to the line. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 2 — Lining up: He lags behind and looks toward the hallway.",
+        answers: [
+          { label: "Give a brief prompt with choice + count of steps to earn. (+10)", delta: +10, quality: "best" },
+          { label: "Warn that he’ll lose recess if he doesn’t hurry. (-10)", delta: -10, quality: "wrong" },
+          { label: "Move the class forward and let him catch up. (0)", delta: 0, quality: "meh" },
+        ]
+      },
+      {
+        prompt: "Step 3 — At the door: He takes a deep breath.",
+        answers: [
+          { label: "Reinforce the coping, then deliver the promised earn item. (+10)", delta: +10, quality: "best" },
+          { label: "Remind him how hard this is and to be brave. (-10)", delta: -10, quality: "wrong" },
+          { label: "Give a thumbs up and proceed. (0)", delta: 0, quality: "meh" },
+        ]
+      }
+    ]
+  }
+];
+
+// Random Mix will select scenarios; each scenario has 3 steps.
+const DEFAULT_ROUNDS = 3;
+
+let rounds = [];     // array of scenarios
+let roundIndex = 0;  // which scenario
+let stepIndex = 0;   // which step within current scenario
+
+function shuffle(arr){
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/***** Home Screen *****/
+function showHome(){
+  clearSummary();
+  setPoints(0);
+  maxPossible = 0;
+  eventLog = [];
+  resultsSent = false;
+
+  scenarioTitle && (scenarioTitle.textContent = "Choose a Scenario");
+  storyText.innerHTML = `<p>Each scenario now has <strong>3 steps</strong>. Pick one to practice, or try a <em>Random Mix</em> (3 scenarios × 3 steps each).</p>`;
+
+  // Clear choices and render home buttons
+  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+
+  // Single-scenario buttons
+  SCENARIOS.forEach(sc => {
+    const btn = document.createElement('button');
+    btn.classList.add('home-card');
+    btn.innerHTML = `<div class="home-title">${sc.title}</div>
+                     <div class="home-sub">Multi‑step • 3 steps • +10/0/−10 per step</div>`;
+    btn.addEventListener('click', () => startGame({ mode:'single', scenarioId: sc.id }));
+    choicesDiv.appendChild(btn);
+  });
+
+  // Random mix option
+  const mix = document.createElement('button');
+  mix.classList.add('home-card','accent');
+  mix.innerHTML = `<div class="home-title">Random Mix</div>
+                   <div class="home-sub">3 scenarios • 3 steps each (total 9)</div>`;
+  mix.addEventListener('click', () => startGame({ mode:'mix' }));
+  choicesDiv.appendChild(mix);
+}
+
+/***** Start Game *****/
+function startGame({mode='mix', scenarioId=null} = {}){
+  clearSummary();
+  resultsSent = false;
+  setPoints(0);
+  maxPossible = 0;
+  eventLog = [];
+
+  if (mode === 'single' && scenarioId){
+    const sc = SCENARIOS.find(s => s.id === scenarioId);
+    rounds = sc ? [sc] : [SCENARIOS[0]];
+  } else {
+    // choose up to DEFAULT_ROUNDS unique scenarios at random
+    rounds = shuffle([...SCENARIOS]).slice(0, DEFAULT_ROUNDS);
+  }
+  roundIndex = 0;
+  stepIndex = 0;
+  updateTitle();
+  showCurrentStep();
+}
+
+function updateTitle(){
+  const totalRounds = rounds.length;
+  const currentScenario = rounds[roundIndex];
+  const totalSteps = currentScenario?.steps?.length || 1;
+  scenarioTitle && (scenarioTitle.textContent =
+    `Round ${Math.min(roundIndex+1,totalRounds)} of ${totalRounds} — Step ${Math.min(stepIndex+1,totalSteps)} of ${totalSteps}`);
+}
+
+function showCurrentStep(){
+  const scenario = rounds[roundIndex];
+  if (!scenario) return showEnd();
+
+  const step = scenario.steps[stepIndex];
+  storyText.textContent = step.prompt;
+
+  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+
+  const shuffledAnswers = shuffle(step.answers.map(a => ({...a})));
+
+  shuffledAnswers.forEach(ans => {
+    const btn = document.createElement('button');
+    btn.textContent = ans.label;
+    btn.addEventListener('click', () => handleAnswer(scenario, step, ans));
+    choicesDiv.appendChild(btn);
+  });
+}
+
+function handleAnswer(scenario, step, answer){
+  // Scoring: each step has a best worth +10.
+  maxPossible += 10;
+  addPoints(answer.delta);
+
+  logEvent({
+    nodeId: `${scenario.id}:step${stepIndex+1}`,
+    choiceText: answer.label,
+    nextId: null,
+    correctness: answer.quality, // 'best','meh','wrong'
+    points_awarded: answer.delta,
+    points_total: points
+  });
+
+  // Advance to next step or next round
+  const totalSteps = scenario.steps.length;
+  if (stepIndex + 1 < totalSteps){
+    stepIndex += 1;
+    updateTitle();
+    showCurrentStep();
+  } else {
+    // next scenario
+    if (roundIndex + 1 < rounds.length){
+      roundIndex += 1;
+      stepIndex = 0;
+      updateTitle();
+      showCurrentStep();
+    } else {
+      showEnd();
+    }
+  }
+}
+
+function showEnd(){
+  // End screen with summary + restart
+  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+  storyText.textContent = "Session complete! Thanks for playing.";
+  const restart = document.createElement('button');
+  restart.textContent = "Play Random Mix Again";
+  restart.addEventListener('click', () => startGame({mode:'mix'}));
+  choicesDiv.appendChild(restart);
+
+  const backHome = document.createElement('button');
+  backHome.classList.add('ghost');
+  backHome.textContent = "Back to Home";
+  backHome.addEventListener('click', showHome);
+  choicesDiv.appendChild(backHome);
+
+  // Summary box
   clearSummary();
   const pct = percentScore();
   const wrap = document.createElement('div');
@@ -130,7 +368,6 @@ function showSummary(){
   `;
   choicesDiv.parentNode.insertBefore(wrap, choicesDiv);
 
-  // Send results once per end screen
   sendResultsIfNeeded();
 }
 
@@ -145,204 +382,11 @@ function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=
   });
 }
 
-/***** Content *****/
-const textNodes = [
-  {
-    id: 1,
-    text: "Welcome to your classroom. Today, you'll face real-time decisions with Alex. Choose a path to begin:",
-    options: [
-      { text: "Start the day with proactive strategies.", nextText: 11 },
-      { text: "Crisis mode: Alex bolts from the room.", nextText: 2 }
-    ]
-  },
-  {
-    id: 2,
-    text: "You're in your classroom when a student bolts out the door. It's Alex, a child with autism known to elope when overstimulated. What do you do?",
-    options: [
-      { text: "Run after Alex immediately.", nextText: 3, correctness: 0 },
-      { text: "Call the office for backup first.", nextText: 4, correctness: 1 }
-    ]
-  },
-  {
-    id: 3,
-    text: "You sprint after Alex, but they're fast. They reach the exit doors before you. What now?",
-    options: [
-      { text: "Use Alex's name and a calming voice.", nextText: 5, correctness: 1 },
-      { text: "Physically block the door.", nextText: 6, correctness: 0 }
-    ]
-  },
-  {
-    id: 4,
-    text: "You radio for help. While waiting, Alex gets farther. You exit your room to see where they are.",
-    options: [
-      { text: "Split up with another teacher to search.", nextText: 7, correctness: 1 },
-      { text: "Check the playground area alone.", nextText: 8, correctness: 0 }
-    ]
-  },
-  {
-    id: 5,
-    text: "Alex slows down slightly and looks at you. You recall his favorite song and hum it.",
-    options: [
-      { text: "Approach slowly while singing.", nextText: 9, correctness: 1 },
-      { text: "Try to grab him now.", nextText: 10, correctness: 0 }
-    ]
-  },
-  { id: 6, text: "You block the door. Alex panics, pushes you hard, and runs. The situation escalates. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  {
-    id: 7,
-    text: "You find Alex near the parking lot. He's crying and seems overwhelmed.",
-    options: [
-      { text: "Sit at a distance and wait.", nextText: 9, correctness: 1 },
-      { text: "Approach quickly and grab him.", nextText: 10, correctness: 0 }
-    ]
-  },
-  { id: 8, text: "No sign of Alex. You get a call — he's out the front gate. The elopement wasn't contained in time. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  { id: 9, text: "Alex calms down and lets you near him. You gently guide him back inside using his visual schedule. Crisis averted. You win!",
-    options: [ { text: "Play again", nextText: 1 } ] },
-  { id: 10, text: "Alex panics at your sudden approach and runs away. The situation worsens. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-
-  /* Proactive path */
-  {
-    id: 11,
-    text: "Before class, you prepare a chart move system for Alex and place visual boundaries in the classroom. How do you start the day?",
-    options: [
-      { text: "Give Alex a clear visual schedule for the day.", nextText: 12, correctness: 1 },
-      { text: "Jump straight into the lesson without preparation.", nextText: 13, correctness: 0 }
-    ]
-  },
-  {
-    id: 12,
-    text: "Alex smiles when he sees his schedule. 'I know what's happening today!' he says with relief.",
-    options: [
-      { text: "Remind him about earning chart moves for staying in designated areas.", nextText: 14, correctness: 1 },
-      { text: "Start the first activity without mentioning the reward system.", nextText: 15, correctness: 0 }
-    ]
-  },
-  {
-    id: 13,
-    text: "Alex looks confused and anxious. He starts rocking and looking at the door.",
-    options: [
-      { text: "Stop and provide his visual schedule now.", nextText: 12, correctness: 1 },
-      { text: "Ignore the warning signs and continue teaching.", nextText: 16, correctness: 0 }
-    ]
-  },
-  {
-    id: 14,
-    text: "Alex points to his chair. 'If I stay here during math, I get a chart move, right?' He seems engaged with the system.",
-    options: [
-      { text: "Enthusiastically confirm and praise his understanding.", nextText: 17, correctness: 1 },
-      { text: "Simply nod and begin teaching without emphasis.", nextText: 15, correctness: 0 }
-    ]
-  },
-  {
-    id: 15,
-    text: "Alex stays in his seat but looks frequently at the door. He's not fully engaged in the lesson.",
-    options: [
-      { text: "Give specific praise and a chart move for staying in his area.", nextText: 17, correctness: 1 },
-      { text: "Continue teaching without acknowledging his appropriate behavior.", nextText: 16, correctness: 0 }
-    ]
-  },
-  {
-    id: 16,
-    text: "Alex stands up suddenly and walks toward the door. This is a precursor to elopement.",
-    options: [
-      { text: "Calmly remind him about earning chart moves and redirect.", nextText: 18, correctness: 1 },
-      { text: "Tell him firmly to sit down immediately.", nextText: 19, correctness: 0 }
-    ]
-  },
-  {
-    id: 17,
-    text: "'Alex, great job staying in your learning space! That's a chart move!' He smiles and continues working.",
-    options: [
-      { text: "Let him spin the reward wheel since he reached a special symbol.", nextText: 20, correctness: 1 },
-      { text: "Continue with the lesson, maintaining the positive momentum.", nextText: 21, correctness: 1 }
-    ]
-  },
-  {
-    id: 18,
-    text: "Alex hesitates, then returns to his seat. 'Can I get a chart move for coming back?' he asks.",
-    options: [
-      { text: "Yes! Immediately reinforce this replacement behavior.", nextText: 20, correctness: 1 },
-      { text: "No, only rewards for never leaving.", nextText: 19, correctness: 0 }
-    ]
-  },
-  { id: 19, text: "Alex becomes upset and runs out of the classroom. Your proactive plan failed. Game over.",
-    options: [ { text: "Restart", nextText: 1 } ] },
-  { id: 20, text: "Alex is thrilled with his chart move and reward. He completes the lesson without elopement. You win!",
-    options: [ { text: "Play again", nextText: 1 } ] },
-  {
-    id: 21,
-    text: "Alex works well for 20 minutes. During transition he looks anxious again.",
-    options: [
-      { text: "Show the next activity on his schedule and offer another earning opportunity.", nextText: 20, correctness: 1 },
-      { text: "Rush the transition to save time.", nextText: 19, correctness: 0 }
-    ]
-  }
-];
-
-/***** Engine *****/
-function showTextNode(textNodeId) {
-  const textNode = textNodes.find(n => n.id === textNodeId);
-  if (!textNode) return;
-
-  if (textNodeId === 1) clearSummary(); // clear on start
-
-  storyText.textContent = textNode.text;
-
-  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
-
-  textNode.options.forEach(option => {
-    const btn = document.createElement('button');
-    btn.textContent = option.text;
-    btn.addEventListener('click', () => selectOption(textNode, option));
-    choicesDiv.appendChild(btn);
-  });
-
-  // show summary when entering a terminal node
-  if (textNode.options.some(o => /restart|play again/i.test(o.text))) {
-    if (summaryShownForNodeId !== textNode.id) {
-      summaryShownForNodeId = textNode.id;
-      showSummary();
-    }
-  }
-}
-
-function selectOption(currentNode, option) {
-  const nextTextNodeId = option.nextText;
-  const correctness = typeof option.correctness !== 'undefined' ? option.correctness : null;
-
-  let award = 0;
-  if (correctness === 1) award = 10;
-  else if (correctness === 0.5) award = 5;
-
-  if (correctness !== null) maxPossible += 10;
-  addPoints(award);
-
-  logEvent({
-    nodeId: currentNode.id,
-    choiceText: option.text,
-    nextId: nextTextNodeId,
-    correctness,
-    points_awarded: award,
-    points_total: points
-  });
-
-  if (nextTextNodeId === 1) {
-    setPoints(0);
-    maxPossible = 0;
-    clearSummary();
-    resultsSent = false; // new run can send again
-  }
-
-  showTextNode(nextTextNodeId);
-}
-
 /***** Start *****/
 window.addEventListener('load', () => {
-  if (scenarioTitle) scenarioTitle.textContent = "Mission: Reinforceable";
-  setPoints(0);
-  showTextNode(1);
+  showHome();
 });
+
+// Home button
+homeBtn?.addEventListener('click', showHome);
+
