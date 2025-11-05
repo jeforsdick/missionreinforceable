@@ -245,8 +245,7 @@ function showHome(){
   SCENARIOS.forEach(sc => {
     const btn = document.createElement('button');
     btn.classList.add('home-card');
-    btn.innerHTML = `<div class="home-title">${sc.title}</div>
-                     <div class="home-sub">Multi‑step • 3 steps • +10/0/−10 per step</div>`;
+    btn.innerHTML = `<div class="home-title">${sc.title}</div>`;
     btn.addEventListener('click', () => startGame({ mode:'single', scenarioId: sc.id }));
     choicesDiv.appendChild(btn);
   });
