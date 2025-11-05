@@ -15,8 +15,11 @@ body{
 h1{margin:0 0 6px 0; text-align:center; text-shadow:0 0 6px #fdd}
 h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6px #0ff}
 
-#toolbar{display:flex; align-items:center; gap:12px; justify-content:space-between; margin-bottom:16px}
+#toolbar{display:flex; align-items:center; gap:12px; justify-content:flex-start; margin-bottom:16px; flex-wrap:wrap}
 #teacher-badge,#score-badge{background:#333; padding:8px 12px; border:1px solid #444; border-radius:10px; font-weight:700}
+#toolbar .spacer{flex:1 1 auto}
+#toolbar .ghost{background:transparent; color:#fff; border:1px solid #555; padding:8px 12px; border-radius:10px; cursor:pointer}
+#toolbar .ghost:hover{border-color:#777}
 
 #story-text{background:#333; padding:18px; border-radius:10px; min-height:110px; margin-bottom:14px}
 #choices{display:grid; gap:10px}
@@ -31,3 +34,12 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
 
 #session-summary{background:var(--panel2); border:1px solid #444; border-radius:10px; padding:12px 14px; margin:14px 0 10px}
 #session-summary strong{color:var(--accent2)}
+
+/* Home screen cards */
+#choices .home-card{
+  display:flex; flex-direction:column; gap:4px;
+}
+#choices .home-card .home-title{font-size:18px; font-weight:800}
+#choices .home-card .home-sub{opacity:.85; font-weight:600}
+#choices .home-card.accent{background:#12b886}
+
