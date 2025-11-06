@@ -1,0 +1,44 @@
+:root{
+  --bg:#111; --panel:#222; --panel2:#2a2a2a; --text:#f4f4f4;
+  --accent:#1e90ff; --accent2:#16f3f8; --glow: rgba(255,0,0,.7);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; padding:20px; background:var(--bg); color:var(--text);
+  font-family:'Courier New',monospace; line-height:1.6; display:flex; justify-content:center;
+}
+#game-container{
+  width:100%; max-width:900px; background:var(--panel); padding:28px; border-radius:12px;
+  box-shadow:0 0 15px var(--glow);
+}
+h1{margin:0 0 6px 0; text-align:center; text-shadow:0 0 6px #fdd}
+h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6px #0ff}
+
+#toolbar{display:flex; align-items:center; gap:12px; justify-content:flex-start; margin-bottom:16px; flex-wrap:wrap}
+#teacher-badge,#score-badge{background:#333; padding:8px 12px; border:1px solid #444; border-radius:10px; font-weight:700}
+#toolbar .spacer{flex:1 1 auto}
+#toolbar .ghost{background:transparent; color:#fff; border:1px solid #555; padding:8px 12px; border-radius:10px; cursor:pointer}
+#toolbar .ghost:hover{border-color:#777}
+
+#story-text{background:#333; padding:18px; border-radius:10px; min-height:110px; margin-bottom:14px}
+#choices{display:grid; gap:10px}
+#choices button{
+  background:var(--accent); border:2px solid #111; color:#fff; padding:12px 14px; border-radius:10px;
+  text-align:left; font-weight:700; cursor:pointer; transition:transform .12s ease, background .12s ease
+}
+#choices button:hover{background:var(--accent2); color:#000; transform:translateY(-2px)}
+
+#points.flash{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+#session-summary{background:var(--panel2); border:1px solid #444; border-radius:10px; padding:12px 14px; margin:14px 0 10px}
+#session-summary strong{color:var(--accent2)}
+
+/* Home screen cards */
+#choices .home-card{
+  display:flex; flex-direction:column; gap:4px;
+}
+#choices .home-card .home-title{font-size:18px; font-weight:800}
+#choices .home-card .home-sub{opacity:.85; font-weight:600}
+#choices .home-card.accent{background:#12b886}
