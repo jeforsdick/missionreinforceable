@@ -118,7 +118,7 @@ async function sendResultsIfNeeded() {
 
 /***** Multi‑step scenarios *****/
 
-// Each scenario now has 3 steps. Each step has exactly three answers: best (+10), meh (0), wrong (-10).
+// Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full fidelity, others are partial or off-plan. See how your choices add up by the end!.
 const SCENARIOS = [
   {
     id: "elope_crisis",
