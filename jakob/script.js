@@ -214,7 +214,7 @@ function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.
 function showHome(){
   clearSummary(); setPoints(0); maxPossible=0; eventLog=[]; resultsSent=false;
   scenarioTitle.textContent="Choose a Scenario";
-  storyText.innerHTML="<p>Each scenario has <strong>3 steps</strong>. Pick one to practice, or try a <em>Random Mix</em>.</p>";
+  storyText.innerHTML="<p>Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! Select a scenairio to start!.</p>";
   choicesDiv.innerHTML="";
   SCENARIOS.forEach(sc=>{
     const btn=document.createElement('button');
