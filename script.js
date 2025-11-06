@@ -236,7 +236,7 @@ function showHome(){
   resultsSent = false;
 
   scenarioTitle && (scenarioTitle.textContent = "Choose a Scenario");
-  storyText.innerHTML = `<p>Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! <Strong>Select a scenario to start!<Strong></p>`;
+  storyText.innerHTML = `<p><strong>Welcome to Mission: Reinforceable<strong> — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! <strong>Select a scenario to start!<strong></p>`;
 
   // Clear choices and render home buttons
   while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
