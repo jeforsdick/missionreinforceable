@@ -118,7 +118,7 @@ async function sendResultsIfNeeded() {
 
 /***** Multi‑step scenarios *****/
 
-// Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full fidelity, others are partial or off-plan. See how your choices add up by the end!.
+// Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! Select a scenairio to start!.
 const SCENARIOS = [
   {
     id: "elope_crisis",
