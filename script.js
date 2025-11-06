@@ -118,7 +118,7 @@ async function sendResultsIfNeeded() {
 
 /***** Multi‑step scenarios *****/
 
-// Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! Select a scenairio to start!.
+// Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! Select a scenario to start!
 const SCENARIOS = [
   {
     id: "elope_crisis",
@@ -236,7 +236,7 @@ function showHome(){
   resultsSent = false;
 
   scenarioTitle && (scenarioTitle.textContent = "Choose a Scenario");
-  storyText.innerHTML = `<p>Each scenario now has <strong>3 steps</strong>. Pick one to practice, or try a <em>Random Mix</em>.</p>`;
+  storyText.innerHTML = `<p>Welcome to Mission: Reinforceable — a quick simulation to practice your BIP in action. In each short scenario, select the teacher move that keeps the plan on track. Some options earn full points, others are partial or off-plan. See how your choices add up by the end! Select a scenario to start!</p>`;
 
   // Clear choices and render home buttons
   while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
