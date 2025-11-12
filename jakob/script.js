@@ -310,7 +310,9 @@ function startDynamicMission(modeLabel, scenes){
     DYN.nodes.push(node);
   });
   DYN.ids = ids;
-  showNode(ids[0]);
+    showNode(ids[0]);
+  // ⭐ Add this line:
+  showFeedback("Mission launched! You’re making great choices—let’s practice high-fidelity BIP skills. 🚀", "correct", +10);
 }
 
 /* -------- Static summary node -------- */
