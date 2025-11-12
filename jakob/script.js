@@ -219,15 +219,8 @@ function renderIntroCards() {
   // Intro text pod (keeps your style)
   storyText.innerHTML =
 `Welcome to Mission: Reinforceable.
-
-You’ll step through short, branching scenarios based on a Behavior Intervention Plan (BIP).
-At each decision point, choose the teacher move that best aligns with:
-• Proactive supports
-• Teaching and prompting replacement behaviors
-• Reinforcing the right responses
-
-Choose Your Mission
-Select a training mode. New combos rotate daily for three weeks.`;
+You’ll step through short, branching scenarios based on you Behavior Plan.
+Choose your mission below.`;
 
   // Card deck below the intro pod
   const menu = document.createElement('div');
@@ -235,7 +228,7 @@ Select a training mode. New combos rotate daily for three weeks.`;
 
   menu.innerHTML = `
     <div class="mission-card">
-      <h3>Launch Sequence</h3>
+      <h3>Daily Mission</h3>
       <p>BIP Skill Run — practice proactive, teaching, reinforcement, and consequence steps.</p>
       <div class="action"><button id="btn-drill">Start BIP Practice ▶</button></div>
     </div>
