@@ -3,23 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mission: Reinforceable — JM Demo</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Mission: Reinforceable — Multi‑Week Trainer (JM Demo)</title>
+  <style>
+    :root{
+      --bg:#111; --panel:#1c1c1c; --panel2:#262626; --text:#f4f4f4;
+      --glow:rgba(22,243,248,.25); --good:#3bd16f; --bad:#ff5d5d; --neutral:#f0c04a;
+      --border:#333;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; padding:20px; background:var(--bg); color:var(--text); font-family:'Courier New',monospace; display:flex; justify-content:center}
+    #app{width:100%; max-width:960px; background:var(--panel); border-radius:14px; box-shadow:0 0 22px var(--glow); overflow:hidden}
+    header{padding:18px 22px; background:linear-gradient(180deg,#222,#181818); display:flex; gap:14px; align-items:center; justify-content:space-between}
+    h1{font-size:22px; margin:0}
+    .meta{display:flex; gap:10px; flex-wrap:wrap; font-size:13px; opacity:.9}
+    .meta .badge{padding:4px 8px; border-radius:999px; background:#2a2a2a}
+    main{padding:22px}
+    .scene{background:var(--panel2); padding:16px; border-radius:10px; min-height:110px; font-size:15px; line-height:1.5; white-space:pre-wrap}
+    .choices{display:grid; grid-template-columns:1fr; gap:10px; margin-top:14px}
+    button{font-size:15px; padding:12px 14px; text-align:left; border-radius:10px; border:1px solid var(--border); background:#1e1e1e; color:var(--text); cursor:pointer; transition:transform .06s ease, background .2s ease, border .2s ease}
+    button:hover{transform:translateY(-1px); background:#232323}
+    .good{border-color:rgba(59,209,111,.6)}
+    .bad{border-color:rgba(255,93,93,.6)}
+    .neutral{border-color:rgba(240,192,74,.6)}
+    .feedback{margin-top:16px; padding:12px; border-radius:10px; background:#151515; border:1px dashed var(--border); font-size:14px}
+    .feedback strong{display:block; margin-bottom:6px}
+    .kicker{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap}
+    .kicker button{background:#0f0f0f; border:1px solid var(--border); padding:10px 12px; border-radius:10px; color:#ddd}
+    footer{padding:14px 22px; border-top:1px solid #262626; font-size:13px; display:flex; justify-content:space-between; align-items:center}
+    .pill{padding:6px 10px; border-radius:999px; background:#202020; border:1px solid var(--border)}
+    .legend{display:flex; gap:8px; align-items:center}
+    .dot{width:10px; height:10px; border-radius:50%}
+    .dot.good{background:var(--good)}
+    .dot.bad{background:var(--bad)}
+    .dot.neutral{background:var(--neutral)}
+
+    /* Mode menu */
+    .mode-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:14px}
+    .card{padding:16px; border-radius:12px; background:#191919; border:1px solid #2b2b2b}
+    .card h3{margin:0 0 8px 0; font-size:18px}
+    .card p{margin:0 0 10px 0; font-size:14px; opacity:.9}
+    .card button{width:100%; text-align:center}
+  </style>
 </head>
 <body>
-  <div id="game" role="application" aria-label="Mission: Reinforceable — JM Scenario">
+  <div id="app" role="application" aria-label="Mission: Reinforceable — Multi‑Week Trainer">
     <header>
-      <h1 id="title">Mission: Reinforceable — JM (1st Grade)</h1>
+      <h1 id="title">Mission: Reinforceable — Trainer (JM Demo)</h1>
       <div class="meta" id="meta"></div>
     </header>
     <main>
-      <div id="scene" class="scene"></div>
-      <div id="choices" class="choices"></div>
-      <div id="feedback" class="feedback" hidden></div>
-      <div id="kicker" class="kicker" hidden>
-        <button id="next">Continue ▶</button>
-        <button id="restart">Restart ⟲</button>
-      </div>
+      <div id="view"></div>
     </main>
     <footer>
       <div class="legend">
@@ -30,6 +64,282 @@
       <div class="pill">Score: <span id="points">0</span></div>
     </footer>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    // ====== META (swap per teacher) ======
+    const meta = {
+      title: "Mission: Reinforceable — JM (1st Grade)",
+      badges: [
+        "Function: Escape",
+        "Setting: Classroom — Writing, Transitions, Centers",
+        "Reinforcement: Mario Coins → Break w/ Mr. Jakob"
+      ],
+      desired: "Stays in area and completes work ~80% of lesson",
+      reinforcement: "Mario coin token board → Spin / Break with Mr. Jakob",
+      crisis: "If leaves room: call office; maintain visual; do not chase"
+    };
+
+    // ====== DAILY VARIETY UTILS ======
+    const pointsEl = document.getElementById('points');
+    let points = 0;
+    function seedFromDate(){
+      const d = new Date();
+      const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+      let h=0; for(let i=0;i<key.length;i++){ h = (h<<5)-h + key.charCodeAt(i); h |= 0; }
+      return Math.abs(h);
+    }
+    function srandom(seed){ // simple seeded rng
+      let x = seed || seedFromDate();
+      return function(){ x ^= x<<13; x ^= x>>>17; x ^= x<<5; return (x>>>0)/4294967295; }
+    }
+    function pickN(arr, n, rnd=Math.random){
+      const a=[...arr]; const out=[]; while(a.length && out.length<n){ out.push(a.splice(Math.floor(rnd()*a.length),1)[0]); } return out;
+    }
+
+    // ====== SCENE BUILDING BLOCK ======
+    const G = (label, tag, delta, why) => ({label, tag, delta, why});
+
+    // Pools categorized by skill area
+    const pool = {
+      proactive: [
+        {
+          text: `8:55 a.m. Writing starts at 9:00. JM often avoids this block.`,
+          choices:[
+            G('Show visual schedule and preview writing → PE; offer choice of pencil/gel pen.', 'good', +10, 'Pre-correction + choice reduces escape.'),
+            G('Start directions immediately to save time.', 'bad', -10, 'Skipping pre-correction increases escape risk.'),
+            G('Ask para to “keep an eye on him.”', 'neutral', 0, 'Monitoring alone does not address function or teach replacement.')
+          ]
+        },
+        {
+          text:`Centers are about to rotate. JM scans the door.`,
+          choices:[
+            G('Pre-correct the move and point to his next center on the visual map.', 'good', +10, 'Predictability lowers avoidance.'),
+            G('Tell the class to move quietly; no individual pre-correction.', 'neutral', 0, 'Generic cues miss JM’s need for predictability.'),
+            G('Announce a timer is already late and rush the rotation.', 'bad', -10, 'Rushing increases transition stress.')
+          ]
+        },
+        {
+          text:`Sub day: schedule slightly shifted.`,
+          choices:[
+            G('Review a simplified schedule with icons and star his preferred block.', 'good', +10, 'Visuals + motivation buffer change.'),
+            G('Say “We’ll figure it out” and begin.', 'bad', -10, 'Uncertainty fuels escape-maintained behavior.'),
+            G('Tell JM you’ll explain later if needed.', 'neutral', 0, 'Delay keeps ambiguity high.')
+          ]
+        }
+      ],
+      teaching: [
+        {
+          text:`JM fiddles with paper and glances at door — early signs.`,
+          choices:[
+            G('Prompt: “If you need it, use your break card for 5 minutes.”', 'good', +10, 'Prompt function-matched replacement before escalation.'),
+            G('“We stay in seats.” (rule reminder)', 'neutral', 0, 'Not a function-matched skill prompt.'),
+            G('“Start now or lose recess.”', 'bad', -10, 'Threats escalate escape; no skill is taught.')
+          ]
+        },
+        {
+          text:`During math, JM whispers “too hard.”`,
+          choices:[
+            G('Model asking for help and practice a quick role-play.', 'good', +10, 'Teach the communicative alternative.'),
+            G('Tell him “try your best.”', 'neutral', 0, 'Encouraging but not instructional.'),
+            G('Remove 3 problems to speed him up.', 'bad', -10, 'May reinforce escape without communication.')
+          ]
+        }
+      ],
+      reinforcement: [
+        {
+          text:`JM uses break card and returns on time; writes his name.`,
+          choices:[
+            G('Give Mario coin + behavior-specific praise for using the card.', 'good', +10, 'Immediate reinforcement strengthens alternative.'),
+            G('Wait to award until the whole page is done.', 'bad', -10, 'Delays weaken the replacement–reinforcer link.'),
+            G('Nod and keep circulating.', 'neutral', 0, 'Misses planned schedule and specificity.')
+          ]
+        },
+        {
+          text:`On-task for 5 minutes during centers.`,
+          choices:[
+            G('Deliver coin on the schedule with specific praise.', 'good', +10, 'Consistency builds momentum.'),
+            G('Stack rewards later “all at once.”', 'bad', -10, 'Bulk delivery reduces contingency clarity.'),
+            G('Praise only; skip the coin this round.', 'neutral', 0, 'Half the plan — weaker than planned reinforcement.')
+          ]
+        }
+      ],
+      consequence: [
+        {
+          text:`JM mutters “This is dumb” and swivels away from work.`,
+          choices:[
+            G('Planned ignore; prompt “Ask for help or a break.”', 'good', +10, 'Do not reinforce refusal; cue the alternative.'),
+            G('Lecture about respect.', 'bad', -10, 'Provides attention and escalates.'),
+            G('Do the first item for him silently.', 'neutral', 0, 'Risks reinforcing escape without teaching.')
+          ]
+        },
+        {
+          text:`Peer snickers after JM sighs dramatically.`,
+          choices:[
+            G('Quietly redirect peer; reinforce JM for appropriate coping.', 'good', +10, 'Manages attention pathways and reinforces desired response.'),
+            G('Public reprimand of the peer.', 'bad', -10, 'Adds high-intensity attention to the scene.'),
+            G('Ignore both and continue.', 'neutral', 0, 'May allow attention reinforcement to linger.')
+          ]
+        }
+      ],
+      crisis: [
+        {
+          text:`JM stands and brisk-walks toward the door (early elopement).`,
+          choices:[
+            G('Maintain visual; call office; prompt return plan calmly.', 'good', +10, 'Follow crisis plan; avoid chase/block.'),
+            G('Physically block the door.', 'bad', -10, 'Can escalate to aggression; not in plan.'),
+            G('Raise voice: “Sit down now!”', 'bad', -10, 'High-intensity attention escalates.')
+          ]
+        },
+        {
+          text:`He’s at the threshold; peers are watching.`,
+          choices:[
+            G('Signal para to move peers away; keep voice low; maintain visual.', 'good', +10, 'De-crowding reduces attention reinforcement.'),
+            G('Ask peers to chant “come back.”', 'bad', -10, 'Creates powerful attention reinforcement.'),
+            G('Offer a preferred item from across the room.', 'neutral', 0, 'May lure once; unclear safety priority.')
+          ]
+        },
+        {
+          text:`After support arrives, JM slows and turns back.`,
+          choices:[
+            G('Guide to calm corner; debrief briefly; reinforce safe return.', 'good', +10, 'Closes loop and reinforces safe behavior.'),
+            G('Scold for leaving; remove recess.', 'bad', -10, 'Punishment post-crisis undermines repair.'),
+            G('Return to class with no comment.', 'neutral', 0, 'Misses reinforcement for recovery.')
+          ]
+        }
+      ],
+      wildcard: [
+        {
+          text:`Assembly announced with 5‑minute notice.`,
+          choices:[
+            G('Create mini-visual: “Now → Hall → Assembly → Class.”', 'good', +10, 'Predictability during change.'),
+            G('Tell class to hurry; no visuals.', 'bad', -10, 'High ambiguity during change.'),
+            G('Let JM line-lead without pre-correction.', 'neutral', 0, 'Might help but lacks structure.')
+          ]
+        },
+        {
+          text:`Preferred peer is absent today.`,
+          choices:[
+            G('Offer alternative seating plan and extra check-ins on schedule.', 'good', +10, 'Reduces attention-driven drift.'),
+            G('Say “You’ll be fine” and keep routine.', 'neutral', 0, 'No mitigation for known trigger.'),
+            G('Drop all expectations for the morning.', 'bad', -10, 'Removes structure and contingencies.')
+          ]
+        },
+        {
+          text:`Laptop cart is dead; writing becomes pencil‑paper.`,
+          choices:[
+            G('Preview change + choice of paper type; keep token schedule.', 'good', +10, 'Maintains reinforcement and predictability.'),
+            G('Announce the change and start immediately.', 'bad', -10, 'Abrupt shift invites escape.'),
+            G('Offer to postpone writing to later.', 'neutral', 0, 'Avoids trigger but doesn’t teach coping.')
+          ]
+        }
+      ]
+    };
+
+    // ====== MISSION BUILDER ======
+    function buildMission(mode){
+      const rnd = srandom();
+      let scenes = [];
+      if(mode==='bip'){
+        scenes = [
+          ...pickN(pool.proactive, 1, rnd),
+          ...pickN(pool.teaching, 1, rnd),
+          ...pickN(pool.reinforcement, 1, rnd),
+          ...pickN(pool.consequence, 1, rnd)
+        ];
+      } else if(mode==='crisis'){
+        scenes = pickN(pool.crisis, 3, rnd);
+      } else if(mode==='wildcard'){
+        scenes = pickN([...pool.proactive, ...pool.teaching, ...pool.reinforcement, ...pool.consequence, ...pool.crisis, ...pool.wildcard], 5, rnd);
+      }
+      scenes.push({ end:true, text: () => wrapText() });
+      return scenes;
+    }
+
+    function wrapText(){
+      return `Mission complete. Desired: ${meta.desired}.
+Reinforcement: ${meta.reinforcement}.
+Crisis reminder: ${meta.crisis}
+
+Final Score: ${points} / ${maxScoreThisRun}`;
+    }
+
+    // ====== RENDERERS ======
+    const view = document.getElementById('view');
+    const metaEl = document.getElementById('meta');
+    document.getElementById('title').textContent = meta.title;
+    meta.badges.forEach(b=>{ const s=document.createElement('span'); s.className='badge'; s.textContent=b; metaEl.appendChild(s); });
+
+    let currentScenes = []; let idx = 0; let maxScoreThisRun = 0;
+
+    function showMenu(){
+      points = 0; pointsEl.textContent = points; idx = 0; currentScenes = []; maxScoreThisRun = 0;
+      view.innerHTML = `
+        <div class="card">
+          <h3>Choose Your Mission</h3>
+          <p>Select a training mode. New combos rotate daily for three weeks.</p>
+        </div>
+        <div class="mode-grid">
+          <div class="card"><h3>Launch Sequence</h3><p>BIP Skill Run — practice proactive, teaching, reinforcement, and consequence steps.</p><button data-mode="bip">Start BIP Practice ▶</button></div>
+          <div class="card"><h3>Red Alert</h3><p>Crisis Drill — rehearse safe elopement support and recovery steps.</p><button data-mode="crisis">Start Crisis Drill ▶</button></div>
+          <div class="card"><h3>Wildcard</h3><p>Mystery Mission — a mixed set, including curveballs and schedule changes.</p><button data-mode="wildcard">Start Wildcard ▶</button></div>
+        </div>
+      `;
+      view.querySelectorAll('button[data-mode]').forEach(btn=>btn.addEventListener('click', ()=>start(btn.getAttribute('data-mode'))));
+    }
+
+    function start(mode){
+      currentScenes = buildMission(mode);
+      maxScoreThisRun = (currentScenes.length-1)*10; // last is wrap
+      idx = 0;
+      renderScene();
+    }
+
+    function renderScene(){
+      const s = currentScenes[idx];
+      if(s.end){
+        view.innerHTML = `
+          <div class="scene">${typeof s.text==='function'? s.text(): s.text}</div>
+          <div class="kicker"><button id="menu">Main Menu</button><button id="restart">Run Again</button></div>
+        `;
+        document.getElementById('menu').addEventListener('click', showMenu);
+        document.getElementById('restart').addEventListener('click', ()=> start('wildcard'));
+        return;
+      }
+      // shuffle choices
+      const shuffled = [...s.choices].sort(()=>Math.random()-.5);
+      const sceneHTML = `
+        <div class="scene">${s.text}</div>
+        <div class="choices">
+          ${shuffled.map((c,i)=>`<button class="${c.tag}" data-i="${i}">${c.label}</button>`).join('')}
+        </div>
+        <div class="feedback" id="fb" hidden></div>
+        <div class="kicker" id="k" hidden>
+          <button id="next">Continue ▶</button>
+          <button id="quit">Quit ⟲</button>
+        </div>
+      `;
+      view.innerHTML = sceneHTML;
+      view.querySelectorAll('button[data-i]').forEach((b,i)=> b.addEventListener('click', ()=>choose(shuffled[i])));
+      document.getElementById('quit').addEventListener('click', showMenu);
+    }
+
+    function choose(ch){
+      points += ch.delta; pointsEl.textContent = points;
+      const fb = document.getElementById('fb');
+      fb.innerHTML = `<strong>${labelFor(ch.tag)}</strong>${ch.why}`;
+      fb.hidden = false;
+      const k = document.getElementById('k'); k.hidden = false;
+      document.getElementById('next').addEventListener('click', ()=>{ idx++; renderScene(); });
+    }
+
+    function labelFor(tag){
+      if(tag==='good') return '✔ Why this works:';
+      if(tag==='neutral') return '• Consider:';
+      return '✖ Risk:';
+    }
+
+    // boot
+    showMenu();
+  </script>
 </body>
 </html>
