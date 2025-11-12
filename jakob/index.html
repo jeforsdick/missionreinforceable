@@ -3,44 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mission: Behavioral Interventions</title>
+  <title>Mission: Reinforceable — Multi-Step Scenarios</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div id="game-container">
-    <h1>Behavioral Intervention Simulator</h1>
-    <h2 id="scenario-title">Mission: Reinforceable</h2>
+    <h1>Mission: Reinforceable</h1>
+    <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
 
-    <!-- MODE MENU (shown first) -->
-    <div id="mode-menu">
-      <div class="menu-grid">
-        <div class="menu-card">
-          <h3>Daily Drill</h3>
-          <p>Practice your student’s BIP steps: Proactive → Teach → Reinforce → Consequence.</p>
-          <button id="start-drill">Play Daily Drill ▶</button>
+    <!-- Toolbar (single) -->
+    <div id="toolbar">
+      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
+      <div id="score-badge">Points: <span id="points">0</span></div>
+
+      <!-- Feedback HUD with MR Wizard avatar -->
+      <div id="feedback">
+        <div id="coach-icon">
+          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
         </div>
-        <div class="menu-card">
-          <h3>Emergency Sim</h3>
-          <p>Walk through a safe crisis response (e.g., elopement) using your site plan.</p>
-          <button id="start-crisis">Run Emergency Sim ▶</button>
-        </div>
-        <div class="menu-card">
-          <h3>Shuffle Quest</h3>
-          <p>Random mix of classroom curveballs to keep skills sharp.</p>
-          <button id="start-random">Start Shuffle Quest ▶</button>
-        </div>
+        <div id="feedback-text"></div>
       </div>
+
+      <div class="spacer"></div>
+      <button id="home-btn" class="ghost">Home</button>
     </div>
 
-    <!-- GAME VIEW (shown after a mode is chosen) -->
-    <div id="story-text" hidden></div>
-    <div id="choices" hidden></div>
-    <div id="feedback" class="feedback" hidden></div>
-    <div id="nav" hidden>
-      <button id="next">Continue ▶</button>
-      <button id="back-to-menu">Back to Menu ⟲</button>
-    </div>
+    <!-- Game area -->
+    <div id="story-text"></div>
+    <div id="choices"></div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
