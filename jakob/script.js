@@ -1,701 +1,399 @@
-/**********************************************************
- * Mission: Reinforceable — Jakob
- * - 3 options per decision: +10 / 0 / -10 (hidden scoring)
- * - 3 scenarios, each with 3 scored steps
- * - Branching endings + fidelity feedback
- * - Options are SHUFFLED so the best choice isn't always first
- * - Results emailed via Google Apps Script
- **********************************************************/
+/* Mission: Reinforceable — Multi-Week, Multi-Mode Script
+   Modes:
+   - Daily Drill (BIP steps): randomized set of Proactive → Teaching → Reinforcement → Consequence
+   - Emergency Sim (Crisis): crisis rehearsal (e.g., elopement) with safe responses
+   - Shuffle Quest (Random): mixed set from all pools + wildcard school curveballs
 
-const storyText = document.getElementById('story-text');
-const choicesDiv = document.getElementById('choices');
-const scenarioTitle = document.getElementById('scenario-title');
-const pointsEl = document.getElementById('points');
+   Integration:
+   - Works with your current index.html ids:
+       #mode-menu, #story-text, #choices, #feedback, #nav, #next, #back-to-menu
+       #scenario-title, #points (optional: if you have a points element)
+   - Requires no external libraries.
+*/
 
-/********** Teacher / session info **********/
-const params = new URLSearchParams(window.location.search);
-// Default teacher code for Jakob's game; can override with ?t=CODE
-const TEACHER_CODE = (params.get('t') || 'JF').toUpperCase();
+/* ---------------------------- DOM HOOKS ---------------------------- */
+const storyText   = document.getElementById('story-text');
+const choicesDiv  = document.getElementById('choices');
+const feedbackEl  = document.getElementById('feedback');
+const navEl       = document.getElementById('nav');
+const menuEl      = document.getElementById('mode-menu');
+const titleEl     = document.getElementById('scenario-title') || { innerText: '' };
+const pointsEl    = document.getElementById('points') || { textContent: '' };
 
-const SESSION_ID = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-let eventLog = [];
-let resultsSent = false;
+const btnDrill    = document.getElementById('start-drill');
+const btnCrisis   = document.getElementById('start-crisis');
+const btnRandom   = document.getElementById('start-random');
+const btnNext     = document.getElementById('next');
+const btnMenu     = document.getElementById('back-to-menu');
 
-/********** Points + fidelity **********/
-let points = 0;
-let maxPossible = 0; // 10 per scored decision
+/* ---------------------------- UTILITIES ---------------------------- */
+function show(el){ if(el) el.hidden = false; }
+function hide(el){ if(el) el.hidden = true; }
+function clear(el){ if(!el) return; while(el.firstChild) el.removeChild(el.firstChild); }
+function shuffle(arr, rnd=Math.random){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function sample(pool, k, rnd=Math.random){
+  const bag = shuffle(pool, rnd);
+  return bag.slice(0, Math.min(k, bag.length));
+}
 
-function setPoints(v) {
-  points = v;
-  if (pointsEl) {
-    pointsEl.textContent = points;
-    pointsEl.classList.remove('flash');
-    requestAnimationFrame(() => pointsEl.classList.add('flash'));
+/* Seeded RNG so the set rotates each day (stable within a day) */
+function seedFromDate(){
+  const d = new Date();
+  const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  let h = 0;
+  for(let i=0;i<key.length;i++){ h = (h<<5)-h + key.charCodeAt(i); h |= 0; }
+  return Math.abs(h);
+}
+function srandom(seed){
+  let x = seed>>>0;
+  return function(){
+    x ^= x<<13; x ^= x>>>17; x ^= x<<5;
+    return ((x>>>0) / 4294967295);
   }
 }
 
-function addPoints(delta) {
-  if (typeof delta === 'number') {
-    maxPossible += 10; // each scored decision assumes a +10 best
-    setPoints(points + delta);
-  }
-}
+/* ---------------------------- META (PER TEACHER) ----------------------------
+   Swap these values for each teacher when you build their game.
+----------------------------------------------------------------------------- */
+const META = {
+  student:    'JM',
+  grade:      '1st',
+  function:   'Escape',
+  replacement:['Request a 5‑min break', 'Ask for help'],
+  desired:    'Stays in area and completes work ~80% of lesson',
+  reinforcement: 'Mario coin token board → Break/Spin with Mr. Jakob',
+  crisis:     'If leaves room: maintain visual; call office; do not chase; follow ESI',
+};
 
-function resetGame() {
-  points = 0;
-  maxPossible = 0;
-  eventLog = [];
-  resultsSent = false;
-  setPoints(0);
-}
+/* ---------------------------- CHOICE HELPERS ---------------------------- */
+const G=(label, why)=>({label, tag:'good',    delta:+10, why});
+const N=(label, why)=>({label, tag:'neutral', delta:  0, why});
+const B=(label, why)=>({label, tag:'bad',     delta:-10, why});
 
-function percentScore() {
-  return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0;
-}
+/* ---------------------------- SCENE POOLS ----------------------------
+   You can keep adding items to these arrays. The builders will create
+   fresh combinations every session for three weeks or more.
+---------------------------------------------------------------------------*/
 
-function fidelityMessage() {
-  const pct = percentScore();
-  if (pct >= 80) {
-    return "Nice work — your decisions closely matched Jakob's behavior plan.";
-  } else if (pct >= 50) {
-    return "Some moves were on-plan, but key supports were missed. Review Jakob's plan and try again.";
-  }
-  return "This run drifted from Jakob's plan. Replay and look for proactive supports, clear replacement skills, and consistent chart-move reinforcement.";
-}
-
-/********** Utility: non-destructive shuffle **********/
-function shuffledOptions(options) {
-  return options
-    .map(o => ({ ...o })) // copy
-    .sort(() => Math.random() - 0.5);
-}
-
-/********** Logging **********/
-function logEvent(nodeId, option, deltaApplied) {
-  eventLog.push({
-    ts: new Date().toISOString(),
-    session_id: SESSION_ID,
-    teacher_code: TEACHER_CODE,
-    node_id: nodeId,
-    choice_text: option.text,
-    delta: typeof option.delta === 'number' ? option.delta : null,
-    delta_applied: !!deltaApplied,
-    points_total: points,
-    max_possible: maxPossible
-  });
-}
-
-/********** Email results **********/
-const RESULTS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw0rHoBv6deNoy6avedLj5fj4JpCqt6r8B39UJmaNMeOYhRQfH6vbWKTgmTrhnC7cIy/exec';
-const TO_EMAIL = 'jess.olson@utah.edu';
-
-async function sendResultsIfNeeded() {
-  if (resultsSent || !RESULTS_ENDPOINT || RESULTS_ENDPOINT.startsWith('PASTE_')) return;
-  resultsSent = true;
-
-  const payload = {
-    teacher_code: TEACHER_CODE,
-    session_id: SESSION_ID,
-    student: "Jakob",
-    points,
-    max_possible: maxPossible,
-    percent: percentScore(),
-    timestamp: new Date().toISOString(),
-    to_email: TO_EMAIL,
-    log: eventLog
-  };
-
-  try {
-    const json = JSON.stringify(payload);
-
-    // Prefer sendBeacon
-    let queued = false;
-    if (navigator.sendBeacon) {
-      const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
-      queued = navigator.sendBeacon(RESULTS_ENDPOINT, blob);
-    }
-
-    // Fallback: no-cors fetch
-    if (!queued) {
-      await fetch(RESULTS_ENDPOINT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body: json
-      });
-    }
-  } catch (err) {
-    // If it fails, allow another try on next summary
-    resultsSent = false;
-  }
-}
-
-/**********************************************************
- * Nodes — tailored for Jakob's BIP
- * Focus: chart moves, neutral prompting, replacement behaviors,
- * preventing/handling disruptive vocalizations, noncompliance,
- * elopement, and aggression.
- **********************************************************/
-
-const NODES = [
-  /********** INTRO **********/
-  {
-    id: 1,
-    intro: true,
-    text:
-      "Welcome to Mission: Reinforceable — Jakob.\n\n" +
-      "You’ll step through short, branching scenarios built directly from Jakob's Behavior Intervention Plan (BIP). " +
-      "At each decision point, choose the teacher move that best aligns with:\n" +
-      "• Using chart moves\n" +
-      "• Teaching and prompting replacement behaviors\n" +
-      "• Staying neutral while reinforcing expectations\n\n" +
-      "Pick a scenario to begin.",
-    options: [
-      { text: "Proactive Morning Setup with Jakob", nextId: 10 },
-      { text: "In-Class Escalation & Elopement Risk", nextId: 20 },
-      { text: "Transition to Specials with Jakob", nextId: 30 }
+const poolProactive = [
+  { text: 'Five minutes to specials. JM tenses at “line up.” What do you do first?',
+    choices: [
+      G('Show visual schedule + pre‑correct; offer line job/choice.', 'Pre‑correction + choice reduces escape by clarifying expectations.'),
+      N('Ask the para to stand near JM.', 'Proximity helps but does not teach or address function.'),
+      B('Skip preview to stay on time; “Everyone line up now!”', 'Skipping proactive supports increases escape risk.')
     ]
   },
-
-  /********** SCENARIO A: PROACTIVE MORNING (3 steps) **********/
-  // Step 1
-  {
-    id: 10,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Arrival.\n\n" +
-      "Jakob often engages in disruptive vocalizations, off-task behavior, or leaves his area when he’s unsure of expectations.\n" +
-      "He walks in, looks around, and hesitates.\n\n" +
-      "What do you do first?",
-    options: [
-      {
-        text: "Greet Jakob by name, show his chart move sheet and schedule, and remind him how he can earn.",
-        delta: +10,
-        nextId: 11
-      },
-      {
-        text: "Say 'Good morning' to the class and tell everyone to start work with no specific support for Jakob.",
-        delta: 0,
-        nextId: 12
-      },
-      {
-        text: "Ignore arrival routines and begin giving rapid-fire directions.",
-        delta: -10,
-        nextId: 13
-      }
+  { text: 'Centers about to rotate. JM glances at the door.',
+    choices: [
+      G('Pre‑correct and point to his next center on the map.', 'Predictability lowers avoidance.'),
+      N('Tell class to rotate; no individual cue.', 'Generic cues miss JM’s need for predictability.'),
+      B('Rush rotation because the timer already went off.', 'Rushing raises transition stress.')
     ]
   },
-  // Step 2
-  {
-    id: 11,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Early success.\n\n" +
-      "Jakob checks his schedule, sits where expected, and starts the first task.\n\n" +
-      "What’s your next move to align with his plan?",
-    options: [
-      {
-        text: "Give behavior-specific praise and mark a chart move for following expectations.",
-        delta: +10,
-        nextId: 14
-      },
-      {
-        text: "Say a quick 'Nice job' and move on without using the chart.",
-        delta: 0,
-        nextId: 14
-      },
-      {
-        text: "Say nothing; he should know this by now.",
-        delta: -10,
-        nextId: 15
-      }
+  { text: 'Sub day: schedule slightly shifted and noisier than usual.',
+    choices: [
+      G('Preview a simplified visual schedule; star a preferred block.', 'Visuals + motivation buffer change stress.'),
+      N('Say “We’ll figure it out” and begin.', 'Ambiguity fuels escape‑maintained behavior.'),
+      B('Tell students there is no time to explain; get started.', 'Abrupt change without preview increases risk.')
     ]
   },
-  {
-    id: 12,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Ambiguous start.\n\n" +
-      "Jakob glances at the door and taps his pencil loudly.\n\n" +
-      "How do you respond?",
-    options: [
-      {
-        text: "Pause and show him: 'Here’s your chart, here’s how you earn today.'",
-        delta: +10,
-        nextId: 14
-      },
-      {
-        text: "Hand him materials and hope the behavior settles.",
-        delta: 0,
-        nextId: 15
-      },
-      {
-        text: "Correct him sharply for tapping and tell him to 'just get to work'.",
-        delta: -10,
-        nextId: 16
-      }
+  { text: 'Independent work after recess — historically tough for JM.',
+    choices: [
+      G('Offer choice of task order + set a visible 5‑min timer.', 'Choice + predictability reduces response effort.'),
+      N('Place JM near a quiet peer.', 'Helpful but not a BIP step; less targeted.'),
+      B('Start with the hardest task to “get it over with.”', 'High effort first likely triggers escape.')
     ]
   },
-  {
-    id: 13,
-    scenario: "Proactive Morning Setup",
-    text:
-      "No preview.\n\n" +
-      "During instructions, Jakob stares at the exit and mutters.\n\n" +
-      "Next step?",
-    options: [
-      {
-        text: "Introduce the chart and expectations now; reinforce being in his area.",
-        delta: +10,
-        nextId: 14
-      },
-      {
-        text: "Repeat directions more firmly so he 'takes it seriously'.",
-        delta: 0,
-        nextId: 16
-      },
-      {
-        text: "Ignore him completely unless he runs.",
-        delta: -10,
-        nextId: 17
-      }
-    ]
-  },
-  // Step 3 (several variants funnel to summary)
-  {
-    id: 14,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Decision point.\n\n" +
-      "Jakob is in his area and looks to you when he finishes a small chunk.\n\n" +
-      "What do you do?",
-    options: [
-      {
-        text: "Mark a chart move immediately and describe exactly what he did right.",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Plan to give him something later instead of in the moment.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Remind him he has a history of behavior and lower his chances to earn.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-  {
-    id: 15,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Wobble.\n\n" +
-      "Jakob is technically in place, but increasingly loud and watching peers.\n\n" +
-      "Your move?",
-    options: [
-      {
-        text: "Catch even partial on-track behavior and give a chart move + praise.",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Let it go since he hasn’t fully escalated.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Scold him publicly for being annoying.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-  {
-    id: 16,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Escalation.\n\n" +
-      "Jakob raises his voice and edges out of his area.\n\n" +
-      "How do you respond?",
-    options: [
-      {
-        text: "Use a neutral prompt linked to the plan: 'Back to your spot and you earn a chart move.'",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Repeat the rule louder without offering a way to earn.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Physically block and lecture him.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-  {
-    id: 17,
-    scenario: "Proactive Morning Setup",
-    text:
-      "Plan drift.\n\n" +
-      "Jakob is half out of his seat and scanning exits.\n\n" +
-      "What now?",
-    options: [
-      {
-        text: "Reboot the system: prompt him back and reinforce the approximation.",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Ignore until he fully leaves.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Threaten loss of all rewards.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-
-  /********** SCENARIO B: ESCALATION & ELOPEMENT RISK (3 steps) **********/
-  {
-    id: 20,
-    scenario: "In-Class Escalation",
-    text:
-      "Work demand.\n\n" +
-      "You present a non-preferred task. Jakob pushes materials aside and heads toward the door.\n\n" +
-      "First response?",
-    options: [
-      {
-        text: "Use a neutral, plan-based prompt: offer help or a small chunk + chart move if he returns.",
-        delta: +10,
-        nextId: 21
-      },
-      {
-        text: "Raise your voice and tell him he must finish it all now.",
-        delta: 0,
-        nextId: 22
-      },
-      {
-        text: "Ignore him completely as he moves toward the exit.",
-        delta: -10,
-        nextId: 23
-      }
-    ]
-  },
-  {
-    id: 21,
-    scenario: "In-Class Escalation",
-    text:
-      "Jakob pauses.\n\n" +
-      "He hovers near the doorway, looking back at you.\n\n" +
-      "Next move?",
-    options: [
-      {
-        text: "Praise the pause, restate the offer, and reinforce coming back with a chart move.",
-        delta: +10,
-        nextId: 24
-      },
-      {
-        text: "Remind him loudly he’s being unsafe.",
-        delta: 0,
-        nextId: 24
-      },
-      {
-        text: "Grab his arm and pull him back.",
-        delta: -10,
-        nextId: 23
-      }
-    ]
-  },
-  {
-    id: 22,
-    scenario: "In-Class Escalation",
-    text:
-      "Coercive push.\n\n" +
-      "Jakob glares, kicks a chair, and edges farther.\n\n" +
-      "Your move?",
-    options: [
-      {
-        text: "Shift to neutral: offer a smaller step + chart move to return.",
-        delta: +10,
-        nextId: 24
-      },
-      {
-        text: "Continue arguing the whole assignment.",
-        delta: 0,
-        nextId: 23
-      },
-      {
-        text: "Threaten office referral without any support.",
-        delta: -10,
-        nextId: 23
-      }
-    ]
-  },
-  {
-    id: 24,
-    scenario: "In-Class Escalation",
-    text:
-      "Turning point.\n\n" +
-      "Jakob steps back toward you.\n\n" +
-      "How do you lock in the plan?",
-    options: [
-      {
-        text: "Calmly guide him to his spot, mark a chart move, and thank him for coming back.",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Walk him back while lecturing about how close he was to trouble.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Tell him he’s lost all rewards anyway.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-  {
-    id: 23,
-    scenario: "In-Class Escalation",
-    text:
-      "Escalation.\n\n" +
-      "Jakob’s behavior intensifies; the plan steps were not followed.\n\n" +
-      "Time to reflect.",
-    options: [
-      {
-        text: "Acknowledge the miss and consider how neutral prompts + chart moves could reduce risk.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Conclude that Jakob is just defiant and nothing works.",
-        delta: -10,
-        nextId: 901
-      },
-      {
-        text: "Restart this scenario and try the planned steps.",
-        delta: 0,
-        nextId: 20
-      }
-    ]
-  },
-
-  /********** SCENARIO C: TRANSITION SUPPORT (3 steps) **********/
-  {
-    id: 30,
-    scenario: "Transition to Specials",
-    text:
-      "Before Specials.\n\n" +
-      "Transitions are hard for Jakob and often linked to leaving his area.\n\n" +
-      "What do you do before lining up?",
-    options: [
-      {
-        text: "Preview where you're going, review expectations, and show how he can earn chart moves.",
-        delta: +10,
-        nextId: 31
-      },
-      {
-        text: "Tell the class 'Line up for specials!' with no extra support.",
-        delta: 0,
-        nextId: 32
-      },
-      {
-        text: "Say nothing until the last second, then rush everyone out.",
-        delta: -10,
-        nextId: 33
-      }
-    ]
-  },
-  {
-    id: 31,
-    scenario: "Transition to Specials",
-    text:
-      "Line up.\n\n" +
-      "Jakob lingers at his desk, watching peers line up.\n\n" +
-      "Your move?",
-    options: [
-      {
-        text: "Offer a simple choice (spot in line) + remind him he earns a chart move for joining calmly.",
-        delta: +10,
-        nextId: 34
-      },
-      {
-        text: "Tell him again to hurry and get in line.",
-        delta: 0,
-        nextId: 34
-      },
-      {
-        text: "Warn he’ll lose specials if he doesn’t move now.",
-        delta: -10,
-        nextId: 33
-      }
-    ]
-  },
-  {
-    id: 32,
-    scenario: "Transition to Specials",
-    text:
-      "Minimal support.\n\n" +
-      "Jakob shuffles to the back, looking unsure.\n\n",
-    options: [
-      {
-        text: "Pause briefly to restate expectations and how he can earn.",
-        delta: +10,
-        nextId: 34
-      },
-      {
-        text: "Keep walking; at least he's with the group.",
-        delta: 0,
-        nextId: 34
-      },
-      {
-        text: "Call him out in front of peers for being slow.",
-        delta: -10,
-        nextId: 33
-      }
-    ]
-  },
-  {
-    id: 34,
-    scenario: "Transition to Specials",
-    text:
-      "At the door.\n\n" +
-      "Jakob pauses and looks at you before going into the hallway.\n\n" +
-      "What now?",
-    options: [
-      {
-        text: "Reinforce his on-track behavior with praise and a chart move.",
-        delta: +10,
-        nextId: 901
-      },
-      {
-        text: "Give a neutral 'okay' and keep walking.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Ignore him unless there's a problem.",
-        delta: -10,
-        nextId: 901
-      }
-    ]
-  },
-  {
-    id: 33,
-    scenario: "Transition to Specials",
-    text:
-      "Plan drift.\n\n" +
-      "Rushed or punitive responses increase Jakob's anxiety and risk.\n\n",
-    options: [
-      {
-        text: "Reflect on how preview + choices + chart moves could support safer transitions.",
-        delta: 0,
-        nextId: 901
-      },
-      {
-        text: "Decide transitions are his problem alone.",
-        delta: -10,
-        nextId: 901
-      },
-      {
-        text: "Restart the transition scenario to try again.",
-        delta: 0,
-        nextId: 30
-      }
-    ]
-  },
-
-  /********** FEEDBACK **********/
-  {
-    id: 901,
-    feedback: true,
-    text: "Session Summary",
-    options: [
-      { text: "Play again from the beginning", nextId: 1 },
-      { text: "Replay Proactive Morning", nextId: 10 },
-      { text: "Replay In-Class Escalation", nextId: 20 }
+  { text: 'Morning arrival; backpacks everywhere; class energy is high.',
+    choices: [
+      G('Greet JM; review first‑then visual (First: Morning Work → Then: Coins).', 'Pairs routine with reinforcement to prevent drift.'),
+      N('Give a general class reminder to start work.', 'Not individualized to function.'),
+      B('Hold back coins until the end of the day only.', 'Removes immediate reinforcement; weakens contingency.')
     ]
   }
 ];
 
-/**********************************************************
- * Engine
- **********************************************************/
-
-function showNode(id) {
-  const node = NODES.find(n => n.id === id);
-  if (!node) return;
-
-  // Title
-  if (scenarioTitle) {
-    if (node.intro) {
-      scenarioTitle.textContent = "Behavior Intervention Simulator — Jakob";
-    } else if (node.feedback) {
-      scenarioTitle.textContent = "Fidelity Feedback";
-    } else if (node.scenario) {
-      scenarioTitle.textContent = node.scenario;
-    } else {
-      scenarioTitle.textContent = "Choose Your Next Move";
-    }
+const poolTeaching = [
+  { text: 'During writing, JM stares at the door and grips his pencil—early signs of avoidance.',
+    choices: [
+      G('Prompt: “If you need it, use your break card for 5 minutes.”', 'Prompt replacement before escalation; function‑matched.'),
+      N('State the rule: “We stay in our seats during work time.”', 'Rule reminder is not teaching the replacement skill.'),
+      B('“Start now or lose recess.”', 'Punitive threats increase escape and don’t teach the skill.')
+    ]
+  },
+  { text: 'Math problem seems too hard. JM whispers “too hard.”',
+    choices: [
+      G('Model asking for help; brief role‑play then try the first step.', 'Teaches the communicative alternative to escape.'),
+      N('Encourage: “Try your best.”', 'Kind but not instructional in the target skill.'),
+      B('Remove multiple problems to speed him up.', 'May reinforce escape (task removal) rather than communication.')
+    ]
+  },
+  { text: 'Transition to rug. JM lingers at desk, looking away.',
+    choices: [
+      G('Teach & prompt a short transition script with choice of seat.', 'Combines skill and motivation; reduces avoidance.'),
+      N('Tell him to move quickly; “We’re late.”', 'Adds pressure without a skill cue.'),
+      B('Pick up his materials and escort him by the arm.', 'Physical guidance risks escalation.')
+    ]
+  },
+  { text: 'Before small groups, JM asks to get water repeatedly.',
+    choices: [
+      G('Teach & prompt: “Ask for a 2‑min break after first problem.”', 'Schedules a function‑matched break, reducing escape.'),
+      N('Let him go once and hope it helps.', 'May become avoidance without a limit/schedule.'),
+      B('Refuse abruptly: “No more water.”', 'Hard denial can escalate behavior.')
+    ]
   }
+];
 
-  // Text or feedback
-  if (node.feedback) {
-    const pct = percentScore();
-    const msg = fidelityMessage();
-    storyText.textContent =
-      `Your score: ${points} / ${maxPossible} (${pct}%)\n\n${msg}\n\nResults have been recorded for this session.`;
-    sendResultsIfNeeded();
-  } else {
-    storyText.textContent = node.text;
+const poolReinforcement = [
+  { text: 'JM uses the break card and returns on time, starting his name.',
+    choices: [
+      G('Give a Mario coin + behavior‑specific praise immediately.', 'Immediate reinforcement strengthens the alternative.'),
+      N('Smile and award later.', 'Delay weakens the contingency.'),
+      B('Wait until the whole page is done.', 'Raises effort; weakens replacement–reinforcer link.')
+    ]
+  },
+  { text: 'JM is on‑task for 5 minutes at centers.',
+    choices: [
+      G('Deliver coin on schedule with specific praise.', 'Consistency builds momentum and clarity.'),
+      N('Give praise only; skip the coin this round.', 'Half the plan; weaker than planned reinforcement.'),
+      B('Save coins to give in bulk at the end.', 'Bulk delivery reduces contingency clarity.')
+    ]
+  },
+  { text: 'After asking for help, JM completes the first problem.',
+    choices: [
+      G('Praise the help‑request + give coin for initiation.', 'Pairs communication with reinforcement.'),
+      N('Thank him and move to another student.', 'Missed opportunity to strengthen the skill.'),
+      B('Ignore and only praise quiet sitting later.', 'Reinforces an unrelated behavior.')
+    ]
   }
+];
 
-  // Clear old buttons
-  while (choicesDiv.firstChild) choicesDiv.removeChild(choicesDiv.firstChild);
+const poolConsequence = [
+  { text: 'JM mutters “This is dumb” and swivels away from the desk.',
+    choices: [
+      G('Planned ignore the comment; prompt “Ask for help or a break.”', 'Avoid reinforcing refusal; prompt alternative.'),
+      N('Offer to write the first sentence for him.', 'May help once but risks reinforcing escape.'),
+      B('Argue about respect/compliance.', 'Provides attention and escalates.')
+    ]
+  },
+  { text: 'Peer snickers after JM sighs dramatically.',
+    choices: [
+      G('Quietly redirect peer; reinforce JM for coping appropriately.', 'Manages attention pathways; reinforces desired response.'),
+      N('Ignore both and continue.', 'Allows attention reinforcement to linger.'),
+      B('Publicly reprimand the peer loudly.', 'Adds high‑intensity attention to the scene.')
+    ]
+  },
+  { text: 'JM drops pencil and says “I’m done,” crossing arms.',
+    choices: [
+      G('Prompt replacement; offer 2 choices to re‑engage; reinforce initiation.', 'Balances consequence with function‑matched prompt.'),
+      N('Let him sit out until he’s ready.', 'Could become escape without skill practice.'),
+      B('Remove preferred time later as punishment.', 'Delayed punishment rarely builds the target skill.')
+    ]
+  }
+];
 
-  // Shuffle options each time
-  const options = shuffledOptions(node.options);
+const poolCrisis = [
+  { text: 'JM stands, eyes the door, and speed‑walks toward it.',
+    choices: [
+      G('Maintain visual; call office; do not chase; calmly prompt return plan.', 'Matches plan: notify + safety + no chase/block.'),
+      B('Block the door with your body.', 'Can escalate to aggression; not in plan.'),
+      B('Raise voice: “Get back here now!”', 'High‑intensity attention escalates.')
+    ]
+  },
+  { text: 'He is in the hallway; you are 12 feet behind with line‑of‑sight.',
+    choices: [
+      G('Use calm, brief cue linked to reinforcement upon return.', 'Non‑escalatory cue + reinforcement for de‑escalation.'),
+      N('Shadow silently without calling.', 'Safer than chasing, but notify team per plan.'),
+      B('Hurry to grab his arm before he turns the corner.', 'Physical contact can escalate; violates no‑chase guidance.')
+    ]
+  },
+  { text: 'Support arrives. JM slows and stops near the library door.',
+    choices: [
+      G('Prompt return script; walk back together; document; debrief later.', 'Closure with fidelity + documentation + debrief.'),
+      N('Return immediately without debrief.', 'Misses learning from incident; still okay for safety.'),
+      B('Lecture about rules the whole walk back.', 'Sustained attention during return reinforces behavior.')
+    ]
+  }
+];
 
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.textContent = opt.text;
-    btn.addEventListener('click', () => {
-      let deltaApplied = false;
-      if (typeof opt.delta === 'number') {
-        addPoints(opt.delta);
-        deltaApplied = true;
-      }
-      if (opt.nextId === 1) {
-        // restart to intro
-        resetGame();
-      }
-      logEvent(node.id, opt, deltaApplied);
-      showNode(opt.nextId);
-    });
-    choicesDiv.appendChild(btn);
-  });
+const poolWildcard = [
+  { text: 'Surprise assembly announced during writing block.',
+    choices: [
+      G('Preview change with a quick visual; offer role (door holder/time checker).', 'Predictability + meaningful role reduce escape.'),
+      N('Tell the class “Plans changed—let’s go.”', 'Neutral announcement lacks supports.'),
+      B('Rush students without explanation.', 'Increases uncertainty and dysregulation.')
+    ]
+  },
+  { text: 'Sub para today who doesn’t know the plan.',
+    choices: [
+      G('Do a 60‑second plan briefing + cue cards.', 'Sets up consistent adult behavior.'),
+      N('Ask the sub to “watch JM closely.”', 'Too vague to ensure fidelity.'),
+      B('Assume the sub will figure it out.', 'High risk of drift and escalation.')
+    ]
+  },
+  { text: 'Peer: “Hurry up or we’ll be last.” JM glares and grips desk.',
+    choices: [
+      G('Prompt replacement (help/break) + coach peer on supportive language.', 'Addresses function and peer ecology.'),
+      N('Ignore and move on.', 'Misses an antecedent to coach.'),
+      B('Scold JM for being slow.', 'Punishes the wrong student; increases escape.')
+    ]
+  },
+  { text: 'Fire drill during math. JM covers ears and heads toward coat hooks.',
+    choices: [
+      G('Provide headphones/cover + visual route + buddy role.', 'Accommodations + role reduce distress.'),
+      N('Escort quietly with minimal talk.', 'OK, but lacks individualized supports.'),
+      B('Command loudly: “Stop that and move!”', 'Adds intensity; increases avoidance.')
+    ]
+  },
+  { text: 'Indoor recess. Noise rises quickly; JM paces.', 
+    choices: [
+      G('Offer calm‑corner option + timer + token for returning.', 'Function‑matched break + reinforcement.'),
+      N('Ask him to choose a game.', 'Choice helps; add break option for escape function.'),
+      B('Tell him to sit and be quiet.', 'High control without support increases escape.')
+    ]
+  },
+  { text: 'Open‑ended writing prompt assigned; JM freezes.',
+    choices: [
+      G('Offer sentence starters or scribe first line; reinforce initiation.', 'Reduces response effort; builds momentum.'),
+      N('Suggest brainstorming later.', 'Defers support; may not prevent escape now.'),
+      B('Insist on full paragraph without supports.', 'High effort triggers escape.')
+    ]
+  }
+];
+
+/* ---------------------------- MISSION BUILDERS ---------------------------- */
+function buildDailyDrill(rnd){ // 4‑step BIP fidelity
+  // Randomly select one from each fidelity area
+  const steps = [
+    sample(poolProactive,   1, rnd)[0],
+    sample(poolTeaching,    1, rnd)[0],
+    sample(poolReinforcement,1, rnd)[0],
+    sample(poolConsequence, 1, rnd)[0]
+  ].filter(Boolean);
+  return steps;
 }
 
-/********** INIT + HOME BUTTON **********/
-window.addEventListener('load', () => {
-  const homeBtn = document.getElementById('home-btn');
-  if (homeBtn) {
-    homeBtn.addEventListener('click', () => {
-      resetGame();
-      showNode(1); // intro / scenario select
-    });
-  }
+function buildEmergencySim(rnd){ // 3‑step crisis
+  return sample(poolCrisis, 3, rnd);
+}
 
-  resetGame();
-  showNode(1);
-});
+function buildShuffleQuest(rnd){ // 5‑7 mixed
+  const base = [
+    ...sample(poolProactive,    1, rnd),
+    ...sample(poolTeaching,     1, rnd),
+    ...sample(poolReinforcement,1, rnd),
+    ...sample(poolConsequence,  1, rnd),
+    ...sample(poolCrisis,       1, rnd),
+    ...sample(poolWildcard,     2, rnd)
+  ];
+  // Cap length to keep sessions short; randomize 5–7
+  const desiredLength = 5 + Math.floor(rnd()*3); // 5,6,7
+  return shuffle(base, rnd).slice(0, desiredLength);
+}
+
+/* ---------------------------- STATE ---------------------------- */
+let mission = [];
+let stepIndex = 0;
+let points = 0;
+let currentMode = null;
+
+/* Persist last mode played for quick start */
+function saveLastMode(mode){ try{ localStorage.setItem('mr_last_mode', mode); }catch(e){} }
+function loadLastMode(){ try{ return localStorage.getItem('mr_last_mode'); }catch(e){ return null; } }
+
+/* ---------------------------- RENDERERS ---------------------------- */
+function renderStep(){
+  const step = mission[stepIndex];
+  storyText.textContent = step.text;
+  clear(choicesDiv);
+  const rnd = srandom(seedFromDate() + stepIndex);
+  const shuffled = shuffle(step.choices, rnd);
+  shuffled.forEach(choice => {
+    const b = document.createElement('button');
+    b.textContent = choice.label;
+    b.classList.add(choice.tag === 'good' ? 'choice-good' : choice.tag === 'neutral' ? 'choice-neutral' : 'choice-bad');
+    b.addEventListener('click', () => selectChoice(choice));
+    choicesDiv.appendChild(b);
+  });
+  hide(feedbackEl);
+}
+
+function selectChoice(choice){
+  points += (choice.delta || 0);
+  pointsEl.textContent = String(points);
+  feedbackEl.innerHTML = `<strong>${
+      choice.tag === 'good' ? '✔ Why this works:' :
+      choice.tag === 'neutral' ? '• Consider:' : '✖ Risk:'
+    }</strong>${choice.why}`;
+  show(feedbackEl);
+}
+
+function nextStep(){
+  if(stepIndex < mission.length - 1){
+    stepIndex++;
+    renderStep();
+  }else{
+    storyText.textContent =
+`Mission complete.
+
+Desired outcome: ${META.desired}
+Crisis reminder: ${META.crisis}
+
+Final Score: ${points} / ${mission.length * 10}`;
+    clear(choicesDiv);
+    hide(feedbackEl);
+    // keep nav so user can go back
+    if(btnNext) btnNext.disabled = true;
+  }
+}
+
+function backToMenu(){
+  if(btnNext) btnNext.disabled = false;
+  titleEl.innerText = 'Mission: Reinforceable';
+  show(menuEl);
+  hide(storyText);
+  hide(choicesDiv);
+  hide(feedbackEl);
+  hide(navEl);
+  points = 0; pointsEl.textContent = '0';
+}
+
+/* ---------------------------- STARTERS ---------------------------- */
+function startMission(mode){
+  currentMode = mode;
+  saveLastMode(mode);
+  const rnd = srandom(seedFromDate());
+  points = 0; pointsEl.textContent = '0';
+  stepIndex = 0;
+  if (mode === 'drill'){
+    titleEl.innerText = 'Mission: Daily Drill';
+    mission = buildDailyDrill(rnd);
+  } else if (mode === 'crisis'){
+    titleEl.innerText = 'Mission: Emergency Sim';
+    mission = buildEmergencySim(rnd);
+  } else {
+    titleEl.innerText = 'Mission: Shuffle Quest';
+    mission = buildShuffleQuest(rnd);
+  }
+  hide(menuEl);
+  show(storyText);
+  show(choicesDiv);
+  show(navEl);
+  renderStep();
+}
+
+/* ---------------------------- EVENTS ---------------------------- */
+if(btnDrill)  btnDrill.addEventListener('click', ()=> startMission('drill'));
+if(btnCrisis) btnCrisis.addEventListener('click', ()=> startMission('crisis'));
+if(btnRandom) btnRandom.addEventListener('click', ()=> startMission('random'));
+if(btnNext)   btnNext.addEventListener('click', nextStep);
+if(btnMenu)   btnMenu.addEventListener('click', backToMenu);
+
+/* ---------------------------- BOOT ---------------------------- */
+backToMenu();
+// Optional: auto-suggest last mode
+// const last = loadLastMode(); if(last) startMission(last);
