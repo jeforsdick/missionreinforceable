@@ -11,7 +11,7 @@
     <h1>Mission: Reinforceable</h1>
     <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
 
-    <!-- Toolbar (single) -->
+    <!-- Toolbar (kept exactly as before) -->
     <div id="toolbar">
       <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
       <div id="score-badge">Points: <span id="points">0</span></div>
@@ -28,11 +28,12 @@
       <button id="home-btn" class="ghost">Home</button>
     </div>
 
-    <!-- Game area -->
+    <!-- Game area (script renders intro + choices here) -->
     <div id="story-text"></div>
     <div id="choices"></div>
   </div>
 
+  <!-- Keep this last so all elements exist before the script runs -->
   <script src="script.js"></script>
 </body>
 </html>
