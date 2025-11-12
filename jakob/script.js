@@ -312,7 +312,7 @@ function startDynamicMission(modeLabel, scenes){
   DYN.ids = ids;
     showNode(ids[0]);
   // ⭐ Add this line:
-  showFeedback("Mission launched! You’re making great choices—let’s practice high-fidelity BIP skills. 🚀", "correct", +10);
+  showFeedback("Mission launched! Good Luck. 🚀", "correct", +10);
 }
 
 /* -------- Static summary node -------- */
