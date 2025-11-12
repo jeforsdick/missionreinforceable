@@ -1,12 +1,12 @@
 /**********************************************************
  * Mission: Reinforceable — Classic UI + Multi-Mode Engine
- * - Keeps your original look, wizard pod, and feedback
- * - Adds 3 modes: Daily Drill / Emergency Sim / Shuffle Quest
- * - Large randomized pools + daily-seeded rotation
- * - Choices are shuffled every step
+ * - Classic UI + wizard pod preserved
+ * - Three modes: Daily Drill / Emergency Sim / Shuffle Quest
+ * - Scenario pools + daily-seeded randomness
+ * - Choices shuffled every step
  **********************************************************/
 
-/* -------- DOM refs (unchanged) -------- */
+/* -------- DOM refs -------- */
 const storyText       = document.getElementById('story-text');
 const choicesDiv      = document.getElementById('choices');
 const scenarioTitle   = document.getElementById('scenario-title');
@@ -15,16 +15,22 @@ const feedbackEl      = document.getElementById('feedback');
 const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
-/* -------- Wizard sprites (unchanged) -------- */
+/* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
   minus: 'mr-wizard-minus10.png'
 };
-// Preload
-['plus','meh','minus'].forEach(k => { const i = new Image(); i.src = WIZ[k]; });
 
-/* -------- Scoring (unchanged) -------- */
+// Always show a sprite immediately and avoid stale-cache
+function setWizardSprite(state) {
+  const src = (state === 'plus') ? WIZ.plus : (state === 'minus') ? WIZ.minus : WIZ.meh;
+  if (coachImgEl) coachImgEl.src = `${src}?v=${Date.now()}`;
+}
+// default image on load
+setWizardSprite('meh');
+
+/* -------- Scoring -------- */
 let points = 0;
 let maxPossible = 0; // 10 per scored decision
 
@@ -56,14 +62,16 @@ function fidelityMessage() {
   return "This run drifted from the plan. Focus on: (a) proactive setup, (b) prompting & reinforcing the replacement behavior, and (c) using the crisis steps as written. Replay to tighten fidelity.";
 }
 
-/* -------- Feedback UI (unchanged) -------- */
+/* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
+
   let state = 'meh';
   if (typeof scoreHint === 'number') state = scoreHint > 0 ? 'plus' : scoreHint < 0 ? 'minus' : 'meh';
   else if (type === 'correct') state = 'plus';
 
-  if (coachImgEl) coachImgEl.src = state === 'plus' ? WIZ.plus : state === 'minus' ? WIZ.minus : WIZ.meh;
+  // use cache-busting sprite setter
+  setWizardSprite(state);
 
   feedbackEl.classList.remove('state-plus','state-meh','state-minus','flash');
   feedbackEl.classList.add(`state-${state}`);
@@ -89,8 +97,7 @@ const N=(text,why)=>({ text, why, tag:'neutral', delta:0   });
 const B=(text,why)=>({ text, why, tag:'bad',     delta:-10 });
 
 /* ============================================================
-   CONTENT POOLS (expand anytime)
-   - Proactive, Teaching, Reinforcement, Consequence, Crisis, Wildcards
+   CONTENT POOLS
    ============================================================ */
 const POOL = {
   proactive: [
@@ -204,10 +211,65 @@ const POOL = {
 };
 
 /* ============================================================
-   DYNAMIC MISSION BUILDER (uses your classic engine)
-   - Converts pooled scenes into temporary nodes
-   - UI stays identical to your old game
+   DYNAMIC MISSION BUILDER
    ============================================================ */
+function renderIntroCards() {
+  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+
+  // Intro text pod (keeps your style)
+  storyText.innerHTML =
+`Welcome to Mission: Reinforceable.
+
+You’ll step through short, branching scenarios based on a Behavior Intervention Plan (BIP).
+At each decision point, choose the teacher move that best aligns with:
+• Proactive supports
+• Teaching and prompting replacement behaviors
+• Reinforcing the right responses
+
+Choose Your Mission
+Select a training mode. New combos rotate daily for three weeks.`;
+
+  // Card deck below the intro pod
+  const menu = document.createElement('div');
+  menu.className = 'mission-grid';
+
+  menu.innerHTML = `
+    <div class="mission-card">
+      <h3>Launch Sequence</h3>
+      <p>BIP Skill Run — practice proactive, teaching, reinforcement, and consequence steps.</p>
+      <div class="action"><button id="btn-drill">Start BIP Practice ▶</button></div>
+    </div>
+    <div class="mission-card">
+      <h3>Red Alert</h3>
+      <p>Crisis Drill — rehearse safe elopement support and recovery steps.</p>
+      <div class="action"><button id="btn-crisis">Start Crisis Drill ▶</button></div>
+    </div>
+    <div class="mission-card">
+      <h3>Wildcard</h3>
+      <p>Mystery Mission — a mixed set, including curveballs and schedule changes.</p>
+      <div class="action"><button id="btn-random">Start Wildcard ▶</button></div>
+    </div>
+  `;
+
+  // Put the cards right after the story pod
+  const container = document.createElement('div');
+  container.className = 'mission-intro';
+  container.appendChild(menu);
+
+  // Replace choices area with the card menu
+  choicesDiv.innerHTML = '';
+  choicesDiv.appendChild(container);
+
+  // Wizard hint
+  showFeedback("At each step, you’ll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
+
+  // Button hooks
+  const rnd = srandom(seedFromDate());
+  document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   buildDailyDrill(rnd)); };
+  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', buildEmergencySim(rnd)); };
+  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', buildShuffleQuest(rnd)); };
+}
+
 let DYN = { nodes: [], ids: [] };
 let NEXT_ID = 1000; // dynamic ids won’t collide with your static ones
 function newId(){ return NEXT_ID++; }
@@ -239,7 +301,7 @@ function startDynamicMission(modeLabel, scenes){
   DYN = { nodes: [], ids: [] };
   const ids = scenes.map(() => newId());
   scenes.forEach((sc, i) => {
-    const nextId = (i < scenes.length - 1) ? ids[i+1] : 901; // your summary node
+    const nextId = (i < scenes.length - 1) ? ids[i+1] : 901; // summary node id
     const node = {
       id: ids[i],
       scenario: modeLabel,
@@ -258,43 +320,14 @@ function startDynamicMission(modeLabel, scenes){
   showNode(ids[0]);
 }
 
-/* ============================================================
-   CLASSIC NODES
-   - Intro is replaced with 3 mode buttons (same look as before)
-   - Summary stays 901
-   ============================================================ */
+/* -------- Static summary node -------- */
 const NODES = [
-  {
-    id: 1, intro: true,
-    text:
-`Welcome to Mission: Reinforceable.
-
-You’ll step through short, branching scenarios based on a Behavior Intervention Plan (BIP).
-At each decision point, choose the teacher move that best aligns with:
-• Proactive supports
-• Teaching and prompting replacement behaviors
-• Reinforcing the right responses
-
-Pick a mode to begin.`,
-    options: [
-      { text: "Daily Drill — Practice BIP Steps",   mode: 'drill'  },
-      { text: "Emergency Sim — Support a Crisis",   mode: 'crisis' },
-      { text: "Shuffle Quest — Random Mission",     mode: 'random' }
-    ]
-  },
-
-  // Keep static scenarios here too if you want (not required; dynamic modes cover variety)
-
   { id: 901, feedback: true, text: "Session Summary",
-    options: [
-      { text: "Play again (choose a mode)", nextId: 1 }
-    ]
-  }
+    options: [{ text: "Play again (choose a mode)", nextId: 1 }] }
 ];
 
 /* -------- Engine (classic, with dynamic support) -------- */
 function getNode(id){
-  // Prefer dynamic nodes if id is in the dynamic mission
   return (DYN.nodes.find(n => n.id === id)) || (NODES.find(n => n.id === id)) || null;
 }
 
@@ -305,7 +338,6 @@ function showNode(id) {
   // Title
   if (scenarioTitle) {
     scenarioTitle.textContent =
-      node.intro ? "Behavior Intervention Simulator - Example Game" :
       node.feedback ? "Fidelity Feedback" :
       node.scenario || "Choose Your Next Move";
   }
@@ -315,7 +347,7 @@ function showNode(id) {
     const pct = percentScore();
     const msg = fidelityMessage();
     storyText.textContent = `Your score: ${points} / ${maxPossible} (${pct}%)`;
-    showFeedback(msg, pct >= 80 ? "correct" : "coach", 0); // neutral color on summary
+    showFeedback(msg, pct >= 80 ? "correct" : "coach", 0);
   } else {
     storyText.textContent = node.text;
   }
@@ -326,48 +358,27 @@ function showNode(id) {
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.textContent = opt.text;
-
-    // Make buttons inherit your classic style (works with your CSS)
-    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
+    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c)); // keep your styling
 
     btn.addEventListener('click', () => {
-      // If this is a mode choice from the intro, build a dynamic mission
-      if (node.intro && opt.mode) {
-        resetGame();
-        const rnd = srandom(seedFromDate());
-        if (opt.mode === 'drill')   startDynamicMission('Daily Drill',   buildDailyDrill(rnd));
-        else if (opt.mode === 'crisis') startDynamicMission('Emergency Sim', buildEmergencySim(rnd));
-        else startDynamicMission('Shuffle Quest', buildShuffleQuest(rnd));
-        return;
-      }
-
-      // Normal scored option
+      // Mode choices aren’t here anymore (cards start missions), but keep generic flow
       if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
 
       // Immediate wizard feedback
       if (opt.feedback) showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
       else if (!node.feedback) showFeedback('', null, 0);
 
-      if (opt.nextId === 1) resetGame();
+      if (opt.nextId === 1) { resetGame(); renderIntroCards(); return; }
       showNode(opt.nextId);
     });
     choicesDiv.appendChild(btn);
   });
-
-  // Intro hint: wizard glow
-  if (node.intro) {
-    showFeedback(
-      "At each step, you’ll see immediate feedback on how closely your choice matches the BIP.",
-      "correct",
-      +10
-    );
-  }
 }
 
-/* -------- INIT + Home (unchanged) -------- */
+/* -------- Single INIT (no duplicates) -------- */
 window.addEventListener('load', () => {
   const homeBtn = document.getElementById('home-btn');
-  if (homeBtn) homeBtn.addEventListener('click', () => { resetGame(); showNode(1); });
+  if (homeBtn) homeBtn.addEventListener('click', () => { resetGame(); renderIntroCards(); });
   resetGame();
-  showNode(1);
+  renderIntroCards();  // show the card menu intro
 });
