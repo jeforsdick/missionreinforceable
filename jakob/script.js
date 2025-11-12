@@ -274,32 +274,28 @@ function startDynamicMission(modeLabel, scenes){
    but the 3 buttons feed the dynamic builder above.)
    ============================================================ */
 const NODES = [
-  { // INTRO (updated choices)
+  {
     id: 1, intro: true,
     text:
-      "Welcome to Mission: Reinforceable.\n\n" +
-      "Choose a training mode:\n" +
-      "• Daily Drill (BIP fidelity practice)\n" +
-      "• Emergency Sim (crisis rehearsal)\n" +
-      "• Shuffle Quest (mixed curveballs)\n",
+`Welcome to Mission: Reinforceable.
+
+You’ll step through short, branching scenarios based on a Behavior Intervention Plan (BIP).
+At each decision point, choose the teacher move that best aligns with:
+• Proactive supports
+• Teaching and prompting replacement behaviors
+• Reinforcing the right responses
+
+Pick a mode to begin.`,
     options: [
-      { text: "Daily Drill — Practice BIP Steps",   mode: 'drill'   },
-      { text: "Emergency Sim — Support a Crisis",   mode: 'crisis'  },
-      { text: "Shuffle Quest — Random Mission",     mode: 'random'  }
+      { text: "Daily Drill — Practice BIP Steps",   mode: 'drill'  },
+      { text: "Emergency Sim — Support a Crisis",   mode: 'crisis' },
+      { text: "Shuffle Quest — Random Mission",     mode: 'random' }
     ]
   },
-
-  /* ---- You can keep your original static scenario nodes below if you want ---- */
-  /* (omitted here for brevity; dynamic modes now cover multi-week variety) */
-
-  /* SUMMARY (unchanged id = 901) */
-  {
-    id: 901, feedback: true, text: "Session Summary",
-    options: [
-      { text: "Play again (choose a mode)", nextId: 1 }
-    ]
-  }
+  { id: 901, feedback: true, text: "Session Summary",
+    options: [{ text: "Play again (choose a mode)", nextId: 1 }] }
 ];
+
 
 /* -------- Node engine (kept, with a tiny hook to start modes) -------- */
 function showNode(id) {
@@ -327,21 +323,33 @@ function showNode(id) {
   }
 
   // Choices
-  choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.textContent = opt.text;
-    btn.addEventListener('click', () => {
-      // If this is a MODE choice from the intro, start a dynamic mission
-      if (node.intro && opt.mode) {
-        resetGame();
-        const rnd = srandom(seedFromDate());
-        if (opt.mode === 'drill')   startDynamicMission('Daily Drill',   buildDailyDrill(rnd));
-        if (opt.mode === 'crisis')  startDynamicMission('Emergency Sim', buildEmergencySim(rnd));
-        if (opt.mode === 'random')  startDynamicMission('Shuffle Quest', buildShuffleQuest(rnd));
-        return;
-      }
+choicesDiv.innerHTML = '';
+const options = shuffledOptions(node.options);
+options.forEach(opt => {
+  const btn = document.createElement('button');
+  btn.textContent = opt.text;
+
+  // ⭐ make buttons inherit your classic style (uses whichever class exists)
+  ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
+
+  btn.addEventListener('click', () => {
+    if (node.intro && opt.mode) {
+      resetGame();
+      const rnd = srandom(seedFromDate());
+      if (opt.mode === 'drill')   startDynamicMission('Daily Drill',   buildDailyDrill(rnd));
+      if (opt.mode === 'crisis')  startDynamicMission('Emergency Sim', buildEmergencySim(rnd));
+      if (opt.mode === 'random')  startDynamicMission('Shuffle Quest', buildShuffleQuest(rnd));
+      return;
+    }
+    if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
+    if (opt.feedback) showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
+    else if (!node.feedback) showFeedback('', null, 0);
+    if (opt.nextId === 1) resetGame();
+    showNode(opt.nextId);
+  });
+  choicesDiv.appendChild(btn);
+});
+
 
       // Normal scored option
       if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
