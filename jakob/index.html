@@ -2,29 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mission: Reinforceable — Multi‑Step Scenarios</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mission: Reinforceable — JM Demo</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="game-container">
-    <h1>Behavioral Intervention Simulator</h1>
-    <h2 id="scenario-title">Mission: Reinforceable</h2>
-
-    <!-- Toolbar -->
-    <div id="toolbar">
-      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
-      <div id="score-badge">Points: <span id="points">0</span></div>
-      <div class="spacer"></div>
-      <button id="home-btn" class="ghost">Home</button>
-    </div>
-
-    <!-- Game area -->
-    <div id="story-text"></div>
-    <div id="choices"></div>
+  <div id="game" role="application" aria-label="Mission: Reinforceable — JM Scenario">
+    <header>
+      <h1 id="title">Mission: Reinforceable — JM (1st Grade)</h1>
+      <div class="meta" id="meta"></div>
+    </header>
+    <main>
+      <div id="scene" class="scene"></div>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback" hidden></div>
+      <div id="kicker" class="kicker" hidden>
+        <button id="next">Continue ▶</button>
+        <button id="restart">Restart ⟲</button>
+      </div>
+    </main>
+    <footer>
+      <div class="legend">
+        <span class="pill"><span class="dot good"></span> good</span>
+        <span class="pill"><span class="dot neutral"></span> neutral</span>
+        <span class="pill"><span class="dot bad"></span> needs work</span>
+      </div>
+      <div class="pill">Score: <span id="points">0</span></div>
+    </footer>
   </div>
-
-  <!-- Keep script tag last so DOM elements exist -->
   <script src="script.js"></script>
 </body>
 </html>
