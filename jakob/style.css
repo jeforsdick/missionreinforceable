@@ -200,7 +200,32 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
   #feedback{ order:4; flex:1 1 100%; }        /* feedback becomes its own row */
 }
 
-/* Make scenario buttons span the pod width */
-#choices { display: grid; grid-template-columns: 1fr; gap: 10px; }
-#choices button { display: block; width: 100%; }
+/* --- Mission cards (intro menu) --- */
+.mission-intro { background:#333; padding:18px; border-radius:10px; margin-bottom:14px; }
+.mission-grid {
+  display:grid; gap:12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.mission-card {
+  background:#2a2a2a; border:1px solid #444; border-radius:10px; padding:14px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.mission-card h3 { margin:0; color:#fff; }
+.mission-card p  { margin:0; font-size:14px; color:#ddd; opacity:.9; }
+.mission-card .action { margin-top:auto; }
+.mission-card .action button { width:100%; }
+
+/* Keep your regular scenario buttons full-width too */
+#choices { display:grid; grid-template-columns:1fr; gap:10px; }
+#choices button { width:100%; display:block; }
+
+/* --- Optional polish for mission cards --- */
+.mission-card .action button:hover {
+  transform: translateY(-2px);
+}
+
+/* Add a little breathing room below the card section */
+.mission-intro {
+  margin-top: 6px;
+}
 
