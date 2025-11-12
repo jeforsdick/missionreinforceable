@@ -1,83 +1,38 @@
-:root{
-  --bg:#111; --panel:#1c1c1c; --panel2:#262626; --text:#f4f4f4;
-  --glow:rgba(22,243,248,.25); --good:#3bd16f; --bad:#ff5d5d; --neutral:#f0c04a;
-  --border:#333; --accent:#16f3f8;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mission: Reinforceable — Multi-Step Scenarios</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Mission: Reinforceable</h1>
+    <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; padding:20px; background:var(--bg); color:var(--text);
-  font-family:'Courier New',monospace; display:flex; justify-content:center;
-}
+    <!-- Toolbar (single) -->
+    <div id="toolbar">
+      <div id="teacher-badge">Teacher: <span id="teacher-code">—</span></div>
+      <div id="score-badge">Points: <span id="points">0</span></div>
 
-/* App frame */
-#app{
-  width:100%; max-width:980px; background:var(--panel); border-radius:14px;
-  box-shadow:0 0 20px var(--glow); overflow:hidden;
-}
-header{
-  padding:18px 22px; background:linear-gradient(180deg,#222,#181818);
-  display:flex; gap:14px; align-items:center; justify-content:space-between;
-}
-h1{font-size:22px; margin:0}
-.meta{display:flex; gap:10px; flex-wrap:wrap; font-size:13px; opacity:.9}
-.meta .badge{padding:4px 8px; border-radius:999px; background:#2a2a2a}
+      <!-- Feedback HUD with MR Wizard avatar -->
+      <div id="feedback">
+        <div id="coach-icon">
+          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
+        </div>
+        <div id="feedback-text"></div>
+      </div>
 
-main{padding:22px}
+      <div class="spacer"></div>
+      <button id="home-btn" class="ghost">Home</button>
+    </div>
 
-/* Panels & cards */
-.panel{
-  background:var(--panel2); padding:16px; border-radius:10px;
-  font-size:15px; line-height:1.5; white-space:pre-wrap;
-}
-.menu{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px;
-}
-.card{
-  background:#1f1f1f; border:1px solid var(--border); border-radius:12px; padding:16px;
-}
-.card h3{margin:0 0 6px}
-.card p{margin:0 0 12px; opacity:.9}
-.card button{width:100%}
+    <!-- Game area -->
+    <div id="story-text"></div>
+    <div id="choices"></div>
+  </div>
 
-/* Choices & buttons */
-.choices{display:grid; grid-template-columns:1fr; gap:10px; margin-top:14px}
-button{
-  font-size:15px; padding:12px 14px; text-align:left; border-radius:10px;
-  border:1px solid var(--border); background:#1e1e1e; color:var(--text);
-  cursor:pointer; transition:transform .06s ease, background .2s ease, border .2s ease;
-}
-button:hover{transform:translateY(-1px); background:#232323}
-
-/* Choice quality borders */
-.good{border-color:rgba(59,209,111,.6)}
-.bad{border-color:rgba(255,93,93,.6)}
-.neutral{border-color:rgba(240,192,74,.6)}
-
-/* Feedback & nav */
-.feedback{
-  margin-top:16px; padding:12px; border-radius:10px;
-  background:#151515; border:1px dashed var(--border); font-size:14px;
-}
-.feedback strong{display:block; margin-bottom:6px}
-
-.kicker{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap}
-.kicker button{
-  background:#0f0f0f; border:1px solid var(--border);
-  padding:10px 12px; border-radius:10px; color:#ddd;
-}
-
-/* Footer / legend */
-footer{
-  padding:14px 22px; border-top:1px solid #262626; font-size:13px;
-  display:flex; justify-content:space-between; align-items:center;
-}
-.pill{padding:6px 10px; border-radius:999px; background:#202020; border:1px solid var(--border)}
-.legend{display:flex; gap:8px; align-items:center}
-.dot{width:10px; height:10px; border-radius:50%}
-.dot.good{background:var(--good)}
-.dot.bad{background:var(--bad)}
-.dot.neutral{background:var(--neutral)}
-
-.hint{font-size:13px; opacity:.85; margin-top:10px}
+  <script src="script.js"></script>
+</body>
+</html>
