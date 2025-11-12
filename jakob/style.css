@@ -199,3 +199,8 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
   #toolbar .ghost{ order:3; margin-left:0; }  /* remove auto push once wrapped */
   #feedback{ order:4; flex:1 1 100%; }        /* feedback becomes its own row */
 }
+
+/* Make scenario buttons span the pod width */
+#choices { display: grid; grid-template-columns: 1fr; gap: 10px; }
+#choices button { display: block; width: 100%; }
+
