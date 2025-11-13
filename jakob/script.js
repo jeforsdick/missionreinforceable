@@ -26,7 +26,7 @@ const WIZ = {
 
 // Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.meh;  // ← This line supports 'think'
+  const src = WIZ[state] || WIZ.think;  // ← This line supports 'think'
   if (coachImgEl) {
     coachImgEl.src = `${src}?v=${Date.now()}`;
   }
@@ -4038,20 +4038,6 @@ function showNode(id) {
   choicesDiv.appendChild(nextBtn);
   requestAnimationFrame(() => nextBtn.focus());
 
-  // === AUTO-CLICK "Continue." (for smooth branching) ===
-  if (opt.text === "Continue.") {
-    setTimeout(() => nextBtn.click(), 2000);
-  }
-});
-
-    choicesDiv.appendChild(btn);
-
-    // Optional: Auto-click single "Continue" buttons after 2s for smooth merges
-    if (options.length === 1 && opt.text === "Continue.") {
-      setTimeout(() => btn.click(), 2000);
-    }
-  });
-}
 
 /* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
