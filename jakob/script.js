@@ -432,7 +432,7 @@ function showNode(id) {
 
   // Wizard pod just says "mission complete"
   showFeedback(
-    "Mission complete! Results have been sent. Review your overall feedback below.",
+    "Mission complete! Review your overall feedback below.",
     pct >= 80 ? "correct" : "coach",
     0
   );
