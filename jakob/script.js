@@ -169,115 +169,295 @@ const B=(text,why)=>({ text, why, tag:'bad',     delta:-10 });
    CONTENT POOLS
    ============================================================ */
 const POOL = {
+  /* ---------- PROACTIVE: set up the day / tasks / transitions ---------- */
   proactive: [
-    { text:'Five minutes to specials. Student tenses at “line up.” What do you do first?',
-      choices:[ G('Show visual schedule + pre-correct; offer line job/choice.', 'Pre-correction + choice reduces escape.'),
-                N('Ask the para to stand near the student.', 'Proximity helps but does not teach or address function.'),
-                B('Skip preview to stay on time; “Everyone line up now!”', 'Skipping proactive supports increases escape risk.') ] },
-    { text:'Centers about to rotate. Student glances at the door.',
-      choices:[ G('Pre-correct and point to next center on the map.', 'Predictability lowers avoidance.'),
-                N('Tell class to rotate; no individual cue.', 'Generic cues miss the student’s need for predictability.'),
-                B('Rush rotation because the timer already went off.', 'Rushing raises transition stress.') ] },
-    { text:'Sub day: schedule slightly shifted and noisy.',
-      choices:[ G('Preview a simplified visual schedule and star a preferred block.', 'Visuals + motivation buffer change.'),
-                N('Say “We’ll figure it out” and begin.', 'Ambiguity fuels escape-maintained behavior.'),
-                B('Tell students there is no time to explain; just get started.', 'Abrupt change increases risk.') ] },
-    { text:'Independent work after recess — historically tough.',
-      choices:[ G('Offer choice of task order + set a visible 5-min timer.', 'Choice + predictability reduces response effort.'),
-                N('Place student near a quiet peer.', 'Helpful but not a BIP step.'),
-                B('Start with the hardest task to “get it over with.”', 'High effort first likely triggers escape.') ] },
-    { text:'Morning arrival; backpacks everywhere; energy is high.',
-      choices:[ G('Greet; review first-then visual (First: Morning Work → Then: Token).', 'Pairs routine with reinforcement to prevent drift.'),
-                N('General reminder to start work.', 'Not individualized to function.'),
-                B('Hold back tokens until day’s end only.', 'Removes immediate reinforcement; weakens contingency.') ] }
+    {
+      text: 'Morning arrival. Alex walks in quietly; this is when elopement usually starts later in math.',
+      choices: [
+        G('Greet Alex at the door, review his visual schedule, and point out when he can earn points/breaks.',
+          'Warm greeting + preview + reinforcement path are core proactive BIP steps.'),
+        N('Say “Good morning” and remind the class to start morning work.',
+          'Friendly but not individualized to his escape-maintained behavior.'),
+        B('Skip greetings and jump straight into directions so you can start on time.',
+          'Skipping BIP preview increases uncertainty and later escape risk.')
+      ]
+    },
+    {
+      text: 'Five minutes before math, a known trigger. Alex shifts in his seat and glances toward the door.',
+      choices: [
+        G('Pause and pre-correct: review the math visual, show how to earn for staying in area, and check for questions.',
+          'Pre-correction tied to earning reduces anxiety and escape motivation.'),
+        N('Tell the class, “Remember, we stay in our seats during math,” and keep going.',
+          'General rule reminder helps a bit but misses individualized supports.'),
+        B('Start math right away with no preview because you are behind in the pacing guide.',
+          'High-demand task with no preview makes escape more likely.')
+      ]
+    },
+    {
+      text: 'Transition to specials. Historically, Alex runs or veers off in the hallway.',
+      choices: [
+        G('Before lining up, show the hallway expectations visual and offer Alex a job (line leader or caboose) linked to earning.',
+          'Pre-correction + role + reinforcement address transition-based escape.'),
+        N('Tell the class, “Line up for specials,” and plan to watch Alex closely.',
+          'Supervision helps but doesn’t directly reduce avoidance or teach expectations.'),
+        B('Call, “Everyone line up, we’re late!” and rush out the door.',
+          'Rushing without pre-correction increases stress and elopement risk.')
+      ]
+    },
+    {
+      text: 'Independent work right after recess has been a tough time; Alex often leaves the area.',
+      choices: [
+        G('Offer Alex a choice of which problem to start with and set a 5-minute timer with a visible earning opportunity.',
+          'Choice + short work interval + clear reinforcement reduce response effort.'),
+        N('Seat Alex near a quiet peer and hope the model helps.',
+          'Peer model is nice, but it’s not a specific BIP step for escape.'),
+        B('Tell Alex, “We’re catching up, so we have to work straight through,” with no breaks.',
+          'Removing flexibility and breaks increases the value of escape.')
+      ]
+    },
+    {
+      text: 'Sub day and an assembly later. The schedule is noisy and different.',
+      choices: [
+        G('Create a simplified visual schedule, preview the big changes, and star a preferred block he can earn.',
+          'Visuals + motivation protect against escalation during schedule changes.'),
+        N('Tell the class, “Today is a little different, but we’ll be fine,” and move on.',
+          'Reassuring but not concrete enough for an escape-prone student.'),
+        B('Say there is no time to explain because you have a lot to cover.',
+          'Ambiguity around changes fuels anxiety and escape-maintained behavior.')
+      ]
+    }
   ],
+
+  /* ---------- TEACHING: explicit instruction & prompting of replacement ---------- */
   teaching: [
-    { text:'During writing, student stares at the door and grips pencil—early signs of avoidance.',
-      choices:[ G('Prompt: “If you need it, use your break card for 5 minutes.”', 'Prompt replacement before escalation; function-matched.'),
-                N('State the rule: “We stay in our seats during work time.”', 'Rule reminder is not skill instruction.'),
-                B('“Start now or lose recess.”', 'Punitive threats increase escape and don’t teach the skill.') ] },
-    { text:'Math problem seems too hard. Student whispers “too hard.”',
-      choices:[ G('Model asking for help; brief role-play; try first step.', 'Teaches the communicative alternative.'),
-                N('Encourage: “Try your best.”', 'Kind but not instructional.'),
-                B('Remove multiple problems to speed things up.', 'May reinforce escape (task removal) rather than communication.') ] },
-    { text:'Transition to rug. Student lingers at desk, looking away.',
-      choices:[ G('Teach & prompt a short transition script with seat choice.', 'Combines skill + motivation; reduces avoidance.'),
-                N('Tell them to move quickly; “We’re late.”', 'Adds pressure without a skill cue.'),
-                B('Pick up materials and escort by the arm.', 'Physical guidance risks escalation.') ] },
-    { text:'Before small groups, student asks to get water repeatedly.',
-      choices:[ G('Teach: “Ask for a 2-min break after first problem.”', 'Schedules a function-matched break.'),
-                N('Let them go once and hope it helps.', 'May become avoidance without a limit.'),
-                B('Refuse abruptly: “No more water.”', 'Hard denial can escalate behavior.') ] }
+    {
+      text: 'During writing, Alex grips his pencil, stares at the door, and whispers, “This is too hard.”',
+      choices: [
+        G('Model the script: “I can say, ‘This is hard. Can I use my break card or get help?’” Then prompt him to try it.',
+          'Explicitly teaching and prompting the communicative replacement before escalation.'),
+        N('Encourage, “Just try your best; you can do it,” and move on.',
+          'Supportive, but it does not teach the function-matched communication response.'),
+        B('Say, “Start now or you’ll lose recess,” in a firm tone.',
+          'Punitive threat increases escape motivation and doesn’t build the replacement skill.')
+      ]
+    },
+    {
+      text: 'Math problem is above Alex’s level; he quietly pushes the worksheet away.',
+      choices: [
+        G('Teach a help script (“Can you show me the first one?”), practice it once, then have him use it for this problem.',
+          'Role-play + in-the-moment use of “ask for help” builds the replacement behavior.'),
+        N('Simplify the problem and tell him, “Try this one instead,” without teaching a script.',
+          'Lowering difficulty may help now but doesn’t build a stable replacement response.'),
+        B('Remove multiple problems and say, “Fine, just do these so we can move on.”',
+          'Task removal can reinforce escape instead of communication.')
+      ]
+    },
+    {
+      text: 'Transition to the rug: Alex lingers at his desk, looking away and fiddling with materials.',
+      choices: [
+        G('Teach a short transition routine: “Stand → push in chair → walk on the line,” and practice it with a quick rehearsal.',
+          'Practice-based instruction turns a high-risk moment into a taught routine.'),
+        N('Remind him, “Come on, we’re going to the rug now,” from across the room.',
+          'Vague reminder, not explicit skill instruction.'),
+        B('Walk over, take his arm, and escort him to the rug.',
+          'Physical guidance can increase resistance and doesn’t teach the independent routine.')
+      ]
+    },
+    {
+      text: 'Before small groups, Alex repeatedly asks for water to avoid starting work.',
+      choices: [
+        G('Teach: “You can ask for a 2-minute break after you start the first problem,” and rehearse the request.',
+          'Schedules a function-matched break while still requiring task engagement.'),
+        N('Let him go for water one more time and hope it helps him reset.',
+          'Might reduce behavior today but easily becomes an escape pattern.'),
+        B('Say sharply, “No more water. Sit down,” with no alternative offered.',
+          'Hard denial without replacement teaching often escalates behavior.')
+      ]
+    }
   ],
+
+  /* ---------- REINFORCEMENT: strengthening replacement / desired behavior ---------- */
   reinforcement: [
-    { text:'Student uses the break card and returns on time, starting name.',
-      choices:[ G('Give a token + behavior-specific praise immediately.', 'Immediate reinforcement strengthens the alternative.'),
-                N('Smile and award later.', 'Delay weakens the contingency.'),
-                B('Wait until the whole page is done.', 'Raises effort; weakens replacement–reinforcer link.') ] },
-    { text:'On-task for 5 minutes at centers.',
-      choices:[ G('Deliver token on schedule with specific praise.', 'Consistency builds momentum and clarity.'),
-                N('Give praise only; skip the token this round.', 'Half the plan; weaker than planned reinforcement.'),
-                B('Save tokens to give in bulk at the end.', 'Bulk delivery reduces contingency clarity.') ] },
-    { text:'After asking for help, student completes the first problem.',
-      choices:[ G('Praise the help-request + give token for initiation.', 'Pairs communication with reinforcement.'),
-                N('Thank them and move to another student.', 'Missed opportunity to strengthen the skill.'),
-                B('Ignore and only praise quiet sitting later.', 'Reinforces an unrelated behavior.') ] }
+    {
+      text: 'Alex uses his break card exactly as taught and returns on time, starting his name on the paper.',
+      choices: [
+        G('Immediately give a point/token and say specifically, “Nice job using your break card and coming back on time.”',
+          'Immediate, behavior-specific reinforcement tightens the break–return contingency.'),
+        N('Smile and give a thumbs up but plan to award a point later in the day.',
+          'Positive, but the delayed reinforcement weakens the clear connection to the behavior.'),
+        B('Wait until the whole assignment is done before acknowledging the break use.',
+          'The critical replacement skill (using the card & returning) goes under-reinforced.')
+      ]
+    },
+    {
+      text: 'Alex raises his hand and asks for help instead of getting up and leaving his seat.',
+      choices: [
+        G('Praise the help request specifically and add a point/token while you give brief help.',
+          'Reinforcing the communicative response increases future use over escape.'),
+        N('Answer his question but forget to deliver points or praise.',
+          'Instruction happens, but the replacement isn’t contact ing planned reinforcement.'),
+        B('Say, “Just try it yourself first,” and ignore the hand-raising.',
+          'Ignoring the replacement response makes escape more efficient than asking for help.')
+      ]
+    },
+    {
+      text: 'During a transition to specials, Alex stays in line and in his zone the whole way.',
+      choices: [
+        G('At the door, give a point/token and say, “You stayed with the class and in your spot the whole time.”',
+          'Reinforcing the successful transition makes on-track hallway behavior more likely.'),
+        N('Say, “Thanks everyone,” as the class arrives, with no specific callout.',
+          'Group acknowledgment is nice but doesn’t highlight his BIP-targeted behavior.'),
+        B('Say nothing because “that’s what he’s supposed to do.”',
+          'Taking success for granted reduces motivation to keep using the replacement pattern.')
+      ]
+    }
   ],
+
+  /* ---------- CONSEQUENCE: responding when problem behavior happens ---------- */
   consequence: [
-    { text:'Student mutters “This is dumb” and swivels away from desk.',
-      choices:[ G('Planned ignore the comment; prompt “Ask for help or a break.”', 'Avoid reinforcing refusal; prompt alternative.'),
-                N('Offer to write the first sentence for them.', 'May help once but risks reinforcing escape.'),
-                B('Argue about respect/compliance.', 'Provides attention and escalates.') ] },
-    { text:'Peer snickers after a dramatic sigh.',
-      choices:[ G('Quietly redirect peer; reinforce student for coping.', 'Manages attention pathways and reinforces desired response.'),
-                N('Ignore both and continue.', 'Allows attention reinforcement to linger.'),
-                B('Publicly reprimand the peer loudly.', 'Adds high-intensity attention to the scene.') ] },
-    { text:'Student drops pencil and says “I’m done,” crossing arms.',
-      choices:[ G('Prompt replacement; offer 2 choices to re-engage; reinforce initiation.', 'Balances consequence with function-matched prompt.'),
-                N('Let them sit out until ready.', 'Could become escape without skill practice.'),
-                B('Remove preferred time later as punishment.', 'Delayed punishment rarely builds the target skill.') ] }
+    {
+      text: 'Alex mutters, “This is stupid,” and swivels away from his desk but has not left the area.',
+      choices: [
+        G('Use planned ignore for the comment and calmly prompt, “If it feels hard, you can ask for help or a break card.”',
+          'Avoids reinforcing the comment and redirects to the replacement behavior.'),
+        N('Offer, “Do you want me to read the directions again?” and hope he re-engages.',
+          'Supportive, but does not explicitly tie back to the BIP replacement skill.'),
+        B('Respond, “That’s disrespectful. You need to fix your attitude,” in front of the class.',
+          'Adds high-intensity attention and can escalate the situation.')
+      ]
+    },
+    {
+      text: 'Alex drops his pencil and says, “I’m not doing this,” while staring at the door.',
+      choices: [
+        G('Acknowledge and restate the plan: “Remember, start the first problem, then you can use your 2-minute break,” and prompt him to begin.',
+          'Keeps the contingency intact and redirects to the function-matched plan.'),
+        N('Let him sit for a few minutes and check on him later.',
+          'Might avoid a power struggle, but can function as escape without skill practice.'),
+        B('Say, “Fine, then you’ll make it up during recess,” and walk away.',
+          'Delayed punishment can reinforce escape right now and strain the relationship.')
+      ]
+    },
+    {
+      text: 'Peer snickers when Alex sighs loudly and slumps. Alex turns toward the door.',
+      choices: [
+        G('Quietly redirect the peer to be supportive and reinforce Alex for staying in his area (“Thanks for staying with us even when it’s frustrating”).',
+          'Manages attention while reinforcing the desired behavior (staying instead of leaving).'),
+        N('Ignore both and keep teaching.',
+          'Avoids escalation but leaves peer attention patterns and Alex’s coping unaddressed.'),
+        B('Call out the peer loudly in front of the class.',
+          'Creates a high-intensity scene that can add fuel to escape and attention-maintained patterns.')
+      ]
+    }
   ],
+
+  /* ---------- CRISIS: elopement / safety-fidelity moments ---------- */
   crisis: [
-    { text:'Student stands, eyes the door, and speed-walks toward it.',
-      choices:[ G('Maintain visual; call office; do not chase; calmly prompt return plan.', 'Matches plan: notify + safety + no chase/block.'),
-                B('Block the door with your body.', 'Can escalate to aggression; not in plan.'),
-                B('Raise voice: “Get back here now!”', 'High-intensity attention escalates.') ] },
-    { text:'They are in the hallway; you are 12 feet behind with line-of-sight.',
-      choices:[ G('Use calm, brief cue linked to reinforcement upon return.', 'Non-escalatory cue + reinforcement for de-escalation.'),
-                N('Shadow silently without calling.', 'Safer than chasing, but notify team per plan.'),
-                B('Hurry to grab an arm before the corner.', 'Physical contact can escalate; violates no-chase.') ] },
-    { text:'Support arrives. Student slows near the library door.',
-      choices:[ G('Prompt return script; walk back; document; debrief later.', 'Closure with fidelity + documentation + debrief.'),
-                N('Return immediately without debrief.', 'Misses learning from incident; still okay for safety.'),
-                B('Lecture about rules the whole walk back.', 'Sustained attention may reinforce behavior.') ] }
+    {
+      text: 'Alex stands up suddenly, eyes the door, and speed-walks toward the hallway.',
+      choices: [
+        G('Maintain visual, activate the crisis plan by calling the office, and follow at a safe distance without chasing.',
+          'Matches typical elopement plan: notify, maintain line-of-sight, and avoid chase/blocking.'),
+        N('Follow behind him silently while hoping he stops before the doors.',
+          'Keeps him in sight but skips the notify/support step in most crisis plans.'),
+        B('Run to block the door with your body and raise your voice to stop him.',
+          'Blocking and yelling can escalate to aggression and are usually off-plan.')
+      ]
+    },
+    {
+      text: 'Alex is in the hallway about 10–12 feet ahead. He slows but is still moving away.',
+      choices: [
+        G('From behind, use a calm, brief cue linked to the plan: “Alex, pause. Walk back with me to earn your points.”',
+          'Calm, plan-based prompt tied to reinforcement encourages safe de-escalation.'),
+        N('Shadow him quietly until he gets near an exit, then speak up.',
+          'Maintains safety somewhat but delays the planned prompt and support.'),
+        B('Hurry to grab his arm before he reaches the corner.',
+          'Hands-on control without de-escalation can increase panic and risk.')
+      ]
+    },
+    {
+      text: 'Support arrives. Alex has stopped near the library door and is breathing hard.',
+      choices: [
+        G('Use the return script from the plan, walk back together, document the incident, and debrief later when calm.',
+          'Follows the full crisis sequence: return, documentation, and learning-focused debrief.'),
+        N('Walk him back to class without saying much and resume instruction.',
+          'He is safe, but there is no debrief to improve future responses.'),
+        B('Lecture him about the rules and how serious this was the entire walk back.',
+          'Sustained, intense attention can inadvertently reinforce the elopement.')
+      ]
+    }
   ],
+
+  /* ---------- WILDCARD: schedule changes, environment shifts, curveballs ---------- */
   wildcard: [
-    { text:'Surprise assembly announced during writing block.',
-      choices:[ G('Preview change with a quick visual; offer role (door holder/time checker).', 'Predictability + role reduce escape.'),
-                N('“Plans changed—let’s go.”', 'Neutral announcement lacks supports.'),
-                B('Rush without explanation.', 'Increases uncertainty and dysregulation.') ] },
-    { text:'Sub para today who doesn’t know the plan.',
-      choices:[ G('Do a 60-second plan briefing + cue cards.', 'Sets up consistent adult behavior.'),
-                N('Ask the sub to “watch closely.”', 'Too vague to ensure fidelity.'),
-                B('Assume they’ll figure it out.', 'High risk of drift and escalation.') ] },
-    { text:'Peer: “Hurry up or we’ll be last.” Student glares and grips desk.',
-      choices:[ G('Prompt replacement (help/break) + coach peer on supportive language.', 'Addresses function and peer ecology.'),
-                N('Ignore and move on.', 'Misses an antecedent to coach.'),
-                B('Scold the student for being slow.', 'Punishes the wrong student; increases escape.') ] },
-    { text:'Fire drill during math. Student covers ears and heads toward hooks.',
-      choices:[ G('Provide headphones/cover + visual route + buddy role.', 'Accommodations + role reduce distress.'),
-                N('Escort quietly with minimal talk.', 'OK, but lacks individualized supports.'),
-                B('Command loudly: “Stop that and move!”', 'Adds intensity; increases avoidance.') ] },
-    { text:'Indoor recess. Noise rises quickly; pacing begins.',
-      choices:[ G('Offer calm-corner option + timer + token for returning.', 'Function-matched break + reinforcement.'),
-                N('Ask to choose a game.', 'Choice helps; add a break option for escape function.'),
-                B('Tell them to sit and be quiet.', 'High control without support increases escape.') ] },
-    { text:'Open-ended writing prompt assigned; student freezes.',
-      choices:[ G('Offer sentence starters or scribe first line; reinforce initiation.', 'Reduces effort; builds momentum.'),
-                N('Suggest brainstorming later.', 'Defers support; may not prevent escape now.'),
-                B('Insist on full paragraph without supports.', 'High effort triggers escape.') ] }
+    {
+      text: 'Surprise assembly is announced during a writing block where Alex often struggles.',
+      choices: [
+        G('Preview the change with a quick visual, review expectations, and offer Alex a special job (line spot or materials helper).',
+          'Predictability + role reduce anxiety and escape during schedule shifts.'),
+        N('Tell the class, “Plans changed—put your things away, we’re going to an assembly.”',
+          'Gives information but lacks individualized supports for Alex.'),
+        B('Announce, “We’re late, hurry up!” and rush the class out the door.',
+          'Rushing without supports adds stress and dysregulation risk.')
+      ]
+    },
+    {
+      text: 'There is a substitute para who does not know Alex’s BIP.',
+      choices: [
+        G('Take 60 seconds to explain key BIP steps and give the sub a simple cue card or visual.',
+          'Quick training increases adult consistency and BIP fidelity.'),
+        N('Tell the sub, “Just keep an eye on him,” and go back to teaching.',
+          'Too vague to ensure the plan is implemented.'),
+        B('Assume the sub will figure it out from watching the class.',
+          'High risk of drift and missed supports for Alex.')
+      ]
+    },
+    {
+      text: 'During line-up, a peer says, “Hurry up or we’ll be last,” and Alex glares and grips the desk.',
+      choices: [
+        G('Prompt Alex’s replacement (“You can ask for help or a short wait break”) and coach the peer on more supportive language.',
+          'Addresses both the trigger and the skill, improving the classroom ecology.'),
+        N('Ignore the interaction and keep lining students up.',
+          'Misses a chance to coach peer support and prompt Alex’s skill.'),
+        B('Scold Alex for being slow in front of the class.',
+          'Punishes the wrong student and increases stress and escape motivation.')
+      ]
+    },
+    {
+      text: 'Fire drill begins during math; noise spikes. Alex covers his ears and moves toward the hooks.',
+      choices: [
+        G('Offer headphones or ear covers, show the drill visual, and pair him with a buddy for the route.',
+          'Sensory support + predictability + social support align with many BIPs.'),
+        N('Escort him quickly without much talking so you can get outside.',
+          'Keeps him safe, but misses individualized sensory and predictability supports.'),
+        B('Command loudly, “Stop that and move!” while pulling him along.',
+          'Adds intensity and control without support, increasing panic and escape behaviors.')
+      ]
+    },
+    {
+      text: 'Indoor recess. The noise rises quickly, and Alex starts pacing by the door.',
+      choices: [
+        G('Offer a calm corner or quiet activity with a timer and a token for returning to the group.',
+          'Provides a function-matched break with a clear path back to participation.'),
+        N('Ask if he wants to pick a different game.',
+          'Choice helps, but a structured break may still be needed for escape function.'),
+        B('Tell him to sit down and be quiet or he will lose all recess.',
+          'High control without support escalates escape-maintained behavior.')
+      ]
+    },
+    {
+      text: 'Open-ended writing prompt during the last 15 minutes of the day. Alex freezes and stares at the clock.',
+      choices: [
+        G('Offer sentence starters or scribe the first sentence while he says it, then reinforce his initiation.',
+          'Reduces response effort and reinforces starting, which combats escape.'),
+        N('Suggest, “You can brainstorm ideas now and write tomorrow,” and let him sit.',
+          'Defers writing but doesn’t address the skill or escape pattern.'),
+        B('Insist he writes a full paragraph right now with no supports.',
+          'High effort and low support make escape highly likely.')
+      ]
+    }
   ]
 };
+
 
 /* ============================================================
    DYNAMIC MISSION BUILDER
