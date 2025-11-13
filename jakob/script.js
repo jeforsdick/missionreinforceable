@@ -587,41 +587,68 @@ function showNode(id) {
       node.scenario || "Choose Your Next Move";
   }
 
- // Main text
+// Main text
 if (node.feedback) {
   const pct = percentScore();
   const msg = fidelityMessage();
 
-  // Score + overall feedback text in the main panel
+  // Teacher-facing action steps
+  let actionSteps = "";
+
+  if (pct >= 80) {
+    actionSteps = `
+      <ul>
+        <li>Continue using strong proactive cues before transitions.</li>
+        <li>Maintain clear reinforcement for replacement behaviors.</li>
+        <li>Keep prompting early signs—your timing is working!</li>
+      </ul>`;
+  } else if (pct >= 50) {
+    actionSteps = `
+      <ul>
+        <li>Increase pre-corrections before predictable triggers.</li>
+        <li>Prompt the replacement behavior earlier in the escalation cycle.</li>
+        <li>Deliver reinforcement immediately when the replacement occurs.</li>
+      </ul>`;
+  } else {
+    actionSteps = `
+      <ul>
+        <li>Revisit the proactive setup steps—these prevent most escape attempts.</li>
+        <li>Practice the replacement behavior script outside of crises.</li>
+        <li>Follow the crisis plan exactly (no blocking, no chasing).</li>
+      </ul>`;
+  }
+
+  // Score + detailed feedback with action steps
   storyText.innerHTML =
     `Your score: ${points} / ${maxPossible} (${pct}%)` +
-    `<br><br><strong>Overall feedback:</strong> ${msg}`;
+    `<br><br><strong>Overall feedback:</strong> ${msg}` +
+    `<br><br><strong>Action Steps for Teachers:</strong>` +
+    `${actionSteps}`;
 
-  // Wizard face based on OVERALL %
+  // Wizard face selection
   let scoreHint;
   let coachLine;
 
   if (pct >= 80) {
-    scoreHint = +10;   // good wizard
-    coachLine = "Mission complete!<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    scoreHint = +10;
+    coachLine =
+      "Mission complete!<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else if (pct >= 50) {
-    scoreHint = 0;     // meh wizard
-    coachLine = "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    scoreHint = 0;
+    coachLine =
+      "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else {
-    scoreHint = -10;   // bad wizard
-    coachLine = "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    scoreHint = -10;
+    coachLine =
+      "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   }
 
-  // Wizard pod coaching message
-  showFeedback(
-    coachLine,
-    null,
-    scoreHint
-  );
-  
+  showFeedback(coachLine, null, scoreHint);
+
 } else {
   storyText.textContent = node.text;
 }
+
 
 
  // Choices
