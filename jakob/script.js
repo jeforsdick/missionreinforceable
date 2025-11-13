@@ -65,7 +65,7 @@ function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossi
 
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
-  let state = 'meh';
+  let state = 'think';
   if (typeof scoreHint === 'number') state = scoreHint > 0 ? 'plus' : scoreHint < 0 ? 'minus' : 'meh';
   setWizardSprite(state);
   feedbackEl.classList.remove('state-plus','state-meh','state-minus','flash');
