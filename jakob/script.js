@@ -567,8 +567,9 @@ function startDynamicMission(modeLabel, scenes){
 /* -------- Static summary node -------- */
 const NODES = [
   { id: 901, feedback: true, text: "Session Summary",
-    options: [{ text: "Play again", nextId: 1 }] }
+    options: [{ text: "Play again (choose a mode)", nextId: 'home' }] }
 ];
+
 
 /* -------- Engine (classic, with dynamic support) -------- */
 function getNode(id){
@@ -591,20 +592,31 @@ function showNode(id) {
   const pct = percentScore();
   const msg = fidelityMessage();
 
-  // Score + overall feedback under it
+  // Score + overall feedback text in the main panel
   storyText.innerHTML =
     `Your score: ${points} / ${maxPossible} (${pct}%)` +
     `<br><br><strong>Overall feedback:</strong> ${msg}`;
 
-  // Wizard pod just says "mission complete"
+  // Wizard face based on OVERALL % (not last choice)
+  let scoreHint;
+  if (pct >= 80) {
+    scoreHint = +10;   // good wizard
+  } else if (pct >= 50) {
+    scoreHint = 0;     // meh wizard
+  } else {
+    scoreHint = -10;   // bad wizard
+  }
+
+  // This uses your existing showFeedback → setWizardSprite pipeline
   showFeedback(
-    "Mission complete! Results have been sent to the team. Review your overall feedback below.",
-    pct >= 80 ? "correct" : "coach",
-    0
+    "Mission complete! Review your overall feedback below.",
+    null,
+    scoreHint
   );
 } else {
   storyText.textContent = node.text;
 }
+
 
 
   // Choices
@@ -615,10 +627,17 @@ function showNode(id) {
     btn.textContent = opt.text;
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c)); // keep your styling
 
-   btn.addEventListener('click', () => {
+  btn.addEventListener('click', () => {
+  // If this is the summary node's "play again" button, go home
+  if (node.feedback && opt.nextId === 'home') {
+    resetGame();
+    renderIntroCards();
+    return;
+  }
+
   if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
 
-  if (!node.feedback) logDecision(node.id, opt); // NEW
+  if (!node.feedback) logDecision(node.id, opt);
 
   if (opt.feedback) {
     showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
@@ -629,11 +648,9 @@ function showNode(id) {
   if (opt.nextId === 1) resetGame();
   showNode(opt.nextId);
 
-  if (opt.nextId === 901) sendResultsOnce();     // NEW
+  if (opt.nextId === 901) sendResultsOnce();
 });
-  choicesDiv.appendChild(btn);
-  });
-} 
+
 
 /* -------- Single INIT -------- */
 window.addEventListener('load', () => {
