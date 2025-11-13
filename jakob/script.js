@@ -3715,3 +3715,12 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 });
+<script src="script.js?v=mr-2025-11-12"></script>
+
+<script>
+  /* Re-attach mission buttons after the DOM + JS both finish */
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => hookMissionButtons(), 50);
+  });
+</script>
+
