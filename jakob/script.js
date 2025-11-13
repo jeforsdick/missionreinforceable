@@ -620,20 +620,34 @@ if (node.feedback) {
 
   // Score + detailed feedback with action steps
  // Wrapped summary so it stays inside the game box
-storyText.innerHTML = `
-  <div class="summary-panel">
-    <div class="summary-score">Your score: ${points} / ${maxPossible} (${pct}%)</div>
+// Clear story box so it stays small
+storyText.textContent = "Session summary:";
 
-    <div class="summary-section">
-      <strong>Overall feedback:</strong> ${msg}
-    </div>
+// Remove any old summary panel if present
+const old = document.getElementById('summary-panel');
+if (old) old.remove();
 
-    <div class="summary-section">
-      <strong>Action Steps for Teachers:</strong>
-      ${actionSteps}
-    </div>
+// Build a new summary panel BELOW the story text
+const panel = document.createElement('div');
+panel.id = "summary-panel";
+panel.className = "summary-panel";
+
+panel.innerHTML = `
+  <div class="summary-score">Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div>
+
+  <div class="summary-section">
+    <strong>Overall feedback:</strong><br>${msg}
+  </div>
+
+  <div class="summary-section">
+    <strong>Action steps for teachers:</strong>
+    ${actionSteps}
   </div>
 `;
+
+// Insert AFTER the story-text box — THIS is the fix
+storyText.insertAdjacentElement('afterend', panel);
+
 
 
   // Wizard face selection
@@ -643,15 +657,15 @@ storyText.innerHTML = `
   if (pct >= 80) {
     scoreHint = +10;
     coachLine =
-      "Mission complete!<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+      "Mission complete! Results have been sent to the team. Review your overall feedback below.";
   } else if (pct >= 50) {
     scoreHint = 0;
     coachLine =
-      "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+      "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
   } else {
     scoreHint = -10;
     coachLine =
-      "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+      "Mission failed. Results have been sent to the team. Review your overall feedback below.";
   }
 
   showFeedback(coachLine, null, scoreHint);
