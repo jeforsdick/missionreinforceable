@@ -3770,7 +3770,7 @@ function renderIntroCards() {
 
   storyText.innerHTML = `
 Welcome to Mission: Reinforceable.
-You’ll step through short, branching scenarios based on you Behavior Plan.
+You’ll step through short, branching scenarios based on your Behavior Plan.
 Choose your mission below.`;
 
   const menu = document.createElement('div');
@@ -3982,11 +3982,32 @@ function showNode(id) {
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
     btn.addEventListener('click', () => {
-      if (node.feedback && opt.nextId === 'home') {
-        resetGame();
-        renderIntroCards();
-        return;
-      }
+    if (node.feedback && opt.nextId === 'home') {
+  // FULL RESET: Clear everything and go home
+  resetGame();
+
+  // Clear feedback HUD (wizard + text)
+  showFeedback('', null, 0);
+
+  // Reset title
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  }
+
+  // Remove any leftover summary
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
+
+  // Show story text again (in case it was hidden)
+  if (storyText) {
+    storyText.style.display = 'block';
+    storyText.innerHTML = ''; // clear any old content
+  }
+
+  // Rebuild home screen
+  renderIntroCards();
+  return;
+}
 
       if (!node.feedback && typeof opt.delta === 'number') {
         addPoints(opt.delta);
@@ -4008,10 +4029,6 @@ function showNode(id) {
     });
 
     choicesDiv.appendChild(btn);
-
-    // Optional: Auto-click single "Continue" buttons after 2s for smooth merges
-    if (options.length === 1 && opt.text === "Continue.") {
-      setTimeout(() => btn.click(), 2000);
     }
   });
 }
