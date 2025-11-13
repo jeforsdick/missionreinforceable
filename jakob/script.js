@@ -26,7 +26,7 @@ const coachImgEl      = document.getElementById('coach-img');
 
 // Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = (state === 'plus') ? WIZ.plus : (state === 'minus') ? WIZ.minus : WIZ.meh;
+  const src = WIZ[state] || WIZ.meh;  // Handles 'plus', 'minus', 'think', defaults to 'meh'
   if (coachImgEl) coachImgEl.src = `${src}?v=${Date.now()}`;
 }
 // default image on load
@@ -4048,7 +4048,7 @@ btn.addEventListener('click', () => {
 choicesDiv.appendChild(btn);
 
 /* -------- Single INIT -------- */
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const homeBtn = document.getElementById('home-btn');
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
@@ -4058,11 +4058,6 @@ window.addEventListener('load', () => {
   }
   setTeacherBadge(getTeacherCode());
   resetGame();
-
-  // DO NOT CALL showNode() HERE
-  // Just show the home screen
   renderIntroCards();
-
-  // Show initial feedback
   showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
 });
