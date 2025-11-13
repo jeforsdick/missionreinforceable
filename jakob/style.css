@@ -20,7 +20,7 @@
   box-sizing: border-box;
 }
 
-/* Let the page grow naturally, no fixed 100% height */
+/* Let the page grow with content instead of fixing height */
 html,
 body {
   margin: 0;
@@ -29,32 +29,28 @@ body {
   color: var(--text);
   font-family: 'Courier New', monospace;
   line-height: 1.6;
+  min-height: 100vh;          /* ✅ allows the page to grow */
 }
 
-/* Regular block layout; we’ll center the game with margin:auto */
+/* Center the game, but don't constrain its height */
 body {
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;    /* ✅ start at the top, grow downward */
 }
 
-/* Red “box” container */
+/* Dynamic red-box container that grows with content */
 #game-container {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;              /* horizontally centered on all screens */
   background: var(--panel);
-  padding: 28px;
+  padding: 20px;
+  margin: 16px;               /* ✅ little breathing room on mobile */
   border-radius: 12px;
-  box-shadow: 0 0 15px var(--glow);
+  box-shadow: 0 0 15px var(--glow);  /* your red glow */
+  box-sizing: border-box;
 }
 
-
-#game-container{
-  width:100%; max-width:900px;
-  background:var(--panel);
-  padding:28px;
-  border-radius:12px;
-  box-shadow:0 0 15px var(--glow);
-}
 
 /* ---------- Titles ---------- */
 h1{
