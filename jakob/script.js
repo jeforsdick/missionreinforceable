@@ -84,7 +84,7 @@ function showFeedback(text, type, scoreHint) {
 }
 
 /* ===== RESULTS: client → GAS webhook ===== */
-const RESULT_ENDPOINT = "https://script.google.com/macros/s/PASTE_YOUR_WEBAPP_ID/exec";
+const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbxex-Oxdog4qvvITF2C-PJjrfQbptLYEUK9FlQ4ddxK1M7fqJkTGox6S82ysm7FSVOJ/exec";
 
 /* teacher code from ?teacher=XX or badge */
 function getTeacherCode() {
