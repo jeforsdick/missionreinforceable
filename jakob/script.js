@@ -4058,5 +4058,11 @@ window.addEventListener('load', () => {
   }
   setTeacherBadge(getTeacherCode());
   resetGame();
+
+  // DO NOT CALL showNode() HERE
+  // Just show the home screen
   renderIntroCards();
+
+  // Show initial feedback
+  showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
 });
