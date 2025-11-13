@@ -3608,17 +3608,18 @@ POOL.wild.push({
   }
 });
 /*************************************************
- * MISSION BUTTON HOOKS
- * (Put this at the VERY BOTTOM of script.js)
- *************************************************/
-window.addEventListener('DOMContentLoaded', () => {
+ * HOME / MISSION SCREEN + BUTTON HOOKS
+ **************************************************/
+
+// This assumes you already have these at the top of your file:
+// const storyText   = document.getElementById('story-text');
+// const choicesDiv  = document.getElementById('choices');
+// const scenarioTitle = document.getElementById('scenario-title');
+
+function hookMissionButtons() {
   const btnDaily  = document.getElementById('btn-drill');   // Daily Mission
   const btnCrisis = document.getElementById('btn-crisis');  // Crisis Mission
   const btnWild   = document.getElementById('btn-random');  // Wildcard Mission
-
-  // OPTIONAL: If you have a dedicated "game page" separate from landing,
-  // you might call startScenario(...) directly when that page loads instead.
-  // For now, these buttons will start scenarios on this page.
 
   if (btnDaily) {
     btnDaily.onclick = () => {
@@ -3638,6 +3639,79 @@ window.addEventListener('DOMContentLoaded', () => {
     btnWild.onclick = () => {
       const scn = getWildcardScenario();
       startScenario(scn);
+    };
+  }
+}
+
+// Draw the landing screen (the one from your nice screenshot)
+function renderHomeScreen() {
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  }
+
+  if (storyText) {
+    storyText.innerHTML = `
+      <div class="mission-intro">
+        <p>Welcome to Mission: Reinforceable.</p>
+        <p>You’ll step through short, branching scenarios based on your Behavior Intervention Plan.</p>
+        <p>Choose your mission below.</p>
+      </div>
+    `;
+  }
+
+  if (choicesDiv) {
+    choicesDiv.innerHTML = `
+      <div class="mission-grid">
+        <article class="mission-card">
+          <h3>Daily Mission</h3>
+          <p>
+            BIP Skill Run — practice proactive, teaching, reinforcement, and
+            follow-through steps for everyday classroom routines.
+          </p>
+          <div class="action">
+            <button id="btn-drill" class="scenario-btn">Start Daily Mission</button>
+          </div>
+        </article>
+
+        <article class="mission-card">
+          <h3>Red Alert</h3>
+          <p>
+            Crisis Drill — rehearse safe elopement support, aggression response,
+            and recovery steps while following the crisis plan.
+          </p>
+          <div class="action">
+            <button id="btn-crisis" class="scenario-btn">Start Crisis Drill</button>
+          </div>
+        </article>
+
+        <article class="mission-card">
+          <h3>Wildcard</h3>
+          <p>
+            Mystery Mission — a mixed set, including curveballs like assemblies,
+            fire drills, testing days, and other schedule shifts.
+          </p>
+          <div class="action">
+            <button id="btn-random" class="scenario-btn">Start Wildcard Mission</button>
+          </div>
+        </article>
+      </div>
+    `;
+  }
+
+  // Now that the buttons exist, wire them up
+  hookMissionButtons();
+}
+
+// Run once when the page loads
+window.addEventListener('DOMContentLoaded', () => {
+  renderHomeScreen();   // show the mission cards on load
+
+  const homeBtn = document.getElementById('home-btn');
+  if (homeBtn) {
+    homeBtn.onclick = () => {
+      // Reset points if you want, or leave as-is:
+      // setPoints(0);
+      renderHomeScreen();
     };
   }
 });
