@@ -4023,3 +4023,24 @@ function showNode(id) {
   });
 }
 
+/* -------- INIT: DOM Ready -------- */
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("GAME INIT — DOM READY");
+
+  // Home button
+  const homeBtn = document.getElementById('home-btn');
+  if (homeBtn) {
+    homeBtn.addEventListener('click', () => {
+      resetGame();
+      renderIntroCards();
+    });
+  }
+
+  // Start fresh
+  setTeacherBadge(getTeacherCode());
+  resetGame();
+  renderIntroCards();
+
+  // Initial feedback
+  showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
+});
