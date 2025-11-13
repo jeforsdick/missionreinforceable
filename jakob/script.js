@@ -649,7 +649,9 @@ function showNode(id) {
   showNode(opt.nextId);
 
   if (opt.nextId === 901) sendResultsOnce();
-});
+  });
+});    // <-- CLOSE for options.forEach!
+}      // <-- CLOSE for showNode!
 
 
 /* -------- Single INIT -------- */
