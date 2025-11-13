@@ -229,3 +229,106 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
   margin-top: 6px;
 }
 
+/* ---------------------------
+   🍎 MOBILE OPTIMIZATION
+   Only applies on screens <= 600px wide
+--------------------------- */
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+  }
+
+  #game-container {
+    padding: 10px;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  #scenario-title {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  /* Toolbar stacking */
+  #toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  #teacher-badge,
+  #score-badge {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  /* Wizard pod */
+  #feedback {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  #coach-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  #feedback-text {
+    font-size: 0.95rem;
+  }
+
+  /* Story text center + spacing */
+  #story-text {
+    font-size: 1rem;
+    padding: 14px;
+    line-height: 1.4;
+  }
+
+  /* Options/buttons */
+  .option-btn,
+  .scenario-btn,
+  .big,
+  button {
+    width: 100%;
+    margin: 6px 0;
+    padding: 12px;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* Mission cards */
+  .mission-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mission-card {
+    padding: 14px;
+  }
+
+  .mission-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .mission-card p {
+    font-size: 0.9rem;
+  }
+
+  /* Summary box */
+  #session-summary {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
+
+
