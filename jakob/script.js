@@ -17,10 +17,11 @@ const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
 /* -------- Wizard sprites (same folder as index.html) -------- */
-const WIZ = {
+  const WIZ = {
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
-  minus: 'mr-wizard-minus10.png'
+  minus: 'mr-wizard-minus10.png',
+  think: 'mr-wizard-think.png'   // ← NEW
 };
 
 // Always show a sprite immediately and avoid stale-cache
@@ -3963,75 +3964,88 @@ function showNode(id) {
     }
     showFeedback(coachLine, null, scoreHint);
 
-  } else {
-    if (storyText) {
-      storyText.style.display = 'block';
-      storyText.textContent = node.text;
-    }
-
-    const old = document.getElementById('summary-panel');
-    if (old) old.remove();
+ } else {
+  if (storyText) {
+    storyText.style.display = 'block';
+    storyText.textContent = node.text;
   }
 
-  choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
+  const old = document.getElementById('summary-panel');
+  if (old) old.remove();
+
+  // ←←← ADD THESE 2 LINES HERE ←←←
+  setWizardSprite('think');
+  showFeedback('Thinking...', null, 0);
+  // ←←← END OF NEW LINES ←←←
+}
+
+choicesDiv.innerHTML = '';
+const options = shuffledOptions(node.options);
 
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.textContent = opt.text;
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
-    btn.addEventListener('click', () => {
-    if (node.feedback && opt.nextId === 'home') {
-  // FULL RESET: Clear everything and go home
-  resetGame();
-
-  // Clear feedback HUD (wizard + text)
-  showFeedback('', null, 0);
-
-  // Reset title
-  if (scenarioTitle) {
-    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+btn.addEventListener('click', () => {
+  // === 1. Score & Log ===
+  if (!node.feedback && typeof opt.delta === 'number') {
+    addPoints(opt.delta);
   }
+  if (!node.feedback) logDecision(node.id, opt);
 
-  // Remove any leftover summary
-  const oldSummary = document.getElementById('summary-panel');
-  if (oldSummary) oldSummary.remove();
+  // === 2. Show Feedback Wizard + Text ===
+  const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
+  setWizardSprite(feedbackState);
+  showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
 
-  // Show story text again (in case it was hidden)
-  if (storyText) {
-    storyText.style.display = 'block';
-    storyText.innerHTML = ''; // clear any old content
-  }
+  // === 3. Replace choices with "NEXT" button ===
+  choicesDiv.innerHTML = '';
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'NEXT →';
+  nextBtn.className = 'scenario-btn primary big option-btn';
+  nextBtn.style.marginTop = '16px';
+  nextBtn.style.width = '100%';
 
-  // Rebuild home screen
-  renderIntroCards();
-  return;
-}
-
-      if (!node.feedback && typeof opt.delta === 'number') {
-        addPoints(opt.delta);
+  nextBtn.onclick = () => {
+    // === 4. Move to next step ===
+    if (opt.nextId === 'home') {
+      resetGame();
+      // Clear feedback HUD
+      showFeedback('', null, 0);
+      // Reset title
+      if (scenarioTitle) {
+        scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
       }
-
-      if (!node.feedback) logDecision(node.id, opt);
-
-      if (opt.feedback) {
-        showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
-      } else if (!node.feedback) {
-        showFeedback('', null, 0);
+      // Remove summary
+      const oldSummary = document.getElementById('summary-panel');
+      if (oldSummary) oldSummary.remove();
+      // Show story text
+      if (storyText) {
+        storyText.style.display = 'block';
+        storyText.innerHTML = '';
       }
-
-      if (opt.nextId === 1) resetGame();
-
-      showNode(opt.nextId);
-
-      if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) sendResultsOnce();
-    });
-
-    choicesDiv.appendChild(btn);
+      renderIntroCards();
+      return;
     }
-  });
-}
+
+    if (opt.nextId === 1) resetGame();
+
+    showNode(opt.nextId);
+
+    // === 5. Send results at end ===
+    if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
+      sendResultsOnce();
+    }
+  };
+
+  choicesDiv.appendChild(nextBtn);
+
+  // === 6. Auto-focus NEXT ===
+  requestAnimationFrame(() => nextBtn.focus());
+});
+
+choicesDiv.appendChild(btn);
 
 /* -------- Single INIT -------- */
 window.addEventListener('load', () => {
