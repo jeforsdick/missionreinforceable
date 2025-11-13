@@ -587,8 +587,8 @@ function showNode(id) {
       node.scenario || "Choose Your Next Move";
   }
 
-  // Main text
- if (node.feedback) {
+ // Main text
+if (node.feedback) {
   const pct = percentScore();
   const msg = fidelityMessage();
 
@@ -597,29 +597,33 @@ function showNode(id) {
     `Your score: ${points} / ${maxPossible} (${pct}%)` +
     `<br><br><strong>Overall feedback:</strong> ${msg}`;
 
-  // Wizard face based on OVERALL % (not last choice)
+  // Wizard face based on OVERALL %
   let scoreHint;
+  let coachLine;
+
   if (pct >= 80) {
     scoreHint = +10;   // good wizard
+    coachLine = "Mission complete!<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else if (pct >= 50) {
     scoreHint = 0;     // meh wizard
+    coachLine = "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else {
     scoreHint = -10;   // bad wizard
+    coachLine = "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   }
 
-  // This uses your existing showFeedback → setWizardSprite pipeline
+  // Wizard pod coaching message
   showFeedback(
-    "Mission complete! Results have been sent to the team. Review your overall feedback below.",
+    coachLine,
     null,
     scoreHint
   );
+  
 } else {
   storyText.textContent = node.text;
 }
 
 
-
-  // Choices
  // Choices
 choicesDiv.innerHTML = '';
 const options = shuffledOptions(node.options);
