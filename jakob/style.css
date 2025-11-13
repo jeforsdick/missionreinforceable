@@ -13,7 +13,7 @@
   --bad:#ff4d4d;    /* -10 */
 
   /* wizard size */
-  --wiz-size: 20px;
+  --wiz-size: 64px;
 }
 
 * {
