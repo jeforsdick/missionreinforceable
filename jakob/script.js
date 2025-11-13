@@ -9,6 +9,39 @@ const POOL = {
   crisis: [],
   wild: []
 };
+
+/*************************************************
+ * REQUIRED GLOBAL ELEMENT REFERENCES & SCORING
+ **************************************************/
+
+// These must match your HTML IDs exactly
+const storyText      = document.getElementById("story-text");
+const choicesDiv     = document.getElementById("choices");
+const scenarioTitle  = document.getElementById("scenario-title");
+const pointsEl       = document.getElementById("points");
+
+// global points tracking
+let points = 0;
+let maxPossible = 0;
+
+// updates the number in the toolbar
+function setPoints(v) {
+  points = v;
+  if (pointsEl) {
+    pointsEl.textContent = points;
+    pointsEl.classList.remove("flash");
+    requestAnimationFrame(() => pointsEl.classList.add("flash"));
+  }
+}
+
+// apply delta (+10, 0, -10)
+function addPoints(delta) {
+  if (typeof delta === "number") {
+    maxPossible += 10;
+    setPoints(points + delta);
+  }
+}
+
 /*************************************************
  * RANDOM SCENARIO SELECTORS
  * (Needed for the mission buttons to work)
