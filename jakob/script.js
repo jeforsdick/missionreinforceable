@@ -594,7 +594,6 @@ if (node.feedback) {
 
   // Teacher-facing action steps
   let actionSteps = "";
-
   if (pct >= 80) {
     actionSteps = `
       <ul>
@@ -618,61 +617,55 @@ if (node.feedback) {
       </ul>`;
   }
 
-  // Score + detailed feedback with action steps
- // Wrapped summary so it stays inside the game box
-// Clear story box so it stays small
-storyText.textContent = "Session summary:";
+  /* ------------- REMOVE THE GRAY BOX HERE ------------- */
+  storyText.innerHTML = "";  
+  /* ---------------------------------------------------- */
 
-// Remove any old summary panel if present
-const old = document.getElementById('summary-panel');
-if (old) old.remove();
+  // Remove leftover summary panel
+  const old = document.getElementById('summary-panel');
+  if (old) old.remove();
 
-// Build a new summary panel BELOW the story text
-const panel = document.createElement('div');
-panel.id = "summary-panel";
-panel.className = "summary-panel";
+  // Build new panel
+  const panel = document.createElement('div');
+  panel.id = "summary-panel";
+  panel.className = "summary-panel";
 
-panel.innerHTML = `
-  <div class="summary-score">Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div>
+  panel.innerHTML = `
+    <div class="summary-score">
+      Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)
+    </div>
 
-  <div class="summary-section">
-    <strong>Overall feedback:</strong><br>${msg}
-  </div>
+    <div class="summary-section">
+      <strong>Overall feedback:</strong><br>${msg}
+    </div>
 
-  <div class="summary-section">
-    <strong>Action steps for teachers:</strong>
-    ${actionSteps}
-  </div>
-`;
+    <div class="summary-section">
+      <strong>Action steps for teachers:</strong>
+      ${actionSteps}
+    </div>
+  `;
 
-// Insert AFTER the story-text box — THIS is the fix
-storyText.insertAdjacentElement('afterend', panel);
+  storyText.insertAdjacentElement('afterend', panel);
 
-
-
-  // Wizard face selection
-  let scoreHint;
-  let coachLine;
-
+  // Wizard face + coach message
+  let scoreHint, coachLine;
   if (pct >= 80) {
     scoreHint = +10;
     coachLine =
-      "Mission complete! Results have been sent to the team. Review your overall feedback below.";
+      "Mission complete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else if (pct >= 50) {
     scoreHint = 0;
     coachLine =
-      "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
+      "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   } else {
     scoreHint = -10;
     coachLine =
-      "Mission failed. Results have been sent to the team. Review your overall feedback below.";
+      "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
   }
 
   showFeedback(coachLine, null, scoreHint);
-
-} else {
-  storyText.textContent = node.text;
 }
+
 
 
 
