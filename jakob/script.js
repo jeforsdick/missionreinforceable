@@ -721,7 +721,7 @@ function showNode(id) {
     choicesDiv.appendChild(btn);
   });
 }
-
+}
 
 /* -------- Single INIT -------- */
 window.addEventListener('load', () => {
