@@ -18,15 +18,15 @@ const coachImgEl      = document.getElementById('coach-img');
 
 /* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
+  think: 'mr-wizard-think.png',
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
   minus: 'mr-wizard-minus10.png',
-  think: 'mr-wizard-think.png'
 };
 
 // Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.meh;
+  const src = WIZ[state] || WIZ.meh;  // ← This line supports 'think'
   if (coachImgEl) {
     coachImgEl.src = `${src}?v=${Date.now()}`;
   }
@@ -3978,9 +3978,9 @@ function showNode(id) {
   storyText.style.display = 'block';
   storyText.textContent = node.text;
 
-  // THINKING WIZARD + "Thinking..."
+  // THINKING WIZARD + "Observing..."
   setWizardSprite('think');
-  showFeedback('Thinking...', null, 0);
+  showFeedback('Observing', null, 0);
 }
 
     const old = document.getElementById('summary-panel');
