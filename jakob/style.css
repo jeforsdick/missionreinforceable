@@ -161,10 +161,10 @@ h2{
 /* ---------- Mission Intro Text ---------- */
 .mission-intro{
   background:#333;
-  padding:18px 20px;
-  border-radius:12px;
+  padding:18px;
+  border-radius:10px;
   margin-top:6px;
-  margin-bottom:18px;
+  margin-bottom:14px;
   font-size:1rem;
 }
 
