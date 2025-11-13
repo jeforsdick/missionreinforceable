@@ -19,24 +19,25 @@
       <div id="teacher-badge">Teacher: <span id="teacher-code">-</span></div>
       <div id="score-badge">Points: <span id="points">0</span></div>
 
-      <!-- spacer just pushes Home to the right via flex -->
+      <!-- Feedback HUD with MR Wizard avatar -->
+      <div id="feedback">
+        <div id="coach-icon">
+          <!-- ✅ CHANGE: id="coach-img" -> id="wizard-img"
+               ✅ Optional: start him in the "thinking" pose -->
+          <img id="wizard-img" src="mr-wizard-think.png" alt="MR Wizard status"/>
+        </div>
+        <!-- ✅ Optional: give this a default line; JS can overwrite it later -->
+        <div id="feedback-text">
+          At each step, you’ll see immediate feedback on how closely your choice
+          matches the Behavior Intervention Plan.
+        </div>
+      </div>
+
       <div class="spacer"></div>
       <button id="home-btn" class="ghost">Home</button>
     </div>
 
-    <!-- HUD with MR Wizard avatar (thinking / good / meh / bad) -->
-    <div id="feedback">
-      <div id="coach-icon">
-        <!-- NOTE: id is wizard-img now so the new JS can find it -->
-        <img id="wizard-img" src="mr-wizard-think.png" alt="MR Wizard status"/>
-      </div>
-      <div id="feedback-text">
-        At each step, you’ll see immediate feedback on how closely your choice
-        matches the Behavior Intervention Plan.
-      </div>
-    </div>
-
-    <!-- Game area: the JS will render the mission cards & scenarios here -->
+    <!-- Game area -->
     <div id="story-text"></div>
     <div id="choices"></div>
   </div>
