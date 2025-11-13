@@ -17,20 +17,22 @@ const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
 /* -------- Wizard sprites (same folder as index.html) -------- */
-  const WIZ = {
+const WIZ = {
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
   minus: 'mr-wizard-minus10.png',
-  think: 'mr-wizard-think.png'   // ← NEW
+  think: 'mr-wizard-think.png'
 };
 
 // Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.meh;  // Handles 'plus', 'minus', 'think', defaults to 'meh'
-  if (coachImgEl) coachImgEl.src = `${src}?v=${Date.now()}`;
+  const src = WIZ[state] || WIZ.meh;
+  if (coachImgEl) {
+    coachImgEl.src = `${src}?v=${Date.now()}`;
+  }
 }
 // default image on load
-setWizardSprite('meh');
+setWizardSprite('think');
 
 /* -------- Scoring -------- */
 let points = 0;
@@ -57,7 +59,14 @@ function resetGame() {
   sentThisRun = false;  
   SESSION_ID = newSessionId(); 
   setPoints(0);
+
+  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  }
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
 }
 function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
 function fidelityMessage() {
@@ -3771,7 +3780,7 @@ function renderIntroCards() {
 
   storyText.innerHTML = `
 Welcome to Mission: Reinforceable.
-You’ll step through short, branching scenarios based on your Behavior Plan.
+You’ll step through short, branching scenarios based on you Behavior Plan.
 Choose your mission below.`;
 
   const menu = document.createElement('div');
@@ -3964,42 +3973,49 @@ function showNode(id) {
     }
     showFeedback(coachLine, null, scoreHint);
 
- } else {
-  if (storyText) {
-    storyText.style.display = 'block';
-    storyText.textContent = node.text;
-  }
+  } else {
+    if (storyText) {
+  storyText.style.display = 'block';
+  storyText.textContent = node.text;
 
-  const old = document.getElementById('summary-panel');
-  if (old) old.remove();
-
-  // ←←← ADD THESE 2 LINES HERE ←←←
+  // THINKING WIZARD + "Thinking..."
   setWizardSprite('think');
   showFeedback('Thinking...', null, 0);
-  // ←←← END OF NEW LINES ←←←
 }
 
-choicesDiv.innerHTML = '';
-const options = shuffledOptions(node.options);
+    const old = document.getElementById('summary-panel');
+    if (old) old.remove();
+  }
+
+  choicesDiv.innerHTML = '';
+  const options = shuffledOptions(node.options);
 
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.textContent = opt.text;
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
-btn.addEventListener('click', () => {
-  // === 1. Score & Log ===
+    btn.addEventListener('click', () => {
+  if (node.feedback && opt.nextId === 'home') {
+    resetGame();
+    renderIntroCards();
+    return;
+  }
+
   if (!node.feedback && typeof opt.delta === 'number') {
     addPoints(opt.delta);
   }
+
   if (!node.feedback) logDecision(node.id, opt);
 
-  // === 2. Show Feedback Wizard + Text ===
+  // FEEDBACK WIZARD
   const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
   setWizardSprite(feedbackState);
   showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
 
-  // === 3. Replace choices with "NEXT" button ===
+  if (opt.nextId === 1) resetGame();
+
+  // === NEW: SHOW NEXT BUTTON WITH PAUSE ===
   choicesDiv.innerHTML = '';
   const nextBtn = document.createElement('button');
   nextBtn.textContent = 'NEXT →';
@@ -4008,47 +4024,40 @@ btn.addEventListener('click', () => {
   nextBtn.style.width = '100%';
 
   nextBtn.onclick = () => {
-    // === 4. Move to next step ===
-    if (opt.nextId === 'home') {
-      resetGame();
-      // Clear feedback HUD
-      showFeedback('', null, 0);
-      // Reset title
-      if (scenarioTitle) {
-        scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Loading...';
+
+    setTimeout(() => {
+      showNode(opt.nextId);
+      if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
+        sendResultsOnce();
       }
-      // Remove summary
-      const oldSummary = document.getElementById('summary-panel');
-      if (oldSummary) oldSummary.remove();
-      // Show story text
-      if (storyText) {
-        storyText.style.display = 'block';
-        storyText.innerHTML = '';
-      }
-      renderIntroCards();
-      return;
-    }
-
-    if (opt.nextId === 1) resetGame();
-
-    showNode(opt.nextId);
-
-    // === 5. Send results at end ===
-    if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
-      sendResultsOnce();
-    }
+    }, 1500); // 1.5 second pause
   };
 
   choicesDiv.appendChild(nextBtn);
-
-  // === 6. Auto-focus NEXT ===
   requestAnimationFrame(() => nextBtn.focus());
+
+  // === AUTO-CLICK "Continue." (for smooth branching) ===
+  if (opt.text === "Continue.") {
+    setTimeout(() => nextBtn.click(), 2000);
+  }
 });
 
-choicesDiv.appendChild(btn);
+    choicesDiv.appendChild(btn);
 
-/* -------- Single INIT -------- */
+    // Optional: Auto-click single "Continue" buttons after 2s for smooth merges
+    if (options.length === 1 && opt.text === "Continue.") {
+      setTimeout(() => btn.click(), 2000);
+    }
+  });
+}
+
+/* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("GAME INIT — DOM READY");
+
+  // Home button
   const homeBtn = document.getElementById('home-btn');
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
@@ -4056,8 +4065,12 @@ document.addEventListener('DOMContentLoaded', () => {
       renderIntroCards();
     });
   }
+
+  // Start fresh
   setTeacherBadge(getTeacherCode());
   resetGame();
   renderIntroCards();
+
+  // Initial feedback
   showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
 });
