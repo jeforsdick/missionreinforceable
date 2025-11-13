@@ -22,12 +22,12 @@ const WIZ = {
 };
 
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.meh;
+  const src = WIZ[state] || WIZ.think;
   if (coachImgEl) {
     coachImgEl.src = `${src}?v=${Date.now()}`;
   }
 }
-setWizardSprite('meh');
+setWizardSprite('think');
 
 let points = 0;
 let maxPossible = 0;
@@ -3777,7 +3777,7 @@ function showNode(id) {
       storyText.style.display = 'block';
       storyText.textContent = node.text;
       setWizardSprite('think');
-      showFeedback('Thinking...', null, 0);
+      showFeedback('Observing...', null, 0);
     }
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
