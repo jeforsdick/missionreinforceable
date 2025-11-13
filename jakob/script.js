@@ -124,12 +124,28 @@ async function sendResultsOnce() {
   const payload = {
     teacher_code: getTeacherCode(),
     session_id:   SESSION_ID,
-    points,                       // from your game
-    max_possible: maxPossible,    // from your game
-    percent:      percentScore(), // from your game
+    points,
+    max_possible: maxPossible,
+    percent:      percentScore(),
     timestamp:    new Date().toISOString(),
     log:          events
   };
+
+  // helper to create / reuse a status line under the score
+  function getStatusEl() {
+    let el = document.getElementById('send-status');
+    if (!el) {
+      el = document.createElement('p');
+      el.id = 'send-status';
+      el.style.marginTop = '12px';
+      el.style.fontStyle = 'italic';
+      storyText.appendChild(el);
+    }
+    return el;
+  }
+
+  const statusEl = getStatusEl();
+  statusEl.textContent = "Sending results to the research team...";
 
   try {
     await fetch(RESULT_ENDPOINT, {
@@ -137,12 +153,13 @@ async function sendResultsOnce() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    showFeedback("Results sent. Thanks for playing!", "correct", +10);
+    statusEl.textContent = "Results sent to the research team.";
   } catch (e) {
-    sentThisRun = false; // allow retry on next visit
-    showFeedback("Couldn’t send results (offline?). Try again later.", "coach", 0);
+    sentThisRun = false;
+    statusEl.textContent = "Couldn’t send results (maybe offline). You can replay and it will try again.";
   }
 }
+
 
 
 /* -------- Utilities -------- */
@@ -404,14 +421,25 @@ function showNode(id) {
   }
 
   // Main text
-  if (node.feedback) {
-    const pct = percentScore();
-    const msg = fidelityMessage();
-    storyText.textContent = `Your score: ${points} / ${maxPossible} (${pct}%)`;
-    showFeedback(msg, pct >= 80 ? "correct" : "coach", 0);
-  } else {
-    storyText.textContent = node.text;
-  }
+ if (node.feedback) {
+  const pct = percentScore();
+  const msg = fidelityMessage();
+
+  // Score + overall feedback under it
+  storyText.innerHTML =
+    `Your score: ${points} / ${maxPossible} (${pct}%)` +
+    `<br><br><strong>Overall feedback:</strong> ${msg}`;
+
+  // Wizard pod just says "mission complete"
+  showFeedback(
+    "Mission complete! Results have been sent. Review your overall feedback below.",
+    pct >= 80 ? "correct" : "coach",
+    0
+  );
+} else {
+  storyText.textContent = node.text;
+}
+
 
   // Choices
   choicesDiv.innerHTML = '';
