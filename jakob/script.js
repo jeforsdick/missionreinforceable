@@ -580,23 +580,19 @@ function showNode(id) {
   const node = getNode(id);
   if (!node) return;
 
-  // Title
-  function showNode(id) {
-  const node = getNode(id);
-  if (!node) return;
-
-  // Title
+  // ----- Title -----
   if (scenarioTitle) {
     scenarioTitle.textContent =
       node.feedback ? "Fidelity Feedback" :
       node.scenario || "Choose Your Next Move";
   }
 
+  // ----- Summary node (end of mission) -----
   if (node.feedback) {
     const pct = percentScore();
     const msg = fidelityMessage();
 
-    // 🔹 Hide the gray story card on the summary screen
+    // Hide the normal gray story box
     if (storyText) {
       storyText.style.display = 'none';
     }
@@ -626,11 +622,11 @@ function showNode(id) {
         </ul>`;
     }
 
-    // remove any old summary panel
+    // Remove any old summary panel
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
 
-    // build new summary panel
+    // Build new summary panel
     const panel = document.createElement('div');
     panel.id = "summary-panel";
     panel.className = "summary-panel";
@@ -649,7 +645,7 @@ function showNode(id) {
       </div>
     `;
 
-    // insert the panel where the story box normally lives
+    // Insert the panel where the story box normally lives
     if (storyText && storyText.parentNode) {
       storyText.insertAdjacentElement('afterend', panel);
     }
@@ -672,13 +668,14 @@ function showNode(id) {
     showFeedback(coachLine, null, scoreHint);
 
   } else {
-    // 🔹 For regular nodes, SHOW the gray story card again
+    // ----- Normal game nodes -----
+    // Make sure the gray story box is visible again
     if (storyText) {
       storyText.style.display = 'block';
       storyText.textContent = node.text;
     }
 
-    // also remove any leftover summary panel when you go back into game mode
+    // Remove any leftover summary panel
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
   }
@@ -693,34 +690,40 @@ function showNode(id) {
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
     btn.addEventListener('click', () => {
-      // summary "play again" → go home
+      // Summary "play again" → go home
       if (node.feedback && opt.nextId === 'home') {
         resetGame();
         renderIntroCards();
         return;
       }
 
+      // Add points for scored nodes
       if (!node.feedback && typeof opt.delta === 'number') {
         addPoints(opt.delta);
       }
 
+      // Log decisions (only game nodes)
       if (!node.feedback) logDecision(node.id, opt);
 
+      // Per-step feedback
       if (opt.feedback) {
         showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
       } else if (!node.feedback) {
         showFeedback('', null, 0);
       }
 
+      // Legacy reset behavior if nextId === 1
       if (opt.nextId === 1) resetGame();
+
+      // Move to next node
       showNode(opt.nextId);
 
+      // End-of-run: send results once when we hit the summary node
       if (opt.nextId === 901) sendResultsOnce();
     });
 
     choicesDiv.appendChild(btn);
   });
-}
 }
 
 /* -------- Single INIT -------- */
