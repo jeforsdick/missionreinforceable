@@ -4023,16 +4023,3 @@ function showNode(id) {
   });
 }
 
-/* -------- Single INIT -------- */
-window.addEventListener('load', () => {
-  const homeBtn = document.getElementById('home-btn');
-  if (homeBtn) {
-    homeBtn.addEventListener('click', () => {
-      resetGame();
-      renderIntroCards();
-    });
-  }
-  setTeacherBadge(getTeacherCode());
-  resetGame();
-  renderIntroCards();
-});
