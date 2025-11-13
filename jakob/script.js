@@ -620,38 +620,55 @@ function showNode(id) {
 
 
   // Choices
-  choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.textContent = opt.text;
-    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c)); // keep your styling
+ // Choices
+choicesDiv.innerHTML = '';
+const options = shuffledOptions(node.options);
+
+options.forEach(opt => {
+  const btn = document.createElement('button');
+  btn.textContent = opt.text;
+  ["scenario-btn","primary","big","option-btn"]
+    .forEach(c => btn.classList.add(c));
 
   btn.addEventListener('click', () => {
-  // If this is the summary node's "play again" button, go home
-  if (node.feedback && opt.nextId === 'home') {
-    resetGame();
-    renderIntroCards();
-    return;
-  }
 
-  if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
+    // If this is the summary node’s home button:
+    if (node.feedback && opt.nextId === 'home') {
+      resetGame();
+      renderIntroCards();
+      return;
+    }
 
-  if (!node.feedback) logDecision(node.id, opt);
+    // Add points
+    if (!node.feedback && typeof opt.delta === 'number') {
+      addPoints(opt.delta);
+    }
 
-  if (opt.feedback) {
-    showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
-  } else if (!node.feedback) {
-    showFeedback('', null, 0);
-  }
+    // Log decisions
+    if (!node.feedback) logDecision(node.id, opt);
 
-  if (opt.nextId === 1) resetGame();
-  showNode(opt.nextId);
+    // Feedback box
+    if (opt.feedback) {
+      showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
+    } else if (!node.feedback) {
+      showFeedback('', null, 0);
+    }
 
-  if (opt.nextId === 901) sendResultsOnce();
+    // Reset if nextId = 1 (old behavior; safe to keep)
+    if (opt.nextId === 1) resetGame();
+
+    // Move to next node
+    showNode(opt.nextId);
+
+    // End-of-run: send results
+    if (opt.nextId === 901) sendResultsOnce();
   });
-});    // <-- CLOSE for options.forEach!
-}      // <-- CLOSE for showNode!
+
+  // *** THIS WAS MISSING — BUTTONS MUST BE APPENDED ***
+  choicesDiv.appendChild(btn);
+});      // <-- CLOSE foreach
+}        // <-- CLOSE showNode
+
 
 
 /* -------- Single INIT -------- */
