@@ -609,7 +609,7 @@ function showNode(id) {
 
   // This uses your existing showFeedback → setWizardSprite pipeline
   showFeedback(
-    "Mission complete! Review your overall feedback below.",
+    "Mission complete! Results have been sent to the team. <br>Review your overall feedback below.",
     null,
     scoreHint
   );
