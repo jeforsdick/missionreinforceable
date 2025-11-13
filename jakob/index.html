@@ -4,34 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mission: Reinforceable — Multi-Step Scenarios</title>
-  <link rel="icon" type="image/png" href="favicon.png?v=1">
-  <!-- Cache-bust to avoid stale CSS on GitHub Pages -->
-  <link rel="stylesheet" href="style.css?v=mr-2025-11-13"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <div id="game-container">
     <h1>Mission: Reinforceable</h1>
     <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
-    <!-- Toolbar (single) -->
+
+    <!-- Toolbar -->
     <div id="toolbar">
       <div id="teacher-badge">Teacher: <span id="teacher-code">-</span></div>
       <div id="score-badge">Points: <span id="points">0</span></div>
-      <!-- Feedback HUD with MR Wizard avatar -->
       <div id="feedback">
         <div id="coach-icon">
-          <!-- Images live in the same folder as this index -->
-          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
+          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard"/>
         </div>
         <div id="feedback-text"></div>
       </div>
       <div class="spacer"></div>
       <button id="home-btn" class="ghost">Home</button>
     </div>
-    <!-- Game area -->
+
     <div id="story-text"></div>
     <div id="choices"></div>
   </div>
-  <!-- Keep this last so all elements exist before the script runs -->
-  <script src="script.js?v=mr-2025-11-13"></script>
+
+  <!-- Script last -->
+  <script src="script.js"></script>
 </body>
 </html>
