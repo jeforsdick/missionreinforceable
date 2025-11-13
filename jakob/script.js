@@ -655,15 +655,15 @@ function showNode(id) {
     if (pct >= 80) {
       scoreHint = +10;
       coachLine =
-        "Mission complete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+        "Mission complete. Results have been sent to the team. Review your overall feedback below.";
     } else if (pct >= 50) {
       scoreHint = 0;
       coachLine =
-        "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+        "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
     } else {
       scoreHint = -10;
       coachLine =
-        "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+        "Mission failed. Results have been sent to the team. Review your overall feedback below.";
     }
     showFeedback(coachLine, null, scoreHint);
 
