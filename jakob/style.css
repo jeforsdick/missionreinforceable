@@ -332,3 +332,38 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
 }
 
 
+/* --------------------------
+   SUMMARY PAGE FIX
+   Make all containers auto-expand
+-------------------------- */
+
+#game-container,
+#story-text,
+#choices,
+#session-summary {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* The gray summary panel */
+#session-summary {
+  display: block;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Make the story-text box auto-growing */
+#story-text {
+  padding: 20px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+/* Make the overall middle container expand normally */
+#game-container {
+  padding-bottom: 40px;  /* so nothing bleeds out the bottom */
+}
