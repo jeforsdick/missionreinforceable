@@ -227,8 +227,8 @@ h2{
   padding:18px;
   border-radius:10px;
   min-height:110px;
-  margin-top:10px;
-  margin-bottom:14px;
+  margin-top:6px;
+  margin-bottom:6px;
   /* remove the white-space rule */
   font-size:1rem;
   line-height: 1.45;   /* add this to make text look clean and normal */
