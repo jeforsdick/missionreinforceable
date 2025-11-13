@@ -581,143 +581,146 @@ function showNode(id) {
   if (!node) return;
 
   // Title
+  function showNode(id) {
+  const node = getNode(id);
+  if (!node) return;
+
+  // Title
   if (scenarioTitle) {
     scenarioTitle.textContent =
       node.feedback ? "Fidelity Feedback" :
       node.scenario || "Choose Your Next Move";
   }
 
-// Main text
-if (node.feedback) {
-  const pct = percentScore();
-  const msg = fidelityMessage();
+  if (node.feedback) {
+    const pct = percentScore();
+    const msg = fidelityMessage();
 
-  // Teacher-facing action steps
-  let actionSteps = "";
-  if (pct >= 80) {
-    actionSteps = `
-      <ul>
-        <li>Continue using strong proactive cues before transitions.</li>
-        <li>Maintain clear reinforcement for replacement behaviors.</li>
-        <li>Keep prompting early signs—your timing is working!</li>
-      </ul>`;
-  } else if (pct >= 50) {
-    actionSteps = `
-      <ul>
-        <li>Increase pre-corrections before predictable triggers.</li>
-        <li>Prompt the replacement behavior earlier in the escalation cycle.</li>
-        <li>Deliver reinforcement immediately when the replacement occurs.</li>
-      </ul>`;
+    // 🔹 Hide the gray story card on the summary screen
+    if (storyText) {
+      storyText.style.display = 'none';
+    }
+
+    // Teacher-facing action steps
+    let actionSteps = "";
+    if (pct >= 80) {
+      actionSteps = `
+        <ul>
+          <li>Continue using strong proactive cues before transitions.</li>
+          <li>Maintain clear reinforcement for replacement behaviors.</li>
+          <li>Keep prompting early signs—your timing is working!</li>
+        </ul>`;
+    } else if (pct >= 50) {
+      actionSteps = `
+        <ul>
+          <li>Increase pre-corrections before predictable triggers.</li>
+          <li>Prompt the replacement behavior earlier in the escalation cycle.</li>
+          <li>Deliver reinforcement immediately when the replacement occurs.</li>
+        </ul>`;
+    } else {
+      actionSteps = `
+        <ul>
+          <li>Revisit the proactive setup steps—these prevent most escape attempts.</li>
+          <li>Practice the replacement behavior script outside of crises.</li>
+          <li>Follow the crisis plan exactly (no blocking, no chasing).</li>
+        </ul>`;
+    }
+
+    // remove any old summary panel
+    const old = document.getElementById('summary-panel');
+    if (old) old.remove();
+
+    // build new summary panel
+    const panel = document.createElement('div');
+    panel.id = "summary-panel";
+    panel.className = "summary-panel";
+    panel.innerHTML = `
+      <div class="summary-score">
+        Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)
+      </div>
+
+      <div class="summary-section">
+        <strong>Overall feedback:</strong><br>${msg}
+      </div>
+
+      <div class="summary-section">
+        <strong>Action steps for teachers:</strong>
+        ${actionSteps}
+      </div>
+    `;
+
+    // insert the panel where the story box normally lives
+    if (storyText && storyText.parentNode) {
+      storyText.insertAdjacentElement('afterend', panel);
+    }
+
+    // Wizard message
+    let scoreHint, coachLine;
+    if (pct >= 80) {
+      scoreHint = +10;
+      coachLine =
+        "Mission complete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    } else if (pct >= 50) {
+      scoreHint = 0;
+      coachLine =
+        "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    } else {
+      scoreHint = -10;
+      coachLine =
+        "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
+    }
+    showFeedback(coachLine, null, scoreHint);
+
   } else {
-    actionSteps = `
-      <ul>
-        <li>Revisit the proactive setup steps—these prevent most escape attempts.</li>
-        <li>Practice the replacement behavior script outside of crises.</li>
-        <li>Follow the crisis plan exactly (no blocking, no chasing).</li>
-      </ul>`;
+    // 🔹 For regular nodes, SHOW the gray story card again
+    if (storyText) {
+      storyText.style.display = 'block';
+      storyText.textContent = node.text;
+    }
+
+    // also remove any leftover summary panel when you go back into game mode
+    const old = document.getElementById('summary-panel');
+    if (old) old.remove();
   }
 
-  /* ------------- REMOVE THE GRAY BOX HERE ------------- */
-  storyText.innerHTML = "";  
-  /* ---------------------------------------------------- */
+  // ----- Choices -----
+  choicesDiv.innerHTML = '';
+  const options = shuffledOptions(node.options);
 
-  // Remove leftover summary panel
-  const old = document.getElementById('summary-panel');
-  if (old) old.remove();
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt.text;
+    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
-  // Build new panel
-  const panel = document.createElement('div');
-  panel.id = "summary-panel";
-  panel.className = "summary-panel";
+    btn.addEventListener('click', () => {
+      // summary "play again" → go home
+      if (node.feedback && opt.nextId === 'home') {
+        resetGame();
+        renderIntroCards();
+        return;
+      }
 
-  panel.innerHTML = `
-    <div class="summary-score">
-      Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)
-    </div>
+      if (!node.feedback && typeof opt.delta === 'number') {
+        addPoints(opt.delta);
+      }
 
-    <div class="summary-section">
-      <strong>Overall feedback:</strong><br>${msg}
-    </div>
+      if (!node.feedback) logDecision(node.id, opt);
 
-    <div class="summary-section">
-      <strong>Action steps for teachers:</strong>
-      ${actionSteps}
-    </div>
-  `;
+      if (opt.feedback) {
+        showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
+      } else if (!node.feedback) {
+        showFeedback('', null, 0);
+      }
 
-  storyText.insertAdjacentElement('afterend', panel);
+      if (opt.nextId === 1) resetGame();
+      showNode(opt.nextId);
 
-  // Wizard face + coach message
-  let scoreHint, coachLine;
-  if (pct >= 80) {
-    scoreHint = +10;
-    coachLine =
-      "Mission complete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
-  } else if (pct >= 50) {
-    scoreHint = 0;
-    coachLine =
-      "Mission incomplete.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
-  } else {
-    scoreHint = -10;
-    coachLine =
-      "Mission failed.<br>Results have been sent to the team.<br><br>Review your overall feedback below.";
-  }
+      if (opt.nextId === 901) sendResultsOnce();
+    });
 
-  showFeedback(coachLine, null, scoreHint);
-}
-
-
-
-
- // Choices
-choicesDiv.innerHTML = '';
-const options = shuffledOptions(node.options);
-
-options.forEach(opt => {
-  const btn = document.createElement('button');
-  btn.textContent = opt.text;
-  ["scenario-btn","primary","big","option-btn"]
-    .forEach(c => btn.classList.add(c));
-
-  btn.addEventListener('click', () => {
-
-    // If this is the summary node’s home button:
-    if (node.feedback && opt.nextId === 'home') {
-      resetGame();
-      renderIntroCards();
-      return;
-    }
-
-    // Add points
-    if (!node.feedback && typeof opt.delta === 'number') {
-      addPoints(opt.delta);
-    }
-
-    // Log decisions
-    if (!node.feedback) logDecision(node.id, opt);
-
-    // Feedback box
-    if (opt.feedback) {
-      showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
-    } else if (!node.feedback) {
-      showFeedback('', null, 0);
-    }
-
-    // Reset if nextId = 1 (old behavior; safe to keep)
-    if (opt.nextId === 1) resetGame();
-
-    // Move to next node
-    showNode(opt.nextId);
-
-    // End-of-run: send results
-    if (opt.nextId === 901) sendResultsOnce();
+    choicesDiv.appendChild(btn);
   });
-
-  // *** THIS WAS MISSING — BUTTONS MUST BE APPENDED ***
-  choicesDiv.appendChild(btn);
-});      // <-- CLOSE foreach
-}        // <-- CLOSE showNode
-
+}
 
 
 /* -------- Single INIT -------- */
