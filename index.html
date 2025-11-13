@@ -3,25 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; }
-    #output { margin-top: 20px; padding: 15px; background: white; border: 1px solid #ccc; }
-  </style>
+  <title>Mission: Reinforceable — Multi-Step Scenarios</title>
+  <link rel="icon" type="image/png" href="favicon.png?v=1">
+  <link rel="stylesheet" href="style.css?v=mr-2025-11-13"/>
 </head>
 <body>
-  <h1>Mission: Reinforceable — TEST</h1>
-  <button id="btn">Start Test</button>
-  <div id="output"></div>
-
-  <script>
-    document.getElementById('btn').onclick = () => {
-      document.getElementById('output').innerHTML = `
-        <h2>Script is working!</h2>
-        <p>Points: <strong>10</strong></p>
-        <img src="mr-wizard-plus10.png" width="100" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><text y=%2250%22 font-size=%2240%22>Image</text></svg>'">
-      `;
-    };
-  </script>
+  <div id="game-container">
+    <h1>Mission: Reinforceable</h1>
+    <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
+    <div id="toolbar">
+      <div id="teacher-badge">Teacher: <span id="teacher-code">-</span></div>
+      <div id="score-badge">Points: <span id="points">0</span></div>
+      <div id="feedback">
+        <div id="coach-icon">
+          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
+        </div>
+        <div id="feedback-text"></div>
+      </div>
+      <div class="spacer"></div>
+      <button id="home-btn" class="ghost">Home</button>
+    </div>
+    <div id="story-text"></div>
+    <div id="choices"></div>
+  </div>
+  <script src="script.js?v=mr-2025-11-13"></script>
 </body>
 </html>
