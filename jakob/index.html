@@ -9,35 +9,47 @@
   <!-- Cache-bust to avoid stale CSS on GitHub Pages -->
   <link rel="stylesheet" href="style.css?v=mr-2025-11-12"/>
 </head>
+
 <body>
   <div id="game-container">
-    <h1>Mission: Reinforceable</h1>
-    <h2 id="scenario-title">Behavior Intervention Simulator - Example Game</h2>
 
-    <!-- Toolbar (single) -->
+    <!-- Title -->
+    <h1>Mission: Reinforceable</h1>
+    <h2 id="scenario-title">Select Your Mission</h2>
+
+    <!-- Toolbar -->
     <div id="toolbar">
       <div id="teacher-badge">Teacher: <span id="teacher-code">-</span></div>
       <div id="score-badge">Points: <span id="points">0</span></div>
 
-      <!-- Feedback HUD with MR Wizard avatar -->
-      <div id="feedback">
-        <div id="coach-icon">
-          <!-- Images live in the same folder as this index -->
-          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
-        </div>
-        <div id="feedback-text"></div>
-      </div>
-
       <div class="spacer"></div>
-      <button id="home-btn" class="ghost">Home</button>
+      <button id="home-btn" class="ghost" onclick="window.location.href='index.html'">Home</button>
     </div>
 
-    <!-- Game area -->
+    <!-- ★ NEW: Mission Select Buttons -->
+    <div id="mission-select">
+      <button id="btn-drill" class="mission-btn">Daily Mission</button>
+      <button id="btn-crisis" class="mission-btn">Crisis Drill</button>
+      <button id="btn-random" class="mission-btn">Wildcard Mission</button>
+    </div>
+
+    <!-- ★ NEW: Wizard Image (Thinking / Good / Meh / Bad) -->
+    <div id="wizard-area">
+      <img 
+        id="wizard-img" 
+        src="mr-wizard-think.png" 
+        alt="MR Wizard"
+        class="wizard-neutral"
+      />
+    </div>
+
+    <!-- Game Area -->
     <div id="story-text"></div>
     <div id="choices"></div>
+
   </div>
 
-  <!-- Keep this last so all elements exist before the script runs -->
+  <!-- Script -->
   <script src="script.js?v=mr-2025-11-12"></script>
 </body>
 </html>
