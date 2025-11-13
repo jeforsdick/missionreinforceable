@@ -30,6 +30,7 @@ function setWizardSprite(state) {
 // default image on load
 setWizardSprite('meh');
 
+
 /* -------- Scoring -------- */
 let points = 0;
 let maxPossible = 0; // 10 per scored decision
@@ -51,8 +52,11 @@ function addPoints(delta) {
 function resetGame() {
   points = 0;
   maxPossible = 0;
+  events = [];          // NEW
+  sentThisRun = false;  // NEW
+  SESSION_ID = newSessionId(); // NEW: fresh session per run
   setPoints(0);
-  showFeedback('', null, 0); // neutral
+  showFeedback('', null, 0);
 }
 function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
 function fidelityMessage() {
@@ -78,6 +82,68 @@ function showFeedback(text, type, scoreHint) {
   feedbackTextEl.textContent = text || '';
   requestAnimationFrame(() => feedbackEl.classList.add('flash'));
 }
+
+/* ===== RESULTS: client → GAS webhook ===== */
+const RESULT_ENDPOINT = "https://script.google.com/macros/s/PASTE_YOUR_WEBAPP_ID/exec";
+
+/* teacher code from ?teacher=XX or badge */
+function getTeacherCode() {
+  const u = new URL(window.location.href);
+  return (u.searchParams.get("teacher")
+       || document.getElementById("teacher-code")?.textContent
+       || "—").trim();
+}
+function setTeacherBadge(code) {
+  const el = document.getElementById("teacher-code");
+  if (el && code && el.textContent !== code) el.textContent = code;
+}
+
+/* session + decision log */
+function newSessionId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+}
+let SESSION_ID = newSessionId();
+let events = [];
+let sentThisRun = false;
+
+/* log each decision */
+function logDecision(nodeId, opt) {
+  events.push({
+    t: new Date().toISOString(),
+    nodeId,
+    delta: (typeof opt.delta === "number" ? opt.delta : null),
+    choice: opt.text
+  });
+}
+
+/* send once at summary */
+async function sendResultsOnce() {
+  if (sentThisRun) return;
+  sentThisRun = true;
+
+  const payload = {
+    teacher_code: getTeacherCode(),
+    session_id:   SESSION_ID,
+    points,                       // from your game
+    max_possible: maxPossible,    // from your game
+    percent:      percentScore(), // from your game
+    timestamp:    new Date().toISOString(),
+    log:          events
+  };
+
+  try {
+    await fetch(RESULT_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    showFeedback("Results sent. Thanks for playing!", "correct", +10);
+  } catch (e) {
+    sentThisRun = false; // allow retry on next visit
+    showFeedback("Couldn’t send results (offline?). Try again later.", "coach", 0);
+  }
+}
+
 
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
@@ -355,25 +421,37 @@ function showNode(id) {
     btn.textContent = opt.text;
     ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c)); // keep your styling
 
-    btn.addEventListener('click', () => {
-      // Mode choices aren’t here anymore (cards start missions), but keep generic flow
-      if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
+   btn.addEventListener('click', () => {
+  if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
 
-      // Immediate wizard feedback
-      if (opt.feedback) showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
-      else if (!node.feedback) showFeedback('', null, 0);
+  if (!node.feedback) logDecision(node.id, opt); // NEW
 
-      if (opt.nextId === 1) { resetGame(); renderIntroCards(); return; }
-      showNode(opt.nextId);
-    });
-    choicesDiv.appendChild(btn);
+  if (opt.feedback) {
+    showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
+  } else if (!node.feedback) {
+    showFeedback('', null, 0);
+  }
+
+  if (opt.nextId === 1) resetGame();
+  showNode(opt.nextId);
+
+  if (opt.nextId === 901) sendResultsOnce();     // NEW
+});
+  choicesDiv.appendChild(btn);
   });
-}
+} 
 
-/* -------- Single INIT (no duplicates) -------- */
+/* -------- Single INIT -------- */
 window.addEventListener('load', () => {
   const homeBtn = document.getElementById('home-btn');
-  if (homeBtn) homeBtn.addEventListener('click', () => { resetGame(); renderIntroCards(); });
+  if (homeBtn) {
+    homeBtn.addEventListener('click', () => {
+      resetGame();
+      renderIntroCards();   // go back to mission menu
+    });
+  }
+  setTeacherBadge(getTeacherCode()); // fill in teacher from ?teacher=JF
   resetGame();
-  renderIntroCards();  // show the card menu intro
+  renderIntroCards();                // show mission cards on first load
 });
+
