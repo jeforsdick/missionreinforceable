@@ -3974,71 +3974,88 @@ function showNode(id) {
     showFeedback(coachLine, null, scoreHint);
 
   } else {
-    if (storyText) {
-  storyText.style.display = 'block';
-  storyText.textContent = node.text;
+    function showNode(id) {
+  const node = getNode(id);
+  if (!node) return;
 
-  // THINKING WIZARD + "Observing..."
-  setWizardSprite('think');
-  showFeedback('Observing...', null, 0);
-}
+  if (scenarioTitle) {
+    scenarioTitle.textContent = node.feedback ? "Fidelity Feedback" : node.scenario || "Choose Your Next Move";
+  }
+
+  if (node.feedback) {
+    // ... [summary panel code] ...
+  } else {
+    if (storyText) {
+      storyText.style.display = 'block';
+      storyText.textContent = node.text;
+
+      // THINKING WIZARD
+      setWizardSprite('think');
+      showFeedback('Thinking...', null, 0);
+    }
 
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
+
+    // CLEAR CHOICES ONCE — HERE
+    choicesDiv.innerHTML = '';
   }
 
-  choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
+  // ONLY ADD CHOICES IF NOT FEEDBACK
+  if (!node.feedback) {
+    const options = shuffledOptions(node.options);
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.textContent = opt.text;
+      ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
 
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.textContent = opt.text;
-    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
+      btn.addEventListener('click', () => {
+        if (node.feedback && opt.nextId === 'home') {
+          resetGame();
+          renderIntroCards();
+          return;
+        }
 
-    btn.addEventListener('click', () => {
-  if (node.feedback && opt.nextId === 'home') {
-    resetGame();
-    renderIntroCards();
-    return;
+        if (!node.feedback && typeof opt.delta === 'number') {
+          addPoints(opt.delta);
+        }
+
+        if (!node.feedback) logDecision(node.id, opt);
+
+        // FEEDBACK WIZARD
+        const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
+        setWizardSprite(feedbackState);
+        showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
+
+        if (opt.nextId === 1) resetGame();
+
+        // SHOW NEXT BUTTON
+        choicesDiv.innerHTML = '';
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'NEXT →';
+        nextBtn.className = 'scenario-btn primary big option-btn';
+        nextBtn.style.marginTop = '16px';
+        nextBtn.style.width = '100%';
+
+        nextBtn.onclick = () => {
+          nextBtn.disabled = true;
+          nextBtn.textContent = 'Loading...';
+          setTimeout(() => {
+            showNode(opt.nextId);
+            if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
+              sendResultsOnce();
+            }
+          }, 1500);
+        };
+
+        choicesDiv.appendChild(nextBtn);
+        requestAnimationFrame(() => nextBtn.focus());
+      });
+
+      choicesDiv.appendChild(btn);  // ADD ANSWER BUTTON
+    });
   }
-
-  if (!node.feedback && typeof opt.delta === 'number') {
-    addPoints(opt.delta);
-  }
-
-  if (!node.feedback) logDecision(node.id, opt);
-
-    // FEEDBACK WIZARD
-  const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
-  setWizardSprite(feedbackState);
-  showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
-  if (opt.nextId === 1) resetGame();
-
-  // === SHOW NEXT BUTTON WITH PAUSE ===
-  choicesDiv.innerHTML = '';
-  const nextBtn = document.createElement('button');
-  nextBtn.textContent = 'NEXT →';
-  nextBtn.className = 'scenario-btn primary big option-btn';
-  nextBtn.style.marginTop = '16px';
-  nextBtn.style.width = '100%';
-
-  nextBtn.onclick = () => {
-    nextBtn.disabled = true;
-    nextBtn.textContent = 'Loading...';
-    setTimeout(() => {
-      showNode(opt.nextId);
-      if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
-        sendResultsOnce();
-      }
-    }, 1500);
-  };
-
-  choicesDiv.appendChild(nextBtn);
-  requestAnimationFrame(() => nextBtn.focus());
-
-}); // ← CLOSES btn.addEventListener('click', ...)
-}); // ← CLOSES options.forEach(opt => ...)
-} // ← CLOSES showNode()
+}
 
 /* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
