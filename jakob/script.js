@@ -15,16 +15,16 @@ const POOL = {
  **************************************************/
 
 // These must match your HTML IDs exactly
-const storyText      = document.getElementById("story-text");
-const choicesDiv     = document.getElementById("choices");
-const scenarioTitle  = document.getElementById("scenario-title");
-const pointsEl       = document.getElementById("points");
+const storyText     = document.getElementById("story-text");
+const choicesDiv    = document.getElementById("choices");
+const scenarioTitle = document.getElementById("scenario-title");
+const pointsEl      = document.getElementById("points");
 
-// global points tracking
+// Global points tracking
 let points = 0;
 let maxPossible = 0;
 
-// updates the number in the toolbar
+// Updates the number in the toolbar
 function setPoints(v) {
   points = v;
   if (pointsEl) {
@@ -34,13 +34,14 @@ function setPoints(v) {
   }
 }
 
-// apply delta (+10, 0, -10)
+// Apply delta (+10, 0, -10)
 function addPoints(delta) {
   if (typeof delta === "number") {
     maxPossible += 10;
     setPoints(points + delta);
   }
 }
+
 
 /*************************************************
  * RANDOM SCENARIO SELECTORS
@@ -3738,6 +3739,16 @@ function renderStep() {
     choicesDiv.appendChild(btn);
   });
 }
+/*************************************************
+ * Inline feedback block (under story text)
+ **************************************************/
+function showFeedback(text) {
+  const fb = document.createElement("div");
+  fb.className = "feedback";
+  fb.textContent = text;
+  storyText.appendChild(fb);
+}
+
 
 /*************************************************
  * ENDING SCREEN
