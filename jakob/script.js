@@ -3832,4 +3832,5 @@ document.addEventListener('DOMContentLoaded', () => {
   resetGame();
   renderIntroCards();
   showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
-});
+setWizardSprite('think');  // THINKING WIZARD ON HOME;
+}); 
