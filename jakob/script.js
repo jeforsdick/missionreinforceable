@@ -9,6 +9,24 @@ const POOL = {
   crisis: [],
   wild: []
 };
+/*************************************************
+ * RANDOM SCENARIO SELECTORS
+ * (Needed for the mission buttons to work)
+ **************************************************/
+function getDailyScenario() {
+  const arr = POOL.daily;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getCrisisScenario() {
+  const arr = POOL.crisis;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getWildcardScenario() {
+  const arr = POOL.wild;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 /*************************************************
  * DAILY SCENARIO 1 — Morning Independent Work
@@ -3607,6 +3625,120 @@ POOL.wild.push({
     }
   }
 });
+
+/*************************************************
+ * RANDOM SCENARIO SELECTORS
+ **************************************************/
+function getDailyScenario() {
+  const arr = POOL.daily;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function getCrisisScenario() {
+  const arr = POOL.crisis;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function getWildcardScenario() {
+  const arr = POOL.wild;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/*************************************************
+ * CORE ENGINE — required for branching steps
+ **************************************************/
+let currentScenario = null;
+let currentStep = null;
+
+/* Start a scenario */
+function startScenario(scn) {
+  currentScenario = scn;
+  currentStep = scn.start;
+
+  scenarioTitle.textContent = scn.title;
+  setPoints(0);
+
+  renderStep();
+}
+
+/*************************************************
+ * STEP RENDERER
+ **************************************************/
+function renderStep() {
+  const stepObj = currentScenario.steps[currentStep];
+
+  // Set the story text
+  storyText.innerHTML = `
+    <div class="mission-step-text">
+      ${stepObj.text}
+    </div>
+  `;
+
+  // Clear old buttons
+  choicesDiv.innerHTML = "";
+
+  // Each choice button
+  Object.entries(stepObj.choices).forEach(([key, choice]) => {
+    const btn = document.createElement("button");
+    btn.className = "scenario-btn option-btn";
+    btn.textContent = choice.text;
+
+    btn.onclick = () => {
+      // Apply score
+      addPoints(choice.score);
+
+      // Wizard feedback color
+      updateWizard(choice.score);
+
+      // Show the why/explanation
+      showFeedback(choice.feedback);
+
+      // If this choice triggers an ending
+      if (choice.ending) {
+        renderEnding(choice.ending);
+        return;
+      }
+
+      // Otherwise continue to next step
+      currentStep = choice.next;
+      renderStep();
+    };
+
+    choicesDiv.appendChild(btn);
+  });
+}
+
+/*************************************************
+ * ENDING SCREEN
+ **************************************************/
+function renderEnding(endKey) {
+  const end = currentScenario.endings[endKey];
+
+  storyText.innerHTML = `
+    <h3>${end.title}</h3>
+    <p>${end.text}</p>
+    <p><strong>Your final score: ${points}</strong></p>
+  `;
+
+  choicesDiv.innerHTML = `
+    <button id="return-home" class="next-btn">Return to Mission Select</button>
+  `;
+
+  document.getElementById("return-home").onclick = () => {
+    renderHomeScreen();
+  };
+}
+
+/*************************************************
+ * WIZARD STATE UPDATE (+10 / 0 / -10)
+ **************************************************/
+function updateWizard(score) {
+  const img = document.getElementById("wizard-img");
+  img.classList.remove("wizard-good", "wizard-meh", "wizard-bad");
+
+  if (score > 0)      img.classList.add("wizard-good");
+  else if (score < 0) img.classList.add("wizard-bad");
+  else                img.classList.add("wizard-meh");
+}
+
 /*************************************************
  * HOME / MISSION SCREEN + BUTTON HOOKS
  **************************************************/
