@@ -22,7 +22,6 @@
       <!-- Feedback HUD with MR Wizard avatar -->
       <div id="feedback">
         <div id="coach-icon">
-          <!-- Images live in the same folder as this index -->
           <img id="wizard-img" src="mr-wizard-think.png" alt="MR Wizard status"/>
         </div>
         <div id="feedback-text">
@@ -43,31 +42,20 @@
       </div>
     </div>
 
-    <div id="choices">
-        </article>
+    <!-- Choices area (EMPTY — JS fills this!) -->
+    <div id="choices"></div>
 
-        <!-- Crisis Drill card -->
-        <article class="mission-card">
-          <h3>Red Alert</h3>
-          <p>Crisis Drill — rehearse elopement/crisis support and recovery steps when behavior escalates.</p>
-          <div class="action">
-            <button id="btn-crisis">Start Crisis Drill</button>
-          </div>
-        </article>
-
-        <!-- Wildcard card -->
-        <article class="mission-card">
-          <h3>Wildcard</h3>
-          <p>Mystery Mission — a mixed set, including curveballs like assemblies, drills, and schedule changes, plus regular scenarios.</p>
-          <div class="action">
-            <button id="btn-random">Start Wildcard Mission</button>
-          </div>
-        </article>
-      </div>
-    </div>
   </div>
 
-  <!-- Keep this last so all elements exist before the script runs -->
+  <!-- Script -->
   <script src="script.js?v=mr-2025-11-12"></script>
+
+  <!-- Safety re-hook (helps Weebly/GitHub render buttons correctly) -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => hookMissionButtons(), 50);
+    });
+  </script>
+
 </body>
 </html>
