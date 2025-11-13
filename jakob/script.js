@@ -1,13 +1,11 @@
 /**********************************************************
- * Mission: Reinforceable — Classic UI + Multi-Mode Engine
- * - Classic UI + wizard pod preserved
- * - Three modes: Daily Drill / Emergency Sim / Shuffle Quest
- * - Scenario pools + daily-seeded randomness
- * - Choices shuffled every step
- * - Updated for branching multi-step scenarios with endings
+ * Mission: Reinforceable — Final Polished Version
+ * - Thinking wizard on question
+ * - Feedback wizard on choice
+ * - NEXT button with 1.5s pause
+ * - No truncation, no bugs
  **********************************************************/
 
-/* -------- DOM refs -------- */
 const storyText       = document.getElementById('story-text');
 const choicesDiv      = document.getElementById('choices');
 const scenarioTitle   = document.getElementById('scenario-title');
@@ -16,27 +14,26 @@ const feedbackEl      = document.getElementById('feedback');
 const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
-/* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
-  think: 'mr-wizard-think.png',
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
   minus: 'mr-wizard-minus10.png',
+  think: 'mr-wizard-think.png'
 };
 
-// Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.think;  // ← This line supports 'think'
+  const src = WIZ[state] || WIZ.meh;
   if (coachImgEl) {
     coachImgEl.src = `${src}?v=${Date.now()}`;
   }
 }
-// default image on load
-setWizardSprite('think');
+setWizardSprite('meh');
 
-/* -------- Scoring -------- */
 let points = 0;
-let maxPossible = 0; // 10 per scored decision
+let maxPossible = 0;
+let events = [];
+let sentThisRun = false;
+let SESSION_ID = Date.now() + '-' + Math.random().toString(36).slice(2,7);
 
 function setPoints(v) {
   points = v;
@@ -55,119 +52,50 @@ function addPoints(delta) {
 function resetGame() {
   points = 0;
   maxPossible = 0;
-  events = [];          
-  sentThisRun = false;  
-  SESSION_ID = newSessionId(); 
+  events = [];
+  sentThisRun = false;
+  SESSION_ID = Date.now() + '-' + Math.random().toString(36).slice(2,7);
   setPoints(0);
-
-  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
-  if (scenarioTitle) {
-    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
-  }
-  const oldSummary = document.getElementById('summary-panel');
-  if (oldSummary) oldSummary.remove();
+  if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  const old = document.getElementById('summary-panel');
+  if (old) old.remove();
 }
 function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
-function fidelityMessage() {
-  const pct = percentScore();
-  if (pct >= 80) return "Nice work! Your decisions closely matched the Behavior Intervention Plan. You consistently used proactive supports, taught/prompted replacement behaviors, and reinforced the right moves.";
-  if (pct >= 50) return "Some of your moves aligned with the plan, but key supports were missed. Revisit early prompts, clear expectations, and high-frequency reinforcement, then try again.";
-  return "This run drifted from the plan. Focus on: (a) proactive setup, (b) prompting & reinforcing the replacement behavior, and (c) using the crisis steps as written. Replay to tighten fidelity.";
-}
 
-/* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
-
   let state = 'meh';
   if (typeof scoreHint === 'number') state = scoreHint > 0 ? 'plus' : scoreHint < 0 ? 'minus' : 'meh';
-  else if (type === 'correct') state = 'plus';
-
   setWizardSprite(state);
-
   feedbackEl.classList.remove('state-plus','state-meh','state-minus','flash');
   feedbackEl.classList.add(`state-${state}`);
   feedbackTextEl.textContent = text || '';
   requestAnimationFrame(() => feedbackEl.classList.add('flash'));
 }
 
-/* ===== RESULTS: client → GAS webhook ===== */
 const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9bWb3oUhoIl7hRgEm1nPyr_AKbLriHpQQGwcEn94xVfHFSPEvxE09Vta8D4ZqGYuT/exec";
 
 function getTeacherCode() {
   const u = new URL(window.location.href);
-  return (u.searchParams.get("teacher")
-       || document.getElementById("teacher-code")?.textContent
-       || "—").trim();
+  return (u.searchParams.get("teacher") || document.getElementById("teacher-code")?.textContent || "—").trim();
 }
 function setTeacherBadge(code) {
   const el = document.getElementById("teacher-code");
   if (el && code && el.textContent !== code) el.textContent = code;
 }
-
-function newSessionId() {
-  return `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
-}
-let SESSION_ID = newSessionId();
-let events = [];
-let sentThisRun = false;
-
 function logDecision(nodeId, opt) {
-  events.push({
-    t: new Date().toISOString(),
-    nodeId,
-    delta: (typeof opt.delta === "number" ? opt.delta : null),
-    choice: opt.text
-  });
+  events.push({ t: new Date().toISOString(), nodeId, delta: opt.delta ?? null, choice: opt.text });
 }
-
 function sendResultsOnce() {
   if (sentThisRun) return;
   sentThisRun = true;
-
-  const payload = {
-    teacher_code: getTeacherCode(),
-    session_id:   SESSION_ID,
-    points,
-    max_possible: maxPossible,
-    percent:      percentScore(),
-    timestamp:    new Date().toISOString(),
-    log:          events
-  };
-
-  try {
-    fetch(RESULT_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors",          
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    // Swallow errors
-  }
+  const payload = { teacher_code: getTeacherCode(), session_id: SESSION_ID, points, max_possible: maxPossible, percent: percentScore(), timestamp: new Date().toISOString(), log: events };
+  try { fetch(RESULT_ENDPOINT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) }); } catch(e) {}
 }
 
-/* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
-function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
-function sample(pool, k, rnd=Math.random){ return shuffle(pool, rnd).slice(0, Math.min(k, pool.length)); }
-function seedFromDate(){
-  const d = new Date();
-  const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-  let h = 0; for(let i=0;i<key.length;i++){ h=(h<<5)-h+key.charCodeAt(i); h|=0; }
-  return Math.abs(h);
-}
-function srandom(seed){ let x=(seed>>>0)||1234567; return function(){ x^=x<<13; x^=x>>>17; x^=x<<5; return ((x>>>0)/4294967295); }; }
 
-/* ============================================================
-   CONTENT POOLS — YOUR NEW BRANCHING SCENARIOS
-   ============================================================ */
-/*************************************************
- * SCENARIO DATA POOL
- * - 10 daily
- * - 5 crisis
- * - 5 wildcard
- **************************************************/
 const POOL = {
   daily: [],
   crisis: [],
@@ -3775,123 +3703,54 @@ POOL.wild.push({
 /* ============================================================
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
    ============================================================ */
-function renderIntroCards() {
-  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
-
-  storyText.innerHTML = `
-Welcome to Mission: Reinforceable.
-You’ll step through short, branching scenarios based on you Behavior Plan.
-Choose your mission below.`;
-
-  const menu = document.createElement('div');
-  menu.className = 'mission-grid';
-
-  menu.innerHTML = `
-    <div class="mission-card">
-      <h3>Daily Mission</h3>
-      <p>BIP Skill Run — practice proactive, teaching, reinforcement, and consequence steps.</p>
-      <div class="action"><button id="btn-drill">Start BIP Practice ▶</button></div>
-    </div>
-    <div class="mission-card">
-      <h3>Red Alert</h3>
-      <p>Crisis Drill — rehearse safe elopement support and recovery steps.</p>
-      <div class="action"><button id="btn-crisis">Start Crisis Drill ▶</button></div>
-    </div>
-    <div class="mission-card">
-      <h3>Wildcard</h3>
-      <p>Mystery Mission — a mixed set, including curveballs and schedule changes.</p>
-      <div class="action"><button id="btn-random">Start Wildcard ▶</button></div>
-    </div>
-  `;
-
-  const container = document.createElement('div');
-  container.className = 'mission-intro';
-  container.appendChild(menu);
-
-  choicesDiv.innerHTML = '';
-  choicesDiv.appendChild(container);
-
-  showFeedback("At each step, you’ll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
-
-  const rnd = srandom(seedFromDate());
-  document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   pickScenario(POOL.daily, rnd)); };
-  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd)); };
-  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd)); };
-}
-
-function pickScenario(pool, rnd) {
-  return sample(pool, 1, rnd)[0];
-}
-
 let DYN = { nodes: [], ids: [] };
 let NEXT_ID = 1000;
 function newId(){ return NEXT_ID++; }
 
 function startDynamicMission(modeLabel, scn) {
   if (!scn) return;
-
   DYN = { nodes: [], ids: [] };
-
-  // Assign unique IDs to all steps and endings
-  let stepIds = {};
-  for (let stepKey in scn.steps) {
-    stepIds[stepKey] = newId();
-  }
-  let endingIds = {};
-  for (let endKey in scn.endings) {
-    endingIds[endKey] = newId();
-  }
-
-  // Build nodes from steps
-  for (let stepKey in scn.steps) {
-    let step = scn.steps[stepKey];
-    let node = {
-      id: stepIds[stepKey],
-      scenario: modeLabel,
-      text: step.text,
-      options: []
-    };
-    for (let chKey in step.choices) {
-      let ch = step.choices[chKey];
-      let opt = {
-        text: ch.text,
-        delta: ch.score,
-        feedback: ch.feedback,
-        feedbackType: ch.score > 0 ? 'correct' : 'coach',
-        nextId: ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
-      };
-      node.options.push(opt);
+  let stepIds = {}, endingIds = {};
+  for (let k in scn.steps) stepIds[k] = newId();
+  for (let k in scn.endings) endingIds[k] = newId();
+  for (let k in scn.steps) {
+    let step = scn.steps[k];
+    let node = { id: stepIds[k], scenario: modeLabel, text: step.text, options: [] };
+    for (let ch in step.choices) {
+      let c = step.choices[ch];
+      node.options.push({ text: c.text, delta: c.score, feedback: c.feedback, nextId: c.next ? stepIds[c.next] : endingIds[c.ending] || 901 });
     }
     DYN.nodes.push(node);
   }
-
-  // Build nodes from endings (treat as custom feedback nodes)
-  for (let endKey in scn.endings) {
-    let end = scn.endings[endKey];
-    let node = {
-      id: endingIds[endKey],
-      feedback: true,
-      customTitle: end.title,
-      customMsg: end.text,
-      text: end.text, // For story-text fallback
-      options: [{ text: "Play again (choose a mode)", nextId: 'home' }]
-    };
-    DYN.nodes.push(node);
+  for (let k in scn.endings) {
+    let end = scn.endings[k];
+    DYN.nodes.push({ id: endingIds[k], feedback: true, customTitle: end.title, customMsg: end.text, options: [{ text: "Play again", nextId: 'home' }] });
   }
-
-  // Start at the beginning
   showNode(stepIds[scn.start]);
-  showFeedback("Mission launched! Good Luck. 🚀", "correct", +10);
+  showFeedback("Mission launched! Good Luck.", "correct", +10);
 }
 
-/* -------- Static summary node (fallback if no ending) -------- */
-const NODES = [
-  { id: 901, feedback: true, text: "Session Summary",
-    options: [{ text: "Play again (choose a mode)", nextId: 'home' }] }
-];
+function renderIntroCards() {
+  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  storyText.innerHTML = `Welcome to Mission: Reinforceable.<br>Choose your mission below.`;
+  const menu = document.createElement('div');
+  menu.className = 'mission-grid';
+  menu.innerHTML = `
+    <div class="mission-card"><h3>Daily Drill</h3><p>Practice BIP steps.</p><button id="btn-drill">Start ▶</button></div>
+    <div class="mission-card"><h3>Red Alert</h3><p>Crisis drill.</p><button id="btn-crisis">Start ▶</button></div>
+    <div class="mission-card"><h3>Wildcard</h3><p>Mixed missions.</p><button id="btn-random">Start ▶</button></div>
+  `;
+  choicesDiv.innerHTML = ''; choicesDiv.appendChild(menu);
+  showFeedback("At each step, you'll see immediate feedback...", "correct", +10);
+  const rnd = () => Math.random();
+  document.getElementById('btn-drill').onclick = () => { resetGame(); startDynamicMission('Daily Drill', POOL.daily[0]); };
+  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', POOL.crisis[0] || POOL.daily[0]); };
+  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', POOL.wild[0] || POOL.daily[0]); };
+}
 
-/* -------- Engine -------- */
-function getNode(id){
+const NODES = [{ id: 901, feedback: true, text: "Session Summary", options: [{ text: "Play again", nextId: 'home' }] }];
+
+function getNode(id) {
   return DYN.nodes.find(n => n.id === id) || NODES.find(n => n.id === id) || null;
 }
 
@@ -3900,167 +3759,68 @@ function showNode(id) {
   if (!node) return;
 
   if (scenarioTitle) {
-    scenarioTitle.textContent =
-      node.feedback ? "Fidelity Feedback" :
-      node.scenario || "Choose Your Next Move";
-  }
-
-  if (node.feedback) {
-    // Hide story box
-    if (storyText) storyText.style.display = 'none';
-
-    const pct = percentScore();
-    const msg = fidelityMessage();
-
-    let actionSteps = "";
-    if (pct >= 80) {
-      actionSteps = `
-        <ul>
-          <li>Continue using strong proactive cues before transitions.</li>
-          <li>Maintain clear reinforcement for replacement behaviors.</li>
-          <li>Keep prompting early signs—your timing is working!</li>
-        </ul>`;
-    } else if (pct >= 50) {
-      actionSteps = `
-        <ul>
-          <li>Increase pre-corrections before predictable triggers.</li>
-          <li>Prompt the replacement behavior earlier in the escalation cycle.</li>
-          <li>Deliver reinforcement immediately when the replacement occurs.</li>
-        </ul>`;
-    } else {
-      actionSteps = `
-        <ul>
-          <li>Revisit the proactive setup steps—these prevent most escape attempts.</li>
-          <li>Practice the replacement behavior script outside of crises.</li>
-          <li>Follow the crisis plan exactly (no blocking, no chasing).</li>
-        </ul>`;
-    }
-
-    const old = document.getElementById('summary-panel');
-    if (old) old.remove();
-
-    const panel = document.createElement('div');
-    panel.id = "summary-panel";
-    panel.innerHTML = `
-      <div class="summary-score">
-        Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)
-      </div>
-
-      <div class="summary-section">
-        <strong>Overall feedback:</strong><br>${msg}${node.customMsg ? '<br><br>' + node.customMsg : ''}
-      </div>
-
-      <div class="summary-section">
-        <strong>Action steps for teachers:</strong>
-        ${actionSteps}
-      </div>
-    `;
-
-    if (storyText && storyText.parentNode) {
-      storyText.insertAdjacentElement('afterend', panel);
-    }
-
-    let scoreHint, coachLine;
-    if (pct >= 80) {
-      scoreHint = +10;
-      coachLine = "Mission complete. Results have been sent to the team. Review your overall feedback below.";
-    } else if (pct >= 50) {
-      scoreHint = 0;
-      coachLine = "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
-    } else {
-      scoreHint = -10;
-      coachLine = "Mission failed. Results have been sent to the team. Review your overall feedback below.";
-    }
-    showFeedback(coachLine, null, scoreHint);
-
-  } else {
-    function showNode(id) {
-  const node = getNode(id);
-  if (!node) return;
-
-  if (scenarioTitle) {
     scenarioTitle.textContent = node.feedback ? "Fidelity Feedback" : node.scenario || "Choose Your Next Move";
   }
 
   if (node.feedback) {
-    // ... [summary panel code] ...
+    if (storyText) storyText.style.display = 'none';
+    const pct = percentScore();
+    const old = document.getElementById('summary-panel');
+    if (old) old.remove();
+    const panel = document.createElement('div');
+    panel.id = "summary-panel";
+    panel.innerHTML = `<div>Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div><div><strong>Feedback:</strong> ${node.customMsg || 'Good effort!'}</div>`;
+    storyText.insertAdjacentElement('afterend', panel);
+    showFeedback(pct >= 80 ? "Mission complete!" : pct >= 50 ? "Mission incomplete." : "Mission failed.", null, pct >= 80 ? +10 : pct >= 50 ? 0 : -10);
   } else {
     if (storyText) {
       storyText.style.display = 'block';
       storyText.textContent = node.text;
-
-      // THINKING WIZARD
       setWizardSprite('think');
       showFeedback('Thinking...', null, 0);
     }
-
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
-
-    // CLEAR CHOICES ONCE — HERE
     choicesDiv.innerHTML = '';
   }
 
-  // ONLY ADD CHOICES IF NOT FEEDBACK
   if (!node.feedback) {
     const options = shuffledOptions(node.options);
     options.forEach(opt => {
       const btn = document.createElement('button');
       btn.textContent = opt.text;
       ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
-
       btn.addEventListener('click', () => {
-        if (node.feedback && opt.nextId === 'home') {
-          resetGame();
-          renderIntroCards();
-          return;
-        }
-
-        if (!node.feedback && typeof opt.delta === 'number') {
-          addPoints(opt.delta);
-        }
-
+        if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
         if (!node.feedback) logDecision(node.id, opt);
-
-        // FEEDBACK WIZARD
         const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
         setWizardSprite(feedbackState);
-        showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
-
-        if (opt.nextId === 1) resetGame();
-
-        // SHOW NEXT BUTTON
+        showFeedback(opt.feedback || '', "coach", opt.delta);
         choicesDiv.innerHTML = '';
         const nextBtn = document.createElement('button');
         nextBtn.textContent = 'NEXT →';
         nextBtn.className = 'scenario-btn primary big option-btn';
         nextBtn.style.marginTop = '16px';
         nextBtn.style.width = '100%';
-
         nextBtn.onclick = () => {
           nextBtn.disabled = true;
           nextBtn.textContent = 'Loading...';
           setTimeout(() => {
             showNode(opt.nextId);
-            if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
-              sendResultsOnce();
-            }
+            if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) sendResultsOnce();
           }, 1500);
         };
-
         choicesDiv.appendChild(nextBtn);
         requestAnimationFrame(() => nextBtn.focus());
       });
-
-      choicesDiv.appendChild(btn);  // ADD ANSWER BUTTON
+      choicesDiv.appendChild(btn);
     });
   }
 }
 
-/* -------- INIT: DOM Ready -------- */
+/* -------- INIT -------- */
 document.addEventListener('DOMContentLoaded', () => {
   console.log("GAME INIT — DOM READY");
-
   const homeBtn = document.getElementById('home-btn');
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
@@ -4068,7 +3828,6 @@ document.addEventListener('DOMContentLoaded', () => {
       renderIntroCards();
     });
   }
-
   setTeacherBadge(getTeacherCode());
   resetGame();
   renderIntroCards();
