@@ -401,7 +401,7 @@ function startDynamicMission(modeLabel, scenes){
 /* -------- Static summary node -------- */
 const NODES = [
   { id: 901, feedback: true, text: "Session Summary",
-    options: [{ text: "Play again (choose a mode)", nextId: 1 }] }
+    options: [{ text: "Play again", nextId: 1 }] }
 ];
 
 /* -------- Engine (classic, with dynamic support) -------- */
