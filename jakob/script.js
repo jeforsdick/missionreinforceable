@@ -3765,7 +3765,8 @@ function updateWizard(score) {
   if (score > 0)      img.classList.add("wizard-good");
   else if (score < 0) img.classList.add("wizard-bad");
   else                img.classList.add("wizard-meh");
-
+  }
+}
 
 /*************************************************
  * HOME / MISSION SCREEN + BUTTON HOOKS
