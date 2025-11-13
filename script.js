@@ -382,8 +382,16 @@ function logEvent({nodeId, choiceText, nextId, correctness=null, points_awarded=
 
 /***** Start *****/
 window.addEventListener('load', () => {
+  // Only run the game if the core elements exist on this page
+  if (!storyText || !choicesDiv) {
+    return;
+  }
   showHome();
 });
 
 // Home button
-homeBtn?.addEventListener('click', showHome);
+homeBtn?.addEventListener('click', () => {
+  if (!storyText || !choicesDiv) return;
+  showHome();
+});
+
