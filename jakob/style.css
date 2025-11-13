@@ -368,35 +368,30 @@ h2{margin:0 0 18px 0; text-align:center; color:var(--accent2); text-shadow:0 0 6
   padding-bottom: 40px;  /* so nothing bleeds out the bottom */
 }
 
-/* --- Summary Panel Fix (keeps final feedback inside the game box) --- */
-.summary-panel {
+/* --- FINAL SUMMARY PANEL FIX --- */
+#summary-panel {
   background: var(--panel2);
-  padding: 20px;
-  border-radius: 12px;
+  border: 1px solid #444;
+  padding: 18px;
+  margin-top: 16px;
+  border-radius: 10px;
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word;
   word-break: break-word;
-  margin-top: 12px;
-  line-height: 1.5;
 }
 
-.summary-panel ul {
+#summary-panel ul {
   margin-left: 20px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-.summary-section {
-  margin-top: 18px;
+#summary-panel .summary-section {
+  margin-top: 14px;
 }
 
-.summary-score {
-  font-weight: bold;
-  margin-bottom: 12px;
+#summary-panel .summary-score {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
 }
 
-/* Fix for Weebly: prevent outer container clipping */
-#game-container {
-  overflow: visible !important;
-}
