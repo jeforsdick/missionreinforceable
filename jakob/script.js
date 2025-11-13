@@ -3980,7 +3980,7 @@ function showNode(id) {
 
   // THINKING WIZARD + "Observing..."
   setWizardSprite('think');
-  showFeedback('Observing', null, 0);
+  showFeedback('Observing...', null, 0);
 }
 
     const old = document.getElementById('summary-panel');
@@ -4008,14 +4008,13 @@ function showNode(id) {
 
   if (!node.feedback) logDecision(node.id, opt);
 
-  // FEEDBACK WIZARD
+    // FEEDBACK WIZARD
   const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
   setWizardSprite(feedbackState);
   showFeedback(opt.feedback || '', opt.feedbackType || "coach", opt.delta);
-
   if (opt.nextId === 1) resetGame();
 
-  // === NEW: SHOW NEXT BUTTON WITH PAUSE ===
+  // === SHOW NEXT BUTTON WITH PAUSE ===
   choicesDiv.innerHTML = '';
   const nextBtn = document.createElement('button');
   nextBtn.textContent = 'NEXT →';
@@ -4026,24 +4025,25 @@ function showNode(id) {
   nextBtn.onclick = () => {
     nextBtn.disabled = true;
     nextBtn.textContent = 'Loading...';
-
     setTimeout(() => {
       showNode(opt.nextId);
       if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) {
         sendResultsOnce();
       }
-    }, 1500); // 1.5 second pause
+    }, 1500);
   };
 
   choicesDiv.appendChild(nextBtn);
   requestAnimationFrame(() => nextBtn.focus());
-    }
+
+}); // ← CLOSES btn.addEventListener('click', ...)
+}); // ← CLOSES options.forEach(opt => ...)
+} // ← CLOSES showNode()
 
 /* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
   console.log("GAME INIT — DOM READY");
 
-  // Home button
   const homeBtn = document.getElementById('home-btn');
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
@@ -4052,11 +4052,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Start fresh
   setTeacherBadge(getTeacherCode());
   resetGame();
   renderIntroCards();
-
-  // Initial feedback
   showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
 });
