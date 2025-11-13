@@ -56,7 +56,14 @@ function resetGame() {
   sentThisRun = false;  
   SESSION_ID = newSessionId(); 
   setPoints(0);
+
+  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  }
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
 }
 function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
 function fidelityMessage() {
