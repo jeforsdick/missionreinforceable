@@ -229,8 +229,9 @@ h2{
   min-height:110px;
   margin-top:10px;
   margin-bottom:14px;
-  white-space:pre-wrap;
+  /* remove the white-space rule */
   font-size:1rem;
+  line-height: 1.45;   /* add this to make text look clean and normal */
 }
 
 /* ---------- Choices ---------- */
