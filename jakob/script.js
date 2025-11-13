@@ -619,11 +619,22 @@ if (node.feedback) {
   }
 
   // Score + detailed feedback with action steps
-  storyText.innerHTML =
-    `Your score: ${points} / ${maxPossible} (${pct}%)` +
-    `<br><br><strong>Overall feedback:</strong> ${msg}` +
-    `<br><br><strong>Action Steps for Teachers:</strong>` +
-    `${actionSteps}`;
+ // Wrapped summary so it stays inside the game box
+storyText.innerHTML = `
+  <div class="summary-panel">
+    <div class="summary-score">Your score: ${points} / ${maxPossible} (${pct}%)</div>
+
+    <div class="summary-section">
+      <strong>Overall feedback:</strong> ${msg}
+    </div>
+
+    <div class="summary-section">
+      <strong>Action Steps for Teachers:</strong>
+      ${actionSteps}
+    </div>
+  </div>
+`;
+
 
   // Wizard face selection
   let scoreHint;
