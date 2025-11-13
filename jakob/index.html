@@ -22,69 +22,22 @@
       <!-- Feedback HUD with MR Wizard avatar -->
       <div id="feedback">
         <div id="coach-icon">
-          <img id="wizard-img" src="mr-wizard-think.png" alt="MR Wizard status"/>
+          <!-- Images live in the same folder as this index -->
+          <img id="coach-img" src="mr-wizard-0.png" alt="MR Wizard status"/>
         </div>
-        <div id="feedback-text">
-          At each step, you’ll see immediate feedback on how closely your choice matches the Behavior Intervention Plan.
-        </div>
+        <div id="feedback-text"></div>
       </div>
 
       <div class="spacer"></div>
       <button id="home-btn" class="ghost">Home</button>
     </div>
 
-<!-- Game area -->
-<div id="story-text">
-  <div class="mission-intro">
-    <p>Welcome to Mission: Reinforceable.</p>
-    <p>You’ll step through short, branching scenarios based on your Behavior Intervention Plan.</p>
-    <p>Choose your mission below.</p>
+    <!-- Game area -->
+    <div id="story-text"></div>
+    <div id="choices"></div>
   </div>
-</div>
 
-<!-- CHOICES CONTAINER — ONLY ONE -->
-<div id="choices">
-  <div class="mission-grid">
-
-    <!-- Daily Mission -->
-    <article class="mission-card">
-      <h3>Daily Mission</h3>
-      <p>BIP Skill Run — practice proactive, teaching, reinforcement, and response steps from your core Behavior Intervention Plan in everyday scenarios.</p>
-      <div class="action">
-        <button id="btn-drill" class="scenario-btn">Start Daily Mission</button>
-      </div>
-    </article>
-
-    <!-- Crisis Drill -->
-    <article class="mission-card">
-      <h3>Red Alert</h3>
-      <p>Crisis Drill — rehearse elopement/crisis support and recovery steps when behavior escalates.</p>
-      <div class="action">
-        <button id="btn-crisis" class="scenario-btn">Start Crisis Drill</button>
-      </div>
-    </article>
-
-    <!-- Wildcard -->
-    <article class="mission-card">
-      <h3>Wildcard</h3>
-      <p>Mystery Mission — a mixed set, including curveballs like assemblies, drills, and schedule changes, plus regular scenarios.</p>
-      <div class="action">
-        <button id="btn-random" class="scenario-btn">Start Wildcard Mission</button>
-      </div>
-    </article>
-
-  </div>
-</div>
-
-  <!-- Script -->
+  <!-- Keep this last so all elements exist before the script runs -->
   <script src="script.js?v=mr-2025-11-12"></script>
-
-  <!-- Safety re-hook (helps Weebly/GitHub render buttons correctly) -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => hookMissionButtons(), 50);
-    });
-  </script>
-
 </body>
 </html>
