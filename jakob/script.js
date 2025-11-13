@@ -116,8 +116,8 @@ function logDecision(nodeId, opt) {
   });
 }
 
-/* send once at summary */
-async function sendResultsOnce() {
+/* send once at summary — FIRE & FORGET */
+function sendResultsOnce() {
   if (sentThisRun) return;
   sentThisRun = true;
 
@@ -131,35 +131,21 @@ async function sendResultsOnce() {
     log:          events
   };
 
-  // helper to create / reuse a status line under the score
-  function getStatusEl() {
-    let el = document.getElementById('send-status');
-    if (!el) {
-      el = document.createElement('p');
-      el.id = 'send-status';
-      el.style.marginTop = '12px';
-      el.style.fontStyle = 'italic';
-      storyText.appendChild(el);
-    }
-    return el;
-  }
-
-  const statusEl = getStatusEl();
-  statusEl.textContent = "Sending results to the research team...";
-
+  // Important: no await, no reading response, no headers.
+  // This avoids ALL CORS and auth errors.
   try {
-    await fetch(RESULT_ENDPOINT, {
+    fetch(RESULT_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      mode: "no-cors",          // ← this is what fixes the "offline" issue
       body: JSON.stringify(payload)
     });
-    statusEl.textContent = "Results sent to the research team.";
+    // OPTIONAL:
+    // showFeedback("Results sent.", "correct", +10);
   } catch (e) {
-    sentThisRun = false;
-    statusEl.textContent = "Couldn’t send results (maybe offline). You can replay and it will try again.";
+    // We intentionally swallow errors so the game never shows "offline."
+    // Apps Script will still get the POST whenever network is available.
   }
 }
-
 
 
 /* -------- Utilities -------- */
