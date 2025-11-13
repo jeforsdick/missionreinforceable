@@ -4037,7 +4037,7 @@ function showNode(id) {
 
   choicesDiv.appendChild(nextBtn);
   requestAnimationFrame(() => nextBtn.focus());
-
+    }
 
 /* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
