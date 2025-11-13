@@ -16,14 +16,37 @@
   --wiz-size: 64px;
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-
-body{
-  margin:0; padding:20px; background:var(--bg); color:var(--text);
-  font-family:'Courier New', monospace; line-height:1.6;
-  display:flex; justify-content:center;
+* {
+  box-sizing: border-box;
 }
+
+/* Let the page grow naturally, no fixed 100% height */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+/* Regular block layout; we’ll center the game with margin:auto */
+body {
+  padding: 20px;
+}
+
+/* Red “box” container */
+#game-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;              /* horizontally centered on all screens */
+  background: var(--panel);
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px var(--glow);
+}
+
 
 #game-container{
   width:100%; max-width:900px;
@@ -286,13 +309,15 @@ h2{
 }
 
 /* ---------- FULL Mobile Optimization ---------- */
-@media (max-width:600px){
+@media (max-width: 600px) {
 
-  body{ padding:10px; }
+  body {
+    padding: 10px;
+  }
 
-  #game-container{
-    padding:10px;
-    margin:0;
+  #game-container {
+    padding: 10px;
+    margin: 0 auto;   /* still centered */
   }
 
   h1{ font-size:1.6rem; line-height:1.2; }
