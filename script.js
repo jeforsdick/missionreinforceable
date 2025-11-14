@@ -3804,7 +3804,7 @@ Choose your mission below.`;
   choicesDiv.innerHTML = '';
   choicesDiv.appendChild(container);
 
-  showFeedback("Your Wizard Coach will chime in after every move.", "correct", +10);
+  showFeedback("The Wizard will chime in after every move.", "correct", +10);
 
   const rnd = srandom(seedFromDate());
   document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   pickScenario(POOL.daily, rnd)); };
@@ -4034,5 +4034,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderIntroCards();
 
   // Initial feedback
-  showFeedback("Your Wizard Coach will chime in after every move.", "correct", +10);
+  showFeedback("The Wizard will chime in after every move.", "correct", +10);
 });
