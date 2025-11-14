@@ -31,6 +31,8 @@ function setWizardSprite(state) {
 // default image on load
 setWizardSprite('meh');
 
+let currentScenario = null; // will be set when starting a mission
+
 /* -------- Scoring -------- */
 let points = 0;
 let maxPossible = 0; // 10 per scored decision
@@ -123,27 +125,39 @@ function sendResultsOnce() {
   if (sentThisRun) return;
   sentThisRun = true;
 
+  // === DETERMINE MODE ===
+  let mode = "Wildcard"; // default
+  if (currentScenario && currentScenario.title) {
+    if (currentScenario.title.includes("Daily")) mode = "Daily";
+    else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
+  }
+
+  // === GET STUDENT FROM URL (e.g. ?student=JM) ===
+  const url = new URL(window.location.href);
+  const student = url.searchParams.get("student") || "JM";
+
   const payload = {
     teacher_code: getTeacherCode(),
-    session_id:   SESSION_ID,
+    session_id: SESSION_ID,
     points,
     max_possible: maxPossible,
-    percent:      percentScore(),
-    timestamp:    new Date().toISOString(),
-    log:          events
+    percent: percentScore(),
+    timestamp: new Date().toISOString(),
+    log: events,
+    mode: mode,           // NEW: Daily / Crisis / Wildcard
+    student: student      // NEW: JM, Sarah, etc.
   };
 
   try {
-    fetch(RESULT_ENDPOINT, {
+    fetch(RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbx4GMGeiZI_L00p6Wsnse-E5VH6OTkgJ2b4DtKyTmTQqW-zwEJ-o-tJ63ZAr15iUUb_/exec"; {
       method: "POST",
-      mode: "no-cors",          
+      mode: "no-cors",
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    // Swallow errors
+    // swallow
   }
 }
-
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
 function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
@@ -3823,7 +3837,7 @@ function newId(){ return NEXT_ID++; }
 
 function startDynamicMission(modeLabel, scn) {
   if (!scn) return;
-
+  currentScenario = scn; // ← RIGHT HERE
   DYN = { nodes: [], ids: [] };
 
   // Assign unique IDs to all steps and endings
