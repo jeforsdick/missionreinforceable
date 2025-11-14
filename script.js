@@ -3778,7 +3778,7 @@ function renderIntroCards() {
   storyText.innerHTML = `Welcome to Mission: Reinforceable.
 You’ll step through short scenarios based on your student's Behavior Plan.
 
-Choose your mission below.`;
+<strong>Choose your mission below.</strong>`;
 
   const menu = document.createElement('div');
   menu.className = 'mission-grid';
