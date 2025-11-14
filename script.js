@@ -3775,8 +3775,7 @@ POOL.wild.push({
 function renderIntroCards() {
   scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
 
-  storyText.innerHTML = `
-Welcome to Mission: Reinforceable.
+  storyText.innerHTML = `Welcome to Mission: Reinforceable.
 You’ll step through short, branching scenarios based on you Behavior Plan.
 Choose your mission below.`;
 
