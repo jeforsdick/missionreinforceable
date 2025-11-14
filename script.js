@@ -3867,7 +3867,7 @@ function startDynamicMission(modeLabel, scn) {
       customTitle: end.title,
       customMsg: end.text,
       text: end.text, // For story-text fallback
-      options: [{ text: "Play again (choose a mode)", nextId: 'home' }]
+      options: [{ text: "Play again", nextId: 'home' }]
     };
     DYN.nodes.push(node);
   }
@@ -3880,7 +3880,7 @@ function startDynamicMission(modeLabel, scn) {
 /* -------- Static summary node (fallback if no ending) -------- */
 const NODES = [
   { id: 901, feedback: true, text: "Session Summary",
-    options: [{ text: "Play again (choose a mode)", nextId: 'home' }] }
+    options: [{ text: "Play again", nextId: 'home' }] }
 ];
 
 /* -------- Engine -------- */
