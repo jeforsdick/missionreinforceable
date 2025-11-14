@@ -67,7 +67,11 @@ function resetGame() {
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
 }
-function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
+function percentScore() {
+  if (maxPossible === 0) return 0;
+  const raw = (points / maxPossible) * 100;
+  return Math.max(0, raw); // CAP AT 0%
+}
 function fidelityMessage() {
   const pct = percentScore();
   if (pct >= 80) return "Nice work! Your decisions closely matched the Behavior Intervention Plan. You consistently used proactive supports, taught/prompted replacement behaviors, and reinforced the right moves.";
