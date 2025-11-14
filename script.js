@@ -3785,18 +3785,15 @@ Choose your mission below.`;
   menu.innerHTML = `
     <div class="mission-card">
       <h3>Daily Mission</h3>
-      <p>BIP Skill Run — practice proactive, teaching, reinforcement, and consequence steps.</p>
-      <div class="action"><button id="btn-drill">Start BIP Practice ▶</button></div>
+      <div class="action"><button id="btn-drill">Start Behavior Skill Practice ▶</button></div>
     </div>
     <div class="mission-card">
       <h3>Red Alert</h3>
-      <p>Crisis Drill — rehearse safe elopement support and recovery steps.</p>
       <div class="action"><button id="btn-crisis">Start Crisis Drill ▶</button></div>
     </div>
     <div class="mission-card">
       <h3>Wildcard</h3>
-      <p>Mystery Mission — a mixed set, including curveballs and schedule changes.</p>
-      <div class="action"><button id="btn-random">Start Wildcard ▶</button></div>
+      <div class="action"><button id="btn-random">Start Mystery Mission▶</button></div>
     </div>
   `;
 
