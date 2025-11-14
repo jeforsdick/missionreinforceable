@@ -4034,5 +4034,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderIntroCards();
 
   // Initial feedback
-  showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
+  showFeedback("Your Wizard Coach will chime in after every move.", "correct", +10);
 });
