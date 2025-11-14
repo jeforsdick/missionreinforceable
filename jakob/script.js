@@ -1,11 +1,13 @@
 /**********************************************************
- * Mission: Reinforceable — Final Polished Version
- * - Thinking wizard on question
- * - Feedback wizard on choice
- * - NEXT button with 1.5s pause
- * - No truncation, no bugs
+ * Mission: Reinforceable — Classic UI + Multi-Mode Engine
+ * - Classic UI + wizard pod preserved
+ * - Three modes: Daily Drill / Emergency Sim / Shuffle Quest
+ * - Scenario pools + daily-seeded randomness
+ * - Choices shuffled every step
+ * - Updated for branching multi-step scenarios with endings
  **********************************************************/
 
+/* -------- DOM refs -------- */
 const storyText       = document.getElementById('story-text');
 const choicesDiv      = document.getElementById('choices');
 const scenarioTitle   = document.getElementById('scenario-title');
@@ -14,26 +16,24 @@ const feedbackEl      = document.getElementById('feedback');
 const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
+/* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
   plus:  'mr-wizard-plus10.png',
   meh:   'mr-wizard-0.png',
-  minus: 'mr-wizard-minus10.png',
-  think: 'mr-wizard-think.png'
+  minus: 'mr-wizard-minus10.png'
 };
 
+// Always show a sprite immediately and avoid stale-cache
 function setWizardSprite(state) {
-  const src = WIZ[state] || WIZ.think;
-  if (coachImgEl) {
-    coachImgEl.src = `${src}?v=${Date.now()}`;
-  }
+  const src = (state === 'plus') ? WIZ.plus : (state === 'minus') ? WIZ.minus : WIZ.meh;
+  if (coachImgEl) coachImgEl.src = `${src}?v=${Date.now()}`;
 }
-setWizardSprite('think');
+// default image on load
+setWizardSprite('meh');
 
+/* -------- Scoring -------- */
 let points = 0;
-let maxPossible = 0;
-let events = [];
-let sentThisRun = false;
-let SESSION_ID = Date.now() + '-' + Math.random().toString(36).slice(2,7);
+let maxPossible = 0; // 10 per scored decision
 
 function setPoints(v) {
   points = v;
@@ -52,50 +52,119 @@ function addPoints(delta) {
 function resetGame() {
   points = 0;
   maxPossible = 0;
-  events = [];
-  sentThisRun = false;
-  SESSION_ID = Date.now() + '-' + Math.random().toString(36).slice(2,7);
+  events = [];          
+  sentThisRun = false;  
+  SESSION_ID = newSessionId(); 
   setPoints(0);
+
+  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
-  if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
-  const old = document.getElementById('summary-panel');
-  if (old) old.remove();
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  }
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
 }
 function percentScore() { return maxPossible > 0 ? Math.round((points / maxPossible) * 100) : 0; }
+function fidelityMessage() {
+  const pct = percentScore();
+  if (pct >= 80) return "Nice work! Your decisions closely matched the Behavior Intervention Plan. You consistently used proactive supports, taught/prompted replacement behaviors, and reinforced the right moves.";
+  if (pct >= 50) return "Some of your moves aligned with the plan, but key supports were missed. Revisit early prompts, clear expectations, and high-frequency reinforcement, then try again.";
+  return "This run drifted from the plan. Focus on: (a) proactive setup, (b) prompting & reinforcing the replacement behavior, and (c) using the crisis steps as written. Replay to tighten fidelity.";
+}
 
+/* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
-  let state = 'think';
+
+  let state = 'meh';
   if (typeof scoreHint === 'number') state = scoreHint > 0 ? 'plus' : scoreHint < 0 ? 'minus' : 'meh';
+  else if (type === 'correct') state = 'plus';
+
   setWizardSprite(state);
+
   feedbackEl.classList.remove('state-plus','state-meh','state-minus','flash');
   feedbackEl.classList.add(`state-${state}`);
   feedbackTextEl.textContent = text || '';
   requestAnimationFrame(() => feedbackEl.classList.add('flash'));
 }
 
+/* ===== RESULTS: client → GAS webhook ===== */
 const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9bWb3oUhoIl7hRgEm1nPyr_AKbLriHpQQGwcEn94xVfHFSPEvxE09Vta8D4ZqGYuT/exec";
 
 function getTeacherCode() {
   const u = new URL(window.location.href);
-  return (u.searchParams.get("teacher") || document.getElementById("teacher-code")?.textContent || "—").trim();
+  return (u.searchParams.get("teacher")
+       || document.getElementById("teacher-code")?.textContent
+       || "—").trim();
 }
 function setTeacherBadge(code) {
   const el = document.getElementById("teacher-code");
   if (el && code && el.textContent !== code) el.textContent = code;
 }
-function logDecision(nodeId, opt) {
-  events.push({ t: new Date().toISOString(), nodeId, delta: opt.delta ?? null, choice: opt.text });
+
+function newSessionId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
 }
+let SESSION_ID = newSessionId();
+let events = [];
+let sentThisRun = false;
+
+function logDecision(nodeId, opt) {
+  events.push({
+    t: new Date().toISOString(),
+    nodeId,
+    delta: (typeof opt.delta === "number" ? opt.delta : null),
+    choice: opt.text
+  });
+}
+
 function sendResultsOnce() {
   if (sentThisRun) return;
   sentThisRun = true;
-  const payload = { teacher_code: getTeacherCode(), session_id: SESSION_ID, points, max_possible: maxPossible, percent: percentScore(), timestamp: new Date().toISOString(), log: events };
-  try { fetch(RESULT_ENDPOINT, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) }); } catch(e) {}
+
+  const payload = {
+    teacher_code: getTeacherCode(),
+    session_id:   SESSION_ID,
+    points,
+    max_possible: maxPossible,
+    percent:      percentScore(),
+    timestamp:    new Date().toISOString(),
+    log:          events
+  };
+
+  try {
+    fetch(RESULT_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",          
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    // Swallow errors
+  }
 }
 
+/* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
+function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
+function sample(pool, k, rnd=Math.random){ return shuffle(pool, rnd).slice(0, Math.min(k, pool.length)); }
+function seedFromDate(){
+  const d = new Date();
+  const key = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  let h = 0; for(let i=0;i<key.length;i++){ h=(h<<5)-h+key.charCodeAt(i); h|=0; }
+  return Math.abs(h);
+}
+function srandom(seed){ let x=(seed>>>0)||1234567; return function(){ x^=x<<13; x^=x>>>17; x^=x<<5; return ((x>>>0)/4294967295); }; }
 
+/* ============================================================
+   CONTENT POOLS — YOUR NEW BRANCHING SCENARIOS
+   ============================================================ */
+/*************************************************
+ * SCENARIO DATA POOL
+ * - 10 daily
+ * - 5 crisis
+ * - 5 wildcard
+ **************************************************/
 const POOL = {
   daily: [],
   crisis: [],
@@ -162,7 +231,7 @@ POOL.daily.push({
 
     // ---------- STEP 2B (neutral path) ----------
     step2B: {
-      text: "JM taps his pencil and glances toward the calm-down corner.",
+      text: "JM taps his pencil and glances toward his break desk.",
       choices: {
         A: {
           text: "Prompt a break request before he escalates.",
@@ -279,7 +348,7 @@ POOL.daily.push({
   endings: {
     success: {
       title: "Success – High-Fidelity Morning Routine",
-      text: "You followed JM’s BIP closely. He accessed his break through the replacement behavior, regulated in the calm-down corner, and returned to finish part of his work. The class routine stayed mostly on track."
+      text: "You followed JM’s BIP closely. He accessed his break through the replacement behavior, regulated at his break desk, and returned to finish part of his work. The class routine stayed mostly on track."
     },
     mixed: {
       title: "Mixed Outcome – Some Support, Some Escalation Risk",
@@ -1282,7 +1351,7 @@ POOL.daily.push({
       text: "JM stops near the classroom door and looks back at you.",
       choices: {
         A: {
-          text: "Offer a quick prompt to request a break and point to the calm-down corner.",
+          text: "Offer a quick prompt to request a break and point to his break desk.",
           score: 10,
           feedback: "Excellent repair. You provide a safe, replacement-based option instead of elopement.",
           next: "step3A"
@@ -1736,30 +1805,30 @@ POOL.daily.push({
 
 
 /*************************************************
- * DAILY SCENARIO 10 — Using the Calm-Down Corner Effectively
+ * DAILY SCENARIO 10 — Using the Break Desk Effectively
  **************************************************/
 POOL.daily.push({
-  id: "daily_10_calm_corner",
-  title: "Daily Mission: Using the Calm-Down Corner",
+  id: "daily_10_break_desk",
+  title: "Daily Mission: Using the Break Desk",
   start: "step1",
   steps: {
     step1: {
-      text: "JM appears frustrated during independent work and glances repeatedly at the calm-down corner.",
+      text: "JM appears frustrated during independent work and glances repeatedly at his break desk.",
       choices: {
         A: {
-          text: "Review how to use the calm-down corner and how he earns Mario coins when he returns.",
+          text: "Review how to use the break desk and how he earns Mario coins when he returns.",
           score: 10,
           feedback: "Great proactive teaching. You clarify how the space works and connect it to positive reinforcement.",
           next: "step2A"
         },
         B: {
-          text: "Tell him, “Use the calm-down corner if you need it.”",
+          text: "Tell him, “Use the break-desk if you need it.”",
           score: 0,
           feedback: "Neutral. He has permission, but expectations are less clear.",
           next: "step2B"
         },
         C: {
-          text: "Tell him the calm-down corner is only for serious problems.",
+          text: "Tell him the break desk is only for serious problems.",
           score: -10,
           feedback: "Restricting access can reduce his use of replacement behaviors and increase escalation.",
           next: "step2C"
@@ -1792,7 +1861,7 @@ POOL.daily.push({
     },
 
     step2B: {
-      text: "JM stands and walks slowly toward the calm-down corner.",
+      text: "JM stands and walks slowly towards his break desk.",
       choices: {
         A: {
           text: "Remind him briefly of expectations for using the space.",
@@ -1819,9 +1888,9 @@ POOL.daily.push({
       text: "JM sighs heavily and begins tapping loudly on his desk.",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a break in the calm-down corner.",
+          text: "Offer a calm prompt to request a break at his break desk.",
           score: 10,
-          feedback: "Great repair. You bring the calm-down corner back in as a proactive support.",
+          feedback: "Great repair. You bring the break desk back in as a proactive support.",
           next: "step3A"
         },
         B: {
@@ -1840,18 +1909,18 @@ POOL.daily.push({
     },
 
     step3A: {
-      text: "JM requests a break and goes to the calm-down corner, sitting quietly.",
+      text: "JM requests a break and goes to the break desk, sitting quietly.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is using the calm-down space as intended.",
+          feedback: "He is using the break space as intended.",
           next: "step4"
         }
       }
     },
     step3B: {
-      text: "JM goes to the calm-down corner but begins playing with items instead of calming.",
+      text: "JM goes to the break desk but begins playing with items instead of calming.",
       choices: {
         A: {
           text: "Continue.",
@@ -1874,7 +1943,7 @@ POOL.daily.push({
     },
 
     step4: {
-      text: "How do you help JM transition out of the calm-down corner or back to his work?",
+      text: "How do you help JM transition away from the break desk or back to his work?",
       choices: {
         A: {
           text: "After a short, calm break, praise his use of the corner, give a Mario coin, and help him ease back into the task.",
@@ -1899,8 +1968,8 @@ POOL.daily.push({
   },
   endings: {
     success: {
-      title: "Success – Effective Calm-Down Corner Use",
-      text: "JM uses the calm-down corner to regulate, then returns to his work with your support and earns reinforcement for doing so."
+      title: "Success – Effective Break Desk Use",
+      text: "JM uses the break desk to regulate, then returns to his work with your support and earns reinforcement for doing so."
     },
     mixed: {
       title: "Mixed Outcome – Some Regulation, Less Support",
@@ -2458,7 +2527,7 @@ POOL.crisis.push({
   start: "step1",
   steps: {
     step1: {
-      text: "JM is in the calm-down corner after a difficult moment. The break timer has ended, but he refuses to leave the corner and return to his seat.",
+      text: "JM is in the break desk after a difficult moment. The break timer has ended, but he refuses to leave the corner and return to his seat.",
       choices: {
         A: {
           text: "Provide space and maintain visibility while keeping your voice calm and neutral.",
@@ -2614,7 +2683,7 @@ POOL.crisis.push({
   endings: {
     success: {
       title: "Success – Supported Return from Break",
-      text: "JM used his communication skills to ask for support, and you helped him return from the calm-down corner with minimal escalation."
+      text: "JM used his communication skills to ask for support, and you helped him return from the break desk with minimal escalation."
     },
     mixed: {
       title: "Mixed Outcome – Resolved with Extra Support",
@@ -3557,7 +3626,7 @@ POOL.wild.push({
       text: "The substitute reads the script and explains to JM that his usual break options and token system are still in place today.",
       choices: {
         A: {
-          text: "Prompt JM to show the substitute where his calm-down corner or break space is.",
+          text: "Prompt JM to show the substitute where his break desk is.",
           score: 10,
           feedback: "Great. You empower JM to participate in his own support system and help the substitute learn the environment.",
           next: "step3A"
@@ -3663,7 +3732,7 @@ POOL.wild.push({
       text: "How is JM supported for the rest of the substitute day?",
       choices: {
         A: {
-          text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, calm-down corner, tokens) throughout the day.",
+          text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, break space, tokens) throughout the day.",
           score: 10,
           feedback: "Excellent systems-level fidelity. JM experiences consistency even when staff changes.",
           ending: "success"
@@ -3703,54 +3772,120 @@ POOL.wild.push({
 /* ============================================================
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
    ============================================================ */
+function renderIntroCards() {
+  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+
+  storyText.innerHTML = `Welcome to Mission: Reinforceable.
+You’ll step through short scenarios based on your student's Behavior Plan.
+
+<strong>Choose your mission below.</strong>`;
+
+  const menu = document.createElement('div');
+  menu.className = 'mission-grid';
+
+  menu.innerHTML = `
+    <div class="mission-card">
+      <h3>Daily Mission</h3>
+      <div class="action"><button id="btn-drill">Start Behavior Skill Practice ▶</button></div>
+    </div>
+    <div class="mission-card">
+      <h3>Red Alert</h3>
+      <div class="action"><button id="btn-crisis">Start Crisis Drill ▶</button></div>
+    </div>
+    <div class="mission-card">
+      <h3>Wildcard</h3>
+      <div class="action"><button id="btn-random">Start Mystery Mission▶</button></div>
+    </div>
+  `;
+
+  const container = document.createElement('div');
+  container.className = 'mission-intro';
+  container.appendChild(menu);
+
+  choicesDiv.innerHTML = '';
+  choicesDiv.appendChild(container);
+
+  showFeedback("The Wizard will chime in after every move.", "correct", +10);
+
+  const rnd = srandom(seedFromDate());
+  document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   pickScenario(POOL.daily, rnd)); };
+  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd)); };
+  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd)); };
+}
+
+function pickScenario(pool, rnd) {
+  return sample(pool, 1, rnd)[0];
+}
+
 let DYN = { nodes: [], ids: [] };
 let NEXT_ID = 1000;
 function newId(){ return NEXT_ID++; }
 
 function startDynamicMission(modeLabel, scn) {
   if (!scn) return;
+
   DYN = { nodes: [], ids: [] };
-  let stepIds = {}, endingIds = {};
-  for (let k in scn.steps) stepIds[k] = newId();
-  for (let k in scn.endings) endingIds[k] = newId();
-  for (let k in scn.steps) {
-    let step = scn.steps[k];
-    let node = { id: stepIds[k], scenario: modeLabel, text: step.text, options: [] };
-    for (let ch in step.choices) {
-      let c = step.choices[ch];
-      node.options.push({ text: c.text, delta: c.score, feedback: c.feedback, nextId: c.next ? stepIds[c.next] : endingIds[c.ending] || 901 });
+
+  // Assign unique IDs to all steps and endings
+  let stepIds = {};
+  for (let stepKey in scn.steps) {
+    stepIds[stepKey] = newId();
+  }
+  let endingIds = {};
+  for (let endKey in scn.endings) {
+    endingIds[endKey] = newId();
+  }
+
+  // Build nodes from steps
+  for (let stepKey in scn.steps) {
+    let step = scn.steps[stepKey];
+    let node = {
+      id: stepIds[stepKey],
+      scenario: modeLabel,
+      text: step.text,
+      options: []
+    };
+    for (let chKey in step.choices) {
+      let ch = step.choices[chKey];
+      let opt = {
+        text: ch.text,
+        delta: ch.score,
+        feedback: ch.feedback,
+        feedbackType: ch.score > 0 ? 'correct' : 'coach',
+        nextId: ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
+      };
+      node.options.push(opt);
     }
     DYN.nodes.push(node);
   }
-  for (let k in scn.endings) {
-    let end = scn.endings[k];
-    DYN.nodes.push({ id: endingIds[k], feedback: true, customTitle: end.title, customMsg: end.text, options: [{ text: "Play again", nextId: 'home' }] });
+
+  // Build nodes from endings (treat as custom feedback nodes)
+  for (let endKey in scn.endings) {
+    let end = scn.endings[endKey];
+    let node = {
+      id: endingIds[endKey],
+      feedback: true,
+      customTitle: end.title,
+      customMsg: end.text,
+      text: end.text, // For story-text fallback
+      options: [{ text: "Play again", nextId: 'home' }]
+    };
+    DYN.nodes.push(node);
   }
+
+  // Start at the beginning
   showNode(stepIds[scn.start]);
-  showFeedback("Mission launched! Good Luck.", "correct", +10);
+  showFeedback("Mission launched! Good Luck. 🚀", "correct", +10);
 }
 
-function renderIntroCards() {
-  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
-  storyText.innerHTML = `Welcome to Mission: Reinforceable.<br>Choose your mission below.`;
-  const menu = document.createElement('div');
-  menu.className = 'mission-grid';
-  menu.innerHTML = `
-    <div class="mission-card"><h3>Daily Drill</h3><p>Practice BIP steps.</p><button id="btn-drill">Start ▶</button></div>
-    <div class="mission-card"><h3>Red Alert</h3><p>Crisis drill.</p><button id="btn-crisis">Start ▶</button></div>
-    <div class="mission-card"><h3>Wildcard</h3><p>Mixed missions.</p><button id="btn-random">Start ▶</button></div>
-  `;
-  choicesDiv.innerHTML = ''; choicesDiv.appendChild(menu);
-  showFeedback("At each step, you'll see immediate feedback...", "correct", +10);
-  const rnd = () => Math.random();
-  document.getElementById('btn-drill').onclick = () => { resetGame(); startDynamicMission('Daily Drill', POOL.daily[0]); };
-  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', POOL.crisis[0] || POOL.daily[0]); };
-  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', POOL.wild[0] || POOL.daily[0]); };
-}
+/* -------- Static summary node (fallback if no ending) -------- */
+const NODES = [
+  { id: 901, feedback: true, text: "Session Summary",
+    options: [{ text: "Play again", nextId: 'home' }] }
+];
 
-const NODES = [{ id: 901, feedback: true, text: "Session Summary", options: [{ text: "Play again", nextId: 'home' }] }];
-
-function getNode(id) {
+/* -------- Engine -------- */
+function getNode(id){
   return DYN.nodes.find(n => n.id === id) || NODES.find(n => n.id === id) || null;
 }
 
@@ -3759,68 +3894,133 @@ function showNode(id) {
   if (!node) return;
 
   if (scenarioTitle) {
-    scenarioTitle.textContent = node.feedback ? "Fidelity Feedback" : node.scenario || "Choose Your Next Move";
+    scenarioTitle.textContent =
+      node.feedback ? "Fidelity Feedback" :
+      node.scenario || "Choose Your Next Move";
   }
 
   if (node.feedback) {
+    // Hide story box
     if (storyText) storyText.style.display = 'none';
+
     const pct = percentScore();
+    const msg = fidelityMessage();
+
+    let actionSteps = "";
+    if (pct >= 80) {
+      actionSteps = `
+        <ul>
+          <li>Continue using strong proactive cues before transitions.</li>
+          <li>Maintain clear reinforcement for replacement behaviors.</li>
+          <li>Keep prompting early signs—your timing is working!</li>
+        </ul>`;
+    } else if (pct >= 50) {
+      actionSteps = `
+        <ul>
+          <li>Increase pre-corrections before predictable triggers.</li>
+          <li>Prompt the replacement behavior earlier in the escalation cycle.</li>
+          <li>Deliver reinforcement immediately when the replacement occurs.</li>
+        </ul>`;
+    } else {
+      actionSteps = `
+        <ul>
+          <li>Revisit the proactive setup steps—these prevent most escape attempts.</li>
+          <li>Practice the replacement behavior script outside of crises.</li>
+          <li>Follow the crisis plan exactly (no blocking, no chasing).</li>
+        </ul>`;
+    }
+
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
+
     const panel = document.createElement('div');
     panel.id = "summary-panel";
-    panel.innerHTML = `<div>Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)</div><div><strong>Feedback:</strong> ${node.customMsg || 'Good effort!'}</div>`;
-    storyText.insertAdjacentElement('afterend', panel);
-    showFeedback(pct >= 80 ? "Mission complete!" : pct >= 50 ? "Mission incomplete." : "Mission failed.", null, pct >= 80 ? +10 : pct >= 50 ? 0 : -10);
+    panel.innerHTML = `
+      <div class="summary-score">
+        Score: <strong>${points}</strong> / ${maxPossible} (${pct}%)
+      </div>
+
+      <div class="summary-section">
+        <strong>Overall feedback:</strong><br>${msg}${node.customMsg ? '<br><br>' + node.customMsg : ''}
+      </div>
+
+      <div class="summary-section">
+        <strong>Action steps for teachers:</strong>
+        ${actionSteps}
+      </div>
+    `;
+
+    if (storyText && storyText.parentNode) {
+      storyText.insertAdjacentElement('afterend', panel);
+    }
+
+    let scoreHint, coachLine;
+    if (pct >= 80) {
+      scoreHint = +10;
+      coachLine = "Mission complete. Results have been sent to the team. Review your overall feedback below.";
+    } else if (pct >= 50) {
+      scoreHint = 0;
+      coachLine = "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
+    } else {
+      scoreHint = -10;
+      coachLine = "Mission failed. Results have been sent to the team. Review your overall feedback below.";
+    }
+    showFeedback(coachLine, null, scoreHint);
+
   } else {
     if (storyText) {
       storyText.style.display = 'block';
       storyText.textContent = node.text;
-      setWizardSprite('think');
-      showFeedback('Observing...', null, 0);
     }
+
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
-    choicesDiv.innerHTML = '';
   }
 
-  if (!node.feedback) {
-    const options = shuffledOptions(node.options);
-    options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.textContent = opt.text;
-      ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
-      btn.addEventListener('click', () => {
-        if (!node.feedback && typeof opt.delta === 'number') addPoints(opt.delta);
-        if (!node.feedback) logDecision(node.id, opt);
-        const feedbackState = opt.delta > 0 ? 'plus' : opt.delta < 0 ? 'minus' : 'meh';
-        setWizardSprite(feedbackState);
-        showFeedback(opt.feedback || '', "coach", opt.delta);
-        choicesDiv.innerHTML = '';
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = 'NEXT →';
-        nextBtn.className = 'scenario-btn primary big option-btn';
-        nextBtn.style.marginTop = '16px';
-        nextBtn.style.width = '100%';
-        nextBtn.onclick = () => {
-          nextBtn.disabled = true;
-          nextBtn.textContent = 'Loading...';
-          setTimeout(() => {
-            showNode(opt.nextId);
-            if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) sendResultsOnce();
-          }, 1500);
-        };
-        choicesDiv.appendChild(nextBtn);
-        requestAnimationFrame(() => nextBtn.focus());
-      });
-      choicesDiv.appendChild(btn);
+  choicesDiv.innerHTML = '';
+  const options = shuffledOptions(node.options);
+
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt.text;
+    ["scenario-btn","primary","big","option-btn"].forEach(c => btn.classList.add(c));
+
+    btn.addEventListener('click', () => {
+      if (node.feedback && opt.nextId === 'home') {
+        resetGame();
+        renderIntroCards();
+        return;
+      }
+
+      if (!node.feedback && typeof opt.delta === 'number') {
+        addPoints(opt.delta);
+      }
+
+      if (!node.feedback) logDecision(node.id, opt);
+
+      if (opt.feedback) {
+        showFeedback(opt.feedback, opt.feedbackType || "coach", opt.delta);
+      } else if (!node.feedback) {
+        showFeedback('', null, 0);
+      }
+
+      if (opt.nextId === 1) resetGame();
+
+      showNode(opt.nextId);
+
+      if (opt.nextId === 901 || getNode(opt.nextId)?.feedback) sendResultsOnce();
     });
-  }
+
+    choicesDiv.appendChild(btn);
+
+  });
 }
 
-/* -------- INIT -------- */
+/* -------- INIT: DOM Ready -------- */
 document.addEventListener('DOMContentLoaded', () => {
   console.log("GAME INIT — DOM READY");
+
+  // Home button
   const homeBtn = document.getElementById('home-btn');
   if (homeBtn) {
     homeBtn.addEventListener('click', () => {
@@ -3828,9 +4028,12 @@ document.addEventListener('DOMContentLoaded', () => {
       renderIntroCards();
     });
   }
+
+  // Start fresh
   setTeacherBadge(getTeacherCode());
   resetGame();
   renderIntroCards();
-  showFeedback("At each step, you'll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
-setWizardSprite('think');  // THINKING WIZARD ON HOME;
-}); 
+
+  // Initial feedback
+  showFeedback("The Wizard will chime in after every move.", "correct", +10);
+});
