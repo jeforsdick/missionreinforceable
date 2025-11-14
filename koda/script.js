@@ -62,7 +62,7 @@ function resetGame() {
   // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
   if (scenarioTitle) {
-    scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+    scenarioTitle.textContent = "Behavior Intervention Simulator";
   }
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
@@ -3789,7 +3789,7 @@ POOL.wild.push({
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
    ============================================================ */
 function renderIntroCards() {
-  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  scenarioTitle.textContent = "Behavior Intervention Simulator";
 
   storyText.innerHTML = `Welcome to Mission: Reinforceable.
 You’ll step through short scenarios based on your student's Behavior Plan.
