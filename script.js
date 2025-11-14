@@ -3776,7 +3776,7 @@ function renderIntroCards() {
   scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
 
   storyText.innerHTML = `Welcome to Mission: Reinforceable.
-You’ll step through short, branching scenarios based on you Behavior Plan.
+You’ll step through short scenarios based on your student's Behavior Plan.
 Choose your mission below.`;
 
   const menu = document.createElement('div');
