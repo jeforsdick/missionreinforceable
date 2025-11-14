@@ -35,7 +35,7 @@ body {
 /* Center the game, but don't constrain its height */
 body {
   display: flex;
-  justify-content: center;
+  justify-content: top;
   align-items: flex-start;    /* ✅ start at the top, grow downward */
 }
 
