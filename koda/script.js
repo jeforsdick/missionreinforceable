@@ -138,9 +138,9 @@ function sendResultsOnce() {
     else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
   }
 
-  // === GET STUDENT FROM URL (e.g. ?student=JM) ===
+  // === GET STUDENT FROM URL (e.g. ?student=LF) ===
   const url = new URL(window.location.href);
-  const student = url.searchParams.get("student") || "JM";
+  const student = url.searchParams.get("student") || "LF";
 
   const payload = {
     teacher_code: getTeacherCode(),
@@ -151,7 +151,7 @@ function sendResultsOnce() {
     timestamp: new Date().toISOString(),
     log: events,
     mode: mode, // NEW: Daily / Crisis / Wildcard
-    student: student // NEW: JM, Sarah, etc.
+    student: student // NEW: LF, Sarah, etc.
   };
 
   try {
@@ -191,357 +191,173 @@ const POOL = {
   wild: []
 };
 /*************************************************
- * DAILY SCENARIO 1 — Morning Independent Work
- * Hybrid branching: step1 → step2A/B/C → step3A/B/C → step4 endings
+ * DAILY SCENARIO 1 — Whole-Group Instruction (Calling Out)
  **************************************************/
 POOL.daily.push({
-  id: "daily_1_morning_independent",
-  title: "Daily Mission: Morning Independent Work",
+  id: "daily_1_whole_group_callouts",
+  title: "Daily Mission: Whole-Group Instruction",
   start: "step1",
   steps: {
+
     // ---------- STEP 1 ----------
     step1: {
-      text: "JM enters the classroom and sees his morning work on his desk. He looks overwhelmed, shifts in his seat, and glances toward the door.",
+      text: "During whole-group instruction, LF sits near two preferred peers. As you begin explaining a math concept, she blurts out, “I know the answer!” without raising her hand.",
       choices: {
         A: {
-          text: "Remind him he only needs to complete 50% and review how he earns Mario coins.",
+          text: "Use neutral planned ignoring, then prompt: “Try again—hand up first.”",
           score: 10,
-          feedback: "Great job! You reduced the task demand and made expectations clear. This supports JM’s replacement behavior and lowers the chance of escape. He takes a deep breath and slows his movements.",
+          feedback: "Great fidelity. You avoid giving peer attention and guide her into replacement behavior.",
           next: "step2A"
         },
         B: {
-          text: "Tell him, “Try your best,” without reviewing expectations.",
+          text: "Give a gentle reminder to “Wait your turn” without referencing hand-raising.",
           score: 0,
-          feedback: "This is a neutral choice. JM hears that he should try, but he still doesn’t know what is expected. He keeps tapping his pencil and looks unsure.",
+          feedback: "Neutral. LF gets teacher attention, but the core skill isn’t cued.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to complete all of the work today.",
+          text: "Say publicly, “Stop shouting out!”",
           score: -10,
-          feedback: "This increases the demand and makes escape more likely. JM pushes his chair back and looks toward the door, showing signs of avoidance.",
+          feedback: "Public correction increases peer attention and escalates attention-seeking behavior.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A (improving path) ----------
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM slows his movement and looks at you for reassurance.",
+      text: "LF pauses, then looks at her hand and glances toward you.",
       choices: {
         A: {
-          text: "Prompt him to request a break before starting work.",
+          text: "Pre-correct: “Remember—red card means quiet. Hand up if you want to share.”",
           score: 10,
-          feedback: "Excellent! Prompting a break keeps JM in the replacement behavior pathway. He considers the option calmly and prepares to ask.",
+          feedback: "Clear expectations + card check strengthens the routine.",
           next: "step3A"
         },
         B: {
-          text: "Wait quietly to see if he begins working on his own.",
+          text: "Move on with the lesson and hope she follows.",
           score: 0,
-          feedback: "Neutral choice. Giving space is not harmful, but JM still seems unsure about what to do. He hesitates over the paper.",
+          feedback: "Neutral. She may follow, but no explicit support was given.",
           next: "step3B"
         },
         C: {
-          text: "Say, “No breaks yet—let’s get going.”",
+          text: "Tell her, “You need to stop or you’ll lose points.”",
           score: -10,
-          feedback: "Denying breaks removes access to his replacement behavior. This increases anxiety and escape motivation. JM stiffens and looks away.",
+          feedback: "Threats increase peer attention and reduce motivation.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B (neutral path) ----------
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM taps his pencil and glances toward his break desk.",
+      text: "LF leans toward a peer and whispers, “I still knew it first.”",
       choices: {
         A: {
-          text: "Prompt a break request before he escalates.",
+          text: "Prompt: “Check your card. What color is it right now?”",
           score: 10,
-          feedback: "Nice move. You offer an appropriate escape option that matches his BIP. JM starts to calm and look more regulated.",
+          feedback: "Excellent. This directs her to the routine without giving more attention.",
           next: "step3A"
         },
         B: {
-          text: "Give him space to see if he settles.",
+          text: "Give her a look to signal quiet behavior.",
           score: 0,
-          feedback: "Neutral. This might help, but JM still looks uncertain and hasn’t engaged with the work yet.",
+          feedback: "Neutral cue, but still some attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he needs to stay in his seat.",
+          text: "Say, “No talking right now.” loudly.",
           score: -10,
-          feedback: "Redirecting without offering the replacement behavior increases the chance of avoidance. JM’s tapping becomes more intense.",
+          feedback: "Public correction increases peer attention.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C (escalation path) ----------
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM pushes his chair and starts pacing across the room.",
+      text: "Peers look over, some smiling. LF smirks and leans back in her chair.",
       choices: {
         A: {
-          text: "Offer a prompt to request a break calmly.",
+          text: "Redirect privately: “Let’s reset. Hand up if you want to share.”",
           score: 10,
-          feedback: "Great repair strategy. You give JM a safe way to escape the task without eloping. He slows slightly and listens.",
+          feedback: "Nice repair—quiet, brief, not feeding peer attention.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll help him in a moment.",
+          text: "Give her a stern look and gesture to be quiet.",
           score: 0,
-          feedback: "Neutral. This may or may not help him calm down, but it doesn’t teach or reinforce his replacement behavior.",
+          feedback: "Neutral. Mild attention may reinforce behavior.",
           next: "step3B"
         },
         C: {
-          text: "Redirect him back to his desk.",
+          text: "Tell the whole class to stop encouraging her.",
           score: -10,
-          feedback: "Redirecting during escalation can increase running or aggression. JM pulls away and speeds up his pacing.",
+          feedback: "This gives LF a huge attention moment from peers.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A (positive path, merge) ----------
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and requests a break appropriately.",
+      text: "LF raises her hand appropriately and waits.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "Nice work. JM accessed his replacement behavior and is ready to regulate with a break.",
+          feedback: "She used her replacement behavior!",
           next: "step4"
         }
       }
     },
 
-    // ---------- STEP 3B (neutral path, merge) ----------
+    // ---------- STEP 3B ----------
     step3B: {
-      text: "JM stays near his desk but doesn’t start working. He looks stuck.",
+      text: "LF stays mostly quiet but still fidgets and looks toward peers.",
       choices: {
         A: {
           text: "Continue.",
           score: 0,
-          feedback: "He has not escalated, but he also hasn’t engaged. He may need a clear, supportive next step.",
+          feedback: "Behavior is stable but not fully engaged.",
           next: "step4"
         }
       }
     },
 
-    // ---------- STEP 3C (escalated path, merge) ----------
+    // ---------- STEP 3C ----------
     step3C: {
-      text: "JM begins jogging in small circles or moving toward the classroom door.",
+      text: "LF calls out again: “I KNOW THIS PART!”",
       choices: {
         A: {
           text: "Continue.",
           score: -10,
-          feedback: "JM is escalating. A supportive response is needed quickly to prevent elopement or aggression.",
+          feedback: "She is escalating—more peer attention likely.",
           next: "step4"
         }
       }
     },
 
-    // ---------- STEP 4 (final decision & endings) ----------
+    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "You now decide how to respond to JM’s current behavior and his need for a break.",
+      text: "How do you finalize support in this moment?",
       choices: {
         A: {
-          text: "Honor his break immediately, start the 5-minute timer, and reinforce his return.",
+          text: "Quietly praise: “Thanks for raising your hand!” and award a point.",
           score: 10,
-          feedback: "Excellent fidelity to the BIP. You reinforce JM’s replacement behavior, support regulation, and keep him engaged in the routine.",
+          feedback: "Perfect. Reinforces replacement behavior and keeps attention low-key.",
           ending: "success"
         },
         B: {
-          text: "Allow a break after a short delay and offer help when you can.",
+          text: "Let her share after a delay and give a neutral acknowledgment.",
           score: 0,
-          feedback: "Partial implementation. JM eventually gets a break and some support, but the delay may increase stress and reduce instructional time.",
+          feedback: "Moderate support. Not reinforcing the replacement behavior clearly.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to return to work independently without a break.",
+          text: "Ignore her raised hand and move on.",
           score: -10,
-          feedback: "Break access is removed, which increases escape-maintained behavior. JM is more likely to escalate or leave his area, and additional staff support may be needed.",
-          ending: "fail"
-        }
-      }
-    }
-  },
-
-  // ---------- ENDINGS ----------
-  endings: {
-    success: {
-      title: "Success – High-Fidelity Morning Routine",
-      text: "You followed JM’s BIP closely. He accessed his break through the replacement behavior, regulated at his break desk, and returned to finish part of his work. The class routine stayed mostly on track."
-    },
-    mixed: {
-      title: "Mixed Outcome – Some Support, Some Escalation Risk",
-      text: "You used pieces of the BIP, but delays and unclear expectations made the routine less smooth. JM eventually worked with support, but stress and lost instructional time were higher than they needed to be."
-    },
-    fail: {
-      title: "Escalation – Low-Fidelity Implementation",
-      text: "JM did not have consistent access to his replacement behavior or break. His behavior escalated, increasing the likelihood of elopement or aggression. Reviewing proactive strategies, reduced demands, and timely breaks could improve outcomes next time."
-    }
-  }
-});
-/*************************************************
- * DAILY SCENARIO 2 — Writing Task Avoidance
- **************************************************/
-POOL.daily.push({
-  id: "daily_2_writing",
-  title: "Daily Mission: Writing Task Avoidance",
-  start: "step1",
-  steps: {
-    step1: {
-      text: "During writing time, JM is asked to write three sentences about his weekend. He looks away, slouches, and taps his pencil rapidly.",
-      choices: {
-        A: {
-          text: "Remind him he only needs to complete 50% and offer sentence starters.",
-          score: 10,
-          feedback: "Great job! You reduced the task demand and helped JM access success. He looks more willing to try.",
-          next: "step2A"
-        },
-        B: {
-          text: "Tell him, “Just write a little bit.”",
-          score: 0,
-          feedback: "Neutral choice. JM may start, but expectations are still unclear. He looks unsure.",
-          next: "step2B"
-        },
-        C: {
-          text: "Tell him he must write all three sentences.",
-          score: -10,
-          feedback: "Increased demand raises escape motivation. JM pushes his paper away and looks toward the door.",
-          next: "step2C"
-        }
-      }
-    },
-
-    /* ---------- STEP 2A (improving path) ---------- */
-    step2A: {
-      text: "JM looks at the sentence starter you provided.",
-      choices: {
-        A: {
-          text: "Prompt him to request a break before writing.",
-          score: 10,
-          feedback: "Excellent! Prompting a break supports regulation and reduces avoidance.",
-          next: "step3A"
-        },
-        B: {
-          text: "Wait to see if he begins independently.",
-          score: 0,
-          feedback: "Neutral. JM hesitates and looks uncertain.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell him to start writing now.",
-          score: -10,
-          feedback: "Directing him increases escape-driven behavior. JM taps his pencil harder.",
-          next: "step3C"
-        }
-      }
-    },
-
-    /* ---------- STEP 2B (neutral path) ---------- */
-    step2B: {
-      text: "JM twirls his pencil and looks at his backpack.",
-      choices: {
-        A: {
-          text: "Prompt a break request before he escalates.",
-          score: 10,
-          feedback: "Nice move. You're supporting his replacement behavior early.",
-          next: "step3A"
-        },
-        B: {
-          text: "Allow a little time to see if he starts.",
-          score: 0,
-          feedback: "Neutral. He still seems stuck.",
-          next: "step3B"
-        },
-        C: {
-          text: "Redirect him to begin the sentence.",
-          score: -10,
-          feedback: "Redirecting during avoidance can increase stress. JM scoots in his chair.",
-          next: "step3C"
-        }
-      }
-    },
-
-    /* ---------- STEP 2C (escalation path) ---------- */
-    step2C: {
-      text: "JM pushes his paper off the desk.",
-      choices: {
-        A: {
-          text: "Offer a break prompt to help him regulate.",
-          score: 10,
-          feedback: "Great repair strategy! Prompting a break gives JM a safe alternative.",
-          next: "step3A"
-        },
-        B: {
-          text: "Tell him you'll help in a moment.",
-          score: 0,
-          feedback: "Neutral. He remains uncertain.",
-          next: "step3B"
-        },
-        C: {
-          text: "Ask him firmly to pick the paper up.",
-          score: -10,
-          feedback: "Redirecting during escalation may worsen behavior. JM stiffens.",
-          next: "step3C"
-        }
-      }
-    },
-
-    /* ---------- STEP 3A/B/C → MERGE ---------- */
-    step3A: {
-      text: "JM requests a break appropriately.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 10,
-          feedback: "Nice—JM used his replacement behavior.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM stays seated but looks frozen.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He hasn’t escalated but still needs support.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM starts sliding off his chair or walking away.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "JM is escalating. Quick support is needed.",
-          next: "step4"
-        }
-      }
-    },
-
-    /* ---------- STEP 4 (ENDING) ---------- */
-    step4: {
-      text: "How do you respond to JM’s behavior now?",
-      choices: {
-        A: {
-          text: "Honor his break immediately and reinforce his return.",
-          score: 10,
-          feedback: "Excellent support aligned with his BIP.",
-          ending: "success"
-        },
-        B: {
-          text: "Allow a break after a delay.",
-          score: 0,
-          feedback: "Partial support, but delayed assistance increases stress.",
-          ending: "mixed"
-        },
-        C: {
-          text: "Tell him to return to work independently.",
-          score: -10,
-          feedback: "This removes access to replacement behavior and increases escalation risk.",
+          feedback: "Missed reinforcement reduces future appropriate behavior.",
           ending: "fail"
         }
       }
@@ -550,183 +366,187 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Regulated Writing Routine",
-      text: "JM takes a calm break, returns, and completes some writing with support."
+      title: "Success – Hand-Raising Routine Strengthened",
+      text: "LF followed the hand-raising routine and received reinforcement without gaining peer attention for shout-outs."
     },
     mixed: {
       title: "Mixed Outcome – Partial Support",
-      text: "JM eventually writes with help, but delays increased frustration."
+      text: "LF participated but without clear reinforcement for replacement behavior, leading to uneven engagement."
     },
     fail: {
-      title: "Escalation – Low Fidelity",
-      text: "JM escalates into avoidance behaviors and may require assistance."
+      title: "Escalation – Attention Maintained",
+      text: "LF gained peer attention for call-outs with little reinforcement for appropriate behavior, increasing future call-outs."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 3 — Math Work With Peer Support
+ * DAILY SCENARIO 2 — Independent Work (Peer Talking)
  **************************************************/
 POOL.daily.push({
-  id: "daily_3_math",
-  title: "Daily Mission: Math Task Support",
+  id: "daily_2_independent_peer_talking",
+  title: "Daily Mission: Independent Work",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During math, JM sees a worksheet with many problems. He taps rapidly and avoids looking at the page.",
+      text: "LF begins independent reading work during a red-card period (quiet work). She immediately turns to a peer and whispers, “Did you see that video?”",
       choices: {
         A: {
-          text: "Remind him he only needs 50% and offer to start the first problem with him.",
+          text: "Use neutral correction: point to the card and say, “Check the card.” Then walk away.",
           score: 10,
-          feedback: "Nice proactive support! JM looks at the worksheet calmly.",
+          feedback: "Great fidelity. Brief, neutral, removes peer attention, cues the system.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to pick any problem he wants to start with.",
+          text: "Say softly, “Not right now—keep working.”",
           score: 0,
-          feedback: "Neutral. JM still looks unsure.",
+          feedback: "Neutral. Redirects, but still adds attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he must finish the whole worksheet.",
+          text: "Say loudly, “Stop talking during work time!”",
           score: -10,
-          feedback: "Increasing the demand raises escape motivation. JM pulls his chair away.",
+          feedback: "Public correction increases peer attention and makes the behavior more likely.",
           next: "step2C"
         }
       }
     },
 
-    /* STEP 2A — Improving */
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM looks at the first problem with you.",
+      text: "LF frowns slightly, checks the red card, and glances back at her work.",
       choices: {
         A: {
-          text: "Prompt him to ask for a break if he needs one.",
+          text: "Chunk the task: “Complete the first 3 questions, then you’ll earn a green break.”",
           score: 10,
-          feedback: "Great! Prompting his replacement behavior reduces avoidance.",
+          feedback: "Excellent. Gives incentive for quiet work and meets attention function safely later.",
           next: "step3A"
         },
         B: {
-          text: "Wait silently for him to start.",
+          text: "Give her space and hope she starts working.",
           score: 0,
-          feedback: "Neutral—he hesitates.",
+          feedback: "Neutral. She may comply, but no active support.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to finish this line of problems.",
+          text: "Tell her she’ll lose a point if she talks again.",
           score: -10,
-          feedback: "Direct commands during avoidance increase stress.",
+          feedback: "Threatening without teaching replacement behavior fuels attention-seeking.",
           next: "step3C"
         }
       }
     },
 
-    /* STEP 2B — Neutral */
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM flips his pencil over and over.",
+      text: "LF spins her pencil dramatically and leans slightly toward a peer.",
       choices: {
         A: {
-          text: "Prompt an appropriate break request.",
+          text: "Prompt the routine: “What do you earn when you finish this chunk?”",
           score: 10,
-          feedback: "Good support. JM listens.",
+          feedback: "Great cue—redirects to work-first → green-break routine.",
           next: "step3A"
         },
         B: {
-          text: "Give him space.",
+          text: "Tap her desk lightly as a reminder to work.",
           score: 0,
-          feedback: "Neutral—he still looks unsure.",
+          feedback: "Neutral but still gives attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to stop fidgeting and begin.",
+          text: "Tell her she is distracting the whole class.",
           score: -10,
-          feedback: "Redirecting increases avoidance pressure.",
+          feedback: "Adds peer attention and criticism—highly reinforcing for her.",
           next: "step3C"
         }
       }
     },
 
-    /* STEP 2C — Escalation */
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM pushes the worksheet off the desk.",
+      text: "Peers giggle. LF smiles and whispers, “Shhh don’t tell her.”",
       choices: {
         A: {
-          text: "Prompt a break request calmly.",
+          text: "Quietly redirect: “Let’s reset. Red card = quiet work. Green talk after your chunk.”",
           score: 10,
-          feedback: "Great repair—breaks reduce escalation.",
+          feedback: "Nice repair. You avoid public attention and keep the system intact.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you'll help soon.",
+          text: "Move her to another seat temporarily.",
           score: 0,
-          feedback: "Neutral.",
+          feedback: "Neutral. Might help but doesn’t teach the routine.",
           next: "step3B"
         },
         C: {
-          text: "Direct him to pick up the worksheet.",
+          text: "Lecture her about interrupting learning.",
           score: -10,
-          feedback: "Redirecting during escalation increases pacing risk.",
+          feedback: "Long attention episode = behavior jackpot.",
           next: "step3C"
         }
       }
     },
 
-    /* STEP 3A/B/C → merge */
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and requests a break politely.",
+      text: "LF turns back to her work and begins the first question.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "Nice job! He's using his supports.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM stays close but doesn't start the task.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He needs some structured help.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM begins moving around the room.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He's escalating. More support needed.",
+          feedback: "She re-engaged and followed the work-first routine.",
           next: "step4"
         }
       }
     },
 
-    /* STEP 4 ENDINGS */
-    step4: {
-      text: "How do you support JM now?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF grabs her pencil but still glances toward her peers occasionally.",
       choices: {
         A: {
-          text: "Honor his break now and reinforce his return.",
+          text: "Continue.",
+          score: 0,
+          feedback: "She’s compliant but not fully engaged.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF whispers loudly, “I bet you can’t finish before me!”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Peer attention maintained—escalation is likely.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you wrap up this moment?",
+      choices: {
+        A: {
+          text: "When she finishes 3 questions, praise her quietly and flip the card to green for peer break.",
           score: 10,
-          feedback: "Excellent BIP fidelity!",
+          feedback: "Beautiful reinforcement of the BIP routine.",
           ending: "success"
         },
         B: {
-          text: "Allow a break after a short delay.",
+          text: "Let her finish her work and then give neutral acknowledgment.",
           score: 0,
-          feedback: "Partial support.",
+          feedback: "Moderate support, less tied to the system.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to continue working independently.",
+          text: "Do not provide green time even if she completes the chunk.",
           score: -10,
-          feedback: "This removes access to his replacement behavior.",
+          feedback: "Breaks the reinforcement system—future compliance drops.",
           ending: "fail"
         }
       }
@@ -735,178 +555,187 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Math Support",
-      text: "JM takes a break, returns calmly, and completes part of his math work."
+      title: "Success – Green Break Earned",
+      text: "LF followed the card routine and earned peer time, reinforcing quiet, focused work."
     },
     mixed: {
-      title: "Mixed – Delayed Support",
-      text: "JM manages with help but remains somewhat dysregulated."
+      title: "Mixed Outcome – Partial Routine Use",
+      text: "LF worked but didn’t clearly connect the effort to the system, reducing future motivation."
     },
     fail: {
-      title: "Escalation – Support Needed",
-      text: "JM escalates into avoidance and may need staff help."
+      title: "Fail – Routine Breakdown",
+      text: "LF did not receive predictable reinforcement, making peer-seeking and off-task talking more likely."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 4 — Transition Back From Recess
+ * DAILY SCENARIO 3 — Transition to Partner Work
  **************************************************/
 POOL.daily.push({
-  id: "daily_4_recess_transition",
-  title: "Daily Mission: Transition Back from Recess",
+  id: "daily_3_partner_transition",
+  title: "Daily Mission: Transition to Partner Work",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "Recess ends. JM lines up slowly, drags his feet, and hesitates at the classroom door.",
+      text: "You announce that students will transition from quiet reading (red card) to partner comprehension checks (green card). LF immediately hops up and says loudly, “Who wants to be my partner?!”, drawing peer attention.",
       choices: {
         A: {
-          text: "Review expectations and how he earns Mario coins.",
+          text: "Pre-correct privately: “Green card in a minute—first directions, then choose a partner.”",
           score: 10,
-          feedback: "Great proactive support! JM enters more calmly.",
+          feedback: "Great step. You structure the transition and avoid feeding the attention burst.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to come inside with the class.",
+          text: "Say, “Sit down until it’s time to pick partners.”",
           score: 0,
-          feedback: "Neutral. He enters but looks hesitant.",
+          feedback: "Neutral. Corrects behavior but still gives attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to hurry up.",
+          text: "Tell the class, “Stop responding to LF when she calls out!”",
           score: -10,
-          feedback: "Rushing increases anxiety and avoidance behaviors.",
+          feedback: "Creates a big peer attention moment—highly reinforcing.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM enters slowly but cooperatively.",
+      text: "LF freezes mid-jump, laughs quietly, and returns to her seat.",
       choices: {
         A: {
-          text: "Prompt a break request once inside.",
+          text: "Model the routine: “When the green card flips, you’ll ask a partner in a quiet voice.”",
           score: 10,
-          feedback: "Great support—break prompts reduce transition stress.",
+          feedback: "Beautiful proactive teaching.",
           next: "step3A"
         },
         B: {
-          text: "Wait and see if he settles.",
+          text: "Flip the green card early to move things along.",
           score: 0,
-          feedback: "Neutral. JM hesitates at his desk.",
+          feedback: "Neutral. Might work but removes structure.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to get straight to work.",
+          text: "Tell her she is already being disruptive.",
           score: -10,
-          feedback: "This increases pressure and escape likelihood.",
+          feedback: "Adds attention and may escalate.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM enters but circles near his desk.",
+      text: "LF sighs loudly, then whispers to a peer, “I call you first.”",
       choices: {
         A: {
-          text: "Prompt a break request.",
+          text: "Prompt: “What color is the card right now?”",
           score: 10,
-          feedback: "Nice support—this redirects him into regulation.",
+          feedback: "Excellent. Redirects her to the expectations.",
           next: "step3A"
         },
         B: {
-          text: "Give him a moment.",
+          text: "Signal with a quiet finger to lips.",
           score: 0,
-          feedback: "Neutral. He stays uncertain.",
+          feedback: "Neutral but adds mild attention.",
           next: "step3B"
         },
         C: {
-          text: "Redirect him to begin quiet work.",
+          text: "Move her seat away from everyone.",
           score: -10,
-          feedback: "This may push him into avoidance.",
+          feedback: "Punishment during a transition increases stress and attention-seeking.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM stops in the doorway and steps backward.",
+      text: "Several peers giggle. LF grins and says, “I’m the best partner anyway!”",
       choices: {
         A: {
-          text: "Offer a break prompt.",
+          text: "Quietly redirect: “Let’s reset—the directions come first.”",
           score: 10,
-          feedback: "Good repair strategy.",
+          feedback: "Good repair. Low attention, clear expectation.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll help soon.",
+          text: "Give her a stern look.",
           score: 0,
-          feedback: "Neutral.",
+          feedback: "Neutral but may inadvertently reinforce behavior.",
           next: "step3B"
         },
         C: {
-          text: "Direct him firmly inside.",
+          text: "Address the whole class about following expectations.",
           score: -10,
-          feedback: "Directives during hesitation increase avoidance.",
+          feedback: "Broad attention fuels the behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM requests a break appropriately.",
+      text: "LF waits—still excited, but quiet—as you explain partner directions.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He’s using his replacement behavior.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM lingers near his desk.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He may escalate without support.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM begins pacing.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "Escalation risk rising.",
+          feedback: "Great regulation and following of expectations.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How do you support JM now?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF fidgets but stays mostly seated. She occasionally glances back at peers.",
       choices: {
         A: {
-          text: "Honor a break now and reinforce his return.",
+          text: "Continue.",
+          score: 0,
+          feedback: "She’s semi-regulated but needs reinforcement soon.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF whispers loudly, “I’m going to pick Chloe before anyone else can!”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Attention-seeking increasing—risk of bigger disruption.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you finalize the transition?",
+      choices: {
+        A: {
+          text: "Flip the green card, praise her quiet waiting, and let her choose a partner appropriately.",
           score: 10,
-          feedback: "Excellent!",
+          feedback: "Excellent reinforcement of the routine.",
           ending: "success"
         },
         B: {
-          text: "Allow a break after a short delay.",
+          text: "Allow partner choice without specific praise.",
           score: 0,
-          feedback: "Partial support.",
+          feedback: "Neutral. Doesn’t reinforce the waiting behavior.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to start working independently.",
+          text: "Assign her a partner as a consequence for calling out earlier.",
           score: -10,
-          feedback: "Break access removed, increasing escalation.",
+          feedback: "Punishment tied to attention behavior risks escalation.",
           ending: "fail"
         }
       }
@@ -915,178 +744,187 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Smooth Transition",
-      text: "JM transitions calmly and rejoins class with support."
+      title: "Success – Smooth Partner Transition",
+      text: "LF waited appropriately, followed the red→green routine, and earned partner time safely."
     },
     mixed: {
-      title: "Mixed – Moderate Success",
-      text: "Transition occurs, but with some dysregulation."
+      title: "Mixed Outcome – Uneven Structure",
+      text: "LF participated but without clear reinforcement or structure, reducing future consistency."
     },
     fail: {
-      title: "Escalation – Assistance Needed",
-      text: "JM becomes avoidant or escalates further."
+      title: "Escalation – Attention Gained",
+      text: "LF gained attention and partner time without following expectations, reinforcing the call-out behavior."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 5 — Token Board Motivation
+ * DAILY SCENARIO 4 — Transition Back From Specials
  **************************************************/
 POOL.daily.push({
-  id: "daily_5_token_motivation",
-  title: "Daily Mission: Token Board Motivation",
+  id: "daily_4_specials_transition",
+  title: "Daily Mission: Transition Back From Specials",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "JM enters the classroom unfocused during whole-group instruction. He wanders and peers at items on shelves.",
+      text: "Students return from art. The hallway was loud, and LF is energized. As the class enters, she sidles up to two preferred peers and whispers jokes instead of going to her seat.",
       choices: {
         A: {
-          text: "Remind him how he earns Mario coins.",
+          text: "Pre-correct quietly: “Red card right now—head to your seat.”",
           score: 10,
-          feedback: "Great proactive reinforcement! JM looks more focused.",
+          feedback: "Excellent—neutral and clear without adding peer attention.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Let’s get started.”",
+          text: "Say from across the room, “Go sit down, please.”",
           score: 0,
-          feedback: "Neutral. Not quite enough structure.",
+          feedback: "Neutral but adds teacher attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he doesn't get coins if he's moving around.",
+          text: "Tell the peers, “Stop talking to LF during transitions.”",
           score: -10,
-          feedback: "This introduces a punitive tone and increases avoidance.",
+          feedback: "Public attention increases the behavior’s payoff.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM comes closer to the group.",
+      text: "LF pauses and glances at the red card posted on the board.",
       choices: {
         A: {
-          text: "Prompt a break request if he grows restless.",
+          text: "Prompt: “What do you earn after quiet start-up?”",
           score: 10,
-          feedback: "Smart support—prevents escalation.",
+          feedback: "Great connection to incentives without over-verbalizing.",
           next: "step3A"
         },
         B: {
-          text: "Give space to see if he settles.",
+          text: "Give her space to follow through.",
           score: 0,
-          feedback: "Neutral.",
+          feedback: "Neutral. She may comply but with less clarity.",
           next: "step3B"
         },
         C: {
-          text: "Ask him to sit still.",
+          text: "Tell her she is already off-task and needs to focus.",
           score: -10,
-          feedback: "Directives increase avoidance.",
+          feedback: "Criticism adds attention and risks escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM wiggles and looks behind him.",
+      text: "LF walks slowly to her seat but continues teasing a peer behind her.",
       choices: {
         A: {
-          text: "Prompt a break request.",
+          text: "Use neutral correction: point silently to the red card.",
           score: 10,
-          feedback: "Great support.",
+          feedback: "Great. No verbal attention, clear direction.",
           next: "step3A"
         },
         B: {
-          text: "Wait for him to settle.",
+          text: "Say, “Not right now” while she walks.",
           score: 0,
-          feedback: "Neutral.",
+          feedback: "Neutral, but attention may reinforce behavior.",
           next: "step3B"
         },
         C: {
-          text: "Redirect him to focus.",
+          text: "Say, “You’re keeping us from starting!” loudly.",
           score: -10,
-          feedback: "Potentially escalating.",
+          feedback: "Gives the whole class’s attention to her.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM begins wandering further.",
+      text: "Peers giggle. LF smirks, clearly enjoying the moment.",
       choices: {
         A: {
-          text: "Prompt a break request immediately.",
+          text: "Quiet redirection: “Let’s reset—seat first, then directions.”",
           score: 10,
-          feedback: "Great repair!",
+          feedback: "Good repair. Low attention and high clarity.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll help him soon.",
+          text: "Give a stern look and wait.",
           score: 0,
-          feedback: "Neutral.",
+          feedback: "Neutral. May or may not work.",
           next: "step3B"
         },
         C: {
-          text: "Direct him to sit with the group.",
+          text: "Address the class about behavior expectations.",
           score: -10,
-          feedback: "Directives often increase avoidance.",
+          feedback: "Accidentally reinforces LF’s attention-seeking.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and requests a break.",
+      text: "LF sits and looks toward you, waiting for what’s next.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He’s regulated and ready.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM stays near the group but looks unsure.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He may need more support soon.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM wanders away from the carpet.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He's escalating; break access is needed.",
+          feedback: "She successfully followed the transition routine.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How do you support JM now?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF sits but swivels in her chair and glances toward peers.",
       choices: {
         A: {
-          text: "Honor his break and reinforce his return.",
+          text: "Continue.",
+          score: 0,
+          feedback: "She complied but is still lightly seeking attention.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF blurts, “Are we doing something fun?!” loudly.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation—peer attention is driving behavior.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you settle the class and support LF?",
+      choices: {
+        A: {
+          text: "Give quiet praise: “Thanks for getting seated quickly,” and award a point.",
           score: 10,
-          feedback: "Excellent implementation.",
+          feedback: "Reinforces transition behavior cleanly.",
           ending: "success"
         },
         B: {
-          text: "Allow a break after a slight delay.",
+          text: "Move into the lesson without additional feedback.",
           score: 0,
-          feedback: "Partial support.",
+          feedback: "Gets things going but doesn’t reinforce expected behaviors.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to return without a break.",
+          text: "Call out LF publicly for the earlier talking.",
           score: -10,
-          feedback: "Escalation likely.",
+          feedback: "Adds more peer attention and undermines expectations.",
           ending: "fail"
         }
       }
@@ -1095,2342 +933,2623 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Motivated & Regulated",
-      text: "JM earns coins, takes a break, and re-engages smoothly."
+      title: "Success – Smooth Re-Entry",
+      text: "LF transitioned back from specials with quiet support and earned reinforcement."
     },
     mixed: {
-      title: "Mixed – Partial Support",
-      text: "JM manages but with lower regulation and reduced learning time."
+      title: "Mixed – Some Compliance",
+      text: "LF followed the transition but didn’t get clear reinforcement, reducing consistency."
     },
     fail: {
-      title: "Escalation – Low Fidelity",
-      text: "JM shows increased avoidance and may require assistance."
+      title: "Escalation – Peer Attention Maintained",
+      text: "Peer interactions drove behavior, and public corrections reinforced attention-seeking."
     }
   }
 });
 /*************************************************
- * DAILY SCENARIO 6 — Small Group Instruction
+ * DAILY SCENARIO 5 — Writing Task (Work Avoidance + Peer Attention)
  **************************************************/
 POOL.daily.push({
-  id: "daily_6_small_group",
-  title: "Daily Mission: Small Group Instruction",
+  id: "daily_5_writing_task",
+  title: "Daily Mission: Writing Task",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During small group reading, JM is asked to join a group at the back table. He begins pacing near the shelves instead of sitting.",
+      text: "LF receives a writing prompt and immediately looks around the room with an exaggerated sigh. She whispers to a nearby peer, “This is soooo boring.”",
       choices: {
         A: {
-          text: "Review expectations and how he earns Mario coins before starting group.",
+          text: "Chunk the task: “Write the first two sentences, then you’ll earn green time.”",
           score: 10,
-          feedback: "Great proactive move. Clear expectations and reinforcement reduce anxiety about small group tasks. JM slows his pacing and looks toward the table.",
+          feedback: "Great support—ties effort to peer-time reinforcement.",
           next: "step2A"
         },
         B: {
-          text: "Ask him to come sit with the group so you can start.",
+          text: "Quietly say, “Let’s get started.”",
           score: 0,
-          feedback: "Neutral. He moves a little closer but still looks hesitant.",
+          feedback: "Neutral but offers attention without teaching routine.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to stay seated at the group table the whole time.",
+          text: "Say loudly, “Stop complaining and get to work.”",
           score: -10,
-          feedback: "This increases pressure and may raise escape-maintained behavior. JM takes a step back from the table.",
+          feedback: "Public correction increases peer attention.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM moves closer to the table and touches the back of a chair.",
+      text: "LF opens her notebook slowly but looks at peers as if expecting reactions.",
       choices: {
         A: {
-          text: "Prompt him to request a break if he starts to feel overwhelmed.",
+          text: "Prompt: “Check your card—red means quiet. Green after the two sentences.”",
           score: 10,
-          feedback: "Excellent support. Prompting a break gives him a safe option before behavior escalates.",
+          feedback: "Strong fidelity. Predictable routine supports engagement.",
           next: "step3A"
         },
         B: {
-          text: "Wait and see if he sits on his own.",
+          text: "Give her space and watch quietly.",
           score: 0,
-          feedback: "Neutral. He hovers behind the chair and hesitates.",
+          feedback: "Neutral. May or may not lead to action.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to sit down so group can start.",
+          text: "Tell her she needs to finish or she’ll lose points.",
           score: -10,
-          feedback: "Directing him without support increases stress. He grips the chair tightly.",
+          feedback: "Threats increase attention-seeking.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM comes partway over but begins pacing in a small circle near the group table.",
+      text: "LF doodles on her paper and whispers, “I bet I can finish before you,” to a peer.",
       choices: {
         A: {
-          text: "Prompt an appropriate break request.",
+          text: "Cue the system: “What do you earn when you finish your chunk?”",
           score: 10,
-          feedback: "Nice move. You support his replacement behavior and reduce the need for escape.",
+          feedback: "Redirects her into the structured routine.",
           next: "step3A"
         },
         B: {
-          text: "Give him a minute and focus on other students.",
+          text: "Give a quiet finger-to-lips signal.",
           score: 0,
-          feedback: "Neutral. JM continues pacing and glancing at the table.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Remind him he needs to sit to participate.",
+          text: "Move her away from the peer immediately.",
           score: -10,
-          feedback: "This may feel like pressure and can trigger more avoidance.",
+          feedback: "Reactive removal delivers attention and undermines proactive routines.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM walks away from the table area and looks toward the door.",
+      text: "Peers smirk. LF smacks her pencil dramatically and says, “This is torture.”",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a break.",
+          text: "Quiet redirection: “Reset—two sentences first.”",
           score: 10,
-          feedback: "Good repair. You give him a safer alternative than leaving the area.",
+          feedback: "Good repair. Keeps attention low and expectations clear.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll get started with the group and he can join when ready.",
+          text: "Give a stern look.",
           score: 0,
-          feedback: "Neutral. He hovers near the edge of the group space.",
+          feedback: "Neutral but still adds attention.",
           next: "step3B"
         },
         C: {
-          text: "Direct him to come back and sit immediately.",
+          text: "Engage in a long discussion about effort.",
           score: -10,
-          feedback: "Directives during escalation can increase elopement or refusal.",
+          feedback: "Long verbal attention magnifies the escape + attention function.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and asks for a break before joining.",
+      text: "LF writes the first few words quietly.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "Nice work—he is using the plan to regulate.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM stays near the table area but doesn’t sit. He watches the group quietly.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is not escalating but still not engaged. Support is still needed.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM moves further away from the group area and glances toward the classroom door.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He is at higher risk for elopement or refusal.",
+          feedback: "Great independent engagement.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How will you respond to support JM’s participation in small group?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF writes a single word, then looks around the room again.",
       choices: {
         A: {
-          text: "Honor a break now and reinforce his return to the group afterward.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial engagement; routine not fully locked in.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF pushes her paper away slightly and turns to a peer again.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Attention behavior escalating.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you conclude this writing block?",
+      choices: {
+        A: {
+          text: "When she completes her two sentences, give quiet praise and flip the card to green for earned peer time.",
           score: 10,
-          feedback: "Excellent fidelity. Breaks and positive reinforcement help him rejoin instruction successfully.",
+          feedback: "Strong reinforcement of both effort and quiet routine.",
           ending: "success"
         },
         B: {
-          text: "Allow a break after he attempts a small part of the activity.",
+          text: "Let her do partner talk later but without explicit praise.",
           score: 0,
-          feedback: "Partial support. He may participate somewhat, but with more stress and less instruction time.",
+          feedback: "Moderate but not connected to the routine.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him he needs to join the group without taking a break.",
+          text: "Deny green time even if she did the work.",
           score: -10,
-          feedback: "Removing access to the replacement behavior increases the chance of avoidance or escalation.",
+          feedback: "Breaks reinforcement predictability and decreases future effort.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Supported Small Group Participation",
-      text: "JM accesses a break, then returns to the table and participates in small group reading with support."
+      title: "Success – Writing Routine Followed",
+      text: "LF completed her chunk and earned peer time through the predictable system."
     },
     mixed: {
-      title: "Mixed Outcome – Partial Engagement",
-      text: "JM engages for a short time, but stress and limited support reduce the quality of instruction."
+      title: "Mixed – Some Movement",
+      text: "LF worked but without strong reinforcement, decreasing future motivation."
     },
     fail: {
-      title: "Escalation – Limited Small Group Access",
-      text: "JM avoids or escalates, missing most of the small group instruction and potentially needing additional staff support."
+      title: "Fail – Routine Breakdown",
+      text: "Without predictable green time, LF is more likely to seek peer attention next writing block."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 7 — Teacher Busy With Another Student
+ * DAILY SCENARIO 6 — Math Block (Shout-Out + Peer Reaction)
  **************************************************/
 POOL.daily.push({
-  id: "daily_7_teacher_busy",
-  title: "Daily Mission: Supporting JM While You’re Busy",
+  id: "daily_6_math_shoutout",
+  title: "Daily Mission: Math Block",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "You are working 1:1 with another student when JM begins wandering around the room, looking at posters on the wall.",
+      text: "You introduce a new math problem. Before you finish giving directions, LF blurts out, “This one is easy, everyone watch how fast I do it!” Peers look over immediately.",
       choices: {
         A: {
-          text: "Give a quick reminder of expectations and his token board before returning to the other student.",
+          text: "Use planned ignoring, then quietly prompt: “Try again — hand up first.”",
           score: 10,
-          feedback: "Nice proactive reminder. This keeps expectations clear even while your attention is divided. JM pauses and looks at his token board.",
+          feedback: "Great fidelity: no attention, quick prompt toward replacement.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Give me a minute, I’m helping someone else.”",
+          text: "Say neutrally, “Wait your turn, please.”",
           score: 0,
-          feedback: "Neutral. JM hears you but still doesn’t know what to do.",
+          feedback: "Neutral redirect but still delivers teacher attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him to sit down and wait quietly until you are done.",
+          text: "Say loudly, “Stop showing off and let me teach.”",
           score: -10,
-          feedback: "This increases waiting demands without clear support. Avoidance or escalation is more likely.",
+          feedback: "Public correction delivers peer attention and fuels behavior.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM moves closer to his desk but continues to look around the room.",
+      text: "LF freezes and lowers her hands. Peers lose interest.",
       choices: {
         A: {
-          text: "Prompt him to request a break if he is feeling restless.",
+          text: "Pre-correct: “Red card until problem #1 is done.”",
           score: 10,
-          feedback: "Great! You support his replacement behavior even while busy.",
+          feedback: "Great structure; connects expectations to the card system.",
           next: "step3A"
         },
         B: {
-          text: "Keep working with the other student and watch JM from a distance.",
+          text: "Continue instruction without comment.",
           score: 0,
-          feedback: "Neutral. He may stay regulated, but he still looks unsure.",
+          feedback: "Neutral and avoids attention, but doesn’t teach expectations.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he needs to sit and wait until you are done.",
+          text: "Warn her publicly to stop interrupting.",
           score: -10,
-          feedback: "This adds delay without support and may increase escape behavior.",
+          feedback: "Adds attention and increases risk of repeat shout-outs.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM walks slowly between desks and hums quietly.",
+      text: "LF leans back in her chair and theatrically yawns, glancing at peers.",
       choices: {
         A: {
-          text: "Prompt an appropriate break request from across the room.",
+          text: "Prompt: “What color is the card? What does that mean?”",
           score: 10,
-          feedback: "Nice distance support. You cue his replacement behavior without stopping instruction.",
+          feedback: "Excellent redirect to system expectations.",
           next: "step3A"
         },
         B: {
-          text: "Let him wander as long as he isn’t disruptive.",
+          text: "Tap her desk lightly while continuing instruction.",
           score: 0,
-          feedback: "Neutral. It keeps the room calm, but doesn’t teach or reinforce expectations.",
+          feedback: "Neutral cue but still teacher attention.",
           next: "step3B"
         },
         C: {
-          text: "Redirect him sharply to sit down.",
+          text: "Tell her she is disrupting your teaching.",
           score: -10,
-          feedback: "Sharp redirection increases anxiety and escape motivation.",
+          feedback: "Public reprimand = strong attention.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM stops near the classroom door and looks back at you.",
+      text: "Peers laugh. LF beams and taps her pencil loudly.",
       choices: {
         A: {
-          text: "Offer a quick prompt to request a break and point to his break desk.",
+          text: "Quietly say, “Reset — directions first.”",
           score: 10,
-          feedback: "Excellent repair. You provide a safe, replacement-based option instead of elopement.",
+          feedback: "Good repair; minimal attention, clear expectations.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll talk with him when you are finished.",
+          text: "Give a stern look and continue.",
           score: 0,
-          feedback: "Neutral, but leaves him waiting and unsupervised at the door.",
+          feedback: "Neutral but may reinforce behavior subtly.",
           next: "step3B"
         },
         C: {
-          text: "Tell him firmly to move away from the door and sit.",
+          text: "Address the whole class about respecting instruction time.",
           score: -10,
-          feedback: "Firm directives near the exit can increase resistance or elopement.",
+          feedback: "Big attention moment for LF.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and asks for a break appropriately, even while you are busy.",
+      text: "LF opens her math book and begins writing her name quietly.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "Great work teaching independence in using his plan.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM lingers and continues low-level wandering.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is not in crisis, but he is also not fully engaged or supported.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM becomes more restless and moves further from his work area.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "His behavior is escalating, and he may soon need more intensive support.",
+          feedback: "Great independent re-engagement.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Now that you can shift your attention back to JM, how do you respond?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF picks up her pencil but watches a peer out of the corner of her eye.",
       choices: {
         A: {
-          text: "Briefly honor his break and then help him re-engage with work.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial compliance with lingering attention motivation.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF loudly whispers, “I bet I finish before all of you!”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalating attention-seeking.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you reinforce the start of math?",
+      choices: {
+        A: {
+          text: "When she completes problem #1, quietly give a point and praise her focus.",
           score: 10,
-          feedback: "Excellent balancing of support and instruction. You follow his BIP while keeping the class moving.",
+          feedback: "Strong reinforcement for quiet work.",
           ending: "success"
         },
         B: {
-          text: "Ask him to try a small amount of work and then offer a break.",
+          text: "Let her continue working without specific praise.",
           score: 0,
-          feedback: "Partial support that may work but with more stress and less clarity.",
+          feedback: "Neutral; doesn’t reinforce replacement behavior clearly.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to sit and get to work without offering a break.",
+          text: "Ignore her completion because of earlier behaviors.",
           score: -10,
-          feedback: "This removes access to his replacement behavior and increases escalation risk.",
+          feedback: "Unpredictable reinforcement decreases future compliance.",
           ending: "fail"
         }
       }
     }
+
   },
+
   endings: {
     success: {
-      title: "Success – Managed While Busy",
-      text: "JM uses his replacement behavior and receives a brief, meaningful break. He returns to his work with support while you still meet other students’ needs."
+      title: "Success – Quiet Start Reinforced",
+      text: "LF completed the first problem and earned attention through positive behavior rather than shout-outs."
     },
     mixed: {
-      title: "Mixed Outcome – Some Support, Some Stress",
-      text: "JM eventually engages in work, but limited support while you were busy led to more stress and less efficient instruction."
+      title: "Mixed – Routine Partially Used",
+      text: "LF’s behavior stabilized, but reinforcement was unclear."
     },
     fail: {
-      title: "Escalation – Competing Demands",
-      text: "Without access to planned supports while you were busy, JM escalates and may need additional staff help, making it hard to serve both him and the other student."
+      title: "Fail – Attention Cycle Continues",
+      text: "LF did not receive structured reinforcement, encouraging future shout-outs."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 8 — End-of-Day Routine
+ * DAILY SCENARIO 7 — Morning Entry (High Social Energy)
  **************************************************/
 POOL.daily.push({
-  id: "daily_8_end_of_day",
-  title: "Daily Mission: End-of-Day Routine",
+  id: "daily_7_morning_entry",
+  title: "Daily Mission: Morning Entry",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "It is the end of the day. Students are cleaning up and packing. JM is wandering and lightly touching materials on other students’ desks instead of cleaning up.",
+      text: "LF enters the room excited, talking rapidly to peers about something that happened at recess. The class is supposed to start with a quiet morning routine (red card). LF’s voice is getting louder as she gathers an audience.",
       choices: {
         A: {
-          text: "Review end-of-day expectations and remind him how he can still earn Mario coins.",
+          text: "Greet her quietly and pre-correct: “Red card — start-up jobs first.”",
           score: 10,
-          feedback: "Great proactive reminder. Clear expectations and reinforcement even at the end of the day help JM stay engaged.",
+          feedback: "Great proactive framing and attention-neutral greeting.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Time to clean up and pack.”",
+          text: "Say, “Inside voices please.”",
           score: 0,
-          feedback: "Neutral. JM hears the directive but may still feel unsure or unmotivated.",
+          feedback: "Neutral correction but still adds attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to clean up quickly or he’ll miss dismissal.",
+          text: "Say loudly, “Stop yelling across the room!”",
           score: -10,
-          feedback: "Time pressure can increase stress and escape-maintained behavior.",
+          feedback: "Public reprimand = peer attention boost.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM moves toward his desk and looks at his materials.",
+      text: "LF pauses mid-sentence and glances at the red card posted.",
       choices: {
         A: {
-          text: "Prompt a break request if he appears overwhelmed.",
+          text: "Prompt: “What do you earn once jobs are done?”",
           score: 10,
-          feedback: "Nice support. You allow him to regulate before finishing tasks.",
+          feedback: "Connects expectations with reinforcement.",
           next: "step3A"
         },
         B: {
-          text: "Wait to see if he starts cleaning independently.",
+          text: "Walk away to give her space.",
           score: 0,
-          feedback: "Neutral. He hesitates and picks up one item slowly.",
+          feedback: "Neutral; may work but doesn’t strengthen routine.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he should be able to handle this without a break.",
+          text: "Tell her she’s starting the day off wrong.",
           score: -10,
-          feedback: "This removes access to his replacement behavior and may increase avoidance.",
+          feedback: "Negative attention fuels the function.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM looks around the room and lightly taps a nearby chair.",
+      text: "LF dramatically lowers her voice but keeps talking to peers.",
       choices: {
         A: {
-          text: "Prompt a break request before he escalates.",
+          text: "Point to the red card silently.",
           score: 10,
-          feedback: "Good early support that keeps the routine calm.",
+          feedback: "Clear, attention-neutral cue.",
           next: "step3A"
         },
         B: {
-          text: "Let him wander for a short time.",
+          text: "Say, “Please get started on your routine.”",
           score: 0,
-          feedback: "Neutral. The room stays calm, but JM still isn’t following expectations.",
+          feedback: "Neutral redirection but gives attention.",
           next: "step3B"
         },
         C: {
-          text: "Redirect him sharply to start cleaning up.",
+          text: "Assign her a seating change immediately.",
           score: -10,
-          feedback: "Sharp redirection near the end of the day can increase refusal.",
+          feedback: "Punitive and increases attention-seeking at start of day.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM stops and looks frozen in the middle of the room.",
+      text: "Peers giggle. LF grins widely and continues narrating her recess story.",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a short break before finishing.",
+          text: "Quietly say, “Reset — jobs first, story later.”",
           score: 10,
-          feedback: "Great repair. A brief break can help him finish successfully.",
+          feedback: "Good repair; minimal attention and clear expectations.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll check on him after helping another student.",
+          text: "Give a ‘stop’ gesture from across the room.",
           score: 0,
-          feedback: "Neutral. He remains unsure what to do.",
+          feedback: "Neutral cue but still some attention.",
           next: "step3B"
         },
         C: {
-          text: "Remind him that everyone else is already finished.",
+          text: "Address the class about appropriate volume levels.",
           score: -10,
-          feedback: "Social comparison can increase anxiety and avoidance.",
+          feedback: "Turns LF’s behavior into a classwide spotlight.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM asks for a short break appropriately.",
+      text: "LF gets out her notebook and begins the start-up job.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is using his replacement behavior even at the end of the day.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM slowly picks up one or two items but then stops.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is partially engaging but still needs support.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM drops the items and walks away from his area.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He is moving toward avoidance and may escalate without support.",
+          feedback: "Excellent engagement with routine.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How do you support JM in finishing the end-of-day routine?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF begins slowly but keeps looking at peers.",
       choices: {
         A: {
-          text: "Honor a short break now and then help him finish cleaning up.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Some compliance, but routine needs reinforcement.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF walks toward a peer to keep talking.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation — attention-seeking persists.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you reinforce morning routines?",
+      choices: {
+        A: {
+          text: "Quietly praise her for starting jobs and award a point.",
           score: 10,
-          feedback: "Excellent BIP alignment. A brief break followed by support allows him to complete the routine successfully.",
+          feedback: "Reinforces expectation and routine clearly.",
           ending: "success"
         },
         B: {
-          text: "Ask him to finish a small part and then allow a break.",
+          text: "Let her finish without specific acknowledgment.",
           score: 0,
-          feedback: "Partial support that may work, but with more stress and less predictability for JM.",
+          feedback: "Neutral — reduces future motivation.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to finish cleaning up without a break.",
+          text: "Bring up her earlier behavior in front of peers.",
           score: -10,
-          feedback: "Removing break access increases the chance of refusal or dysregulation.",
+          feedback: "Public attention reinforces calling-out behavior.",
           ending: "fail"
         }
       }
     }
+
   },
+
   endings: {
     success: {
-      title: "Success – Smooth End-of-Day Routine",
-      text: "JM uses his supports to take a short break and then completes the end-of-day tasks with your help."
+      title: "Success – Strong Start to the Day",
+      text: "LF entered successfully into the red-card routine with positive structure."
     },
     mixed: {
-      title: "Mixed Outcome – Some Cleanup, Some Stress",
-      text: "JM finishes some tasks but with more stress and less structure than needed for an ideal routine."
+      title: "Mixed – Routine Partially Reinforced",
+      text: "LF complied but without clear reinforcement for the routine."
     },
     fail: {
-      title: "Escalation – Unfinished Routine",
-      text: "JM avoids or escalates during clean-up, leaving tasks incomplete and increasing end-of-day stress."
+      title: "Fail – Attention Cycle Begins Early",
+      text: "Public correction increased attention and set an inconsistent tone."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 9 — Whole-Group Carpet Lesson
+ * DAILY SCENARIO 8 — Group Discussion (Hand-Raise Routine)
  **************************************************/
 POOL.daily.push({
-  id: "daily_9_carpet_lesson",
-  title: "Daily Mission: Whole-Group Carpet Lesson",
+  id: "daily_8_group_discussion",
+  title: "Daily Mission: Group Discussion",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During a whole-group story on the carpet, JM sits at the edge and begins to lean back and look around the room.",
+      text: "During a whole-class discussion, you ask an open-ended question. Several students raise their hands. LF blurts out loudly, “OH I KNOW THIS ONE!” while bouncing in her seat.",
       choices: {
         A: {
-          text: "Review expectations for carpet time and how he can earn Mario coins.",
+          text: "Use planned ignoring, then prompt quietly: “Try again — hand up first.”",
           score: 10,
-          feedback: "Great proactive strategy. Clear expectations and reinforcement reduce the chance of wandering.",
+          feedback: "Great: no attention delivered, clear reminder of replacement behavior.",
           next: "step2A"
         },
         B: {
-          text: "Ask him to scoot closer to the group.",
+          text: "Say, “Please wait your turn.”",
           score: 0,
-          feedback: "Neutral. He moves a little but still seems restless.",
+          feedback: "Neutral. Still gives LF teacher attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to sit still and listen for the whole story.",
+          text: "Say loudly, “LF, stop interrupting the discussion!”",
           score: -10,
-          feedback: "High demands for stillness increase discomfort and escape behavior.",
+          feedback: "Public correction = strong peer attention.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM shifts closer and looks at the book.",
+      text: "LF pauses and slowly raises her hand while watching you expectantly.",
       choices: {
         A: {
-          text: "Prompt a break request if he starts to look restless again.",
+          text: "Pre-correct: “Thanks — keep your hand up, I’ll call on you soon.”",
           score: 10,
-          feedback: "Nice foresight. Prompting a break helps him regulate before he wanders.",
+          feedback: "Great reinforcement of the replacement behavior.",
           next: "step3A"
         },
         B: {
-          text: "Wait and see if he stays engaged.",
+          text: "Move on to another student without acknowledgment.",
           score: 0,
-          feedback: "Neutral. He listens, but his body still wiggles.",
+          feedback: "Neutral. Hand-raise is not reinforced.",
           next: "step3B"
         },
         C: {
-          text: "Remind him that he needs to sit up and not move around.",
+          text: "Tell her the class will not continue until she stops shouting out.",
           score: -10,
-          feedback: "Extra directives can increase discomfort and avoidance.",
+          feedback: "Creates a power struggle and public attention.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM scoots in slightly but starts to lean on his hands and glance behind him.",
+      text: "LF sighs loudly and whispers, “Ugh, I knew it first.”",
       choices: {
         A: {
-          text: "Prompt an appropriate break request.",
+          text: "Point silently to her raised-hand peers as a cue.",
           score: 10,
-          feedback: "Good support. You keep the lesson calm while supporting his needs.",
+          feedback: "Nonverbal cue avoids added attention.",
           next: "step3A"
         },
         B: {
-          text: "Ignore the restlessness as long as he is quiet.",
+          text: "Give her a brief “shh” gesture.",
           score: 0,
-          feedback: "Neutral. This may be okay, but it doesn’t teach or reinforce expectations.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to stop moving and pay attention.",
+          text: "Tell her she’s being rude in front of the class.",
           score: -10,
-          feedback: "Directives may lead him to leave the carpet.",
+          feedback: "Public reprimand reinforces peer-attention behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM shifts further away and starts edging toward the back of the carpet area.",
+      text: "Peers giggle. LF dramatically pretends to 'zip her mouth' while still making noises.",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a break.",
+          text: "Quiet redirect: “Reset — hand up if you want to share.”",
           score: 10,
-          feedback: "Great repair. You offer a replacement-aligned way to step away without wandering.",
+          feedback: "Good repair with minimal attention.",
           next: "step3A"
         },
         B: {
-          text: "Tell him you’ll talk with him after the story.",
+          text: "Give a stern look.",
           score: 0,
-          feedback: "Neutral, but does not give him support in the moment.",
+          feedback: "Neutral but may reinforce LF through attention.",
           next: "step3B"
         },
         C: {
-          text: "Direct him to come back to his spot immediately.",
+          text: "Lecture the whole class about discussion behavior.",
           score: -10,
-          feedback: "This can feel threatening and may trigger escape.",
+          feedback: "Broad attention dramatically reinforces LF.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his replacement behavior and asks for a break from the carpet.",
+      text: "LF holds her hand up quietly and waits.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 10,
-          feedback: "Nice! He is using the plan to stay regulated.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM remains on the carpet but looks increasingly uncomfortable.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is holding it together, but support would help.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM leaves the carpet area and moves toward the shelves.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He is now avoiding the group activity. Extra support is needed.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 10, feedback: "Strong replacement behavior.", next: "step4" }
       }
     },
 
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF raises her hand but keeps looking around for peer reactions.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Acceptable but not reinforced yet.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF loudly whispers, “I BET you pick me next!”",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Attention behavior resurfaces.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 4 ----------
     step4: {
-      text: "How do you respond to JM’s behavior during the carpet lesson?",
+      text: "How do you wrap up support?",
       choices: {
         A: {
-          text: "Allow a brief break and then support him to rejoin the carpet or a nearby seat.",
+          text: "Call on her soon and praise: “Thanks for raising your hand.”",
           score: 10,
-          feedback: "Excellent support. He stays connected to the lesson with appropriate breaks.",
+          feedback: "Perfect reinforcement for replacement behavior.",
           ending: "success"
         },
         B: {
-          text: "Ask him to sit through a bit more of the story, then offer a break.",
+          text: "Call on her without praise.",
           score: 0,
-          feedback: "Partial support. He may manage, but with more discomfort and less clarity.",
+          feedback: "Neutral; missed reinforcement opportunity.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to stay on the carpet without a break.",
+          text: "Skip her turn entirely because of earlier behaviors.",
           score: -10,
-          feedback: "Removing break access increases the chance of wandering or refusal.",
+          feedback: "Unpredictable reinforcement weakens her hand-raising.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Supported Carpet Participation",
-      text: "JM takes brief, planned breaks and returns to the lesson, staying mostly engaged and regulated."
+      title: "Success – Discussion Skills Strengthened",
+      text: "LF used hand-raising appropriately and earned teacher attention through the correct behavior."
     },
     mixed: {
-      title: "Mixed Outcome – Some Engagement, Some Stress",
-      text: "JM participates but with more discomfort and less consistent support than his BIP allows."
+      title: "Mixed – Partial Reinforcement",
+      text: "Hand-raising occurred, but without explicit praise it may not maintain."
     },
     fail: {
-      title: "Escalation – Carpet Avoidance",
-      text: "JM avoids or leaves the carpet and may need additional support to rejoin or participate in another way."
+      title: "Fail – Reinforcement Breakdown",
+      text: "Hand-raising was not reinforced, increasing the chance of future call-outs."
     }
   }
 });
-
-
 /*************************************************
- * DAILY SCENARIO 10 — Using the Break Desk Effectively
+ * DAILY SCENARIO 9 — Reading Groups (Quiet Signal for Help)
  **************************************************/
 POOL.daily.push({
-  id: "daily_10_break_desk",
-  title: "Daily Mission: Using the Break Desk",
+  id: "daily_9_reading_groups",
+  title: "Daily Mission: Reading Groups",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "JM appears frustrated during independent work and glances repeatedly at his break desk.",
+      text: "During small reading groups, LF works independently at her desk. She begins calling across the room, “Do I highlight the WHOLE paragraph?!” seeking peer reactions.",
       choices: {
         A: {
-          text: "Review how to use the break desk and how he earns Mario coins when he returns.",
+          text: "Use neutral ignoring, then prompt quietly: “Use your quiet signal for help.”",
           score: 10,
-          feedback: "Great proactive teaching. You clarify how the space works and connect it to positive reinforcement.",
+          feedback: "Excellent — teaches the replacement behavior clearly.",
           next: "step2A"
         },
         B: {
-          text: "Tell him, “Use the break-desk if you need it.”",
+          text: "Say softly, “Just try your best for now.”",
           score: 0,
-          feedback: "Neutral. He has permission, but expectations are less clear.",
+          feedback: "Neutral but adds attention and doesn’t reinforce the quiet signal.",
           next: "step2B"
         },
         C: {
-          text: "Tell him the break desk is only for serious problems.",
+          text: "Say loudly, “Stop shouting across the room!”",
           score: -10,
-          feedback: "Restricting access can reduce his use of replacement behaviors and increase escalation.",
+          feedback: "Public reprimand reinforces peer-attention seeking.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM nods and continues working for a moment.",
+      text: "LF stops shouting and hesitantly puts up the quiet help signal.",
       choices: {
         A: {
-          text: "Prompt him to request a break if he is still feeling upset.",
+          text: "Acknowledge quietly: “Thanks for the signal — I’ll be there in a moment.”",
           score: 10,
-          feedback: "Nice support. You encourage appropriate use of the corner before escalation.",
+          feedback: "Reinforces the exact replacement behavior.",
           next: "step3A"
         },
         B: {
-          text: "Wait quietly to see if he chooses to use the corner.",
+          text: "Give her a thumbs up but keep helping another student.",
           score: 0,
-          feedback: "Neutral. He may or may not use it effectively on his own.",
+          feedback: "Neutral — not a strong reinforcer.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to keep working and not worry about breaks right now.",
+          text: "Tell her she should know this by now.",
           score: -10,
-          feedback: "Discouraging breaks increases the chance of escape-maintained behavior later.",
+          feedback: "Critical attention undermines skill use.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM stands and walks slowly towards his break desk.",
+      text: "LF sighs dramatically and says, “Someone help me!”",
       choices: {
         A: {
-          text: "Remind him briefly of expectations for using the space.",
+          text: "Point silently to the quiet-signal visual.",
           score: 10,
-          feedback: "Good support. Clear expectations help him use the space appropriately.",
+          feedback: "Cues the replacement behavior without attention.",
           next: "step3A"
         },
         B: {
-          text: "Let him go without saying anything else.",
+          text: "Tell her, “I'll come in a minute.”",
           score: 0,
-          feedback: "Neutral. He may use it well or may play instead of regulating.",
+          feedback: "Neutral; still verbal attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to make it quick because there is work to finish.",
+          text: "Tell peers not to respond to LF's questions.",
           score: -10,
-          feedback: "Time pressure reduces the calming effect and may increase stress.",
+          feedback: "Public attention inadvertently rewards the behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM sighs heavily and begins tapping loudly on his desk.",
+      text: "Peers look over. LF smiles smugly.",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a break at his break desk.",
+          text: "Quiet redirect: “Reset — quiet signal for help.”",
           score: 10,
-          feedback: "Great repair. You bring the break desk back in as a proactive support.",
+          feedback: "Good repair with low attention.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to try to push through and finish his work.",
+          text: "Give her a sharp look.",
           score: 0,
-          feedback: "Neutral, but not aligned with his BIP supports.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Remind him that the corner is not for small frustrations.",
+          text: "Address the class about expectations.",
           score: -10,
-          feedback: "This discourages appropriate self-regulation and may increase escalation.",
+          feedback: "Large attention burst for LF.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM requests a break and goes to the break desk, sitting quietly.",
+      text: "LF keeps the quiet signal raised appropriately.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 10,
-          feedback: "He is using the break space as intended.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM goes to the break desk but begins playing with items instead of calming.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is not fully dysregulated, but the purpose of the space is not clear.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM stays at his desk and becomes more visibly upset.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "Without access to the corner, his frustration is more likely to escalate.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 10, feedback: "Strong replacement behavior.", next: "step4" }
       }
     },
 
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF raises the quiet signal briefly but then waves it dramatically.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Some compliance with attention-seeking mixed in.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF calls out again: “HELLO? I need help!”",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Escalating behavior, attention-driven.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 4 ----------
     step4: {
-      text: "How do you help JM transition away from the break desk or back to his work?",
+      text: "How do you finalize support?",
       choices: {
         A: {
-          text: "After a short, calm break, praise his use of the corner, give a Mario coin, and help him ease back into the task.",
+          text: "Respond to the quiet signal first and give quick, positive help.",
           score: 10,
-          feedback: "Excellent BIP fidelity. You support regulation, reinforce replacement behavior, and scaffold the return to work.",
+          feedback: "Solid reinforcement of replacement skill.",
           ending: "success"
         },
         B: {
-          text: "Tell him the break is over and ask him to return to work with a brief reminder.",
+          text: "Help her eventually but without specific praise.",
           score: 0,
-          feedback: "Partial support. He may return, but without clear reinforcement or scaffolding.",
+          feedback: "Neutral; reduces future consistency.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him to get back to work on his own without additional support.",
+          text: "Ignore her quiet signal due to earlier behaviors.",
           score: -10,
-          feedback: "This makes the transition harder and may lead to renewed avoidance or escalation.",
+          feedback: "Inconsistent reinforcement weakens the skill completely.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Effective Break Desk Use",
-      text: "JM uses the break desk to regulate, then returns to his work with your support and earns reinforcement for doing so."
+      title: "Success – Quiet Signal Strengthened",
+      text: "LF learned that using the quiet signal results in fast, positive help."
     },
     mixed: {
-      title: "Mixed Outcome – Some Regulation, Less Support",
-      text: "JM returns to work, but without strong reinforcement or structured transition, the benefit of the corner is reduced."
+      title: "Mixed – Inconsistent Reinforcement",
+      text: "LF used the signal but didn't receive strong reinforcement."
     },
     fail: {
-      title: "Escalation – Missed Regulation Opportunity",
-      text: "JM either escalates or returns to work without real regulation, making future work demands more challenging."
+      title: "Fail – Signal Undermined",
+      text: "Quiet help-seeking was not reinforced, increasing future calling-out."
     }
   }
 });
 /*************************************************
- * CRISIS SCENARIO 1 — Elopement Out of Classroom
+ * DAILY SCENARIO 10 — End-of-Day Cleanup (Delay + Peer Attention)
+ **************************************************/
+POOL.daily.push({
+  id: "daily_10_cleanup_energy",
+  title: "Daily Mission: End-of-Day Cleanup",
+  start: "step1",
+  steps: {
+
+    // ---------- STEP 1 ----------
+    step1: {
+      text: "During end-of-day cleanup, LF has high social energy. Instead of packing up, she spins around and jokingly taps a peer’s backpack, saying, “Bet you can’t catch me!” Peers laugh.",
+      choices: {
+        A: {
+          text: "Quietly redirect: “Red card — pack up first, then talk.”",
+          score: 10,
+          feedback: "Excellent: clear expectations, minimal attention.",
+          next: "step2A"
+        },
+        B: {
+          text: "Say, “Please just get your things ready.”",
+          score: 0,
+          feedback: "Neutral but adds attention.",
+          next: "step2B"
+        },
+        C: {
+          text: "Say loudly, “Knock it off and pack up!”",
+          score: -10,
+          feedback: "Public reprimand gives LF more peer attention.",
+          next: "step2C"
+        }
+      }
+    },
+
+    // ---------- STEP 2A ----------
+    step2A: {
+      text: "LF glances at the red card and slows down.",
+      choices: {
+        A: {
+          text: "Prompt: “What do you earn once you’re packed?”",
+          score: 10,
+          feedback: "Ties compliance to reinforcement.",
+          next: "step3A"
+        },
+        B: {
+          text: "Walk away to let her follow through.",
+          score: 0,
+          feedback: "Neutral; doesn’t actively reinforce routine.",
+          next: "step3B"
+        },
+        C: {
+          text: "Warn her that she’s losing end-of-day points.",
+          score: -10,
+          feedback: "Threat-based attention fuels peer-seeking.",
+          next: "step3C"
+        }
+      }
+    },
+
+    // ---------- STEP 2B ----------
+    step2B: {
+      text: "LF picks up a folder but immediately looks for peer reactions.",
+      choices: {
+        A: {
+          text: "Nonverbal cue: point to the red card.",
+          score: 10,
+          feedback: "Clear, attention-neutral routine cue.",
+          next: "step3A"
+        },
+        B: {
+          text: "Tell her again to pack up.",
+          score: 0,
+          feedback: "Neutral but repeated verbal attention.",
+          next: "step3B"
+        },
+        C: {
+          text: "Tell peers to stop encouraging LF.",
+          score: -10,
+          feedback: "Big peer attention moment.",
+          next: "step3C"
+        }
+      }
+    },
+
+    // ---------- STEP 2C ----------
+    step2C: {
+      text: "LF laughs loudly and taps another student’s shoulder.",
+      choices: {
+        A: {
+          text: "Quiet redirect: “Reset — pack-up routine first.”",
+          score: 10,
+          feedback: "Good repair with minimal attention.",
+          next: "step3A"
+        },
+        B: {
+          text: "Give her a firm look.",
+          score: 0,
+          feedback: "Neutral but gives attention.",
+          next: "step3B"
+        },
+        C: {
+          text: "Lecture her in front of peers about appropriate behavior.",
+          score: -10,
+          feedback: "Provides high levels of attention.",
+          next: "step3C"
+        }
+      }
+    },
+
+    // ---------- STEP 3A ----------
+    step3A: {
+      text: "LF starts packing up quietly.",
+      choices: {
+        A: { text: "Continue.", score: 10, feedback: "Excellent independent compliance.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF packs slowly, occasionally glancing at peers.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Partial compliance.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF tosses a pencil to a peer and giggles.",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Escalating peer-attention behavior.", next: "step4" }
+      }
+    },
+
+    // ---------- STEP 4 ----------
+    step4: {
+      text: "How do you finish the routine?",
+      choices: {
+        A: {
+          text: "Quietly praise her for packing up and award a point.",
+          score: 10,
+          feedback: "Strong reinforcement of routine.",
+          ending: "success"
+        },
+        B: {
+          text: "Simply tell her to line up.",
+          score: 0,
+          feedback: "Neutral; no reinforcement.",
+          ending: "mixed"
+        },
+        C: {
+          text: "Bring up earlier misbehavior before dismissal.",
+          score: -10,
+          feedback: "Public attention undermines routine.",
+          ending: "fail"
+        }
+      }
+    }
+
+  },
+
+  endings: {
+    success: {
+      title: "Success – Calm End-of-Day Routine",
+      text: "LF followed the pack-up routine with clear reinforcement."
+    },
+    mixed: {
+      title: "Mixed – Some Compliance",
+      text: "LF packed up but didn’t get strong reinforcement."
+    },
+    fail: {
+      title: "Fail – Attention Reignited",
+      text: "Public correction boosted peer attention and undermined the expectation."
+    }
+  }
+});
+/*************************************************
+ * CRISIS SCENARIO 1 — Argument About the Card
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_1_elopement",
-  title: "Crisis Mission: Elopement Out of Classroom",
+  id: "crisis_1_card_argument",
+  title: "Crisis Drill: Arguing About the Card",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "When you hand JM a new assignment, he suddenly bolts out of the classroom doorway into the hall.",
+      text: "During independent work, LF notices the red card and immediately protests: “Ugh, why is it red AGAIN? It’s always red! This is unfair!” Peers look over.",
       choices: {
         A: {
-          text: "Call the office immediately per the crisis plan while ensuring another adult supervises the class.",
+          text: "Use calm, brief directive: “Start your first part. Green after the chunk.”",
           score: 10,
-          feedback: "Excellent crisis response. You follow the plan, request support, and protect supervision for the rest of the class.",
+          feedback: "Great fidelity — non-argumentative, minimal attention.",
           next: "step2A"
         },
         B: {
-          text: "Step into the hall to see where he went while leaving the class briefly.",
+          text: "Explain why the card is red and walk her through the schedule.",
           score: 0,
-          feedback: "Neutral. You monitor JM, but the classroom briefly lacks full supervision and you have not yet called for help.",
+          feedback: "Well-intentioned, but extended talking fuels attention.",
           next: "step2B"
         },
         C: {
-          text: "Follow him down the hallway alone without calling the office.",
+          text: "Say firmly, “Stop complaining. Sit down and work.”",
           score: -10,
-          feedback: "Risky choice. The class is left unsupervised and you are managing elopement alone, increasing safety risks.",
+          feedback: "Public reprimand increases peer attention and escalation.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "Office staff answer the phone and begin sending help. You stand at the doorway where you can see both JM in the hallway and your class.",
+      text: "LF rolls her eyes but stops talking. She stares at the red card with crossed arms.",
       choices: {
         A: {
-          text: "Maintain visual contact from a safe distance without chasing JM.",
+          text: "Offer a simple choice: “Start with #1 or #2.”",
           score: 10,
-          feedback: "Great job. You reduce attention that can reinforce elopement while still monitoring safety.",
+          feedback: "Excellent — reduces resistance and supports re-engagement.",
           next: "step3A"
         },
         B: {
-          text: "Call his name and ask him to come back.",
+          text: "Give her space and return to other students.",
           score: 0,
-          feedback: "Neutral. This may or may not help, but gives extra attention to the elopement.",
+          feedback: "Neutral; could help but may leave her stuck.",
           next: "step3B"
         },
         C: {
-          text: "Walk quickly toward JM to try to guide him back.",
+          text: "Tell her she’s being disrespectful.",
           score: -10,
-          feedback: "Approaching can accidentally turn elopement into a chase, increasing running and safety risk.",
+          feedback: "Adds attention and accelerates escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "You see JM at the far end of the hallway. The class is momentarily unsupervised.",
+      text: "As you try explaining, LF starts debating: “Then just make it green! I’ll work faster if it’s green!”",
       choices: {
         A: {
-          text: "Quickly return to the room, call the office, and monitor JM from the doorway.",
+          text: "Cut debate: “Break space is open if you need it.” (pointing calmly).",
           score: 10,
-          feedback: "Good correction. You secure supervision for the class and bring in support.",
+          feedback: "Excellent redirection to the plan without engaging the argument.",
           next: "step3A"
         },
         B: {
-          text: "Stay in the hall and continue trying to talk JM into coming back.",
+          text: "Continue explaining why she can’t have green yet.",
           score: 0,
-          feedback: "Neutral. You are engaged with JM, but the class is unsupervised and no support has been called.",
+          feedback: "Unintentionally reinforces the debate with attention.",
           next: "step3B"
         },
         C: {
-          text: "Follow JM further down the hall, leaving the room completely.",
+          text: "Say, “You’re being manipulative, go sit down.”",
           score: -10,
-          feedback: "This increases risk for both JM and the unsupervised class.",
+          feedback: "Criticism increases emotional intensity.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "You follow JM down the hallway. The rest of the class is alone in the room.",
+      text: "LF raises her voice: “This is STUPID!” Peers stare.",
       choices: {
         A: {
-          text: "Stop, call the office from the hall, and ask another adult to supervise your room.",
+          text: "Use calm reset prompt: “You can take a reset. You rejoin when ready.”",
           score: 10,
-          feedback: "Good repair. You bring support into the crisis and address supervision for the class.",
+          feedback: "Right step — minimizes attention and follows plan.",
           next: "step3A"
         },
         B: {
-          text: "Continue walking behind JM and verbally ask him to stop and come back.",
+          text: "Say, “Lower your voice right now.”",
           score: 0,
-          feedback: "Neutral. You may slow him down, but you are still managing the crisis alone.",
+          feedback: "Neutral; may or may not de-escalate.",
           next: "step3B"
         },
         C: {
-          text: "Run after JM and attempt to physically block his path.",
+          text: "Scold her loudly for being disrespectful.",
           score: -10,
-          feedback: "Running and blocking can escalate the crisis and increase risk of injury.",
+          feedback: "Creates the exact attention spike the behavior seeks.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM slows and stands near the end of the hall as additional staff arrive to help.",
+      text: "LF takes a breath, grabs her pencil, and looks at her work.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "You have followed the plan and now have support to help JM return safely.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM continues moving unpredictably down the hall while you try to talk with him.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "You are engaged, but the crisis is not well-contained and support is limited.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM speeds up, turning the situation into a chase. He approaches exits and other classrooms.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "The elopement is escalating, with increased safety risks and disruption.",
+          feedback: "She is de-escalating and returning to task.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Support is beginning to arrive or could be called. How do you finalize your response?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF slumps but stays mostly quiet.",
       choices: {
         A: {
-          text: "Coordinate with support staff, maintain a calm presence, and help JM walk back safely once he slows.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Neutral stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF mutters loudly: “I hate this class.”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation continues — attention cycle activated.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you finalize the support?",
+      choices: {
+        A: {
+          text: "Once she starts working, quietly praise the restart and award a point.",
           score: 10,
-          feedback: "Excellent crisis management. You used the plan, prioritized safety, and allowed JM to de-escalate with minimal extra attention.",
+          feedback: "Excellent — reinforces de-escalation.",
           ending: "success"
         },
         B: {
-          text: "Ask another staff member to help while you walk with JM back to class.",
+          text: "Let her work without specific acknowledgement.",
           score: 0,
-          feedback: "Moderate response. JM returns, but the crisis relied on informal support rather than the full plan.",
+          feedback: "Neutral — stabilization but no reinforcement.",
           ending: "mixed"
         },
         C: {
-          text: "Continue managing the situation mostly alone until the crisis team must step in.",
+          text: "Re-address her earlier argument with a lecture.",
           score: -10,
-          feedback: "The situation escalates enough that the full crisis team is required to bring JM back and restore safety.",
+          feedback: "Re-escalates and reinforces attention-seeking.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Crisis Managed with Plan & Support",
-      text: "You followed the crisis plan, notified the office, and coordinated support. JM de-escalated and walked back safely with minimal disruption, and your class remained supervised."
+      title: "Success – Calm Directive Worked",
+      text: "LF de-escalated with minimal attention and re-engaged in work."
     },
     mixed: {
-      title: "Mixed Outcome – Crisis Resolved with Moderate Disruption",
-      text: "JM returned safely with some staff assistance, but aspects of supervision or communication could be improved next time to reduce disruption and risk."
+      title: "Mixed – Stabilized but Unreinforced",
+      text: "LF calmed but didn’t receive reinforcement for recovery."
     },
     fail: {
-      title: "Crisis Team Activation – High-Intensity Response",
-      text: "The elopement escalated and required full crisis team intervention. Reviewing the crisis plan, supervision procedures, and early responses could help prevent this level of escalation in the future."
+      title: "Fail – Escalation Maintained",
+      text: "The argument cycle stayed active due to high attention and inconsistent reinforcement."
     }
   }
 });
-
-
 /*************************************************
- * CRISIS SCENARIO 2 — Running Around Classroom
+ * CRISIS SCENARIO 2 — Work Refusal + Peers Watching
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_2_running_classroom",
-  title: "Crisis Mission: Running Around the Classroom",
+  id: "crisis_2_work_refusal",
+  title: "Crisis Drill: Work Refusal with Peer Attention",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During independent work, JM suddenly leaves his seat and begins sprinting between desk clusters, weaving around classmates.",
+      text: "You assign a short reading task. LF pushes her paper away and loudly says, “NOPE. Not doing ANY of this.” Several peers look up.",
       choices: {
         A: {
-          text: "Clear a safe path and quietly move other students out of his way.",
+          text: "Use calm directive: “Start with the first sentence. I’ll check in after that.”",
           score: 10,
-          feedback: "Great crisis move. You prioritize safety for all students while avoiding additional attention to JM.",
+          feedback: "Excellent — short directive, avoids argument.",
           next: "step2A"
         },
         B: {
-          text: "Ask JM to stop running and come sit down.",
+          text: "Say neutrally, “Just try your best.”",
           score: 0,
-          feedback: "Neutral. You give a directive, but it may not be effective once he is already running.",
+          feedback: "Neutral but doesn’t activate the plan.",
           next: "step2B"
         },
         C: {
-          text: "Stand in his path to block him from running.",
+          text: "Say, “You’re being dramatic. Stop it.”",
           score: -10,
-          feedback: "Physically blocking increases the risk of collision or aggression and can escalate the crisis.",
+          feedback: "Public correction increases attention and escalation.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "Students are moved to safer spots. JM continues running but with fewer obstacles.",
+      text: "LF glares but doesn’t argue. She taps her pencil loudly.",
       choices: {
         A: {
-          text: "Call the office according to the crisis plan while keeping visual contact.",
+          text: "Offer a reset: “Reset space is open — rejoin when ready.”",
           score: 10,
-          feedback: "Excellent. You add structured support while maintaining safety and distance.",
+          feedback: "Good — minimal verbal engagement and good containment.",
           next: "step3A"
         },
         B: {
-          text: "Reduce your verbal attention, staying calm and monitoring JM.",
+          text: "Ignore the tapping and help another student.",
           score: 0,
-          feedback: "Neutral-positive. You avoid fueling behavior, but haven’t yet requested backup.",
+          feedback: "Neutral; could stabilize or escalate.",
           next: "step3B"
         },
         C: {
-          text: "Raise your voice to demand he stop immediately.",
+          text: "Tell her she is disrupting the whole class.",
           score: -10,
-          feedback: "Raised voice and urgency can increase arousal and running.",
+          feedback: "Immediate peer attention, fueling the function.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM glances at you but keeps running in circles.",
+      text: "LF exaggerates a groan and says loudly, “This assignment is dumb.”",
       choices: {
         A: {
-          text: "Calmly move students to safe areas and call the office for support.",
+          text: "Gesture calmly toward reset: “Take a break if you need it.”",
           score: 10,
-          feedback: "Good correction. You initiate the crisis plan and protect the rest of the class.",
+          feedback: "Great — reduces verbal attention and prevents argument.",
           next: "step3A"
         },
         B: {
-          text: "Continue repeating directions for him to sit down.",
+          text: "Say, “It’s not dumb, it’s important.”",
           score: 0,
-          feedback: "Neutral. Repeated directions may not reduce behavior and can add attention.",
+          feedback: "Neutral but engages the debate.",
           next: "step3B"
         },
         C: {
-          text: "Move closer and try to grab his arm as he runs by.",
+          text: "Tell her you’re disappointed in her attitude.",
           score: -10,
-          feedback: "This significantly increases risk of injury and escalation.",
+          feedback: "Adds emotional attention she may find reinforcing.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "You step in front of JM. He veers sharply, knocking into a chair.",
+      text: "LF dramatically sighs, “Can YOU just do the work for me?” while looking at peers.",
       choices: {
         A: {
-          text: "Back away, move students to safety, and call the office.",
+          text: "Use minimal attention: “Reset is open.”",
           score: 10,
-          feedback: "Good repair. You step out of his path and follow the crisis protocol.",
+          feedback: "Excellent non-engagement.",
           next: "step3A"
         },
         B: {
-          text: "Continue trying to block his path more carefully.",
+          text: "Give a stern look.",
           score: 0,
-          feedback: "Neutral to risky. You might slow him, but physical blocking keeps risk high.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Physically restrain him to stop the running.",
+          text: "Say, “This behavior is unacceptable.”",
           score: -10,
-          feedback: "Physical restraint without support and training can be dangerous and is generally outside teacher role.",
+          feedback: "Public attention increases escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "Additional staff are on their way while you supervise from a distance with the class secured.",
+      text: "LF gets up, takes 1–2 deep breaths, and returns to her desk.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "You have contained risk and activated support.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM continues running, occasionally bumping into furniture or nearly colliding with items.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "The crisis remains active with moderate risk.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM becomes more agitated, yelling or flailing as he moves.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "The crisis is intensifying, and high-level support is likely needed.",
+          feedback: "She is de-escalating independently.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Support is available or en route. How is the crisis ultimately resolved?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF slumps but remains relatively quiet.",
       choices: {
         A: {
-          text: "Coordinate with support staff to calmly contain the area, give space, and help JM slow and sit when he is ready.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Neutral stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF loudly says, “Whatever, I hate reading anyway.”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Attention cycle active.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 ----------
+    step4: {
+      text: "How do you finalize support once she re-engages?",
+      choices: {
+        A: {
+          text: "Quietly praise: “Thanks for getting started,” and award a point.",
           score: 10,
-          feedback: "Excellent team-based response. Behavior de-escalates with safety and minimal attention.",
+          feedback: "Reinforces recovery and task initiation.",
           ending: "success"
         },
         B: {
-          text: "Have another staff member escort the class out while you and one other staff member remain with JM.",
+          text: "Let her begin working without comment.",
           score: 0,
-          feedback: "Moderate solution. The situation is contained, but requires additional class disruption.",
+          feedback: "Neutral; stabilization but no reinforcement.",
           ending: "mixed"
         },
         C: {
-          text: "The crisis team is fully activated to manage JM’s behavior and restore safety.",
+          text: "Re-address the refusal with a lecture.",
           score: -10,
-          feedback: "A high-intensity response was needed. Reviewing early steps may help reduce future escalation.",
+          feedback: "Adds attention and risks re-escalation.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Contained Classroom Running",
-      text: "You quickly implemented safety procedures, moved students, and coordinated support. JM slowed and sat with help, and the class remained as safe and calm as possible."
+      title: "Success – Reset Used Effectively",
+      text: "LF recovered calmly and re-engaged with minimal attention."
     },
     mixed: {
-      title: "Mixed Outcome – Crisis Contained with Disruption",
-      text: "JM’s behavior was managed with staff support and additional class disruption. Future planning can further reduce risk and disruption."
+      title: "Mixed – Stabilized Without Reinforcement",
+      text: "LF calmed down but didn’t get reinforcement for re-engaging."
     },
     fail: {
-      title: "Crisis Team Activation – High Risk Running",
-      text: "JM’s running escalated to the point of requiring full crisis team intervention. Reviewing proactive supports and early steps can improve safety and outcomes in future incidents."
+      title: "Fail – Escalation Maintained",
+      text: "Attention and lecturing reinforced refusal behaviors."
     }
   }
 });
-
-
 /*************************************************
- * CRISIS SCENARIO 3 — Aggression When Blocked
+ * CRISIS SCENARIO 3 — Escalation During Partner Work
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_3_aggression_blocked",
-  title: "Crisis Mission: Aggression When Blocked",
+  id: "crisis_3_partner_escalation",
+  title: "Crisis Drill: Partner Work Escalation",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "JM moves quickly toward a restricted area of the room. When you step near him to redirect, he swings his arm and kicks toward you.",
+      text: "During a partner activity, LF loudly says, “Why do I ALWAYS get the boring partner?!” A few nearby students laugh, and LF smirks.",
       choices: {
         A: {
-          text: "Move back out of range to keep yourself safe and reduce immediate conflict.",
+          text: "Use minimal verbal attention: “Reset is open.” and step away.",
           score: 10,
-          feedback: "Excellent safety-first response. Increasing distance reduces risk of injury and may lower his arousal.",
+          feedback: "Excellent fidelity — you avoid feeding peer-attention behavior.",
           next: "step2A"
         },
         B: {
-          text: "Ask him to calm down and tell him that hitting is not okay.",
+          text: "Say neutrally, “Please use kind words.”",
           score: 0,
-          feedback: "Neutral. The message is appropriate, but verbal reasoning alone may not de-escalate aggression.",
+          feedback: "Neutral but still gives attention during attention-maintained behavior.",
           next: "step2B"
-        },
+        },  
         C: {
-          text: "Stay close and attempt to physically guide him away from the restricted area.",
+          text: "Reprimand: “We do NOT talk to peers like that.”",
           score: -10,
-          feedback: "Physical guidance during active aggression increases safety risk and may escalate behavior.",
+          feedback: "Public scolding = huge attention delivery.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "You maintain distance while still watching JM carefully.",
+      text: "LF huffs dramatically but moves a few feet toward the reset space.",
       choices: {
         A: {
-          text: "Call the office to request assistance per the crisis plan.",
+          text: "Calm directive: “Rejoin when ready.”",
           score: 10,
-          feedback: "Great adherence to the plan. You are not handling aggression alone.",
+          feedback: "Clear, non-engaging support for self-regulation.",
           next: "step3A"
         },
         B: {
-          text: "Reduce verbal interaction and give him some space to de-escalate.",
+          text: "Give space and walk to another group.",
           score: 0,
-          feedback: "Neutral-positive. Giving space helps, but you still may need support.",
+          feedback: "Neutral — may or may not support re-entry.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he is going to lose privileges because of this behavior.",
+          text: "Ask, “Why did you say that to your partner?”",
           score: -10,
-          feedback: "Consequences in the moment of crisis can escalate aggression rather than reduce it.",
+          feedback: "Invites debate, increases attention.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM yells and continues to swing, not responding to your words.",
+      text: "LF shrugs dramatically and says, “Whatever, this whole thing is dumb.”",
       choices: {
         A: {
-          text: "Step back to a safer distance and call the office for help.",
+          text: "Gesture silently toward reset.",
           score: 10,
-          feedback: "Good correction. You prioritize safety and request support.",
+          feedback: "Nice repair — minimal verbal attention.",
           next: "step3A"
         },
         B: {
-          text: "Continue telling him to calm down and stop hitting.",
+          text: "Tell her the assignment is important.",
           score: 0,
-          feedback: "Neutral. Verbal reminders alone are unlikely to change his behavior in the moment.",
+          feedback: "Neutral but adds verbal engagement.",
           next: "step3B"
         },
         C: {
-          text: "Attempt to block his arms or legs with your hands.",
+          text: "Warn her she’ll lose points if she keeps it up.",
           score: -10,
-          feedback: "Blocking increases physical contact and risk of injury for both of you.",
+          feedback: "Adds drama + attention = escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "As you try to guide him, JM kicks harder and swings toward your torso.",
+      text: "Peers snicker; LF smiles wider and tosses her hair with a flourish.",
       choices: {
         A: {
-          text: "Immediately release contact, move to a safer distance, and call the office.",
+          text: "Move toward the class and reduce audience attention while signaling reset.",
           score: 10,
-          feedback: "Strong repair. You stop physical contact and access support.",
+          feedback: "Excellent — removes peer reinforcement.",
           next: "step3A"
         },
         B: {
-          text: "Hold on more firmly and attempt to contain his movements.",
+          text: "Give an annoyed look.",
           score: 0,
-          feedback: "Neutral to risky. Containment without support can escalate behavior and injury risk.",
+          feedback: "Still attention, but low-level.",
           next: "step3B"
         },
         C: {
-          text: "Raise your voice to warn him about serious consequences.",
+          text: "Lecture the class about kindness.",
           score: -10,
-          feedback: "Escalated tone plus physical contact can intensify the crisis.",
+          feedback: "Mass attention = jackpot for LF.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "You maintain distance while help is contacted or arriving. JM’s swings become less intense.",
+      text: "LF sits on the reset chair, breathing loudly but staying put.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "You are using distance and support to allow de-escalation.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM continues at a moderate level of aggression and shouting.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "The crisis is active and not yet fully contained.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM’s aggression increases, with louder yelling and more intense swings.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "The situation is worsening and more intensive crisis responses are likely needed.",
+          feedback: "She is de-escalating independently.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Support is available or could be activated. How is this crisis resolved?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF slowly drags her feet near the reset area but glares at peers.",
       choices: {
         A: {
-          text: "Coordinate with support staff to maintain distance, provide a safe space, and allow JM to calm before discussing next steps.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF mutters loudly about her partner and slams a marker cap.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation still active.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you support re-entry?",
+      choices: {
+        A: {
+          text: "Quietly praise the reset and reintegrate her with a neutral partner role.",
           score: 10,
-          feedback: "Excellent team-based, de-escalation-focused response.",
+          feedback: "Excellent — reinforces de-escalation, not drama.",
           ending: "success"
         },
         B: {
-          text: "Have another staff member help monitor him while you attend to the class and then return.",
+          text: "Let her rejoin on her own without positive feedback.",
           score: 0,
-          feedback: "Moderate solution. The crisis ends with staff help but with some disruption to class and support roles.",
+          feedback: "Neutral but doesn’t strengthen recovery.",
           ending: "mixed"
         },
         C: {
-          text: "The crisis team is fully activated to manage the aggressive episode and ensure safety.",
+          text: "Publicly correct her behavior before letting her rejoin.",
           score: -10,
-          feedback: "High-intensity intervention was needed. Reviewing early distance, support, and de-escalation strategies may reduce future crises.",
+          feedback: "Reinforces the attention-seeking pattern.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Aggression Safely De-escalated",
-      text: "You maintained safety, used distance, and coordinated with support to help JM calm without additional injury or escalation."
+      title: "Success – Partner Issue Resolved",
+      text: "LF used the reset space and rejoined without attention-seeking."
     },
     mixed: {
-      title: "Mixed Outcome – Crisis Resolved with Support",
-      text: "Aggression decreased with staff assistance, but there was moderate disruption. Future practice can improve early distance and calling procedures."
+      title: "Mixed – Stabilized but Not Reinforced",
+      text: "LF rejoined, but future cycles may repeat without reinforcement."
     },
     fail: {
-      title: "Crisis Team Activation – Aggression Episode",
-      text: "JM’s aggression required crisis team intervention. A review of early responses, distance, and attention patterns can guide improved responses next time."
+      title: "Fail – Peer Attention Drove Escalation",
+      text: "Public correction maintained the attention function."
     }
   }
 });
-
-
 /*************************************************
- * CRISIS SCENARIO 4 — Refusal to Re-enter After Break
+ * CRISIS SCENARIO 4 — Emotional Overload (Shutdown/Crying)
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_4_refusal_return",
-  title: "Crisis Mission: Refusal to Re-enter After Break",
+  id: "crisis_4_emotional_overload",
+  title: "Crisis Drill: Emotional Overload",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "JM is in the break desk after a difficult moment. The break timer has ended, but he refuses to leave the corner and return to his seat.",
+      text: "After a difficult transition, LF suddenly puts her head down and begins crying softly. Peers look over with concern.",
       choices: {
         A: {
-          text: "Provide space and maintain visibility while keeping your voice calm and neutral.",
+          text: "Quietly offer: “Reset is open — take space if you need it.”",
           score: 10,
-          feedback: "Great start. You avoid power struggles while still monitoring his safety.",
+          feedback: "Low-attention support that respects her emotional state.",
           next: "step2A"
         },
         B: {
-          text: "Remind him that the timer is over and it’s time to return.",
+          text: "Ask, “What’s wrong? Talk to me.”",
           score: 0,
-          feedback: "Neutral. The reminder is accurate but may create pressure without added support.",
+          feedback: "Well-meaning but increases sustained 1:1 attention.",
           next: "step2B"
         },
         C: {
-          text: "Walk over and try to physically guide him out of the corner.",
+          text: "Tell her to sit up and stop crying.",
           score: -10,
-          feedback: "Physical prompting can escalate refusal into aggression or a more intense crisis.",
+          feedback: "Invalidation increases distress and escalation.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM stays in the corner, curled up but not moving toward his seat.",
+      text: "LF stands slowly and walks to the reset space, wiping her eyes.",
       choices: {
         A: {
-          text: "Briefly prompt him to use his words to request more break time if he needs it.",
+          text: "Give quiet space and supervise indirectly.",
           score: 10,
-          feedback: "Nice. You prompt a replacement behavior instead of forcing the transition.",
+          feedback: "Excellent — calm, low-attention containment.",
           next: "step3A"
         },
         B: {
-          text: "Continue giving him space without further interaction.",
+          text: "Ask if she wants to talk about it right now.",
           score: 0,
-          feedback: "Neutral. He may calm, but also may stay stuck.",
+          feedback: "Neutral but increases verbal load.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he is taking too long and must leave now.",
+          text: "Tell her she needs to get it together quickly.",
           score: -10,
-          feedback: "This increases pressure and can escalate the situation.",
+          feedback: "Harsh phrasing intensifies emotional overload.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM pulls a cushion in front of his face and stays silent.",
+      text: "LF cries harder as you ask questions, now hiding her face.",
       choices: {
         A: {
-          text: "Shift to a calm prompt to use his break-request language for more time or help.",
+          text: "Switch to calm directive: “Reset is open.”",
           score: 10,
-          feedback: "Good repair. You redirect the moment into a replacement-behavior opportunity.",
+          feedback: "Great repair — reduces interaction load.",
           next: "step3A"
         },
         B: {
-          text: "Wait quietly a bit longer to see if he moves.",
+          text: "Ask more gently, “Do you want to tell me why you're upset?”",
           score: 0,
-          feedback: "Neutral. The situation is unchanged.",
+          feedback: "Still increases attention during overload.",
           next: "step3B"
         },
         C: {
-          text: "Tell him that if he doesn't leave now, there will be consequences.",
+          text: "Say, “Crying won’t fix anything.”",
           score: -10,
-          feedback: "Adding threats increases stress and resistance.",
+          feedback: "Escalates shame and distress.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "As you approach to guide him, JM tenses and pulls away from you.",
+      text: "LF stiffens and wipes her face angrily.",
       choices: {
         A: {
-          text: "Step back, give space, and switch to a calm verbal prompt for break-request language.",
+          text: "Say calmly, “Reset is open — you can rejoin when ready.”",
           score: 10,
-          feedback: "Solid repair. You reduce physical contact and focus on replacement behavior.",
+          feedback: "Excellent soft redirection.",
           next: "step3A"
         },
         B: {
-          text: "Hold your position near him and keep asking him to come out.",
+          text: "Ignore the crying and continue the lesson.",
           score: 0,
-          feedback: "Neutral to slightly risky. Your presence may feel like pressure.",
+          feedback: "Neutral; may or may not help her regulate.",
           next: "step3B"
         },
         C: {
-          text: "Continue trying to pull him gently out of the corner area.",
+          text: "Tell her she is disrupting the class.",
           score: -10,
-          feedback: "Physical attempts to move him can escalate the crisis and risk aggression.",
+          feedback: "Adds attention + guilt, increasing overload.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM uses his words to request a little more time or signals he needs extra support.",
+      text: "In the reset space, LF breathes deeply and begins slowing her crying.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is using a more appropriate behavior to communicate his needs.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM remains withdrawn in the corner, neither escalating nor returning.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is stuck, and additional support or a plan adjustment may be needed.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM becomes louder, kicking the wall or pushing items in the corner.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "The situation is escalating into a more intense crisis.",
+          feedback: "De-escalation is occurring independently.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How is this crisis around refusal to leave the corner ultimately resolved?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF remains hunched and tearful but quiet.",
       choices: {
         A: {
-          text: "Honor a brief extension of break time with clear limits, then calmly support JM’s transition back to his seat.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Stabilized but not progressing.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF mutters angrily through tears: “Nobody cares anyway.”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation still active.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you support her return?",
+      choices: {
+        A: {
+          text: "Quietly say, “Nice reset. Ready to rejoin?” and award a point for re-entry.",
           score: 10,
-          feedback: "Excellent. You balance flexibility with structure and help him return without power struggles.",
+          feedback: "Excellent reinforcement of recovery.",
           ending: "success"
         },
         B: {
-          text: "Ask for support from another staff member to help encourage JM back to his seat.",
+          text: "Let her come back without positive acknowledgment.",
           score: 0,
-          feedback: "Moderate solution. The situation resolves with added help, though it could be smoother with earlier replacement prompts.",
+          feedback: "Neutral but doesn’t reinforce emotional regulation.",
           ending: "mixed"
         },
         C: {
-          text: "Call the crisis team because the situation has escalated and he is not leaving the corner.",
+          text: "Discuss the crying episode in front of classmates.",
           score: -10,
-          feedback: "High-level intervention was needed. Reviewing transition language, break timings, and prompts may reduce future crises.",
+          feedback: "Shame + attention = future escalation more likely.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Supported Return from Break",
-      text: "JM used his communication skills to ask for support, and you helped him return from the break desk with minimal escalation."
+      title: "Success – Calm Recovery",
+      text: "LF emotionally regulated and rejoined the class with supported autonomy."
     },
     mixed: {
-      title: "Mixed Outcome – Resolved with Extra Support",
-      text: "JM eventually returned with help from another adult. The situation ended safely but required more staff time and disruption than necessary."
+      title: "Mixed – Stabilized with Minimal Reinforcement",
+      text: "LF recovered but didn’t receive reinforcement for self-regulation."
     },
     fail: {
-      title: "Crisis Team Activation – Corner Standoff",
-      text: "Refusal escalated to a level requiring crisis team support. Future planning can focus on earlier prompts, flexible timing, and structured transitions."
+      title: "Fail – Emotional Escalation Cycle",
+      text: "Public discussion or invalidation intensified the emotional overload."
     }
   }
 });
-
-
 /*************************************************
- * CRISIS SCENARIO 5 — Unsafe Behavior Near Doors
+ * CRISIS SCENARIO 5 — Refusal to Transition + Peer Attention
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_5_unsafe_doors",
-  title: "Crisis Mission: Unsafe Behavior Near the Door",
+  id: "crisis_5_transition_refusal",
+  title: "Crisis Drill: Transition Refusal",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During a difficult work period, JM begins moving toward the classroom door, lingering near the handle and looking back at you.",
+      text: "It’s time to transition from reading to science. LF stays seated and loudly says, “Nope. Not moving. This class is boring!” Peers stare.",
       choices: {
         A: {
-          text: "Position yourself where you can see the door and JM without standing right next to him.",
+          text: "Use calm directive: “Stand up and join us — green after first part.”",
           score: 10,
-          feedback: "Great move. You monitor safety and reduce the chance of elopement without creating a power struggle at the door.",
+          feedback: "Clear, structured, low-attention cue.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to move away from the door and go back to his seat.",
+          text: "Say neutrally, “It’s time to move.”",
           score: 0,
-          feedback: "Neutral. You set a limit, but may not address his underlying need to escape.",
+          feedback: "Neutral; may not address attention-seeking.",
           next: "step2B"
         },
         C: {
-          text: "Stand directly between JM and the door, blocking his access.",
+          text: "Say sharply, “Stop being dramatic and get up.”",
           score: -10,
-          feedback: "Standing directly between him and the exit can increase tension and may escalate attempts to leave.",
+          feedback: "Public reprimand = high attention.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM rests his hand lightly on the door frame but does not open it.",
+      text: "LF sighs and knocks her pencil to the floor but stays seated.",
       choices: {
         A: {
-          text: "Calmly prompt him to request a break away from the door area.",
+          text: "Point silently toward the reset space.",
           score: 10,
-          feedback: "Excellent. You redirect him to a safer break option using his replacement behavior.",
+          feedback: "Excellent — minimal verbal input.",
           next: "step3A"
         },
         B: {
-          text: "Watch quietly without adding additional prompts.",
+          text: "Give her 10 seconds and repeat the directive.",
           score: 0,
-          feedback: "Neutral. The situation does not immediately worsen, but support is limited.",
+          feedback: "Neutral but risks attention delivery.",
           next: "step3B"
         },
         C: {
-          text: "Remind him that being by the door is unsafe and he needs to move now.",
+          text: "Tell her the whole class is waiting on her.",
           score: -10,
-          feedback: "Directives at the door can increase stress and elopement motivation.",
+          feedback: "Peer-based pressure fuels escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM looks at you when you tell him to move, but keeps one hand near the door.",
+      text: "LF crosses her arms and says loudly, “Make me.”",
       choices: {
         A: {
-          text: "Shift to a calm prompt to request a break in a different part of the room.",
+          text: "Gesture toward reset: “Rejoin when ready.”",
           score: 10,
-          feedback: "Nice repair. You offer a safe escape path that matches his BIP.",
+          feedback: "Great — avoids argument.",
           next: "step3A"
         },
         B: {
-          text: "Repeat that he should move away from the door.",
+          text: "Say, “I’m not going to argue with you.”",
           score: 0,
-          feedback: "Neutral. Repetition may not change his behavior and can increase tension.",
+          feedback: "Neutral but still extends interaction.",
           next: "step3B"
         },
         C: {
-          text: "Walk over and place your hand on the door handle to prevent him from opening it.",
+          text: "Raise your voice and say, “Do NOT talk to me like that.”",
           score: -10,
-          feedback: "Directly guarding the handle increases physical proximity and may escalate attempts to grab or push.",
+          feedback: "Large verbal attention + emotion = escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "You stand between JM and the door. He moves closer and reaches around you.",
+      text: "Peers giggle; LF grins and leans back in her chair.",
       choices: {
         A: {
-          text: "Step back to a safer position and prompt a break request away from the door.",
+          text: "Shift class attention away, then gesture reset.",
           score: 10,
-          feedback: "Good repair. You increase space and reintroduce a safe replacement behavior.",
+          feedback: "Strong repair — removes audience reinforcement.",
           next: "step3A"
         },
         B: {
-          text: "Stay firmly in place and repeat that he cannot go out.",
+          text: "Give her a stern look.",
           score: 0,
-          feedback: "Neutral to risky. This may increase his frustration and attempts to push past you.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Use your body to keep the door fully blocked and hold the handle.",
+          text: "Lecture the class about transitions.",
           score: -10,
-          feedback: "High risk for physical struggle and escalation.",
+          feedback: "Mass attention reinforces behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM steps slightly away from the door and begins to consider the break option.",
+      text: "LF steps into the reset area and breathes heavily but stays put.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is moving toward a safer behavior pattern.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM lingers close to the door, unsure whether to stay or attempt to leave.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "The situation is fragile and could escalate or de-escalate depending on next steps.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM pushes or pulls more intensely near the door, raising the risk of elopement or physical struggle.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "The crisis is intensifying and may require higher-level support.",
+          feedback: "She is de-escalating independently.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Support may be needed. How is this crisis around the door resolved?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF remains seated but quiets down, arms still crossed.",
       choices: {
         A: {
-          text: "Guide JM to take a supervised break away from the door with support from another adult if available.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF kicks her chair lightly and mutters.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation continues.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you reintegrate her?",
+      choices: {
+        A: {
+          text: "Quietly praise the restart and give a point for joining science calmly.",
           score: 10,
-          feedback: "Excellent. You redirect him to safety, use the BIP supports, and reduce door-related risks.",
+          feedback: "Reinforces recovery and transition.",
           ending: "success"
         },
         B: {
-          text: "Ask another staff member to monitor the door area while you support the rest of the class.",
+          text: "Let her join without reinforcement.",
           score: 0,
-          feedback: "Moderate solution. The situation is contained but uses additional staff and splits attention.",
+          feedback: "Neutral; doesn’t strengthen transition success.",
           ending: "mixed"
         },
         C: {
-          text: "Activate the crisis team because behavior near the door has become unsafe and unresponsive to your prompts.",
+          text: "Bring up her refusal publicly as she rejoins.",
           score: -10,
-          feedback: "A high-level response was required. Reviewing proactive supports and early prompting near the door can improve future outcomes.",
+          feedback: "Re-escalation risk + attention reinforcement.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Door Safety Maintained",
-      text: "You redirected JM away from the door using replacement behavior and support, keeping him and the class safe without major escalation."
+      title: "Success – Transition Restored",
+      text: "LF transitioned with minimal attention and earned reinforcement for recovery."
     },
     mixed: {
-      title: "Mixed Outcome – Door Area Managed with Support",
-      text: "The situation was contained with help from another adult and ended safely, though with moderate disruption and staff time."
+      title: "Mixed – Transition Occurred Without Reinforcement",
+      text: "LF joined the class, but future refusals may persist."
     },
     fail: {
-      title: "Crisis Team Activation – Unsafe Door Behavior",
-      text: "Behavior near the door escalated until the crisis team was needed. Future planning can focus on early prompts, space, and proactive break options away from exits."
+      title: "Fail – Attention Maintained Refusal",
+      text: "Public correction strengthened attention-seeking cycles."
     }
   }
 });
 /*************************************************
- * WILDCARD SCENARIO 1 — Assembly Day Schedule Change
+ * WILDCARD SCENARIO 1 — Surprise Schedule Change (Assembly)
  **************************************************/
 POOL.wild.push({
-  id: "wild_1_assembly",
-  title: "Wildcard Mission: Assembly Day Schedule Change",
+  id: "wild_1_surprise_assembly",
+  title: "Wildcard Mission: Surprise Assembly",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "It’s assembly day. The schedule is different, and JM looks confused as students line up to leave the classroom at an unusual time.",
+      text: "An unexpected announcement comes over the intercom: all classes must head to an assembly immediately. LF freezes, eyes widening, then says loudly, “Wait—WHAT? We didn’t plan this!” Peers murmur.",
       choices: {
         A: {
-          text: "Review the schedule change with JM and remind him how he can still earn Mario coins during the assembly.",
+          text: "Use calm directive: “We’re going together — I’ll show the steps.”",
           score: 10,
-          feedback: "Great proactive strategy. You give predictability and connect the new routine to his reinforcement system, reducing anxiety.",
+          feedback: "Great — clear, low-attention direction reduces anxiety.",
           next: "step2A"
         },
         B: {
-          text: "Tell him, “We’re going to an assembly now—let’s go.”",
+          text: "Say neutrally, “It’s okay, let’s line up.”",
           score: 0,
-          feedback: "Neutral. He knows what’s happening, but doesn’t understand how it fits his plan.",
+          feedback: "Neutral but doesn’t address the uncertainty driving escalation.",
           next: "step2B"
         },
         C: {
-          text: "Tell him there’s no time to explain; he just needs to keep up with the class.",
+          text: "Say firmly, “Stop overreacting and just line up.”",
           score: -10,
-          feedback: "Lack of explanation and added pressure increase JM’s uncertainty and escape motivation.",
+          feedback: "Adds attention and increases emotional intensity.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM nods and lines up near the middle of the line, still glancing back at the classroom.",
+      text: "LF breathes quickly and stands but looks overwhelmed.",
       choices: {
         A: {
-          text: "Prompt him to use break-request language if he feels overwhelmed in the assembly.",
+          text: "Pre-correct quietly: “Stay close to me.”",
           score: 10,
-          feedback: "Excellent. You generalize his replacement behavior to a new setting, preventing escalation.",
+          feedback: "Excellent — support without added attention.",
           next: "step3A"
         },
         B: {
-          text: "Let him stay in line and move with the class without further support.",
+          text: "Let her walk to the line on her own.",
           score: 0,
-          feedback: "Neutral. He may be okay, but still looks unsure.",
+          feedback: "Neutral; she may feel unanchored.",
           next: "step3B"
         },
         C: {
-          text: "Remind him that he needs to stay quiet and still the whole time.",
+          text: "Tell her she should be used to changes by now.",
           score: -10,
-          feedback: "High demands in a new setting increase pressure and escape-maintained behavior.",
+          feedback: "Dismissive, increases stress.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM lines up but stands near the back, looking restless and shifting his weight.",
+      text: "LF mutters, “Ugh, this is going to be boring,” and drags her feet.",
       choices: {
         A: {
-          text: "Walk briefly to the back of the line and remind him how he can earn Mario coins during the assembly.",
+          text: "Quietly point to the green card visual in your hand.",
           score: 10,
-          feedback: "Nice repair. You bring reinforcement and expectations to where he is.",
+          feedback: "Nice repair — gives a concrete signal of expectations.",
           next: "step3A"
         },
         B: {
-          text: "Keep the line moving and hope he follows along.",
+          text: "Say, “We don’t talk like that.”",
           score: 0,
-          feedback: "Neutral. He moves but stays uneasy.",
+          feedback: "Neutral correction but adds attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him firmly to stop fidgeting and stay with the class.",
+          text: "Scold her for her attitude.",
           score: -10,
-          feedback: "Firm directives without support increase stress in a crowded setting.",
+          feedback: "High public attention, increases escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM lags behind and looks as if he might step out of line or turn back toward the classroom.",
+      text: "Peers glance at LF. She tosses her hair and says dramatically, “This is SO dumb.”",
       choices: {
         A: {
-          text: "Pause briefly to explain where you are going and when you will return, and offer a break prompt if he feels overwhelmed.",
+          text: "Redirect attention away (address the line) and gesture for her to join.",
           score: 10,
-          feedback: "Good repair. You give clarity, predictability, and access to his replacement behavior.",
+          feedback: "Good — removes peer audience.",
           next: "step3A"
         },
         B: {
-          text: "Encourage him to keep walking with the line without additional detail.",
+          text: "Give her a stern look.",
           score: 0,
-          feedback: "Neutral. He may follow, but his anxiety stays high.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Tell him sharply that he must keep up or risk missing the assembly.",
+          text: "Lecture the class about manners.",
           score: -10,
-          feedback: "Threatening consequences during transitions increases avoidance.",
+          feedback: "Public stage = reinforcement jackpot.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM walks with the class into the assembly space and sits in the designated area, still a bit alert but staying with the group.",
+      text: "LF lines up close to you, breathing slower.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is managing the schedule change with support.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM enters the assembly space but sits on the edge, glancing around and shifting frequently.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is present but may need more support to remain regulated.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM hesitates at the doorway or steps to the side, unsure whether to join the group.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He is close to avoiding the assembly and may escalate without support.",
+          feedback: "She’s stabilizing.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Students are seated and the assembly begins. How do you support JM during the event?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF lines up but continues small grumbles.",
       choices: {
         A: {
-          text: "Quietly remind him of break options (e.g., brief staff-supported walk) and how he’ll earn Mario coins for staying with the group.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Neutral stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF says loudly, “Everyone is walking too slow!”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation still running on peer attention.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you support her during the assembly?",
+      choices: {
+        A: {
+          text: "Quietly praise her for staying close and award a point.",
           score: 10,
-          feedback: "Excellent support. You maintain safety, engagement, and BIP alignment in a new setting.",
+          feedback: "Excellent reinforcement for regulation.",
           ending: "success"
         },
         B: {
-          text: "Let him stay on the edge and watch, stepping in only if he becomes disruptive.",
+          text: "Let her sit with the class without specific reinforcement.",
           score: 0,
-          feedback: "Moderate approach. He may stay regulated, but support and learning opportunities are limited.",
+          feedback: "Neutral; helps but doesn’t strengthen coping.",
           ending: "mixed"
         },
         C: {
-          text: "Insist that he sit perfectly still and silent or else there will be consequences later.",
+          text: "Talk to her publicly about her earlier comments.",
           score: -10,
-          feedback: "Rigid expectations in a difficult setting increase the chance of escalation or escape behavior.",
+          feedback: "Adds embarrassment + attention = future escalation likely.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Assembly Managed with Flexibility",
-      text: "JM stayed with the group, used his supports in the new setting, and earned reinforcement for managing a tricky schedule change."
+      title: "Success – Schedule Change Managed",
+      text: "LF handled the unexpected assembly with support and low attention, staying regulated."
     },
     mixed: {
-      title: "Mixed Outcome – Assembly with Some Strain",
-      text: "JM attended the assembly but remained anxious and received limited proactive support. Reviewing how to bring his BIP into specials and assemblies could improve future experiences."
+      title: "Mixed – Managed but Not Reinforced",
+      text: "LF managed the change but without reinforcement for coping."
     },
     fail: {
-      title: "Escalation – Assembly Stress",
-      text: "JM struggled with the schedule change and expectations, leading to avoidance or disruptive behavior. Planning ahead for assemblies, seating, and break options can reduce stress next time."
+      title: "Fail – Attention Fueled Escalation",
+      text: "Public correction during a surprise change increased attention cycles."
     }
   }
 });
-
-
 /*************************************************
- * WILDCARD SCENARIO 2 — Fire Drill During Work Time
+ * WILDCARD SCENARIO 2 — Fire Drill (Noise Overwhelm)
  **************************************************/
 POOL.wild.push({
-  id: "wild_2_fire_drill",
-  title: "Wildcard Mission: Fire Drill During Work Time",
+  id: "wild_2_fire_drill_noise",
+  title: "Wildcard Mission: Fire Drill Overwhelm",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "During independent work, the fire alarm suddenly sounds. JM startles and looks around wide-eyed, hands over his ears.",
+      text: "The fire alarm blares suddenly during writing time. LF startles, covers her ears, and says loudly, “TOO LOUD! TOO LOUD!” Peers stare.",
       choices: {
         A: {
-          text: "Calmly say the practiced fire drill steps to the class, including JM, and remind him you’ll walk together.",
+          text: "Use calm directive: “Stand with me — we’re going together.”",
           score: 10,
-          feedback: "Excellent. Safety and predictability both increase while you anchor him in the routine.",
+          feedback: "Excellent — anchors her without adding attention.",
           next: "step2A"
         },
         B: {
-          text: "Tell everyone to line up quickly at the door without further explanation.",
+          text: "Say neutrally, “It’s just a drill, let’s go.”",
           score: 0,
-          feedback: "Neutral. The class moves, but JM still looks panicked and confused.",
+          feedback: "Neutral but doesn’t support sensory overload.",
           next: "step2B"
         },
         C: {
-          text: "Focus on getting everyone out as fast as possible and do not address JM specifically.",
+          text: "Tell her to stop yelling and move now.",
           score: -10,
-          feedback: "You keep the class moving, but JM’s fear and confusion remain unsupported, increasing risk of bolting or freezing.",
+          feedback: "Adds verbal intensity to an already overwhelming moment.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM stands up, still covering his ears, and moves slowly toward the line.",
+      text: "LF stands shakily and steps close to you, hands still over ears.",
       choices: {
         A: {
-          text: "Prompt a quick break-type strategy for him (e.g., stand near you, use a visual, or walk at the front).",
+          text: "Keep her close with a calm gesture forward.",
           score: 10,
-          feedback: "Great use of his support strategies within a safety drill. You reduce his fear while maintaining safety.",
+          feedback: "Excellent sensory-informed support.",
           next: "step3A"
         },
         B: {
-          text: "Let him join the line wherever he ends up.",
+          text: "Let her walk behind the class.",
           score: 0,
-          feedback: "Neutral. He is in line, but not anchored with specific supports.",
+          feedback: "Neutral but may increase distress.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he needs to move faster because this is important.",
+          text: "Say, “It’s not that loud, you’re fine.”",
           score: -10,
-          feedback: "Extra pressure during a loud, unexpected alarm increases panic and escape behavior.",
+          feedback: "Dismissal increases emotional overload.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM stands halfway up from his seat, unsure whether to go to the line or stay put.",
+      text: "LF flinches again as the alarm continues, saying, “Make it STOP.”",
       choices: {
         A: {
-          text: "Move closer and briefly remind him: “We practiced this—stand with me and we’ll walk together.”",
+          text: "Move to her side and gesture forward: “Right here.”",
           score: 10,
-          feedback: "Nice repair. You connect the drill to prior practice and give him a safe anchor.",
+          feedback: "Strong repair — minimal verbal load.",
           next: "step3A"
         },
         B: {
-          text: "Repeat instructions to line up quickly.",
+          text: "Repeat, “Come on, it’s just a drill.”",
           score: 0,
-          feedback: "Neutral. He may join the line but still feel panicked.",
+          feedback: "Neutral, but still verbal pressure.",
           next: "step3B"
         },
         C: {
-          text: "Call his name sharply and point to the line.",
+          text: "Say, “If you don’t move now, you’ll get a consequence.”",
           score: -10,
-          feedback: "Sharp commands in a stressful moment raise his anxiety and may increase freezing or bolting.",
+          feedback: "Threats + loud noise = escalation.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "The class is lining up. JM remains at his desk, frozen and covering his ears.",
+      text: "LF stomps once and refuses to move, tears starting in her eyes.",
       choices: {
         A: {
-          text: "Quickly move to his side, use calm, brief language, and guide him to stand near you in line.",
+          text: "Stand beside her and say quietly, “Right here with me.”",
           score: 10,
-          feedback: "Good repair. You blend safety, gentle guidance, and emotional support.",
+          feedback: "Low-attention, high-anchoring support.",
           next: "step3A"
         },
         B: {
-          text: "Tell him from across the room to follow everyone else.",
+          text: "Ignore her and move the class out.",
           score: 0,
-          feedback: "Neutral, but distance and noise make it hard for him to process.",
+          feedback: "Neutral but unsafe — she may freeze.",
           next: "step3B"
         },
         C: {
-          text: "Direct the rest of the class out and plan to return for him if needed.",
+          text: "Say sharply, “Stop crying and MOVE!”",
           score: -10,
-          feedback: "Leaving him behind in a drill is unsafe and increases fear.",
+          feedback: "Overwhelming and invalidating.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM lines up close to you with his hands still near his ears but moving with the class toward the exit.",
+      text: "LF walks close beside you, still covering her ears but moving in a regulated way.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is following the drill with strong support.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM joins the line but stays tense and looks like he might try to run ahead or fall behind.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is moving, but his regulation is fragile.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM hesitates or moves unpredictably as the line exits, increasing safety risk.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "His fear and confusion remain high, and additional support is urgently needed.",
+          feedback: "Great — she’s stabilizing.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "Outside at the meeting spot, the alarm is still sounding or just ending. How do you support JM now?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF walks slowly and hesitantly, looking overwhelmed.",
       choices: {
         A: {
-          text: "Use calm language to praise his safe walking, briefly review the drill, and connect it back to his plan and Mario coins.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF cries loudly as she walks, drawing peer attention.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation continues — attention + overwhelm.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "Outside, the alarm stops. How do you support LF?",
+      choices: {
+        A: {
+          text: "Quietly praise her for staying close and award a point for safe walking.",
           score: 10,
-          feedback: "Excellent. You reinforce his safe behavior and help him process the event.",
+          feedback: "Reinforces coping under stress.",
           ending: "success"
         },
         B: {
-          text: "Allow him to stand close to you until the drill ends without further discussion.",
+          text: "Let her recover without comment.",
           score: 0,
-          feedback: "Moderate support. He stays safe, but misses a chance to connect the drill to his coping strategies.",
+          feedback: "Neutral; doesn’t strengthen future coping.",
           ending: "mixed"
         },
         C: {
-          text: "Tell him that even though he was scared, he needs to handle drills better next time.",
+          text: "Discuss her crying in front of the class.",
           score: -10,
-          feedback: "Critiquing his response in the moment can increase his fear and avoidance of future drills.",
+          feedback: "Public attention increases future escalation in drills.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Fire Drill with Safety & Support",
-      text: "JM followed the fire drill routine with your calm support and left the building safely. He received reinforcement and a chance to process the experience."
+      title: "Success – Fire Drill Managed",
+      text: "LF stayed safe and regulated with quiet anchoring support."
     },
     mixed: {
-      title: "Mixed Outcome – Safe but Stressed",
-      text: "JM exited safely, but remained very distressed. Additional practice, visuals, and BIP-aligned supports can help future drills go more smoothly."
+      title: "Mixed – Safe but Not Reinforced",
+      text: "LF managed the drill but without reinforcement for coping."
     },
     fail: {
-      title: "Escalation – Drill Distress",
-      text: "JM’s distress created safety concerns or major dysregulation. Planning individualized fire drill supports and previewing drills can reduce future risk."
+      title: "Fail – Overwhelm + Public Attention",
+      text: "Public correction strengthened emotional overload patterns."
     }
   }
 });
-
-
 /*************************************************
- * WILDCARD SCENARIO 3 — Testing Day (High Demand)
+ * WILDCARD SCENARIO 3 — Random Partner Switch
  **************************************************/
 POOL.wild.push({
-  id: "wild_3_testing_day",
-  title: "Wildcard Mission: Testing Day",
+  id: "wild_3_partner_switch",
+  title: "Wildcard Mission: Random Partner Switch",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "It’s testing day with a longer, more demanding assessment. JM sees the test packet and immediately slumps in his chair, staring at the ceiling.",
+      text: "The counselor enters and asks the class to switch partners for a quick SEL activity. LF gasps and whispers loudly, “NO! I want MY partner — not THEM.” Peers look over.",
       choices: {
         A: {
-          text: "Explain how today’s test will work, what part he is responsible for, and how his usual BIP supports (like breaks) still apply.",
+          text: "Use calm directive: “Start with the new partner — green after check-in.”",
           score: 10,
-          feedback: "Excellent. You reduce uncertainty and show that his supports are still available even on testing days.",
+          feedback: "Clear, low-attention direction with reinforcement path.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to just do his best and start on page one.",
+          text: "Say neutrally, “It’ll be fine — just switch for today.”",
           score: 0,
-          feedback: "Neutral. The encouragement is kind but leaves demands and supports unclear.",
+          feedback: "Neutral but doesn’t address attention-seeking.",
           next: "step2B"
         },
         C: {
-          text: "Tell him he needs to finish the entire test without breaks.",
+          text: "Say, “Stop complaining. You don’t always get your way.”",
           score: -10,
-          feedback: "Removing supports on a high-demand day increases anxiety and escape-maintained behavior.",
+          feedback: "Adds attention and emotional charge.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM nods slowly and looks at the first page of the test.",
+      text: "LF stomps once but sits by the new partner, arms crossed.",
       choices: {
         A: {
-          text: "Offer a clear plan: work for a short amount of time or a few questions, then take a brief BIP-aligned break.",
+          text: "Pre-correct quietly: “First question only.”",
           score: 10,
-          feedback: "Great scaffolding. You chunk the test and protect his regulation.",
+          feedback: "Reduces demand + prevents escape bids.",
           next: "step3A"
         },
         B: {
-          text: "Let him begin on his own without additional structure.",
+          text: "Let her sit without comment.",
           score: 0,
-          feedback: "Neutral. He may start, but is still vulnerable to feeling overwhelmed.",
+          feedback: "Neutral stabilization.",
           next: "step3B"
         },
         C: {
-          text: "Remind him the test is very important and he needs to focus the whole time.",
+          text: "Tell her she is being rude.",
           score: -10,
-          feedback: "High-stakes language can increase stress and shutdown.",
+          feedback: "Public correction adds peer attention.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM flips the first page but then sighs and stares at the floor.",
+      text: "LF scoots her chair loudly away from the new partner.",
       choices: {
         A: {
-          text: "Clarify that he can still use his break-request behavior during testing following specific guidelines.",
+          text: "Point silently to reset.",
           score: 10,
-          feedback: "Nice repair. You reintroduce his BIP supports into a high-pressure context.",
+          feedback: "Minimal attention; supports regulation.",
           next: "step3A"
         },
         B: {
-          text: "Encourage him again to ‘just try a little’ without specifying supports.",
+          text: "Say, “Scoot back into place.”",
           score: 0,
-          feedback: "Neutral. He still may not understand how to cope with the length of the test.",
+          feedback: "Neutral correction.",
           next: "step3B"
         },
         C: {
-          text: "Tell him that this time he has to push through without breaks so he can show what he knows.",
+          text: "Say, “You’re embarrassing yourself.”",
           score: -10,
-          feedback: "This discourages self-regulation and increases avoidance.",
+          feedback: "High shame + attention.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM pushes the test packet away and leans over his desk.",
+      text: "LF loudly whispers, “I’m NOT working with them,” glancing to peers.",
       choices: {
         A: {
-          text: "Reassure him that the BIP still applies today and prompt a break request before starting.",
+          text: "Redirect class attention, then cue reset.",
           score: 10,
-          feedback: "Great repair. You calm him and reconnect the test to familiar supports.",
+          feedback: "Strong peer-attention management.",
           next: "step3A"
         },
         B: {
-          text: "Give him a minute with the test in front of him without saying more.",
+          text: "Give a stern look.",
           score: 0,
-          feedback: "Neutral. His distress may or may not decrease on its own.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "Remind him sharply that everyone else is working and he needs to start too.",
+          text: "Lecture her about cooperation.",
           score: -10,
-          feedback: "Social comparison and pressure can increase shutdown or escape.",
+          feedback: "Long attention moment = reinforces behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM requests a break appropriately or agrees to a short work-break cycle.",
+      text: "LF takes a breath, sits up, and looks toward the new partner.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is using his plan even under high testing demands.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM holds his pencil but doesn’t begin writing. He seems frozen.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is not escalating, but he is also not accessing his supports.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM puts his head down or pushes the test off the desk.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "He is moving into stronger avoidance and may soon engage in more disruptive escape behavior.",
+          feedback: "Great de-escalation.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How do you structure JM’s participation in the test for the rest of the session?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF sits stiffly, avoiding eye contact.",
       choices: {
         A: {
-          text: "Use a clear, visual work-break routine (e.g., a few questions then a short break), reinforcing his effort and completion.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Neutral stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF mutters about how unfair the switch is.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation still active.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you support the activity’s success?",
+      choices: {
+        A: {
+          text: "Quietly praise the first question completed and award a point.",
           score: 10,
-          feedback: "Excellent high-demand-day adaptation. You protect regulation and allow meaningful participation.",
+          feedback: "Reinforces coping + participation.",
           ending: "success"
         },
         B: {
-          text: "Encourage him to complete a portion of the test without a formal work-break structure.",
+          text: "Let her participate without reinforcement.",
           score: 0,
-          feedback: "Moderate support. He may complete some work, but with more stress and less predictability.",
+          feedback: "Neutral; doesn’t strengthen acceptance of change.",
           ending: "mixed"
         },
         C: {
-          text: "Insist that he completes as much as possible without breaks so he doesn’t fall behind.",
+          text: "Bring up her earlier behavior in front of the group.",
           score: -10,
-          feedback: "High pressure without supports likely leads to shutdown, avoidance, or behavioral escalation.",
+          feedback: "Public reflection reinforces the attention cycle.",
           ending: "fail"
         }
       }
     }
   },
+
   endings: {
     success: {
-      title: "Success – Testing with Supports",
-      text: "JM participated in the assessment using his work-break routine and replacement behaviors, allowing a more accurate and regulated performance."
+      title: "Success – Partner Switch Managed",
+      text: "LF participated with minimal attention and earned reinforcement for flexibility."
     },
     mixed: {
-      title: "Mixed Outcome – Partial Test Engagement",
-      text: "JM completed some test items but with less structure and more stress than ideal. Planning explicit BIP-aligned testing plans can strengthen future outcomes."
+      title: "Mixed – Tolerated Change",
+      text: "LF participated, but flexibility wasn’t reinforced."
     },
     fail: {
-      title: "Escalation – Test Overload",
-      text: "Testing demands without supports led to significant avoidance or escalation. A tailored testing plan and proactive communication about supports are needed."
+      title: "Fail – Public Attention Fueled Escalation",
+      text: "Attention-seeking behaviors escalated with peer involvement."
     }
   }
 });
-
-
 /*************************************************
  * WILDCARD SCENARIO 4 — Indoor Recess (High Energy)
  **************************************************/
@@ -3439,355 +3558,378 @@ POOL.wild.push({
   title: "Wildcard Mission: Indoor Recess",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "It’s raining, so recess is indoors. The classroom is louder and more crowded. JM begins running between desks, weaving around other students.",
+      text: "Indoor recess starts due to rain. LF immediately runs toward peers yelling, “Let’s play CHASE!” A cluster of students turns to watch her.",
       choices: {
         A: {
-          text: "Set clear indoor recess expectations and remind JM how he can earn Mario coins for safe movement and following the plan.",
+          text: "Give calm directive: “Games stay seated — choose one spot.”",
           score: 10,
-          feedback: "Great proactive support. You define success and connect it to reinforcement in this new context.",
+          feedback: "Excellent — clear boundary without attention burst.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to slow down and be careful around others.",
+          text: "Say neutrally, “No running.”",
           score: 0,
-          feedback: "Neutral. He has a warning, but no clear alternative behavior.",
+          feedback: "Neutral but gives verbal attention.",
           next: "step2B"
         },
         C: {
-          text: "Tell him that running is not allowed and he will lose privileges if he continues.",
+          text: "Say loudly, “Stop it RIGHT NOW!”",
           score: -10,
-          feedback: "Threatening loss of privileges increases stress and may not provide a replacement behavior.",
+          feedback: "Public reprimand = high peer attention.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "JM pauses and looks at you, then at a quieter play area.",
+      text: "LF stops running but spins dramatically and flops onto a beanbag.",
       choices: {
         A: {
-          text: "Prompt him to choose a structured, calmer activity (like a game, drawing, or building) and show how it fits his plan.",
+          text: "Pre-correct quietly: “Pick one game — stay with it.”",
           score: 10,
-          feedback: "Excellent. You offer an immediate replacement for unsafe running.",
+          feedback: "Gives structure + keeps attention low.",
           next: "step3A"
         },
         B: {
-          text: "Let him decide where to go now that you’ve reminded him of expectations.",
+          text: "Let her flop and walk away.",
           score: 0,
-          feedback: "Neutral. He may choose well, but may also drift back into running.",
+          feedback: "Neutral stabilization.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he must sit at his desk for the rest of indoor recess.",
+          text: "Tell her to stop being dramatic.",
           score: -10,
-          feedback: "Using desk sitting as a consequence can feel punitive and increase future avoidance.",
+          feedback: "Criticism during attention-seeking increases behavior.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM slows briefly but then starts jogging again around a cluster of desks.",
+      text: "LF laughs loudly, grabs a stuffed animal, and tosses it in the air.",
       choices: {
         A: {
-          text: "Re-set the indoor recess expectations with the whole group and identify safe movement options or zones.",
+          text: "Point silently to the 'calm play' rules visual.",
           score: 10,
-          feedback: "Nice repair. You adjust the whole environment and provide alternatives.",
+          feedback: "Great nonverbal redirection — minimal attention.",
           next: "step3A"
         },
         B: {
-          text: "Continue giving him verbal reminders when he runs.",
+          text: "Say, “Don’t throw toys.”",
           score: 0,
-          feedback: "Neutral. Reminders alone may not sustain safer behavior.",
+          feedback: "Neutral but gives attention.",
           next: "step3B"
         },
         C: {
-          text: "Move him to a corner of the room and tell him to sit alone.",
+          text: "Explain to her why throwing is unsafe.",
           score: -10,
-          feedback: "Isolation during play time can increase dysregulation and resentment.",
+          feedback: "Long verbal attention = reinforcement.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "JM runs faster, narrowly missing a chair as another student moves it.",
+      text: "Peers giggle. LF bows dramatically like a performer.",
       choices: {
         A: {
-          text: "Pause the class briefly, clear a safer space, and give JM a structured movement option (e.g., jumping jacks, wall push-ups) with clear limits.",
+          text: "Redirect the class’s attention away, then cue her to pick a game.",
           score: 10,
-          feedback: "Great repair. You meet his movement needs safely and with structure.",
+          feedback: "Excellent — cuts off peer reinforcement.",
           next: "step3A"
         },
         B: {
-          text: "Stand in his path and redirect him to stop running immediately.",
+          text: "Give a sharp look.",
           score: 0,
-          feedback: "Neutral to risky. It may stop him, but also risks collision and conflict.",
+          feedback: "Neutral; still attention.",
           next: "step3B"
         },
         C: {
-          text: "Raise your voice to scold him for running indoors.",
+          text: "Lecture the class on safe recess behavior.",
           score: -10,
-          feedback: "Scolding in a loud, chaotic environment increases his arousal and may escalate behavior.",
+          feedback: "Creates a stage for LF.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM engages in a safer, structured indoor activity (like a game or movement break) and seems more regulated.",
+      text: "LF chooses coloring materials and sits with them, still buzzing with energy.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is still active but within safe, BIP-aligned boundaries.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM alternates between partial compliance and bursts of running.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is in a gray area and may escalate or calm depending on further support.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM becomes louder and more restless, bumping into desks or peers more frequently.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "Indoor recess is turning into a higher-risk situation for him and others.",
+          feedback: "Strong de-escalation and engagement.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How do you wrap up indoor recess for JM?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF sits awkwardly with a toy but keeps glancing back at peers.",
       choices: {
         A: {
-          text: "Praise his safe choices, use his token system, and give a short, calm transition back to the regular schedule.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial stabilization.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF tosses the stuffed animal again, loudly laughing.",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation through peer attention.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you reinforce indoor recess behavior?",
+      choices: {
+        A: {
+          text: "Quietly praise her for choosing a calm game and award a point.",
           score: 10,
-          feedback: "Excellent. You reinforce replacement behaviors and ease the transition back to learning.",
+          feedback: "Reinforces regulation under tough conditions.",
           ending: "success"
         },
         B: {
-          text: "End recess and move straight into the next activity with a brief reminder of expectations.",
+          text: "Let her keep playing without acknowledgment.",
           score: 0,
-          feedback: "Moderate approach. He transitions, but with less explicit reinforcement or closure.",
+          feedback: "Neutral; doesn’t strengthen calm play.",
           ending: "mixed"
         },
         C: {
-          text: "End recess with a lecture about how indoor behavior should be better next time.",
+          text: "Publicly call out her earlier misbehavior.",
           score: -10,
-          feedback: "Lengthy corrections at the end of an unstructured time can increase frustration and reduce buy-in.",
+          feedback: "Reintroduces attention and risk of re-escalation.",
           ending: "fail"
         }
       }
     }
+
   },
+
   endings: {
     success: {
-      title: "Success – Indoor Recess, Safely Managed",
-      text: "JM stayed active in safer, structured ways and transitioned back to learning with reinforcement for his efforts."
+      title: "Success – Calm Indoor Recess",
+      text: "LF regulated her energy with minimal attention and reinforcement for calm play."
     },
     mixed: {
-      title: "Mixed Outcome – Some Safe Play, Some Stress",
-      text: "JM had periods of safe play but also unstructured running. More proactive, structured options can support smoother indoor recesses."
+      title: "Mixed – Stable but Not Reinforced",
+      text: "LF participated appropriately but didn’t receive reinforcement."
     },
     fail: {
-      title: "Escalation – Indoor Recess Chaos",
-      text: "Indoor recess became stressful and unsafe for JM and peers. Clear routines and planned movement activities can improve future days."
+      title: "Fail – Attention Reinforced Escalation",
+      text: "Public corrections increased peer attention and escalatory patterns."
     }
   }
 });
-
-
 /*************************************************
  * WILDCARD SCENARIO 5 — Substitute Teacher Day
  **************************************************/
 POOL.wild.push({
-  id: "wild_5_sub_day",
-  title: "Wildcard Mission: Substitute Teacher Day",
+  id: "wild_5_substitute_day",
+  title: "Wildcard Mission: Substitute Teacher",
   start: "step1",
   steps: {
+
+    // ---------- STEP 1 ----------
     step1: {
-      text: "You are absent, and a substitute teacher is leading the class. JM notices you are not there, paces at the back of the room, and watches the substitute closely.",
+      text: "You’re unexpectedly out, and a substitute is leading the class. LF immediately senses the lowered structure and loudly says, “We don’t HAVE to do the card thing today — she doesn’t know!” Peers look intrigued.",
       choices: {
         A: {
-          text: "Before your absence (or via a plan), you left the substitute a brief BIP overview and a simple script to explain JM’s plan and supports.",
+          text: "Step in briefly before leaving: “Routine stays the same — red to start.”",
           score: 10,
-          feedback: "Excellent systems-level planning. The substitute can implement key parts of the BIP, even without you present.",
+          feedback: "Excellent — preserves predictability and limits attention.",
           next: "step2A"
         },
         B: {
-          text: "The substitute simply tells the class that you are out and they should follow the usual rules.",
+          text: "Tell the sub, “She needs reminders sometimes.”",
           score: 0,
-          feedback: "Neutral. The class has a general direction, but JM’s specific needs are not addressed.",
+          feedback: "Neutral but publicly points LF out.",
           next: "step2B"
         },
         C: {
-          text: "The substitute expects the class to behave the same as always with no additional information or supports.",
+          text: "Directly reprimand: “LF, stop trying to get out of the system.”",
           score: -10,
-          feedback: "Lack of plan or information about JM’s needs increases the risk of confusion and escalation.",
+          feedback: "Public scolding adds peer attention.",
           next: "step2C"
         }
       }
     },
 
+    // ---------- STEP 2A ----------
     step2A: {
-      text: "The substitute reads the script and explains to JM that his usual break options and token system are still in place today.",
+      text: "LF groans dramatically but quiets a little.",
       choices: {
         A: {
-          text: "Prompt JM to show the substitute where his break desk is.",
+          text: "Prompt quietly to the sub: “Flip to green after first task.”",
           score: 10,
-          feedback: "Great. You empower JM to participate in his own support system and help the substitute learn the environment.",
+          feedback: "Keeps structure tight without highlighting LF.",
           next: "step3A"
         },
         B: {
-          text: "Allow the substitute to proceed and hope JM uses his plan independently.",
+          text: "Say nothing and let the sub take over.",
           score: 0,
-          feedback: "Neutral. JM has supports, but the substitute might not cue them effectively.",
+          feedback: "Neutral; may work or may loosen structure.",
           next: "step3B"
         },
         C: {
-          text: "Note in the plan that JM should get no extra breaks today to keep things simple.",
+          text: "Warn LF again about following rules.",
           score: -10,
-          feedback: "Removing supports specifically on a substitute day increases his vulnerability to dysregulation.",
+          feedback: "Additional attention = reinforcement.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2B ----------
     step2B: {
-      text: "JM continues pacing and looking unsure. The substitute is not yet aware of his BIP details.",
+      text: "LF smirks and says, “See? She’s talking about ME.”",
       choices: {
         A: {
-          text: "Your written sub plans include a note to quickly review JM’s BIP with the classroom aide or another staff member.",
+          text: "Quietly redirect: point to the red card.",
           score: 10,
-          feedback: "Good repair. You build in a way for the substitute to get quick coaching on JM’s needs.",
+          feedback: "Minimal attention; clear routine cue.",
           next: "step3A"
         },
         B: {
-          text: "The substitute continues the lesson and gives JM general reminders to sit down.",
+          text: "Tell LF to be respectful.",
           score: 0,
-          feedback: "Neutral. Without specific supports, JM’s anxiety may remain high.",
+          feedback: "Neutral correction but adds attention.",
           next: "step3B"
         },
         C: {
-          text: "The substitute tells JM he needs to behave like everyone else and stop pacing.",
+          text: "Tell the class to ignore LF’s comments.",
           score: -10,
-          feedback: "This approach ignores his BIP needs and can increase avoidance or escalation.",
+          feedback: "Huge attention event.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 2C ----------
     step2C: {
-      text: "With no plan in place, the substitute asks JM to take a seat and follow along like everyone else.",
+      text: "LF laughs loudly, riding the peer attention wave.",
       choices: {
         A: {
-          text: "A nearby staff member (aide or specialist) steps in and quietly shares key parts of JM’s BIP.",
+          text: "Shift class attention back to tasks, cue reset discreetly.",
           score: 10,
-          feedback: "Great repair supported by the team. The substitute now has important information.",
+          feedback: "Excellent peer-attention management.",
           next: "step3A"
         },
         B: {
-          text: "JM is left to manage his anxiety alone with only general classroom rules.",
+          text: "Give an annoyed stare.",
           score: 0,
-          feedback: "Neutral, but risky. He may cope or may escalate.",
+          feedback: "Neutral but still attention.",
           next: "step3B"
         },
         C: {
-          text: "The substitute responds to JM’s pacing with strict warnings about consequences.",
+          text: "Lecture about respecting substitutes.",
           score: -10,
-          feedback: "Strict responses without BIP knowledge often increase dysregulation.",
+          feedback: "Large audience = strong reinforcement.",
           next: "step3C"
         }
       }
     },
 
+    // ---------- STEP 3A ----------
     step3A: {
-      text: "JM learns that his usual supports (breaks, calm-down space, tokens) are still available and that the substitute understands them.",
+      text: "LF starts the first task quietly but rolls her eyes.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is more likely to stay regulated despite the staff change.",
-          next: "step4"
-        }
-      }
-    },
-    step3B: {
-      text: "JM remains uncertain, sometimes sitting and sometimes pacing near the back of the room.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "He is managing, but with more anxiety than usual.",
-          next: "step4"
-        }
-      }
-    },
-    step3C: {
-      text: "JM’s pacing grows more intense, and he starts talking loudly or moving toward the door.",
-      choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "His behavior is escalating in the absence of familiar supports.",
+          feedback: "She’s engaging within the system.",
           next: "step4"
         }
       }
     },
 
-    step4: {
-      text: "How is JM supported for the rest of the substitute day?",
+    // ---------- STEP 3B ----------
+    step3B: {
+      text: "LF starts the task but whispers jokes to a peer.",
       choices: {
         A: {
-          text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, break space, tokens) throughout the day.",
+          text: "Continue.",
+          score: 0,
+          feedback: "Partial compliance with attention leakage.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 3C ----------
+    step3C: {
+      text: "LF loudly says, “This sub lets us do ANYTHING.”",
+      choices: {
+        A: {
+          text: "Continue.",
+          score: -10,
+          feedback: "Escalation pattern continuing.",
+          next: "step4"
+        }
+      }
+    },
+
+    // ---------- STEP 4 (ENDINGS) ----------
+    step4: {
+      text: "How do you reinforce the substitute-day routine?",
+      choices: {
+        A: {
+          text: "Quietly praise LF for starting the task and award a point for staying in routine.",
           score: 10,
-          feedback: "Excellent systems-level fidelity. JM experiences consistency even when staff changes.",
+          feedback: "Excellent reinforcement for stability with a sub.",
           ending: "success"
         },
         B: {
-          text: "The substitute uses some informal strategies and JM gets through the day with a mix of support and stress.",
+          text: "Let the substitute praise her without structure.",
           score: 0,
-          feedback: "Moderate outcome. He manages, but with less consistency than usual.",
+          feedback: "Neutral; structure unclear.",
           ending: "mixed"
         },
         C: {
-          text: "JM has frequent difficulties, and staff are called multiple times because his usual supports were not used.",
+          text: "Address her earlier behavior in front of peers.",
           score: -10,
-          feedback: "Low-fidelity implementation on a sub day leads to higher risk and disruption.",
+          feedback: "Reinforces attention-seeking on sub days.",
           ending: "fail"
         }
       }
     }
+
   },
+
   endings: {
     success: {
-      title: "Success – Sub Day with Consistent Supports",
-      text: "Even with a substitute teacher, JM’s BIP was implemented and he stayed mostly regulated and engaged throughout the day."
+      title: "Success – Substitute Day Stability",
+      text: "LF maintained the routine with low attention and strong structure."
     },
     mixed: {
-      title: "Mixed Outcome – Sub Day with Gaps",
-      text: "JM got through the sub day with some success but also extra stress. Clearer sub plans and quick staff coaching can strengthen future days."
+      title: "Mixed – Participated Lightly",
+      text: "LF engaged, but reinforcement inconsistencies may affect future sub days."
     },
     fail: {
-      title: "Escalation – Sub Day Struggles",
-      text: "Without consistent use of his BIP, JM had significant difficulties during the sub day. Planning simple, sub-friendly BIP instructions is a key next step."
+      title: "Fail – Attention Flew Wild",
+      text: "Public correction heightened peer attention and escalatory behavior."
     }
   }
 });
-
 
 /* ============================================================
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
