@@ -184,9 +184,9 @@ h2{
 /* ---------- Story Text ---------- */
 #story-text{
   background:#333;
-  padding:18px;
+  padding:15px;
   border-radius:10px;
-  min-height:110px;
+  min-height:100px;
   margin-bottom:14px;
   white-space:pre-wrap;
 }
