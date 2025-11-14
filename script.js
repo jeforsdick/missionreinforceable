@@ -231,7 +231,7 @@ POOL.daily.push({
 
     // ---------- STEP 2B (neutral path) ----------
     step2B: {
-      text: "JM taps his pencil and glances toward the calm-down corner.",
+      text: "JM taps his pencil and glances toward his break desk.",
       choices: {
         A: {
           text: "Prompt a break request before he escalates.",
@@ -348,7 +348,7 @@ POOL.daily.push({
   endings: {
     success: {
       title: "Success – High-Fidelity Morning Routine",
-      text: "You followed JM’s BIP closely. He accessed his break through the replacement behavior, regulated in the calm-down corner, and returned to finish part of his work. The class routine stayed mostly on track."
+      text: "You followed JM’s BIP closely. He accessed his break through the replacement behavior, regulated at his break desk, and returned to finish part of his work. The class routine stayed mostly on track."
     },
     mixed: {
       title: "Mixed Outcome – Some Support, Some Escalation Risk",
@@ -1351,7 +1351,7 @@ POOL.daily.push({
       text: "JM stops near the classroom door and looks back at you.",
       choices: {
         A: {
-          text: "Offer a quick prompt to request a break and point to the calm-down corner.",
+          text: "Offer a quick prompt to request a break and point to his break desk.",
           score: 10,
           feedback: "Excellent repair. You provide a safe, replacement-based option instead of elopement.",
           next: "step3A"
@@ -1805,30 +1805,30 @@ POOL.daily.push({
 
 
 /*************************************************
- * DAILY SCENARIO 10 — Using the Calm-Down Corner Effectively
+ * DAILY SCENARIO 10 — Using the Break Desk Effectively
  **************************************************/
 POOL.daily.push({
-  id: "daily_10_calm_corner",
-  title: "Daily Mission: Using the Calm-Down Corner",
+  id: "daily_10_break_desk",
+  title: "Daily Mission: Using the Break Desk",
   start: "step1",
   steps: {
     step1: {
-      text: "JM appears frustrated during independent work and glances repeatedly at the calm-down corner.",
+      text: "JM appears frustrated during independent work and glances repeatedly at his break desk.",
       choices: {
         A: {
-          text: "Review how to use the calm-down corner and how he earns Mario coins when he returns.",
+          text: "Review how to use the break desk and how he earns Mario coins when he returns.",
           score: 10,
           feedback: "Great proactive teaching. You clarify how the space works and connect it to positive reinforcement.",
           next: "step2A"
         },
         B: {
-          text: "Tell him, “Use the calm-down corner if you need it.”",
+          text: "Tell him, “Use the break-desk if you need it.”",
           score: 0,
           feedback: "Neutral. He has permission, but expectations are less clear.",
           next: "step2B"
         },
         C: {
-          text: "Tell him the calm-down corner is only for serious problems.",
+          text: "Tell him the break desk is only for serious problems.",
           score: -10,
           feedback: "Restricting access can reduce his use of replacement behaviors and increase escalation.",
           next: "step2C"
@@ -1861,7 +1861,7 @@ POOL.daily.push({
     },
 
     step2B: {
-      text: "JM stands and walks slowly toward the calm-down corner.",
+      text: "JM stands and walks slowly towards his break desk.",
       choices: {
         A: {
           text: "Remind him briefly of expectations for using the space.",
@@ -1888,9 +1888,9 @@ POOL.daily.push({
       text: "JM sighs heavily and begins tapping loudly on his desk.",
       choices: {
         A: {
-          text: "Offer a calm prompt to request a break in the calm-down corner.",
+          text: "Offer a calm prompt to request a break at his break desk.",
           score: 10,
-          feedback: "Great repair. You bring the calm-down corner back in as a proactive support.",
+          feedback: "Great repair. You bring the break desk back in as a proactive support.",
           next: "step3A"
         },
         B: {
@@ -1909,18 +1909,18 @@ POOL.daily.push({
     },
 
     step3A: {
-      text: "JM requests a break and goes to the calm-down corner, sitting quietly.",
+      text: "JM requests a break and goes to the break desk, sitting quietly.",
       choices: {
         A: {
           text: "Continue.",
           score: 10,
-          feedback: "He is using the calm-down space as intended.",
+          feedback: "He is using the break space as intended.",
           next: "step4"
         }
       }
     },
     step3B: {
-      text: "JM goes to the calm-down corner but begins playing with items instead of calming.",
+      text: "JM goes to the break desk but begins playing with items instead of calming.",
       choices: {
         A: {
           text: "Continue.",
@@ -1943,7 +1943,7 @@ POOL.daily.push({
     },
 
     step4: {
-      text: "How do you help JM transition out of the calm-down corner or back to his work?",
+      text: "How do you help JM transition away from the break desk or back to his work?",
       choices: {
         A: {
           text: "After a short, calm break, praise his use of the corner, give a Mario coin, and help him ease back into the task.",
@@ -1968,8 +1968,8 @@ POOL.daily.push({
   },
   endings: {
     success: {
-      title: "Success – Effective Calm-Down Corner Use",
-      text: "JM uses the calm-down corner to regulate, then returns to his work with your support and earns reinforcement for doing so."
+      title: "Success – Effective Break Desk Use",
+      text: "JM uses the break desk to regulate, then returns to his work with your support and earns reinforcement for doing so."
     },
     mixed: {
       title: "Mixed Outcome – Some Regulation, Less Support",
@@ -2527,7 +2527,7 @@ POOL.crisis.push({
   start: "step1",
   steps: {
     step1: {
-      text: "JM is in the calm-down corner after a difficult moment. The break timer has ended, but he refuses to leave the corner and return to his seat.",
+      text: "JM is in the break desk after a difficult moment. The break timer has ended, but he refuses to leave the corner and return to his seat.",
       choices: {
         A: {
           text: "Provide space and maintain visibility while keeping your voice calm and neutral.",
@@ -2683,7 +2683,7 @@ POOL.crisis.push({
   endings: {
     success: {
       title: "Success – Supported Return from Break",
-      text: "JM used his communication skills to ask for support, and you helped him return from the calm-down corner with minimal escalation."
+      text: "JM used his communication skills to ask for support, and you helped him return from the break desk with minimal escalation."
     },
     mixed: {
       title: "Mixed Outcome – Resolved with Extra Support",
@@ -3626,7 +3626,7 @@ POOL.wild.push({
       text: "The substitute reads the script and explains to JM that his usual break options and token system are still in place today.",
       choices: {
         A: {
-          text: "Prompt JM to show the substitute where his calm-down corner or break space is.",
+          text: "Prompt JM to show the substitute where his break desk is.",
           score: 10,
           feedback: "Great. You empower JM to participate in his own support system and help the substitute learn the environment.",
           next: "step3A"
@@ -3732,7 +3732,7 @@ POOL.wild.push({
       text: "How is JM supported for the rest of the substitute day?",
       choices: {
         A: {
-          text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, calm-down corner, tokens) throughout the day.",
+          text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, break space, tokens) throughout the day.",
           score: 10,
           feedback: "Excellent systems-level fidelity. JM experiences consistency even when staff changes.",
           ending: "success"
