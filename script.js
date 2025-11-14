@@ -4015,10 +4015,6 @@ function showNode(id) {
 
     choicesDiv.appendChild(btn);
 
-    // Optional: Auto-click single "Continue" buttons after 2s for smooth merges
-    if (options.length === 1 && opt.text === "Continue.") {
-      setTimeout(() => btn.click(), 30000);
-    }
   });
 }
 
