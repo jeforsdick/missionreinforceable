@@ -3804,7 +3804,7 @@ Choose your mission below.`;
   choicesDiv.innerHTML = '';
   choicesDiv.appendChild(container);
 
-  showFeedback("At each step, you’ll see immediate feedback on how closely your choice matches the BIP.", "correct", +10);
+  showFeedback("Your Wizard Coach will chime in after every move.", "correct", +10);
 
   const rnd = srandom(seedFromDate());
   document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   pickScenario(POOL.daily, rnd)); };
