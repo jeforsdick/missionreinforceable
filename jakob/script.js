@@ -92,7 +92,7 @@ function showFeedback(text, type, scoreHint) {
 }
 
 /* ===== RESULTS: client → GAS webhook ===== */
-const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9bWb3oUhoIl7hRgEm1nPyr_AKbLriHpQQGwcEn94xVfHFSPEvxE09Vta8D4ZqGYuT/exec";
+const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbx4GMGeiZI_L00p6Wsnse-E5VH6OTkgJ2b4DtKyTmTQqW-zwEJ-o-tJ63ZAr15iUUb_/exec";
 
 function getTeacherCode() {
   const u = new URL(window.location.href);
@@ -100,6 +100,7 @@ function getTeacherCode() {
        || document.getElementById("teacher-code")?.textContent
        || "—").trim();
 }
+
 function setTeacherBadge(code) {
   const el = document.getElementById("teacher-code");
   if (el && code && el.textContent !== code) el.textContent = code;
@@ -108,6 +109,7 @@ function setTeacherBadge(code) {
 function newSessionId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
 }
+
 let SESSION_ID = newSessionId();
 let events = [];
 let sentThisRun = false;
@@ -144,18 +146,18 @@ function sendResultsOnce() {
     percent: percentScore(),
     timestamp: new Date().toISOString(),
     log: events,
-    mode: mode,           // NEW: Daily / Crisis / Wildcard
-    student: student      // NEW: JM, Sarah, etc.
+    mode: mode, // NEW: Daily / Crisis / Wildcard
+    student: student // NEW: JM, Sarah, etc.
   };
 
   try {
-    fetch(RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbx4GMGeiZI_L00p6Wsnse-E5VH6OTkgJ2b4DtKyTmTQqW-zwEJ-o-tJ63ZAr15iUUb_/exec"; {
+    fetch(RESULT_ENDPOINT, {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    // swallow
+    console.error("Failed to send results:", e); // For debugging
   }
 }
 /* -------- Utilities -------- */
