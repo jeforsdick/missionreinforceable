@@ -44,7 +44,7 @@ body {
   width: 100%;
   max-width: 900px;
   background: var(--panel);
-  padding: 10px 30px 10px 30px;
+  padding: 7px 30px 10px 30px;
   margin: 16px;               /* ✅ little breathing room on mobile */
   border-radius: 12px;
   box-shadow: 0 0 15px var(--glow);  /* your red glow */
