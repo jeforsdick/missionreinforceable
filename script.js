@@ -147,17 +147,20 @@ function sendResultsOnce() {
     student: student
   };
 
-  try {
-    fetch(RESULT_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    console.error("Send failed:", e);
-  }
-}
+  console.log("Sending payload:", payload); // ← DEBUG: See it in Console
 
+  fetch(RESULT_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    console.log("Data sent successfully!");
+  })
+  .catch(err => {
+    console.error("Fetch failed:", err);
+  });
+}
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
 function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
