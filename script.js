@@ -329,7 +329,7 @@ POOL.daily.push({
         A: {
           text: "Honor his break immediately, start the 5-minute timer, and reinforce his return.",
           score: 10,
-          feedback: "Excellent fidelity to the BIP. You reinforce JM’s replacement behavior, support regulation, and keep him engaged in the routine.",
+          feedback: "Excellent accuracy to the BIP. You reinforce JM’s replacement behavior, support regulation, and keep him engaged in the routine.",
           ending: "success"
         },
         B: {
@@ -698,7 +698,7 @@ POOL.daily.push({
         A: {
           text: "Honor his break now and reinforce his return.",
           score: 10,
-          feedback: "Excellent BIP fidelity!",
+          feedback: "Excellent BIP accuracy!",
           ending: "success"
         },
         B: {
@@ -1236,7 +1236,7 @@ POOL.daily.push({
         A: {
           text: "Honor a break now and reinforce his return to the group afterward.",
           score: 10,
-          feedback: "Excellent fidelity. Breaks and positive reinforcement help him rejoin instruction successfully.",
+          feedback: "Excellent accuracy. Breaks and positive reinforcement help him rejoin instruction successfully.",
           ending: "success"
         },
         B: {
@@ -1952,7 +1952,7 @@ POOL.daily.push({
         A: {
           text: "After a short, calm break, praise his use of the corner, give a Mario coin, and help him ease back into the task.",
           score: 10,
-          feedback: "Excellent BIP fidelity. You support regulation, reinforce replacement behavior, and scaffold the return to work.",
+          feedback: "Excellent BIP accuracy. You support regulation, reinforce replacement behavior, and scaffold the return to work.",
           ending: "success"
         },
         B: {
@@ -3738,7 +3738,7 @@ POOL.wild.push({
         A: {
           text: "The substitute, supported by written plans or staff, consistently uses JM’s BIP (breaks, break space, tokens) throughout the day.",
           score: 10,
-          feedback: "Excellent systems-level fidelity. JM experiences consistency even when staff changes.",
+          feedback: "Excellent systems-level accuracy. JM experiences consistency even when staff changes.",
           ending: "success"
         },
         B: {
@@ -3750,7 +3750,7 @@ POOL.wild.push({
         C: {
           text: "JM has frequent difficulties, and staff are called multiple times because his usual supports were not used.",
           score: -10,
-          feedback: "Low-fidelity implementation on a sub day leads to higher risk and disruption.",
+          feedback: "Low-accuracy implementation on a sub day leads to higher risk and disruption.",
           ending: "fail"
         }
       }
