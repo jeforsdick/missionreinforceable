@@ -35,7 +35,7 @@ body {
 /* Center the game, but don't constrain its height */
 body {
   display: flex;
-  justify-content: center;
+  justify-content: top;
   align-items: flex-start;    /* ✅ start at the top, grow downward */
 }
 
@@ -44,7 +44,7 @@ body {
   width: 100%;
   max-width: 900px;
   background: var(--panel);
-  padding: 20px;
+  padding: 7px 30px 10px 30px;
   margin: 16px;               /* ✅ little breathing room on mobile */
   border-radius: 12px;
   box-shadow: 0 0 15px var(--glow);  /* your red glow */
@@ -59,7 +59,7 @@ h1{
   text-shadow:0 0 6px #fdd;
 }
 h2{
-  margin:0 0 18px 0;
+  margin:0 0 12px 0;
   text-align:center;
   color:var(--accent2);
   text-shadow:0 0 6px #0ff;
@@ -77,7 +77,7 @@ h2{
 
 #teacher-badge,#score-badge{
   background:#333;
-  padding:8px 12px;
+  padding:8px 10px;
   border:1px solid #444;
   border-radius:10px;
   font-weight:700;
@@ -184,9 +184,8 @@ h2{
 /* ---------- Story Text ---------- */
 #story-text{
   background:#333;
-  padding:18px;
+  padding:8px 18px 8px 18px;
   border-radius:10px;
-  min-height:110px;
   margin-bottom:14px;
   white-space:pre-wrap;
 }
@@ -243,7 +242,7 @@ button {
 /* ---------- Mission Cards ---------- */
 .mission-intro{
   background:#333;
-  padding:18px;
+  padding:12px;
   border-radius:10px;
   margin-top:6px;
   margin-bottom:14px;
@@ -259,7 +258,7 @@ button {
   background:#2a2a2a;
   border:1px solid #444;
   border-radius:10px;
-  padding:14px;
+  padding:10px;
   display:flex;
   flex-direction:column;
   gap:10px;
