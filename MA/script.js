@@ -102,7 +102,7 @@ function showFeedback(text, type, scoreHint) {
 }
 
 /* ===== RESULTS: client → GAS webhook ===== */
-const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbx1XP42217uss-Uhnj1ELfZkCd6PABaXLnsxbG-9mNY9iuQzAdkw2_P8t6T52APiEBz/exec";
+const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbw2X2PPiEDZ7vJhOEBqW1KLFqKAj2x6Pn-DQI6UHBVJDCwRa9ogy9q-mZ0cmSvT6qit/exec";
 
 function getTeacherCode() {
   const u = new URL(window.location.href);
@@ -162,13 +162,12 @@ function sendResultsOnce() {
 
   try {
     fetch(RESULT_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    console.error("Failed to send results:", e); // For debugging
-  }
+  method: "POST",
+  headers: { "Content-Type": "text/plain;charset=utf-8" }, // important for GAS
+  body: JSON.stringify(payload)
+})
+.then(() => console.log("Results sent"))
+.catch(err => console.error("Send failed:", err));
 }
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
