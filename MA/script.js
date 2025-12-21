@@ -102,7 +102,7 @@ function showFeedback(text, type, scoreHint) {
 }
 
 /* ===== RESULTS: client → GAS webhook ===== */
-const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbw2X2PPiEDZ7vJhOEBqW1KLFqKAj2x6Pn-DQI6UHBVJDCwRa9ogy9q-mZ0cmSvT6qit/exec";
+const RESULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyZ4Z7Axzzb0hwMSJ2wQ1127sjNeeK3P9T-sOSr9P2teZpKyogHPOUAkZllVK13-XeR/exec";
 
 function getTeacherCode() {
   const u = new URL(window.location.href);
