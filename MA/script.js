@@ -3643,12 +3643,21 @@ POOL.wild.push({
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
    ============================================================ */
 function renderIntroCards() {
+  // Make sure the welcome text is visible again (it gets hidden on feedback screens)
+  if (storyText) storyText.style.display = 'block';
+
+  // Remove any old summary panel if it exists
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
+
   scenarioTitle.textContent = "Behavior Intervention Simulator";
 
   storyText.innerHTML = `Welcome to Mission: Reinforceable.
 You’ll step through short scenarios based on your student's Behavior Plan.
 
 <strong>Choose your mission below.</strong>`;
+  // ...
+}
 
   const menu = document.createElement('div');
   menu.className = 'mission-grid';
