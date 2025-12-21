@@ -411,7 +411,7 @@ POOL.daily.push({
       text: "KeKu pauses, then flattens the paper and looks at the bottom problem.",
       choices: {
         A: {
-          text: "Give an incompatible direction: “Write your name and circle the first problem.”",
+          text: "Say: “Write your name and circle the first problem.”",
           score: 10,
           feedback: "Excellent. Clear action that competes with property misuse.",
           next: "step3A"
@@ -578,7 +578,7 @@ POOL.daily.push({
       text: "KeKu hesitates, then points to partner B.",
       choices: {
         A: {
-          text: "Give an incompatible direction: “Sit next to partner B and open to page one.”",
+          text: "Say: “Sit next to partner B and open to page one.”",
           score: 10,
           feedback: "Excellent — clear and task-focused.",
           next: "step3A"
@@ -745,7 +745,7 @@ POOL.daily.push({
       text: "KeKu walks toward the end-of-row seat and pauses.",
       choices: {
         A: {
-          text: "Incompatible direction: “Sit down and put your feet flat on the floor.”",
+          text: "Say: “Sit down and put your feet flat on the floor.”",
           score: 10,
           feedback: "Clear physical direction competing with elopement.",
           next: "step3A"
@@ -912,7 +912,7 @@ POOL.daily.push({
       text: "KeKu pulls the paper back toward him but keeps watching peers.",
       choices: {
         A: {
-          text: "Incompatible direction: “Write your name and underline it.”",
+          text: "Say: “Write your name and underline it.”",
           score: 10,
           feedback: "Excellent — clear motor action that starts the task.",
           next: "step3A"
@@ -1246,7 +1246,7 @@ POOL.daily.push({
       text: "KeKu heads to the backpack hook and slows slightly.",
       choices: {
         A: {
-          text: "Incompatible direction: “Hang it up and walk to your seat.”",
+          text: "Say: “Hang it up and walk to your seat.”",
           score: 10,
           feedback: "Clear physical direction supports regulation.",
           next: "step3A"
@@ -1747,7 +1747,7 @@ POOL.daily.push({
       text: "KeKu pauses and returns toward his desk, still looking at peers.",
       choices: {
         A: {
-          text: "Incompatible direction: “Sit and zip your backpack.”",
+          text: "Say: “Sit and zip your backpack.”",
           score: 10,
           feedback: "Excellent. Clear motor action anchors him in place.",
           next: "step3A"
