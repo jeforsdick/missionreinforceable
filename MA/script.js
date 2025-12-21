@@ -642,7 +642,6 @@ function showNode(id) {
 
     // Teacher-facing action steps
 let actionSteps = "";
-const pct = percentScore();
 
 if (pct >= 80) {
   actionSteps = `
