@@ -506,7 +506,7 @@ const POOL = {
    DYNAMIC MISSION BUILDER
    ============================================================ */
 function renderIntroCards() {
-  scenarioTitle.textContent = "Behavior Intervention Simulator - Example Game";
+  scenarioTitle.textContent = "Behavior Intervention Simulator - KeKu";
 
   // Intro text pod (keeps your style)
   storyText.innerHTML =
