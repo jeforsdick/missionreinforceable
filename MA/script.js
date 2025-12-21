@@ -3650,14 +3650,14 @@ function renderIntroCards() {
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
 
-  scenarioTitle.textContent = "Behavior Intervention Simulator";
+  if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator";
 
-  storyText.innerHTML = `Welcome to Mission: Reinforceable.
+  if (storyText) {
+    storyText.innerHTML = `Welcome to Mission: Reinforceable.
 You’ll step through short scenarios based on your student's Behavior Plan.
 
 <strong>Choose your mission below.</strong>`;
-  // ...
-}
+  }
 
   const menu = document.createElement('div');
   menu.className = 'mission-grid';
@@ -3673,7 +3673,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
     </div>
     <div class="mission-card">
       <h3>Wildcard</h3>
-      <div class="action"><button id="btn-random">Start Mystery Mission▶</button></div>
+      <div class="action"><button id="btn-random">Start Mystery Mission ▶</button></div>
     </div>
   `;
 
@@ -3681,16 +3681,41 @@ You’ll step through short scenarios based on your student's Behavior Plan.
   container.className = 'mission-intro';
   container.appendChild(menu);
 
-  choicesDiv.innerHTML = '';
-  choicesDiv.appendChild(container);
+  if (choicesDiv) {
+    choicesDiv.innerHTML = '';
+    choicesDiv.appendChild(container);
+  }
 
   showFeedback("The Wizard will chime in after every move.", "correct", +10);
 
   const rnd = srandom(seedFromDate());
-  document.getElementById('btn-drill').onclick  = () => { resetGame(); startDynamicMission('Daily Drill',   pickScenario(POOL.daily, rnd)); };
-  document.getElementById('btn-crisis').onclick = () => { resetGame(); startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd)); };
-  document.getElementById('btn-random').onclick = () => { resetGame(); startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd)); };
+
+  const drillBtn  = document.getElementById('btn-drill');
+  const crisisBtn = document.getElementById('btn-crisis');
+  const randomBtn = document.getElementById('btn-random');
+
+  if (drillBtn) {
+    drillBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
+    };
+  }
+
+  if (crisisBtn) {
+    crisisBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
+    };
+  }
+
+  if (randomBtn) {
+    randomBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
+    };
+  }
 }
+
 
 function pickScenario(pool, rnd) {
   return sample(pool, 1, rnd)[0];
