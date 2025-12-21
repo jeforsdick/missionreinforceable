@@ -156,19 +156,23 @@ function sendResultsOnce() {
     percent: percentScore(),
     timestamp: new Date().toISOString(),
     log: events,
-    mode: mode, // NEW: Daily / Crisis / Wildcard
-    student: student // NEW: KK, Sarah, etc.
+    mode: mode,
+    student: student
   };
 
   try {
     fetch(RESULT_ENDPOINT, {
-  method: "POST",
-  headers: { "Content-Type": "text/plain;charset=utf-8" }, // important for GAS
-  body: JSON.stringify(payload)
-})
-.then(() => console.log("Results sent"))
-.catch(err => console.error("Send failed:", err));
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => console.log("Results sent"))
+    .catch(err => console.error("Send failed:", err));
+  } catch (e) {
+    console.error("Fetch threw:", e);
+  }
 }
+
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
 function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
