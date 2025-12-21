@@ -213,7 +213,7 @@ POOL.daily.push({
       text: "During whole-group instruction on the rug, KeKu starts sliding backward and lightly pokes the student next to him (KYHFOOTY risk). When you begin the directions, he says, “I’m not doing this,” and looks for reactions.",
       choices: {
         A: {
-          text: `Avoid “no” + give 2 choices: “${offerTwoChoices("sit on your spot on the rug", "sit in your chair spot")}.”`,
+          text: `Avoid “no” + give 2 choices: “Sit on your spot on the rug or sit in your chair spot.”`,
           score: 10,
           feedback: "Great fidelity. You avoided a power struggle and used a safe two-choice prompt.",
           next: "step2A"
@@ -238,7 +238,7 @@ POOL.daily.push({
       text: "KeKu hesitates, then moves toward the chair spot and quiets his hands.",
       choices: {
         A: {
-          text: `Give an incompatible direction + quick start: “${incompatibleDirection("Put both hands on your knees and point to the first picture")}.”`,
+          text: `Give an incompatible direction + quick start: “Put both hands on your knees and point to the first picture.”`,
           score: 10,
           feedback: "Excellent. Clear action that competes with KYHFOOTY and gets him started.",
           next: "step3A"
@@ -263,7 +263,7 @@ POOL.daily.push({
       text: "KeKu smirks and lightly bumps the peer again while watching you.",
       choices: {
         A: {
-          text: `Precision request for incompatible behavior: “${incompatibleDirection("Scoot to your chair spot and put your hands on your lap")}.”`,
+          text: `Precision request for incompatible behavior: “Scoot to your chair spot and put your hands on your lap.”`,
           score: 10,
           feedback: "Great. Specific, fast, and incompatible with poking.",
           next: "step3A"
@@ -288,7 +288,7 @@ POOL.daily.push({
       text: "KeKu kicks the rug edge and says loudly, “This is boring!” A few kids look over.",
       choices: {
         A: {
-          text: `Repair with calm choices: “${offerTwoChoices("chair spot", "end-of-row rug spot")}—then we start.”`,
+          text: `Repair with calm choices: “Chair spot or end-of-row rug spot—then we start.”`,
           score: 10,
           feedback: "Nice repair. You re-established structure without arguing.",
           next: "step3A"
@@ -312,7 +312,7 @@ POOL.daily.push({
     step3A: {
       text: "KeKu is in his assigned spot and starts the first direction.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: markChartMove("Great start—mark a Chart Move for joining and following the direction."), next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Great start—mark a Chart Move for joining and following the direction.", next: "step4" }
       }
     },
 
