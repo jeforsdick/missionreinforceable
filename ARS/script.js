@@ -32,6 +32,8 @@ function setWizardSprite(state) {
 setWizardSprite('meh');
 
 let currentScenario = null; // will be set when starting a mission
+let currentMode = null; // "Daily" | "Crisis" | "Wildcard"
+
 
 /* -------- Scoring -------- */
 let points = 0;
