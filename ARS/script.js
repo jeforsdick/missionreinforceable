@@ -4063,7 +4063,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
     choicesDiv.appendChild(container);
   }
 
-  showFeedback("The Wizard will chime in after every move.", "correct", +10);
+    showFeedback("The Wizard will chime in after every move.", "correct", +10);
 
   const rnd = srandom(seedFromDate());
 
@@ -4073,6 +4073,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
 
   if (drillBtn) {
     drillBtn.onclick = () => {
+      currentMode = "Daily";            // <-- put it here
       resetGame();
       startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
     };
@@ -4080,6 +4081,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
 
   if (crisisBtn) {
     crisisBtn.onclick = () => {
+      currentMode = "Crisis";           // <-- put it here
       resetGame();
       startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
     };
@@ -4087,6 +4089,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
 
   if (randomBtn) {
     randomBtn.onclick = () => {
+      currentMode = "Wildcard";         // <-- put it here
       resetGame();
       startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
     };
