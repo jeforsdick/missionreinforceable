@@ -4078,7 +4078,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
     startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
   };
 }
-
+}
 if (drillBtn) {
   drillBtn.onclick = () => {
     resetGame();
@@ -4094,7 +4094,6 @@ if (randomBtn) {
     startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
   };
 }
-
 
 function pickScenario(pool, rnd) {
   return sample(pool, 1, rnd)[0];
