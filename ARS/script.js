@@ -146,7 +146,7 @@ function sendResultsOnce() {
 
   // === GET STUDENT FROM URL (e.g. ?student=AC) ===
   const url = new URL(window.location.href);
-  const student = url.searchParams.get("student") || "KK";
+  const student = url.searchParams.get("student") || "AC";
 
   const payload = {
     teacher_code: getTeacherCode(),
