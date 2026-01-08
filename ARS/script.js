@@ -144,7 +144,7 @@ function sendResultsOnce() {
     else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
   }
 
-  // === GET STUDENT FROM URL (e.g. ?student=KK) ===
+  // === GET STUDENT FROM URL (e.g. ?student=AC) ===
   const url = new URL(window.location.href);
   const student = url.searchParams.get("student") || "KK";
 
