@@ -59,9 +59,6 @@ function resetGame() {
   SESSION_ID = newSessionId(); 
   setPoints(0);
 
-  let currentMode = "wildcard"; // "daily" | "wildcard" | "crisis"
-
-
   // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
   if (scenarioTitle) {
@@ -141,11 +138,11 @@ function sendResultsOnce() {
   sentThisRun = true;
 
   // === DETERMINE MODE ===
-const mode =
-  currentMode === "daily" ? "Daily" :
-  currentMode === "crisis" ? "Crisis" :
-  "Wildcard";
-
+  let mode = "Wildcard"; // default
+  if (currentScenario && currentScenario.title) {
+    if (currentScenario.title.includes("Daily")) mode = "Daily";
+    else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
+  }
 
   // === GET STUDENT FROM URL (e.g. ?student=AC) ===
   const url = new URL(window.location.href);
@@ -4068,32 +4065,30 @@ You’ll step through short scenarios based on your student's Behavior Plan.
 
   const rnd = srandom(seedFromDate());
 
-const drillBtn  = document.getElementById('btn-drill');
-const crisisBtn = document.getElementById('btn-crisis');
-const randomBtn = document.getElementById('btn-random');
+  const drillBtn  = document.getElementById('btn-drill');
+  const crisisBtn = document.getElementById('btn-crisis');
+  const randomBtn = document.getElementById('btn-random');
 
-if (drillBtn) {
-  drillBtn.onclick = () => {
-    currentMode = "daily";
-    resetGame();
-    startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
-  };
-}
+  if (drillBtn) {
+    drillBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
+    };
+  }
 
-if (crisisBtn) {
-  crisisBtn.onclick = () => {
-    currentMode = "crisis";
-    resetGame();
-    startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
-  };
-}
+  if (crisisBtn) {
+    crisisBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
+    };
+  }
 
-if (randomBtn) {
-  randomBtn.onclick = () => {
-    currentMode = "wildcard";
-    resetGame();
-    startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
-  };
+  if (randomBtn) {
+    randomBtn.onclick = () => {
+      resetGame();
+      startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
+    };
+  }
 }
 
 
