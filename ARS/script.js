@@ -4071,29 +4071,28 @@ You’ll step through short scenarios based on your student's Behavior Plan.
   const crisisBtn = document.getElementById('btn-crisis');
   const randomBtn = document.getElementById('btn-random');
 
-  if (drillBtn) {
-    drillBtn.onclick = () => {
-      currentMode = "Daily";            // <-- put it here
-      resetGame();
-      startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
-    };
-  }
-
   if (crisisBtn) {
-    crisisBtn.onclick = () => {
-      currentMode = "Crisis";           // <-- put it here
-      resetGame();
-      startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
-    };
-  }
+  crisisBtn.onclick = () => {
+    resetGame();                 // do this first
+    currentMode = "Crisis";      // set AFTER resetGame
+    startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
+  };
+}
 
-  if (randomBtn) {
-    randomBtn.onclick = () => {
-      currentMode = "Wildcard";         // <-- put it here
-      resetGame();
-      startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
-    };
-  }
+if (drillBtn) {
+  drillBtn.onclick = () => {
+    resetGame();
+    currentMode = "Daily";
+    startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
+  };
+}
+
+if (randomBtn) {
+  randomBtn.onclick = () => {
+    resetGame();
+    currentMode = "Wildcard";
+    startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
+  };
 }
 
 
