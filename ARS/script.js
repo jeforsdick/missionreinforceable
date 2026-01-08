@@ -3253,7 +3253,7 @@ POOL.wild.push({
 /*************************************************
  * WILDCARD SCENARIO 2 - Substitute Teacher (New Adult, Same Plan)
  **************************************************/
-POOL.wildcard.push({
+POOL.wild.push({
   id: "wildcard_2_substitute_teacher_same_plan",
   title: "Wildcard Mission: Substitute Day",
   start: "step1",
@@ -3444,7 +3444,7 @@ POOL.wildcard.push({
 /*************************************************
  * WILDCARD SCENARIO 3 - Peer Conflict (Keep Safety, Teach a Simple Script)
  **************************************************/
-POOL.wildcard.push({
+POOL.wild.push({
   id: "wildcard_3_peer_conflict_simple_script",
   title: "Wildcard Mission: Peer Conflict",
   start: "step1",
@@ -3635,7 +3635,7 @@ POOL.wildcard.push({
 /*************************************************
  * WILDCARD SCENARIO 4 - Late Arrival (Entering Calmly and Joining the Routine)
  **************************************************/
-POOL.wildcard.push({
+POOL.wild.push({
   id: "wildcard_4_late_arrival_join_routine",
   title: "Wildcard Mission: Late Arrival",
   start: "step1",
@@ -3826,7 +3826,7 @@ POOL.wildcard.push({
 /*************************************************
  * WILDCARD SCENARIO 5 - Fire Drill or Loud Alarm (Noise Trigger + Safety)
  **************************************************/
-POOL.wildcard.push({
+POOL.wild.push({
   id: "wildcard_5_fire_drill_noise_trigger",
   title: "Wildcard Mission: Fire Drill or Loud Alarm",
   start: "step1",
