@@ -54,21 +54,22 @@ function addPoints(delta) {
   }
 }
 function resetGame() {
+  currentMode = null;
+  currentScenario = null;
+
   points = 0;
   maxPossible = 0;
-  events = [];          
-  sentThisRun = false;  
-  SESSION_ID = newSessionId(); 
+  events = [];
+  sentThisRun = false;
+  SESSION_ID = newSessionId();
   setPoints(0);
 
-  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
-  if (scenarioTitle) {
-    scenarioTitle.textContent = "Behavior Intervention Simulator";
-  }
+  if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator";
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
 }
+
 function percentScore() {
   if (maxPossible === 0) return 0;
   const raw = (points / maxPossible) * 100;
@@ -140,11 +141,16 @@ function sendResultsOnce() {
   sentThisRun = true;
 
   // === DETERMINE MODE ===
-  let mode = "Wildcard"; // default
-  if (currentScenario && currentScenario.title) {
-    if (currentScenario.title.includes("Daily")) mode = "Daily";
-    else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
+  let mode = currentMode || "Wildcard";
+
+  // Fallback if currentMode somehow isn't set
+  if (!currentMode && currentScenario && currentScenario.title) {
+    const t = currentScenario.title;
+    if (/Daily/i.test(t)) mode = "Daily";
+    else if (/Red Alert|Crisis|Emergency/i.test(t)) mode = "Crisis";
+    else if (/Wildcard/i.test(t)) mode = "Wildcard";
   }
+
 
   // === GET STUDENT FROM URL (e.g. ?student=AC) ===
   const url = new URL(window.location.href);
