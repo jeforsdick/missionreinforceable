@@ -3062,7 +3062,7 @@ POOL.crisis.push({
 /*************************************************
  * WILDCARD SCENARIO 1 - Surprise Change (Schedule Change)
  **************************************************/
-POOL.wildcard.push({
+POOL.wild.push({
   id: "wildcard_1_surprise_change_schedule",
   title: "Wildcard Mission: Surprise Schedule Change",
   start: "step1",
