@@ -32,6 +32,8 @@ function setWizardSprite(state) {
 setWizardSprite('meh');
 
 let currentScenario = null; // will be set when starting a mission
+let currentMode = null; // "Daily" | "Crisis" | "Wildcard"
+
 
 /* -------- Scoring -------- */
 let points = 0;
@@ -3642,11 +3644,13 @@ POOL.wild.push({
 /* ============================================================
    DYNAMIC MISSION BUILDER — ADAPTED FOR BRANCHING
    ============================================================ */
+function pickScenario(pool, rnd) {
+  return sample(pool, 1, rnd)[0];
+}
+
 function renderIntroCards() {
-  // Make sure the welcome text is visible again (it gets hidden on feedback screens)
   if (storyText) storyText.style.display = 'block';
 
-  // Remove any old summary panel if it exists
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
 
@@ -3661,7 +3665,6 @@ You’ll step through short scenarios based on your student's Behavior Plan.
 
   const menu = document.createElement('div');
   menu.className = 'mission-grid';
-
   menu.innerHTML = `
     <div class="mission-card">
       <h3>Daily Mission</h3>
@@ -3686,7 +3689,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
     choicesDiv.appendChild(container);
   }
 
-  showFeedback("The Wizard will chime in after every move.", "correct", +10);
+  showFeedback("The Wizard will chime in after every move.", "correct", 10);
 
   const rnd = srandom(seedFromDate());
 
@@ -3697,6 +3700,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
   if (drillBtn) {
     drillBtn.onclick = () => {
       resetGame();
+      currentMode = "Daily";
       startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
     };
   }
@@ -3704,6 +3708,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
   if (crisisBtn) {
     crisisBtn.onclick = () => {
       resetGame();
+      currentMode = "Crisis";
       startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
     };
   }
@@ -3711,6 +3716,7 @@ You’ll step through short scenarios based on your student's Behavior Plan.
   if (randomBtn) {
     randomBtn.onclick = () => {
       resetGame();
+      currentMode = "Wildcard";
       startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
     };
   }
@@ -3781,6 +3787,7 @@ function startDynamicMission(modeLabel, scn) {
   showNode(stepIds[scn.start]);
   showFeedback("Mission launched! Good Luck. 🚀", "correct", +10);
 }
+
 
 /* -------- Static summary node (fallback if no ending) -------- */
 const NODES = [
