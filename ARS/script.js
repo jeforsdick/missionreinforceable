@@ -201,20 +201,7 @@ const POOL = {
   crisis: [],
   wild: []
 };
-/* ============================================================
-   CONTENT POOLS — YOUR NEW BRANCHING SCENARIOS
-   ============================================================ */
-/*************************************************
- * SCENARIO DATA POOL
- * - 10 daily
- * - 5 crisis
- * - 5 wildcard
- **************************************************/
-const POOL = {
-  daily: [],
-  crisis: [],
-  wild: []
-};
+
 /*************************************************
  * DAILY SCENARIO 1 - Independent Reading (Hard Task + Asking for Help or Break)
  **************************************************/
