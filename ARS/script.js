@@ -16,26 +16,6 @@ const feedbackEl      = document.getElementById('feedback');
 const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
-function formatMountain(date = new Date()) {
-  // Utah Mountain time (handles DST automatically)
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Denver",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false
-  }).formatToParts(date);
-
-  const get = (type) => parts.find(p => p.type === type)?.value;
-
-  // Produces: YYYY-MM-DDTHH:mm:ss (Mountain time)
-  return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}:${get("second")}`;
-}
-
-
 /* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
   plus:  'mr-wizard-plus10.png',
@@ -74,22 +54,21 @@ function addPoints(delta) {
   }
 }
 function resetGame() {
-  currentMode = null;
-  currentScenario = null;
-
   points = 0;
   maxPossible = 0;
-  events = [];
-  sentThisRun = false;
-  SESSION_ID = newSessionId();
+  events = [];          
+  sentThisRun = false;  
+  SESSION_ID = newSessionId(); 
   setPoints(0);
 
+  // === CLEAR FEEDBACK & SUMMARY PANEL ON RESTART ===
   showFeedback('', null, 0);
-  if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator";
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Behavior Intervention Simulator";
+  }
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
 }
-
 function percentScore() {
   if (maxPossible === 0) return 0;
   const raw = (points / maxPossible) * 100;
@@ -98,7 +77,7 @@ function percentScore() {
 function fidelityMessage() {
   const pct = percentScore();
 
- if (pct >= 80) {
+   if (pct >= 80) {
   return "Strong run. You stayed calm and brief, kept it private, and helped AC get back on track fast. You also followed through with the earning plan (stickers) when he met the goal.";
 }
 if (pct >= 50) {
@@ -161,33 +140,27 @@ function sendResultsOnce() {
   sentThisRun = true;
 
   // === DETERMINE MODE ===
-  let mode = currentMode || "Wildcard";
-
-  // Fallback if currentMode somehow isn't set
-  if (!currentMode && currentScenario && currentScenario.title) {
-    const t = currentScenario.title;
-    if (/Daily/i.test(t)) mode = "Daily";
-    else if (/Red Alert|Crisis|Emergency/i.test(t)) mode = "Crisis";
-    else if (/Wildcard/i.test(t)) mode = "Wildcard";
+  let mode = "Wildcard"; // default
+  if (currentScenario && currentScenario.title) {
+    if (currentScenario.title.includes("Daily")) mode = "Daily";
+    else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
   }
 
-
-  // === GET STUDENT FROM URL (e.g. ?student=AC) ===
+  // === GET STUDENT FROM URL (e.g. ?student=KK) ===
   const url = new URL(window.location.href);
   const student = url.searchParams.get("student") || "AC";
 
-const payload = {
-  teacher_code: getTeacherCode(),
-  session_id: SESSION_ID,
-  points,
-  max_possible: maxPossible,
-  percent: percentScore(),
-  timestamp: formatMountain(new Date()),
-  log: events,
-  mode: mode,
-  student: student
-};
-
+  const payload = {
+    teacher_code: getTeacherCode(),
+    session_id: SESSION_ID,
+    points,
+    max_possible: maxPossible,
+    percent: percentScore(),
+    timestamp: new Date().toISOString(),
+    log: events,
+    mode: mode,
+    student: student
+  };
 
   try {
     fetch(RESULT_ENDPOINT, {
@@ -203,9 +176,7 @@ const payload = {
 }
 
 /* -------- Utilities -------- */
-function shuffledOptions(options, rnd = Math.random) {
-  return shuffle((options || []).map(o => ({ ...o })), rnd);
-}
+function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
 function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
 function sample(pool, k, rnd=Math.random){ return shuffle(pool, rnd).slice(0, Math.min(k, pool.length)); }
 function seedFromDate(){
@@ -216,6 +187,20 @@ function seedFromDate(){
 }
 function srandom(seed){ let x=(seed>>>0)||1234567; return function(){ x^=x<<13; x^=x>>>17; x^=x<<5; return ((x>>>0)/4294967295); }; }
 
+/* ============================================================
+   CONTENT POOLS — YOUR NEW BRANCHING SCENARIOS
+   ============================================================ */
+/*************************************************
+ * SCENARIO DATA POOL
+ * - 10 daily
+ * - 5 crisis
+ * - 5 wildcard
+ **************************************************/
+const POOL = {
+  daily: [],
+  crisis: [],
+  wild: []
+};
 /* ============================================================
    CONTENT POOLS — YOUR NEW BRANCHING SCENARIOS
    ============================================================ */
@@ -4192,6 +4177,7 @@ function startDynamicMission(modeLabel, scn) {
   showFeedback("Mission launched! Good Luck. 🚀", "correct", +10);
 }
 
+
 /* -------- Static summary node (fallback if no ending) -------- */
 const NODES = [
   { id: 901, feedback: true, text: "Session Summary",
@@ -4250,6 +4236,7 @@ else {
     </ul>`;
 }
 
+
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
 
@@ -4298,8 +4285,7 @@ else {
   }
 
   choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options, rnd);
-
+  const options = shuffledOptions(node.options);
 
   options.forEach(opt => {
     const btn = document.createElement('button');
