@@ -203,7 +203,9 @@ const payload = {
 }
 
 /* -------- Utilities -------- */
-function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
+function shuffledOptions(options, rnd = Math.random) {
+  return shuffle((options || []).map(o => ({ ...o })), rnd);
+}
 function shuffle(a, rnd=Math.random){ const x=[...a]; for(let i=x.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [x[i],x[j]]=[x[j],x[i]];} return x; }
 function sample(pool, k, rnd=Math.random){ return shuffle(pool, rnd).slice(0, Math.min(k, pool.length)); }
 function seedFromDate(){
@@ -4296,7 +4298,8 @@ else {
   }
 
   choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
+  const options = shuffledOptions(node.options, rnd);
+
 
   options.forEach(opt => {
     const btn = document.createElement('button');
