@@ -16,6 +16,26 @@ const feedbackEl      = document.getElementById('feedback');
 const feedbackTextEl  = document.getElementById('feedback-text');
 const coachImgEl      = document.getElementById('coach-img');
 
+function formatMountain(date = new Date()) {
+  // Utah Mountain time (handles DST automatically)
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Denver",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).formatToParts(date);
+
+  const get = (type) => parts.find(p => p.type === type)?.value;
+
+  // Produces: YYYY-MM-DDTHH:mm:ss (Mountain time)
+  return `${get("year")}-${get("month")}-${get("day")}T${get("hour")}:${get("minute")}:${get("second")}`;
+}
+
+
 /* -------- Wizard sprites (same folder as index.html) -------- */
 const WIZ = {
   plus:  'mr-wizard-plus10.png',
@@ -156,17 +176,18 @@ function sendResultsOnce() {
   const url = new URL(window.location.href);
   const student = url.searchParams.get("student") || "AC";
 
-  const payload = {
-    teacher_code: getTeacherCode(),
-    session_id: SESSION_ID,
-    points,
-    max_possible: maxPossible,
-    percent: percentScore(),
-    timestamp: new Date().toISOString(),
-    log: events,
-    mode: mode,
-    student: student
-  };
+const payload = {
+  teacher_code: getTeacherCode(),
+  session_id: SESSION_ID,
+  points,
+  max_possible: maxPossible,
+  percent: percentScore(),
+  timestamp: formatMountain(new Date()),
+  log: events,
+  mode: mode,
+  student: student
+};
+
 
   try {
     fetch(RESULT_ENDPOINT, {
