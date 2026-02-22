@@ -77,15 +77,16 @@ function percentScore() {
 function fidelityMessage() {
   const pct = percentScore();
 
-  if (pct >= 80) {
-    return "High fidelity. You stayed calm and brief, redirected without spotlighting, and reinforced the right behaviors quickly (Chart Moves). KeKu got a clear path back to success.";
-  }
-  if (pct >= 50) {
-    return "Getting there. Try fewer words + faster reinforcement. Prompt the replacement behavior right away, keep directions to one step, and use Chart Moves the moment you see safe hands/calm body/task start.";
-  }
-  return "Not aligned yet. Reset your approach: one-step directive, prompt the replacement behavior, reinforce immediately (Chart Moves), and avoid public corrections or debates. If escalation builds, move straight to the reset/safety steps.";
-}
+ // SR (escape-maintained work avoidance + noises/talking) — updated summary statement
 
+if (pct >= 80) {
+  return "High fidelity. You stayed calm and brief, supported task entry (start together then fade), and prompted help-seeking early. SR had a clear path back to success and you reinforced quickly with a Yeehaw ticket and specific praise.";
+}
+if (pct >= 50) {
+  return "Getting there. Use fewer words and move faster into the plan: prompt “If it’s hard, ask for help,” offer a tiny next step (one sentence, one problem), and reinforce immediately when SR re-enters with a Yeehaw ticket and specific praise.";
+}
+return "Not aligned yet. Reset your approach: keep language minimal, avoid public corrections or debates, and go straight to a predictable routine (quiet proximity cue, 1–10 effort check-in, start together for one step, then fade). Reinforce task start and help-seeking right away. If safety risk shows up, follow the safety steps exactly.";
+}
 
 /* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
@@ -146,9 +147,9 @@ function sendResultsOnce() {
     else if (currentScenario.title.includes("Crisis") || currentScenario.title.includes("Emergency")) mode = "Crisis";
   }
 
-  // === GET STUDENT FROM URL (e.g. ?student=KK) ===
+  // === GET STUDENT FROM URL (e.g. ?student=SR) ===
   const url = new URL(window.location.href);
-  const student = url.searchParams.get("student") || "KK";
+  const student = url.searchParams.get("student") || "SR";
 
   const payload = {
     teacher_code: getTeacherCode(),
@@ -202,161 +203,150 @@ const POOL = {
   wild: []
 };
 /*************************************************
- * DAILY SCENARIO 1 — Whole-Group Instruction (Calling Out)
- **************************************************/
-/*************************************************
- * DAILY SCENARIO 1 — Whole-Group Rug Time (Escape + Disruption)
+ * DAILY SCENARIO 1 — ELA Independent Reading (Work Avoidance)
  **************************************************/
 POOL.daily.push({
-  id: "daily_1_rug_time_task_start",
-  title: "Daily Mission: Rug Time Start-Up",
+  id: "daily_1_ela_independent_reading_escape",
+  title: "Daily Mission: ELA Independent Reading",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "During whole-group instruction on the rug, KeKu starts sliding backward and lightly pokes the student next to him (KYHFOOTY risk). When you begin the directions, he says, “I’m not doing this,” and looks for reactions.",
+      text: "During ELA independent reading, SR flips to a longer passage, stares at it, and quietly pushes the paper away. He starts looking around for someone to talk to.",
       choices: {
         A: {
-          text: `Avoid “no” + give 2 choices: “Sit on your spot on the rug or sit in your chair spot.”`,
+          text: "Start together: “Let’s do the hardest first sentence together, then you try the next one. If it feels hard, ask for help.”",
           score: 10,
-          feedback: "Great fidelity. You avoided a power struggle and used a safe two-choice prompt.",
+          feedback: "Great fidelity. You reduce the demand and prompt the replacement behavior (do what you can, ask for help).",
           next: "step2A"
         },
         B: {
-          text: "Say, “Come on, be good and listen.”",
+          text: "Say, “Just do your best and keep going,” and walk away.",
           score: 0,
-          feedback: "Neutral. It’s a prompt, but not specific and may increase negotiation.",
+          feedback: "Neutral. Encouraging, but it does not teach or prompt how to ask for help when it feels hard.",
           next: "step2B"
         },
         C: {
-          text: "Say, “No. Stop it right now,” in front of the group.",
+          text: "Say, “Stop stalling. Get to work,” where others can hear.",
           score: -10,
-          feedback: "Public correction + ‘no’ can escalate and pull peer attention.",
+          feedback: "Public correction can increase avoidance and starts a power struggle.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "KeKu hesitates, then moves toward the chair spot and quiets his hands.",
+      text: "SR does the first sentence with you, then hesitates on the next one and glances toward a peer.",
       choices: {
         A: {
-          text: `Give an incompatible direction + quick start: “Put both hands on your knees and point to the first picture.”`,
+          text: "Prompt a help request: “If it’s hard, ask for help. Do you want help from me or a peer?”",
           score: 10,
-          feedback: "Excellent. Clear action that competes with KYHFOOTY and gets him started.",
+          feedback: "Excellent. You prompt a clear, functional replacement and give a small choice.",
           next: "step3A"
         },
         B: {
-          text: "Let it go and continue teaching without checking in.",
+          text: "Tell him, “Keep trying,” without offering a help option.",
           score: 0,
-          feedback: "Neutral. Might work, but you missed a chance to lock in the routine.",
+          feedback: "Neutral. He may still avoid if he cannot access help appropriately.",
           next: "step3B"
         },
         C: {
-          text: "Remind him about consequences if he pokes again.",
+          text: "Say, “Do not talk. You are distracting people,” in a firm tone.",
           score: -10,
-          feedback: "Threat talk often increases escape/attention cycles.",
+          feedback: "Focuses on talking before teaching how to respond when work feels hard, which can increase escape behavior.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "KeKu smirks and lightly bumps the peer again while watching you.",
+      text: "SR slumps and starts whispering to a nearby student about something unrelated.",
       choices: {
         A: {
-          text: `Precision request for incompatible behavior: “Scoot to your chair spot and put your hands on your lap.”`,
+          text: "Use proximity and a quiet reminder: “Save conversation for later. If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Great. Specific, fast, and incompatible with poking.",
+          feedback: "Great. You keep attention low and prompt the exact expected behaviors.",
           next: "step3A"
         },
         B: {
-          text: "Give him ‘the look’ and keep talking.",
+          text: "Say softly, “Not right now,” and keep helping other students.",
           score: 0,
-          feedback: "Neutral. Nonverbal cues can help, but may not interrupt the pattern.",
+          feedback: "Neutral. It might pause the talking, but the help-seeking replacement is still missing.",
           next: "step3B"
         },
         C: {
-          text: "Call him out to the group: “KeKu is not following directions.”",
+          text: "Call out, “SR, stop talking,” from across the room.",
           score: -10,
-          feedback: "This gives peer attention and can escalate refusal.",
+          feedback: "Public attention can reinforce the off-task behavior and disrupt instruction.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu kicks the rug edge and says loudly, “This is boring!” A few kids look over.",
+      text: "SR sighs loudly and responds with a drawn-out “Uhhhhhh,” then looks at peers to see who noticed.",
       choices: {
         A: {
-          text: `Repair with calm choices: “Chair spot or end-of-row rug spot—then we start.”`,
+          text: "Quietly reset with stop-and: “Let’s pause. 1–10, how hard are you working right now?” then prompt help.",
           score: 10,
-          feedback: "Nice repair. You re-established structure without arguing.",
+          feedback: "Nice. You use your scale and redirect to help-seeking without giving a big audience moment.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to calm down.",
+          text: "Say, “Just focus,” and move on quickly.",
           score: 0,
-          feedback: "Neutral, but not a clear action to follow.",
+          feedback: "Neutral. It avoids a debate, but it does not teach what to do when it feels hard.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about respect and listening.",
+          text: "Lecture him about attitude and being respectful.",
           score: -10,
-          feedback: "Long attention moment can reinforce the behavior.",
+          feedback: "Extended attention often increases escape behavior and keeps the cycle going.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu is in his assigned spot and starts the first direction.",
+      text: "SR asks for help and starts working again, staying quiet.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Great start—mark a Chart Move for joining and following the direction.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Replacement behavior happened and work resumed.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu is quieter but still wiggly and scanning peers.",
+      text: "SR writes a little, then slows down and looks around again.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Stable but not fully engaged yet.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. He may need the routine prompted again.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu shifts back toward peers and reaches toward another student’s materials (Property Misuse risk).",
+      text: "SR stops working and starts another quiet conversation with a peer.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Risk is increasing—redirect quickly with an incompatible direction.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Off-task talking is maintaining escape from the difficult task.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "How do you finalize support in this moment?",
+      text: "How do you wrap up this moment?",
       choices: {
         A: {
-          text: "Brief praise + mark a Chart Move, then give the next clear direction.",
+          text: "Praise specifically and deliver reinforcement: “Nice job doing what you could and asking for help.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Perfect: reinforcement stays private and the lesson keeps moving.",
+          feedback: "Perfect. Reinforces task persistence and appropriate help-seeking.",
           ending: "success"
         },
         B: {
-          text: "Move on without marking anything.",
+          text: "Let him continue without praise or reinforcement.",
           score: 0,
-          feedback: "Okay, but missed a key reinforcement moment.",
+          feedback: "Neutral. He is working, but the replacement behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Bring up his earlier behavior in front of peers.",
+          text: "Bring up the earlier avoidance again and warn about consequences.",
           score: -10,
-          feedback: "Public attention can restart the cycle.",
+          feedback: "Reintroduces attention and can restart escape behavior.",
           ending: "fail"
         }
       }
@@ -365,165 +355,166 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Routine + Compliance Strengthened",
-      text: "KeKu started whole-group successfully using choices, incompatible directions, and reinforcement through Chart Moves."
+      title: "Success – Help-Seeking Reinforced",
+      text: "SR accessed help appropriately and re-engaged with the challenging task, then earned reinforcement."
     },
     mixed: {
-      title: "Mixed Outcome – Stable but Under-Reinforced",
-      text: "KeKu complied, but the team missed a chance to strengthen the routine with a Chart Move."
+      title: "Mixed Outcome – Working, But Not Strengthened",
+      text: "SR worked, but without clear reinforcement the replacement behavior may not maintain."
     },
     fail: {
-      title: "Escalation – Peer Attention Maintained",
-      text: "Public attention and unclear structure increased the chance of KYHFOOTY/property issues continuing."
+      title: "Fail – Escape Pattern Continued",
+      text: "The interaction increased attention and avoidance, making future work refusal more likely."
     }
   }
 });
 
+
 /*************************************************
- * DAILY SCENARIO 2 — Independent Work Start
+ * DAILY SCENARIO 2 — Writing Block (Quit Working Then Talk)
  **************************************************/
 POOL.daily.push({
-  id: "daily_2_independent_work_start",
-  title: "Daily Mission: Independent Work Start",
+  id: "daily_2_writing_quit_then_talk",
+  title: "Daily Mission: Writing Block",
   start: "step1",
   steps: {
 
     step1: {
-      text: "Independent work begins. KeKu looks at the worksheet, sighs loudly, and starts folding the corner of the paper while watching nearby peers (Property Misuse risk).",
+      text: "During writing, SR writes one sentence, then stops. He puts his pencil down, looks at the page, and turns to start a quiet conversation with a neighbor.",
       choices: {
         A: {
-          text: "Offer two choices tied to starting: “Would you like to start with the top problem or the bottom problem?”",
+          text: "Use a quiet stop-and check-in: “1–10, how hard are you working right now?” Then: “Pick the hardest part and we will start together.”",
           score: 10,
-          feedback: "Great. Choices reduce escape behavior and get him started without pressure.",
+          feedback: "Great match to your plan. You use the scale, reduce the demand, and re-start the work with support.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Let’s get started, buddy.”",
+          text: "Say, “Keep writing,” and point to the prompt.",
           score: 0,
-          feedback: "Neutral encouragement, but not specific enough to reduce avoidance.",
+          feedback: "Neutral. It is a directive, but it does not teach what to do when it feels hard.",
           next: "step2B"
         },
         C: {
-          text: "Say, “Stop messing with your paper and do your work.”",
+          text: "Tell him, “Stop talking. You never focus,” in front of others.",
           score: -10,
-          feedback: "Public correction + ‘stop’ language may escalate escape behavior.",
+          feedback: "Public correction and global statements increase frustration and escape.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu pauses, then flattens the paper and looks at the bottom problem.",
+      text: "SR says, “It’s like a 9,” and looks stuck. He still watches the peer like he wants to talk.",
       choices: {
         A: {
-          text: "Say: “Write your name and circle the first problem.”",
+          text: "Give a choice plus help: “Do you want help from me or a peer? Then write one more sentence.”",
           score: 10,
-          feedback: "Excellent. Clear action that competes with property misuse.",
+          feedback: "Excellent. Clear replacement behavior plus a tiny, doable expectation.",
           next: "step3A"
         },
         B: {
-          text: "Walk away to give him space.",
+          text: "Say, “Okay, just try,” without offering help or a next step.",
           score: 0,
-          feedback: "Neutral. May work, but misses a chance to lock in momentum.",
+          feedback: "Neutral. Acknowledges difficulty but does not give a path forward.",
           next: "step3B"
         },
         C: {
-          text: "Warn him not to crumple the paper.",
+          text: "Say, “It’s not that hard,” and push him to keep going.",
           score: -10,
-          feedback: "Threat-based reminders can increase avoidance.",
+          feedback: "Invalidation increases avoidance and can trigger whining or shutdown.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu slowly slides the paper away and taps his pencil loudly.",
+      text: "SR makes a quiet noise, “Uhhhhhh,” then begins whispering to the peer again.",
       choices: {
         A: {
-          text: "Precision request: “Slide the paper back and put your pencil on number one.”",
+          text: "Proximity + quiet prompt: “Save conversation for later. If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Specific and fast — reduces avoidance.",
+          feedback: "Great. You keep it private and cue both expectations.",
           next: "step3A"
         },
         B: {
-          text: "Give a quiet look and wait.",
+          text: "Say, “Not now,” and walk away.",
           score: 0,
-          feedback: "Neutral, but may allow avoidance to continue.",
+          feedback: "Neutral. It might pause behavior, but he still lacks the replacement response.",
           next: "step3B"
         },
         C: {
-          text: "Tell him you’ll take the paper if he keeps touching it.",
+          text: "Call him out across the room for making noises and talking.",
           score: -10,
-          feedback: "Escalates control struggles and escape behavior.",
+          feedback: "Public attention can reinforce the behavior and derail writing time.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu smirks and begins tearing the paper edge while glancing at peers.",
+      text: "SR smirks slightly and keeps whispering, testing whether you will keep engaging.",
       choices: {
         A: {
-          text: "Repair calmly: “New paper or write on the whiteboard — you choose.”",
+          text: "Stop-and with private debrief: “We will talk after. Right now: one sentence, then check in.”",
           score: 10,
-          feedback: "Nice repair using choice instead of confrontation.",
+          feedback: "Nice repair. You reduce attention and set a small, clear step.",
           next: "step3A"
         },
         B: {
-          text: "Tell him he’s wasting time.",
+          text: "Give him a stern look and keep teaching.",
           score: 0,
-          feedback: "Neutral but attention-heavy.",
+          feedback: "Neutral. Might work, but it is not consistent prompting of the replacement behavior.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about respecting materials.",
+          text: "Argue about why he needs to do the assignment right now.",
           score: -10,
-          feedback: "Long attention moment reinforces escape.",
+          feedback: "Debate increases attention and makes escape more efficient.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu begins writing and keeps his hands to himself.",
+      text: "SR asks for help and writes another sentence quietly.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Good task engagement.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He used help-seeking and persisted with the task.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu sits quietly but does not start yet.",
+      text: "SR writes a few words but pauses again and looks toward the peer.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Stable, but momentum is weak.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. He may need another quick prompt and reinforcement.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu drops the paper and looks toward peers for reactions.",
+      text: "SR stops writing and continues the quiet conversation, fully off task.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Avoidance + attention cycle active.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Talking is functioning as escape from writing demands.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce this moment?",
+      text: "How do you conclude support for writing?",
       choices: {
         A: {
-          text: "Brief praise and mark a Chart Move for starting work.",
+          text: "Deliver quick praise and a Yeehaw ticket: “Thanks for asking for help and sticking with it.”",
           score: 10,
-          feedback: "Perfect reinforcement for task initiation.",
+          feedback: "Perfect reinforcement for persistence and help-seeking.",
           ending: "success"
         },
         B: {
-          text: "Move on without feedback.",
+          text: "Give a general “good job” later without tying it to the specific behavior.",
           score: 0,
-          feedback: "Missed reinforcement opportunity.",
+          feedback: "Neutral. Praise is helpful, but the contingency is weaker.",
           ending: "mixed"
         },
         C: {
-          text: "Mention earlier behavior in front of peers.",
+          text: "Remove help and tell him to do it alone since he was off task earlier.",
           score: -10,
-          feedback: "Public attention risks re-escalation.",
+          feedback: "Reduces supports when work is hard, increasing escape behavior next time.",
           ending: "fail"
         }
       }
@@ -532,165 +523,166 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Work Started",
-      text: "KeKu initiated independent work using structured choices and clear directions."
+      title: "Success – Writing Persistence Reinforced",
+      text: "SR practiced doing what he could, asked for help, and earned reinforcement."
     },
     mixed: {
-      title: "Mixed – Partial Engagement",
-      text: "KeKu stayed regulated but did not fully engage with the task."
+      title: "Mixed Outcome – Some Work Done",
+      text: "SR completed some writing, but replacement behavior was not clearly strengthened."
     },
     fail: {
-      title: "Fail – Avoidance Maintained",
-      text: "Escape and attention behaviors reduced work engagement."
+      title: "Fail – Avoidance Strengthened",
+      text: "Supports were inconsistent, making talking and quitting more likely in future writing tasks."
     }
   }
 });
 
+
 /*************************************************
- * DAILY SCENARIO 3 — Transition to Partner Work
+ * DAILY SCENARIO 3 — During Instruction (Mumbling and Noises)
  **************************************************/
 POOL.daily.push({
-  id: "daily_3_partner_transition",
-  title: "Daily Mission: Partner Work Transition",
+  id: "daily_3_instruction_mumbling_noises",
+  title: "Daily Mission: During Instruction",
   start: "step1",
   steps: {
 
     step1: {
-      text: "You announce a transition from independent work to partner work. KeKu immediately says loudly, “I don’t want a partner!” and looks around for reactions.",
+      text: "You are giving directions for a task. SR begins low mumbling and small noises while looking down at his paper. A couple students glance at him.",
       choices: {
         A: {
-          text: "Pre-correct with choice: “Would you like to be partner A or partner B?”",
+          text: "Use proximity and a quiet reminder: “No noises during instruction. If it feels hard, ask for help.”",
           score: 10,
-          feedback: "Great — gives control within the routine.",
+          feedback: "Great. Private, quick, and directly teaches expected behavior and replacement skill.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Everyone needs a partner.”",
+          text: "Pause and ask, “Are you okay?” in front of the group.",
           score: 0,
-          feedback: "Neutral, but may invite negotiation.",
+          feedback: "Neutral. Caring, but it can add attention during instruction and may not cue the plan.",
           next: "step2B"
         },
         C: {
-          text: "Say, “Stop complaining and pick a partner.”",
+          text: "Stop the class and say, “SR, stop making noises.”",
           score: -10,
-          feedback: "Public correction increases attention-seeking.",
+          feedback: "Public correction increases attention and can escalate avoidance.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu hesitates, then points to partner B.",
+      text: "SR nods slightly and quiets. He looks at the assignment directions again and hesitates.",
       choices: {
         A: {
-          text: "Say: “Sit next to partner B and open to page one.”",
+          text: "Prompt a help request: “Do you want help from me or a peer to get started?”",
           score: 10,
-          feedback: "Excellent — clear and task-focused.",
+          feedback: "Excellent. You pair calm expectation with a clear path to support.",
           next: "step3A"
         },
         B: {
-          text: "Let him move on his own.",
+          text: "Say, “Just listen,” and continue directions.",
           score: 0,
-          feedback: "Neutral; may slow the transition.",
+          feedback: "Neutral. It keeps class moving but may leave him stuck when work starts.",
           next: "step3B"
         },
         C: {
-          text: "Remind him to use a nicer tone.",
+          text: "Tell him he is wasting everyone’s time.",
           score: -10,
-          feedback: "Tone policing adds attention without progress.",
+          feedback: "Shame and public attention can increase escape behavior.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu sighs dramatically and mutters, “This is dumb.”",
+      text: "SR responds with a long “Uhhhhhh,” and a few students look over again.",
       choices: {
         A: {
-          text: "Precision request: “Stand up and walk to your partner.”",
+          text: "Quiet stop-and: “We will debrief after. Right now: show me which part is hardest.”",
           score: 10,
-          feedback: "Direct and clear — reduces delay.",
+          feedback: "Great. You contain attention and move directly into a support step.",
           next: "step3A"
         },
         B: {
-          text: "Ignore and continue instructions.",
+          text: "Ignore it and keep teaching.",
           score: 0,
-          feedback: "Neutral but may leave him stuck.",
+          feedback: "Neutral. It avoids attention, but he may still be headed toward work refusal.",
           next: "step3B"
         },
         C: {
-          text: "Respond with, “That’s not appropriate.”",
+          text: "Respond with sarcasm or a reprimand about the noise.",
           score: -10,
-          feedback: "Verbal attention may escalate.",
+          feedback: "Escalates emotion and attention during instruction.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu repeats loudly, “I SAID I don’t want a partner!” Peers stare.",
+      text: "SR looks up, smirks slightly, then starts a quiet side comment to a peer.",
       choices: {
         A: {
-          text: "Repair calmly: “Sit with me first, then join your partner.”",
+          text: "Move closer and quietly redirect: “Save conversation for later. Track me for directions.”",
           score: 10,
-          feedback: "Nice repair — reduces pressure and attention.",
+          feedback: "Great fidelity. Proximity and quiet reminders match your plan.",
           next: "step3A"
         },
         B: {
-          text: "Tell him he’s holding everyone up.",
+          text: "Give a stern look and keep going.",
           score: 0,
-          feedback: "Peer pressure increases escalation risk.",
+          feedback: "Neutral. Might work, but the plan is not clearly prompted.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about cooperation.",
+          text: "Engage in a back-and-forth about why he is talking.",
           score: -10,
-          feedback: "Long attention moment fuels the behavior.",
+          feedback: "Debate gives attention and can reinforce the behavior.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu sits with his partner and opens the materials.",
+      text: "SR is quiet and follows directions, then signals he needs help to start.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Successful transition.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He stayed quiet and accessed support appropriately.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu stands near his partner but doesn’t start yet.",
+      text: "SR is quiet for now but looks disengaged and avoids eye contact with the work.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Transition incomplete.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Stable, but he may need a proactive check-in when work begins.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu turns away from the partner and scans the room.",
+      text: "SR resumes mumbling and peers are now reacting more.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Attention cycle persists.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Peer attention and escape are both being strengthened.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce the transition?",
+      text: "How do you reinforce instruction-following in this moment?",
       choices: {
         A: {
-          text: "Quiet praise and mark a Chart Move for joining partner work.",
+          text: "Deliver quick praise: “Thanks for staying quiet during directions.” Then give a Yeehaw ticket when he starts.",
           score: 10,
-          feedback: "Strong reinforcement for flexibility.",
+          feedback: "Perfect. Reinforces the exact expectation and task initiation.",
           ending: "success"
         },
         B: {
-          text: "Move on without feedback.",
+          text: "Move into the task without acknowledging the change.",
           score: 0,
-          feedback: "Routine not strengthened.",
+          feedback: "Neutral. It keeps pace but misses reinforcement for the expected behavior.",
           ending: "mixed"
         },
         C: {
-          text: "Bring up his refusal in front of peers.",
+          text: "Bring up the earlier noise again as a warning before starting work.",
           score: -10,
-          feedback: "Public attention undermines transition success.",
+          feedback: "Reintroduces attention and can trigger renewed avoidance.",
           ending: "fail"
         }
       }
@@ -699,165 +691,166 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Partner Transition Completed",
-      text: "KeKu transitioned to partner work using choices and clear structure."
+      title: "Success – Quiet During Instruction Reinforced",
+      text: "SR stayed quiet during directions and used support appropriately, strengthening instruction routines."
     },
     mixed: {
-      title: "Mixed – Partial Transition",
-      text: "KeKu transitioned but without reinforcement for flexibility."
+      title: "Mixed Outcome – Calm, But Not Strengthened",
+      text: "SR stabilized, but reinforcement was not clearly tied to the expected behavior."
     },
     fail: {
-      title: "Fail – Transition Escalation",
-      text: "Peer attention reinforced refusal behaviors."
+      title: "Fail – Attention and Escape Increased",
+      text: "Public engagement increased attention and made avoidance more likely during future instruction."
     }
   }
 });
 
+
 /*************************************************
- * DAILY SCENARIO 4 — Return From Specials
+ * DAILY SCENARIO 4 — Lining Up (Hallway Trigger)
  **************************************************/
 POOL.daily.push({
-  id: "daily_4_return_from_specials",
-  title: "Daily Mission: Return From Specials",
+  id: "daily_4_lining_up_hallway_talking",
+  title: "Daily Mission: Lining Up and Hallway",
   start: "step1",
   steps: {
 
     step1: {
-      text: "The class returns from PE. KeKu is energized and begins wandering past his desk, bumping into chairs and drifting toward the door (Unexpected Location risk).",
+      text: "It is time to line up. SR starts talking immediately, making quiet side comments and small noises while the class is forming the line. This is a known trigger time.",
       choices: {
         A: {
-          text: "Pre-correct with choice: “Desk spot or end-of-row seat — you choose.”",
+          text: "Pre-correct privately with proximity: “Quiet line. Save conversation for later. Show me you can do it.”",
           score: 10,
-          feedback: "Great — proactive structure reduces wandering.",
+          feedback: "Great. Clear expectations, low attention, matches your hallway trigger area.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Everyone find your seat.”",
+          text: "Say, “Let’s be quiet in the hall,” to the whole class.",
           score: 0,
-          feedback: "Neutral, but not specific enough for him.",
+          feedback: "Neutral. Classwide reminder helps, but it may not be enough for SR.",
           next: "step2B"
         },
         C: {
-          text: "Say loudly, “KeKu, get back to your seat!”",
+          text: "Call him out by name in front of the line: “SR, stop talking.”",
           score: -10,
-          feedback: "Public call-out may escalate movement.",
+          feedback: "Public attention can increase talking and invite peer reactions.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu walks toward the end-of-row seat and pauses.",
+      text: "SR quiets briefly but then makes a small “uhhh” noise as he looks at the students in front of him.",
       choices: {
         A: {
-          text: "Say: “Sit down and put your feet flat on the floor.”",
+          text: "Use a quiet reminder: “No noises. Track forward.” Then move your attention away.",
           score: 10,
-          feedback: "Clear physical direction competing with elopement.",
+          feedback: "Excellent. Brief, neutral, and avoids building an audience.",
           next: "step3A"
         },
         B: {
-          text: "Wait quietly.",
+          text: "Say, “Almost there,” and keep watching him closely.",
           score: 0,
-          feedback: "Neutral — may work but less support.",
+          feedback: "Neutral. Monitoring helps, but the expectation is not clearly cued again.",
           next: "step3B"
         },
         C: {
-          text: "Remind him about expectations after PE.",
+          text: "Tell him he is being annoying and needs to stop.",
           score: -10,
-          feedback: "Extra verbal attention may escalate.",
+          feedback: "Negative attention can escalate and increase hallway issues.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu circles his desk and taps another student’s chair.",
+      text: "SR keeps talking quietly to the student behind him. A few kids begin talking too.",
       choices: {
         A: {
-          text: "Precision request: “Sit in your seat and hands on desk.”",
+          text: "Proximity and quiet prompt to SR only: “Quiet line. Save it for later.”",
           score: 10,
-          feedback: "Direct and grounding.",
+          feedback: "Great. You target the student without turning it into a group attention moment.",
           next: "step3A"
         },
         B: {
-          text: "Give a nonverbal signal.",
+          text: "Repeat the classwide reminder again.",
           score: 0,
-          feedback: "Neutral; may not interrupt movement.",
+          feedback: "Neutral. Might help, but it can become background noise and does not teach a replacement.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he’s being unsafe.",
+          text: "Stop the whole line and lecture about hallway expectations.",
           score: -10,
-          feedback: "Vague correction increases attention.",
+          feedback: "Big attention event that can reinforce SR and frustrate peers.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu laughs and moves faster between desks.",
+      text: "SR grins and continues talking, now with more peers looking at him.",
       choices: {
         A: {
-          text: "Repair calmly: “Walk with me to your seat.”",
+          text: "Quietly reset with stop-and: “We will debrief after. Right now: quiet line.” Then step away.",
           score: 10,
-          feedback: "Nice repair — removes audience and anchors movement.",
+          feedback: "Nice repair. Private, brief, and consistent.",
           next: "step3A"
         },
         B: {
-          text: "Repeat the directive louder.",
+          text: "Give him a stern look and keep moving.",
           score: 0,
-          feedback: "Neutral but risky.",
+          feedback: "Neutral. Might pause behavior, but does not actively strengthen the routine.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about safety in front of the class.",
+          text: "Continue correcting him publicly until he stops.",
           score: -10,
-          feedback: "Public attention fuels the behavior.",
+          feedback: "Sustained attention in the hallway often strengthens the talking.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu sits down and stays in his seat.",
+      text: "SR walks in line quietly and keeps his eyes forward.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Successful re-entry.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Successful hallway routine.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu sits but swivels and scans peers.",
+      text: "SR is mostly quiet but still whispers a few comments.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partially regulated.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Some improvement, but reinforcement may be needed to lock it in.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu stands again and looks toward the hallway.",
+      text: "SR continues talking and other students are now more distracted.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Elopement risk remains.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Talking is spreading and becoming more reinforcing through peer reactions.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce the return from specials?",
+      text: "How do you reinforce hallway success?",
       choices: {
         A: {
-          text: "Quiet praise and mark a Chart Move for sitting safely.",
+          text: "When you reach the destination, quietly praise SR: “Thanks for saving conversation for later.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Reinforces regulation and safety.",
+          feedback: "Perfect. Reinforces the desired hallway behavior.",
           ending: "success"
         },
         B: {
-          text: "Start the lesson without feedback.",
+          text: "Praise the whole class generally for walking quietly.",
           score: 0,
-          feedback: "Routine not strengthened.",
+          feedback: "Neutral. Helpful, but less targeted to SR’s plan.",
           ending: "mixed"
         },
         C: {
-          text: "Mention his movement issues to the class.",
+          text: "Debrief SR publicly in front of the line about his talking.",
           score: -10,
-          feedback: "Public attention increases future risk.",
+          feedback: "Public attention can increase future hallway talking.",
           ending: "fail"
         }
       }
@@ -866,165 +859,166 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Calm Re-Entry",
-      text: "KeKu returned from specials safely with structured support."
+      title: "Success – Hallway Routine Strengthened",
+      text: "SR followed the quiet line expectation and earned reinforcement for appropriate behavior."
     },
     mixed: {
-      title: "Mixed – Partial Regulation",
-      text: "KeKu re-entered but without reinforcement for safety."
+      title: "Mixed Outcome – Some Improvement",
+      text: "The hallway went okay, but SR did not receive strong, targeted reinforcement."
     },
     fail: {
-      title: "Fail – Movement Escalation",
-      text: "Attention and unclear structure increased elopement risk."
+      title: "Fail – Attention Maintained Talking",
+      text: "Public attention increased the payoff for talking, making hallway behavior harder next time."
     }
   }
 });
 
+
 /*************************************************
- * DAILY SCENARIO 5 — Writing Task
+ * DAILY SCENARIO 5 — Independent Work (Scale + Stop-and Debrief)
  **************************************************/
 POOL.daily.push({
-  id: "daily_5_writing_task",
-  title: "Daily Mission: Writing Task",
+  id: "daily_5_independent_work_scale_stop_and",
+  title: "Daily Mission: Independent Work Time",
   start: "step1",
   steps: {
 
     step1: {
-      text: "KeKu is given a writing prompt. He sighs loudly, pushes the paper slightly away, and says, “This is too hard,” while glancing at nearby peers.",
+      text: "During independent work time, SR stops working, stares at his paper, and starts murmuring softly. He looks like he may begin talking to others.",
       choices: {
         A: {
-          text: "Chunk the task with choice: “Would you like to write one sentence or draw the first picture?”",
+          text: "Use a quick private check-in: “1–10, how hard are you working?” Then: “Show me the hardest part and we start together.”",
           score: 10,
-          feedback: "Great. Reduces escape and gives a supported entry point.",
+          feedback: "Great fidelity. This matches your current supports and prevents escape from growing.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Just try your best.”",
+          text: "Say, “Get back to work,” and stand nearby.",
           score: 0,
-          feedback: "Neutral encouragement but not specific enough.",
+          feedback: "Neutral. Proximity helps, but the replacement behavior and support steps are not activated.",
           next: "step2B"
         },
         C: {
-          text: "Say, “Stop complaining and start writing.”",
+          text: "Remove the work and say, “We will do this later,” to keep things calm.",
           score: -10,
-          feedback: "Public correction increases escape and attention-seeking.",
+          feedback: "Task removal can reinforce escape and increase future work refusal.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu pulls the paper back toward him but keeps watching peers.",
+      text: "SR says, “8,” and points to a paragraph. He is quiet but looks frustrated.",
       choices: {
         A: {
-          text: "Say: “Write your name and underline it.”",
+          text: "Model and prompt: “Ask for help.” Then help him start the first part and fade support quickly.",
           score: 10,
-          feedback: "Excellent — clear motor action that starts the task.",
+          feedback: "Excellent. Teach the help request and use the start-together strategy.",
           next: "step3A"
         },
         B: {
-          text: "Give him space and walk away.",
+          text: "Tell him you will check back later and move away.",
           score: 0,
-          feedback: "Neutral; momentum may stall.",
+          feedback: "Neutral. It avoids attention, but he may stay stuck and disengage again.",
           next: "step3B"
         },
         C: {
-          text: "Remind him the assignment is graded.",
+          text: "Tell him to stop complaining and just do it.",
           score: -10,
-          feedback: "Pressure-based attention may escalate avoidance.",
+          feedback: "Increases frustration and escape behavior risk.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu taps his pencil and mutters, “I hate writing.”",
+      text: "SR makes a quiet “uhhh” sound and begins whispering to a peer, trying to start a conversation.",
       choices: {
         A: {
-          text: "Precision request: “Circle the first line and start there.”",
+          text: "Quiet reminder with proximity: “Save conversation for later. If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Specific and task-focused.",
+          feedback: "Strong fidelity. You correct the talking and prompt the replacement in one calm step.",
           next: "step3A"
         },
         B: {
-          text: "Ignore the comment and continue teaching.",
+          text: "Say, “Not now,” and stay standing over him.",
           score: 0,
-          feedback: "Neutral but may allow avoidance to continue.",
+          feedback: "Neutral. It may stop talking but can become attention-heavy without teaching skills.",
           next: "step3B"
         },
         C: {
-          text: "Tell him that attitude is not acceptable.",
+          text: "Correct him publicly so others stop talking too.",
           score: -10,
-          feedback: "Verbal attention increases disruption.",
+          feedback: "Public correction adds attention and can increase SR’s behavior.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu says louder, “I’m NOT doing this,” and looks for peer reactions.",
+      text: "SR relaxes when the task is removed and immediately starts talking, now smiling.",
       choices: {
         A: {
-          text: "Repair calmly: “Sentence or picture first — you choose.”",
+          text: "Re-present a smaller chunk: “One sentence, then we check in.” Prompt help-seeking.",
           score: 10,
-          feedback: "Nice repair using choice instead of control.",
+          feedback: "Good repair. You restore a doable demand and teach the replacement behavior.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to lower his voice.",
+          text: "Let him have a longer break since he was frustrated.",
           score: 0,
-          feedback: "Neutral but not task-oriented.",
+          feedback: "Neutral. Breaks can help, but without a return plan it can reinforce escape.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about effort and responsibility.",
+          text: "Decide to skip the work entirely to avoid problems today.",
           score: -10,
-          feedback: "Long attention moment reinforces escape.",
+          feedback: "Strengthens escape and makes future independent work harder.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu begins writing or drawing quietly.",
+      text: "SR asks for help, completes a small chunk, and stays quiet.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Task initiation achieved.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Replacement behavior plus persistence occurred.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu sits quietly but does not start yet.",
+      text: "SR does a little work, but he keeps scanning for chances to talk or stop.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Regulated but not engaged.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Some work, but reinforcement and clarity may be needed.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu pushes the paper farther away and looks toward peers.",
+      text: "SR stops working again and the talking returns quickly.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Escape + attention cycle active.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Escape and attention are both being reinforced.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce this moment?",
+      text: "How do you finish this support cycle?",
       choices: {
         A: {
-          text: "Quiet praise and mark a Chart Move for starting writing.",
+          text: "Praise specifically and reinforce: “Nice job doing what you could and asking for help.” Give a Yeehaw ticket or note home later.",
           score: 10,
-          feedback: "Strong reinforcement for effort and engagement.",
+          feedback: "Perfect. Reinforces the desired behavior and builds future persistence.",
           ending: "success"
         },
         B: {
-          text: "Move on without feedback.",
+          text: "Give general praise at the end of class with no mention of help-seeking.",
           score: 0,
-          feedback: "Missed opportunity to strengthen the routine.",
+          feedback: "Neutral. Praise helps, but it is less connected to the replacement behavior.",
           ending: "mixed"
         },
         C: {
-          text: "Bring up earlier refusal publicly.",
+          text: "Focus only on what went wrong and give a corrective talk.",
           score: -10,
-          feedback: "Public attention risks re-escalation.",
+          feedback: "Increases attention to problem behavior and can restart avoidance.",
           ending: "fail"
         }
       }
@@ -1033,165 +1027,668 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Writing Started",
-      text: "KeKu engaged in writing using structured choices and clear directions."
+      title: "Success – Stop-and Routine Worked",
+      text: "SR used help-seeking, completed a small chunk, and earned reinforcement for persistence."
     },
     mixed: {
-      title: "Mixed – Partial Engagement",
-      text: "KeKu stayed regulated but did not fully engage with the task."
+      title: "Mixed Outcome – Some Work, Some Drift",
+      text: "SR engaged partially, but the routine was not strongly reinforced or clarified."
     },
     fail: {
-      title: "Fail – Writing Avoidance",
-      text: "Escape-maintained behavior reduced writing engagement."
+      title: "Fail – Escape Pattern Strengthened",
+      text: "Task removal or high-attention correction increased the likelihood of future work avoidance."
     }
   }
 });
-
 /*************************************************
- * DAILY SCENARIO 6 — Math Block
+ * DAILY SCENARIO 6 — Small Group Reading (Escape + Side Talk)
  **************************************************/
 POOL.daily.push({
-  id: "daily_6_math_block",
-  title: "Daily Mission: Math Block",
+  id: "daily_6_small_group_reading_escape_sidetalk",
+  title: "Daily Mission: Small Group Reading",
   start: "step1",
   steps: {
 
     step1: {
-      text: "As you explain a math problem, KeKu blurts out, “This is easy!” and looks around to see who noticed.",
+      text: "During small group reading, SR is asked to read a short section aloud. He looks down, makes a quiet noise, and starts whispering to a peer instead of reading.",
       choices: {
         A: {
-          text: "Use neutral ignoring, then prompt: “Hand up if you want to share.”",
+          text: "Start together: “Let’s read the first sentence together, then you read the next one.” Prompt: “If it feels hard, ask for help.”",
           score: 10,
-          feedback: "Great. No attention to the call-out, clear replacement cue.",
+          feedback: "Great fidelity. You reduce the demand, avoid a power struggle, and cue help-seeking.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Wait your turn.”",
+          text: "Say, “Come on, it’s your turn,” and wait.",
           score: 0,
-          feedback: "Neutral but still attention.",
+          feedback: "Neutral. A directive alone may increase avoidance if he feels stuck.",
           next: "step2B"
         },
         C: {
-          text: "Say loudly, “Stop interrupting.”",
+          text: "Say, “Stop being silly and read,” where the group can hear clearly.",
           score: -10,
-          feedback: "Public correction fuels attention-seeking.",
+          feedback: "Public correction can increase escape behavior and peer attention.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu quiets and raises his hand, watching you closely.",
+      text: "SR reads with you, then pauses before his independent sentence and glances at the peer again.",
       choices: {
         A: {
-          text: "Acknowledge briefly: “Thanks — I’ll call on you soon.”",
+          text: "Give a small choice: “Do you want help from me or a peer for this sentence?”",
           score: 10,
-          feedback: "Reinforces the replacement behavior.",
+          feedback: "Excellent. Clear replacement behavior with choice reduces escape.",
           next: "step3A"
         },
         B: {
-          text: "Ignore the raised hand and continue.",
+          text: "Say, “Just try,” without offering help.",
           score: 0,
-          feedback: "Neutral but missed reinforcement.",
+          feedback: "Neutral. He may still avoid if he cannot access support appropriately.",
           next: "step3B"
         },
         C: {
-          text: "Tell him to keep his hand down.",
+          text: "Correct the whispering and tell him to stop distracting others.",
           score: -10,
-          feedback: "Punishes appropriate behavior.",
+          feedback: "Focuses on behavior without teaching the help-seeking replacement.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu whispers, “I already know it,” to a nearby peer.",
+      text: "SR makes a longer “uhhh” sound and starts a side comment to the peer, trying to shift the group’s attention.",
       choices: {
         A: {
-          text: "Point silently to the raised-hand expectation.",
+          text: "Use proximity and a quiet reminder: “Save conversation for later. If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Nonverbal cue keeps attention low.",
+          feedback: "Great. Private, quick, and directly prompts the replacement behavior.",
           next: "step3A"
         },
         B: {
-          text: "Give him a look to stop.",
+          text: "Ignore it and call on another student to keep moving.",
           score: 0,
-          feedback: "Neutral attention.",
+          feedback: "Neutral. It avoids attention, but SR may learn escape works in group.",
           next: "step3B"
         },
         C: {
-          text: "Address the class about blurting.",
+          text: "Stop the group and address SR’s noises in front of everyone.",
           score: -10,
-          feedback: "Turns behavior into a spotlight.",
+          feedback: "Public attention increases the payoff and risks escalation.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "Peers laugh softly. KeKu grins.",
+      text: "SR smirks slightly and leans back, still not reading. A couple students look at him.",
       choices: {
         A: {
-          text: "Repair quietly: “Reset — hand up if you want to share.”",
+          text: "Quiet stop-and: “We will talk after. Right now: one sentence.” Then offer help to start.",
           score: 10,
-          feedback: "Nice repair without feeding attention.",
+          feedback: "Nice repair. You reduce attention and give a clear, doable step.",
           next: "step3A"
         },
         B: {
-          text: "Give a stern look.",
+          text: "Give a stern look and wait silently.",
           score: 0,
-          feedback: "Neutral but still attention.",
+          feedback: "Neutral. It may pause behavior, but it does not teach what to do when it feels hard.",
           next: "step3B"
         },
         C: {
-          text: "Lecture about classroom rules.",
+          text: "Ask, “Why are you doing this?” and keep questioning.",
           score: -10,
-          feedback: "Long attention moment reinforces behavior.",
+          feedback: "Extended interaction often increases avoidance and attention.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu waits quietly with his hand raised.",
+      text: "SR asks for help and reads the sentence, then settles back into the group quietly.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Strong self-regulation.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He used help-seeking and completed the demand.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu quiets but watches peers closely.",
+      text: "SR reads a few words, then hesitates and looks around again.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Regulated but attention-seeking lingers.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. He may need quick reinforcement and another prompt.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu blurts again, louder than before.",
+      text: "SR refuses to read and keeps making noises while the group watches.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Attention cycle continues.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Avoidance is increasing and peer attention may reinforce it.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce math participation?",
+      text: "How do you wrap up this small group moment?",
       choices: {
         A: {
-          text: "Call on him appropriately and mark a Chart Move for hand-raising.",
+          text: "Praise specifically: “Thanks for asking for help and reading your part.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Perfect reinforcement of replacement behavior.",
+          feedback: "Perfect. Reinforces help-seeking and participation.",
           ending: "success"
         },
         B: {
-          text: "Call on him without praise.",
+          text: "Move on with the group and do not acknowledge the effort.",
           score: 0,
-          feedback: "Partial reinforcement.",
+          feedback: "Neutral. He participated, but the replacement behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Skip him because of earlier call-outs.",
+          text: "Bring up the refusal again in front of the group as a warning.",
           score: -10,
-          feedback: "Punishes appropriate behavior.",
+          feedback: "Public attention can restart avoidance and increase future refusal.",
+          ending: "fail"
+        }
+      }
+    }
+  },
+
+  endings: {
+    success: {
+      title: "Success – Group Participation Reinforced",
+      text: "SR used help-seeking and completed reading demands, then earned reinforcement."
+    },
+    mixed: {
+      title: "Mixed Outcome – Participated Without Reinforcement",
+      text: "SR participated, but reinforcement was not clearly tied to the replacement behavior."
+    },
+    fail: {
+      title: "Fail – Escape Cycle Increased",
+      text: "Public attention and repeated correction made avoidance and refusal more likely next time."
+    }
+  }
+});
+
+
+/*************************************************
+ * DAILY SCENARIO 7 — Directions to Start Work (Off Task Before Beginning)
+ **************************************************/
+POOL.daily.push({
+  id: "daily_7_start_work_stall_before_beginning",
+  title: "Daily Mission: Getting Started",
+  start: "step1",
+  steps: {
+
+    step1: {
+      text: "You finish giving directions and tell students to begin. SR stares at the page, does not start, and begins making small noises under his breath.",
+      choices: {
+        A: {
+          text: "Proximity check-in: “Show me the hardest part.” Start together for the first step, then fade: “Now you go on your own.”",
+          score: 10,
+          feedback: "Great fidelity. You prevent escape by reducing the start-up barrier and using the start-together strategy.",
+          next: "step2A"
+        },
+        B: {
+          text: "Say, “Start now,” and walk away.",
+          score: 0,
+          feedback: "Neutral. A directive alone may not help if he feels stuck.",
+          next: "step2B"
+        },
+        C: {
+          text: "Say, “You are already off task,” loudly enough for others to hear.",
+          score: -10,
+          feedback: "Public correction can increase attention and avoidance.",
+          next: "step2C"
+        }
+      }
+    },
+
+    step2A: {
+      text: "SR points to one question and says quietly, “I don’t get it.”",
+      choices: {
+        A: {
+          text: "Prompt help-seeking: “Ask for help.” Then give quick support and set a small goal: “Do two, then I check.”",
+          score: 10,
+          feedback: "Excellent. You teach the replacement and keep the task doable.",
+          next: "step3A"
+        },
+        B: {
+          text: "Tell him you will come back later and move away.",
+          score: 0,
+          feedback: "Neutral. He might stall again without a plan for immediate entry.",
+          next: "step3B"
+        },
+        C: {
+          text: "Tell him to figure it out on his own since it is independent work.",
+          score: -10,
+          feedback: "Removing support when the task feels hard increases escape behavior.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2B: {
+      text: "SR begins whispering to a peer about something unrelated, trying to avoid starting.",
+      choices: {
+        A: {
+          text: "Quiet reminder: “Save conversation for later. If it’s hard, ask for help.”",
+          score: 10,
+          feedback: "Great. Private, calm, and directly prompts the replacement behavior.",
+          next: "step3A"
+        },
+        B: {
+          text: "Stand by his desk and monitor without saying anything.",
+          score: 0,
+          feedback: "Neutral. Monitoring can help, but he may not learn the replacement response.",
+          next: "step3B"
+        },
+        C: {
+          text: "Correct him publicly so the whole class hears.",
+          score: -10,
+          feedback: "Public attention increases the payoff and can spread distraction.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2C: {
+      text: "SR shrugs and makes a louder noise, then looks around to see who noticed.",
+      choices: {
+        A: {
+          text: "Stop-and privately: “We will debrief after. Right now, 1–10, how hard are you working?” Then start together for one step.",
+          score: 10,
+          feedback: "Nice repair. You use your scale and return him to the plan without a debate.",
+          next: "step3A"
+        },
+        B: {
+          text: "Ignore and continue helping others.",
+          score: 0,
+          feedback: "Neutral. It avoids attention, but he may continue stalling.",
+          next: "step3B"
+        },
+        C: {
+          text: "Argue about how he needs to stop noises and be respectful.",
+          score: -10,
+          feedback: "Extended attention often strengthens avoidance.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step3A: {
+      text: "SR starts the first part and continues working quietly.",
+      choices: {
+        A: { text: "Continue.", score: 10, feedback: "He initiated work using support and replacement behavior.", next: "step4" }
+      }
+    },
+
+    step3B: {
+      text: "SR starts a little, then slows down and looks around again.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. He may need reinforcement to maintain effort.", next: "step4" }
+      }
+    },
+
+    step3C: {
+      text: "SR refuses to start and continues talking or making noises.",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Avoidance is being reinforced and work initiation is breaking down.", next: "step4" }
+      }
+    },
+
+    step4: {
+      text: "How do you reinforce getting started?",
+      choices: {
+        A: {
+          text: "Praise specifically: “Nice job starting right away and asking for help.” Give a Yeehaw ticket.",
+          score: 10,
+          feedback: "Perfect. Reinforces the exact behavior you want to see again.",
+          ending: "success"
+        },
+        B: {
+          text: "Give general praise later with no mention of starting or help-seeking.",
+          score: 0,
+          feedback: "Neutral. Praise helps, but it is less connected to the replacement behavior.",
+          ending: "mixed"
+        },
+        C: {
+          text: "Focus only on the earlier stalling and give a corrective talk.",
+          score: -10,
+          feedback: "Attention to problem behavior can restart avoidance and reduce motivation.",
+          ending: "fail"
+        }
+      }
+    }
+  },
+
+  endings: {
+    success: {
+      title: "Success – Work Initiation Reinforced",
+      text: "SR started the task with support, used help-seeking, and earned reinforcement."
+    },
+    mixed: {
+      title: "Mixed Outcome – Started, But Not Strengthened",
+      text: "SR began work, but the replacement behavior was not clearly reinforced."
+    },
+    fail: {
+      title: "Fail – Stalling Maintained",
+      text: "Public attention or extended correction increased avoidance and reduced future work initiation."
+    }
+  }
+});
+
+
+/*************************************************
+ * DAILY SCENARIO 8 — Reading to Writing Transition (Refusal at Shift)
+ **************************************************/
+POOL.daily.push({
+  id: "daily_8_reading_to_writing_transition_refusal",
+  title: "Daily Mission: Reading to Writing Transition",
+  start: "step1",
+  steps: {
+
+    step1: {
+      text: "Reading time ends and students must switch to writing. SR groans, puts his head down, and says quietly, “I hate writing,” while looking to see who heard.",
+      choices: {
+        A: {
+          text: "Calm transition support: “Writing feels hard sometimes. Pick the hardest part. We start together for one sentence, then you go on your own.”",
+          score: 10,
+          feedback: "Great fidelity. You validate briefly, reduce the demand, and prevent escape with structured support.",
+          next: "step2A"
+        },
+        B: {
+          text: "Say neutrally, “It’s time to write,” and move on.",
+          score: 0,
+          feedback: "Neutral. It may not be enough if the shift is a trigger for avoidance.",
+          next: "step2B"
+        },
+        C: {
+          text: "Say, “Stop complaining,” in front of nearby students.",
+          score: -10,
+          feedback: "Public correction can increase attention and refusal behaviors.",
+          next: "step2C"
+        }
+      }
+    },
+
+    step2A: {
+      text: "SR sits up but still looks stuck. He taps his pencil and glances at a peer like he wants to talk instead.",
+      choices: {
+        A: {
+          text: "Prompt help-seeking: “If it’s hard, ask for help.” Then set a short goal: “One sentence, then quick check-in.”",
+          score: 10,
+          feedback: "Excellent. Clear replacement behavior plus a small, doable expectation.",
+          next: "step3A"
+        },
+        B: {
+          text: "Tell him to just write anything to get started.",
+          score: 0,
+          feedback: "Neutral. It may help, but help-seeking is still not clearly taught.",
+          next: "step3B"
+        },
+        C: {
+          text: "Tell him he is wasting time and needs to hurry.",
+          score: -10,
+          feedback: "Pressure can increase avoidance and emotional escalation.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2B: {
+      text: "SR begins whispering to a peer and makes a quiet noise, avoiding the transition.",
+      choices: {
+        A: {
+          text: "Proximity + quiet reminder: “Save conversation for later. Show me the hardest part and we start together.”",
+          score: 10,
+          feedback: "Great. Prevents escape and cues the start-together strategy privately.",
+          next: "step3A"
+        },
+        B: {
+          text: "Give him a stern look and keep circulating.",
+          score: 0,
+          feedback: "Neutral. Might work, but it does not teach the replacement behavior.",
+          next: "step3B"
+        },
+        C: {
+          text: "Call him out by name so others stop talking too.",
+          score: -10,
+          feedback: "Public attention increases the payoff and can escalate refusal.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2C: {
+      text: "SR smirks and continues, now louder: “This is so dumb.” A few students glance over.",
+      choices: {
+        A: {
+          text: "Quiet stop-and: “We will debrief after.” Then: “One sentence first.” Offer help to start.",
+          score: 10,
+          feedback: "Good repair. You reduce attention, avoid debate, and return to a clear step.",
+          next: "step3A"
+        },
+        B: {
+          text: "Tell him to lower his voice and keep moving.",
+          score: 0,
+          feedback: "Neutral. It reduces volume but does not address the escape function.",
+          next: "step3B"
+        },
+        C: {
+          text: "Lecture him about attitude and respecting class time.",
+          score: -10,
+          feedback: "Extended attention can reinforce the behavior and increase avoidance.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step3A: {
+      text: "SR writes one sentence with support and then continues quietly on his own.",
+      choices: {
+        A: { text: "Continue.", score: 10, feedback: "He transitioned successfully using support and persistence.", next: "step4" }
+      }
+    },
+
+    step3B: {
+      text: "SR writes a few words, then pauses again and scans for distraction.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. Reinforcement may be needed to maintain effort.", next: "step4" }
+      }
+    },
+
+    step3C: {
+      text: "SR refuses to write and keeps trying to engage peers.",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Avoidance is being maintained through peer attention and escape.", next: "step4" }
+      }
+    },
+
+    step4: {
+      text: "How do you reinforce a successful transition?",
+      choices: {
+        A: {
+          text: "Praise specifically and reinforce: “Nice job switching to writing and sticking with it.” Give a Yeehaw ticket.",
+          score: 10,
+          feedback: "Perfect reinforcement for flexibility and persistence.",
+          ending: "success"
+        },
+        B: {
+          text: "Move on once he is writing without acknowledging the transition.",
+          score: 0,
+          feedback: "Neutral. Transition happened, but it may not maintain without reinforcement.",
+          ending: "mixed"
+        },
+        C: {
+          text: "Bring up his earlier comments again as a warning.",
+          score: -10,
+          feedback: "Reintroduces attention and can restart avoidance in the next transition.",
+          ending: "fail"
+        }
+      }
+    }
+  },
+
+  endings: {
+    success: {
+      title: "Success – Transition Tolerance Reinforced",
+      text: "SR transitioned from reading to writing with structured support and earned reinforcement for persistence."
+    },
+    mixed: {
+      title: "Mixed Outcome – Transition Happened, Weakly Reinforced",
+      text: "SR transitioned, but the replacement behaviors were not clearly reinforced."
+    },
+    fail: {
+      title: "Fail – Transition Avoidance Increased",
+      text: "Public attention and extended correction increased avoidance during future reading to writing shifts."
+    }
+  }
+});
+
+
+/*************************************************
+ * DAILY SCENARIO 9 — Class Discussion (Blurting and Peer Attention)
+ **************************************************/
+POOL.daily.push({
+  id: "daily_9_class_discussion_blurt_peer_attention",
+  title: "Daily Mission: Class Discussion",
+  start: "step1",
+  steps: {
+
+    step1: {
+      text: "During a class discussion, SR blurts a comment out of turn, then smirks and looks around to see who noticed.",
+      choices: {
+        A: {
+          text: "Use a quiet reminder close by: “Save conversation for later. Raise your hand if you want to share.”",
+          score: 10,
+          feedback: "Great. Private, quick, and prompts the replacement behavior without giving a stage.",
+          next: "step2A"
+        },
+        B: {
+          text: "Say, “Please wait your turn,” from the front of the room.",
+          score: 0,
+          feedback: "Neutral. It is a reminder, but it gives attention during the behavior.",
+          next: "step2B"
+        },
+        C: {
+          text: "Stop and correct him publicly in front of the class.",
+          score: -10,
+          feedback: "Public attention can increase blurting and peer reactions.",
+          next: "step2C"
+        }
+      }
+    },
+
+    step2A: {
+      text: "SR quiets and raises his hand halfway, then lowers it quickly like he is unsure.",
+      choices: {
+        A: {
+          text: "Prompt and reinforce: “Thanks for raising your hand. I will call on you soon.”",
+          score: 10,
+          feedback: "Excellent. You reinforce the replacement behavior immediately.",
+          next: "step3A"
+        },
+        B: {
+          text: "Continue the discussion without acknowledging the hand raise.",
+          score: 0,
+          feedback: "Neutral. Hand-raising may not maintain without reinforcement.",
+          next: "step3B"
+        },
+        C: {
+          text: "Tell him he lost his chance because he blurted earlier.",
+          score: -10,
+          feedback: "Unpredictable access increases attention-seeking and frustration.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2B: {
+      text: "SR makes a quiet noise and whispers to a peer, trying to keep attention on himself.",
+      choices: {
+        A: {
+          text: "Proximity + quiet cue: “Raise your hand.” Then move your attention away.",
+          score: 10,
+          feedback: "Great. Clear prompt with minimal attention.",
+          next: "step3A"
+        },
+        B: {
+          text: "Give a stern look and continue teaching.",
+          score: 0,
+          feedback: "Neutral. Might work, but it is not explicit teaching or reinforcement.",
+          next: "step3B"
+        },
+        C: {
+          text: "Engage him in a back-and-forth about interrupting.",
+          score: -10,
+          feedback: "Extended attention can reinforce blurting and talking.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2C: {
+      text: "Peers look over. SR smiles wider and blurts again to keep the attention.",
+      choices: {
+        A: {
+          text: "Quiet repair: “Reset. Raise your hand if you want to share.” Then call on another student.",
+          score: 10,
+          feedback: "Nice repair. You remove the audience payoff and prompt the replacement.",
+          next: "step3A"
+        },
+        B: {
+          text: "Tell him to be quiet and keep going.",
+          score: 0,
+          feedback: "Neutral. It might stop the behavior but does not strengthen hand-raising.",
+          next: "step3B"
+        },
+        C: {
+          text: "Lecture the class about respect and listening.",
+          score: -10,
+          feedback: "Creates a big attention moment tied to SR’s behavior.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step3A: {
+      text: "SR raises his hand appropriately and waits.",
+      choices: {
+        A: { text: "Continue.", score: 10, feedback: "Replacement behavior is occurring.", next: "step4" }
+      }
+    },
+
+    step3B: {
+      text: "SR is quieter but still scanning for reactions from peers.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Stable, but reinforcement may be needed to maintain the replacement.", next: "step4" }
+      }
+    },
+
+    step3C: {
+      text: "SR keeps talking out of turn and peers are starting to react more.",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Peer attention is maintaining the behavior.", next: "step4" }
+      }
+    },
+
+    step4: {
+      text: "How do you wrap up support during discussion?",
+      choices: {
+        A: {
+          text: "Call on him soon and praise: “Thanks for raising your hand.” Give a Yeehaw ticket if appropriate.",
+          score: 10,
+          feedback: "Perfect. Reinforces the replacement behavior and reduces blurting next time.",
+          ending: "success"
+        },
+        B: {
+          text: "Call on him but do not praise the hand raise.",
+          score: 0,
+          feedback: "Neutral. He got attention, but the replacement behavior is not strengthened.",
+          ending: "mixed"
+        },
+        C: {
+          text: "Skip him entirely because of earlier blurting.",
+          score: -10,
+          feedback: "Inconsistent access can increase attention-seeking and frustration.",
           ending: "fail"
         }
       }
@@ -1201,164 +1698,165 @@ POOL.daily.push({
   endings: {
     success: {
       title: "Success – Hand-Raising Reinforced",
-      text: "KeKu earned attention by using the correct participation routine."
+      text: "SR used the replacement behavior and received reinforcement for waiting appropriately."
     },
     mixed: {
-      title: "Mixed – Inconsistent Reinforcement",
-      text: "KeKu participated but without clear reinforcement."
+      title: "Mixed Outcome – Participated, Weakly Reinforced",
+      text: "SR participated, but reinforcement for the replacement behavior was unclear."
     },
     fail: {
-      title: "Fail – Call-Out Cycle Continues",
-      text: "Attention-seeking through blurting was reinforced."
+      title: "Fail – Blurting Pattern Continued",
+      text: "Inconsistent attention increased the likelihood of future blurting and peer-driven distractions."
     }
   }
 });
 
+
 /*************************************************
- * DAILY SCENARIO 7 — Morning Entry
+ * DAILY SCENARIO 10 — End of Block Check-In (Stop-and Debrief After)
  **************************************************/
 POOL.daily.push({
-  id: "daily_7_morning_entry",
-  title: "Daily Mission: Morning Entry",
+  id: "daily_10_end_block_debrief_follow_through",
+  title: "Daily Mission: End of Block Follow-Through",
   start: "step1",
   steps: {
 
     step1: {
-      text: "KeKu enters the classroom with high energy, weaving between desks and calling out to peers instead of going to his seat (Unexpected Location risk).",
+      text: "After a tough independent work block, SR is calmer but still looks frustrated. He mutters, “This was dumb,” and starts to pack up early to avoid finishing the last part.",
       choices: {
         A: {
-          text: "Greet briefly and offer choice: “Backpack hook or desk first?”",
+          text: "Calm stop-and: “We will debrief after.” Then: “Finish this last small part with me, then you are done.”",
           score: 10,
-          feedback: "Great proactive structure for a high-energy moment.",
+          feedback: "Great fidelity. You follow through privately, reduce the demand, and prevent escape at the end.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Good morning — go sit down.”",
+          text: "Let him pack up to avoid an argument and move on.",
           score: 0,
-          feedback: "Neutral but not grounding enough.",
+          feedback: "Neutral. It keeps the peace, but it can reinforce escaping the last part of work.",
           next: "step2B"
         },
         C: {
-          text: "Say loudly, “KeKu, stop running around.”",
+          text: "Call him out in front of others: “You are not done, stop complaining.”",
           score: -10,
-          feedback: "Public attention may escalate movement.",
+          feedback: "Public correction increases attention and can re-escalate him.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu heads to the backpack hook and slows slightly.",
+      text: "SR sits back down and looks at the last problem, still hesitant.",
       choices: {
         A: {
-          text: "Say: “Hang it up and walk to your seat.”",
+          text: "Prompt help-seeking and effort: “Ask for help if you need it.” Then: “One problem, then we check your 1–10 and you are finished.”",
           score: 10,
-          feedback: "Clear physical direction supports regulation.",
+          feedback: "Excellent. Clear replacement behavior and a predictable finish line.",
           next: "step3A"
         },
         B: {
-          text: "Let him move independently.",
+          text: "Say, “Just do it,” and wait.",
           score: 0,
-          feedback: "Neutral; may drift again.",
+          feedback: "Neutral. Without support, he may stall again.",
           next: "step3B"
         },
         C: {
-          text: "Remind him of morning expectations verbally.",
+          text: "Tell him he should not be frustrated and needs to stop with the comments.",
           score: -10,
-          feedback: "Extra verbal attention can escalate.",
+          feedback: "Invalidation increases avoidance and can restart the cycle.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu stops briefly, then veers toward another student’s desk.",
+      text: "SR packs up quickly and relaxes. He starts chatting quietly since the work is over for him.",
       choices: {
         A: {
-          text: "Precision request: “Walk to your seat and sit down.”",
+          text: "Re-present a tiny chunk: “One last problem with me, then you are done.” Prompt: “Ask for help if it’s hard.”",
           score: 10,
-          feedback: "Direct and grounding.",
+          feedback: "Good repair. You restore follow-through with a small, supported demand.",
           next: "step3A"
         },
         B: {
-          text: "Give a nonverbal cue.",
+          text: "Let it go today and plan to start earlier tomorrow.",
           score: 0,
-          feedback: "Neutral but may not interrupt movement.",
+          feedback: "Neutral. Planning helps, but SR may still learn that packing up ends the demand.",
           next: "step3B"
         },
         C: {
-          text: "Say, “You’re not making a good choice.”",
+          text: "Take away a privilege because he packed up early.",
           score: -10,
-          feedback: "Vague correction adds attention.",
+          feedback: "Punishment without teaching the replacement can increase avoidance next time.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu laughs and speeds up as peers watch.",
+      text: "SR becomes more tense and mutters louder, looking to see if peers are watching.",
       choices: {
         A: {
-          text: "Repair calmly: “Walk with me to your seat.”",
+          text: "Quiet repair: move closer and say, “We will talk after. Right now: one last part.” Then help him start.",
           score: 10,
-          feedback: "Removes audience and anchors movement.",
+          feedback: "Nice repair. You reduce the audience effect and return to a doable step.",
           next: "step3A"
         },
         B: {
-          text: "Repeat the directive louder.",
+          text: "Give a stern look and keep moving around the room.",
           score: 0,
-          feedback: "Neutral but risky.",
+          feedback: "Neutral. It may reduce attention, but he may still escape the final part.",
           next: "step3B"
         },
         C: {
-          text: "Address the class about expectations.",
+          text: "Continue correcting him publicly until he complies.",
           score: -10,
-          feedback: "Creates a peer audience.",
+          feedback: "Sustained public attention increases escalation and escape.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu sits at his desk and stays seated.",
+      text: "SR completes the last small part and hands it in, calmer.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Morning routine established.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Follow-through happened with support and a clear finish.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu sits but fidgets and looks around.",
+      text: "SR completes part of it but still tries to end early and avoid finishing.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partially regulated.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Some follow-through, but reinforcement and structure may need to be clearer.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu stands again and moves toward peers.",
+      text: "SR refuses to finish and escalates his comments, now more attention-driven.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Movement risk persists.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Public attention increased the payoff and strengthened avoidance.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you reinforce morning entry?",
+      text: "How do you end the block and strengthen future success?",
       choices: {
         A: {
-          text: "Quiet praise and mark a Chart Move for entering safely.",
+          text: "Praise and reinforce: “Thanks for finishing and asking for help.” Give a Yeehaw ticket, and do a brief private debrief later.",
           score: 10,
-          feedback: "Reinforces a strong start to the day.",
+          feedback: "Perfect. Reinforces follow-through and keeps the debrief private and brief.",
           ending: "success"
         },
         B: {
-          text: "Begin morning work without feedback.",
+          text: "Let him transition without acknowledgment since the block is over.",
           score: 0,
-          feedback: "Routine not strengthened.",
+          feedback: "Neutral. It ends calmly, but the replacement behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Mention earlier behavior publicly.",
+          text: "Debrief the whole incident in front of peers before transitioning.",
           score: -10,
-          feedback: "Public attention undermines regulation.",
+          feedback: "Public attention can make future end-of-block avoidance more likely.",
           ending: "fail"
         }
       }
@@ -1367,666 +1865,165 @@ POOL.daily.push({
 
   endings: {
     success: {
-      title: "Success – Calm Morning Entry",
-      text: "KeKu entered the classroom safely with structured support."
+      title: "Success – Follow-Through Reinforced",
+      text: "SR finished a small final demand with support, then earned reinforcement for persistence and help-seeking."
     },
     mixed: {
-      title: "Mixed – Partial Regulation",
-      text: "KeKu entered the room but needed more reinforcement."
+      title: "Mixed Outcome – Calm Ending, Weak Reinforcement",
+      text: "The block ended calmly, but replacement behaviors were not clearly strengthened for next time."
     },
     fail: {
-      title: "Fail – Morning Escalation",
-      text: "Attention and unclear structure increased movement behavior."
+      title: "Fail – End-of-Block Avoidance Maintained",
+      text: "Public attention and inconsistent follow-through increased avoidance and made future work completion harder."
     }
   }
 });
 
 /*************************************************
- * DAILY SCENARIO 8 — Whole-Class Discussion
- **************************************************/
-POOL.daily.push({
-  id: "daily_8_whole_class_discussion",
-  title: "Daily Mission: Whole-Class Discussion",
-  start: "step1",
-  steps: {
-
-    step1: {
-      text: "During a whole-class discussion, you ask a question. Several students raise their hands. KeKu blurts out the answer loudly and looks around to see who noticed.",
-      choices: {
-        A: {
-          text: "Use neutral ignoring, then prompt quietly: “Hand up if you want to share.”",
-          score: 10,
-          feedback: "Great. No reinforcement for blurting, clear replacement cue.",
-          next: "step2A"
-        },
-        B: {
-          text: "Say, “Wait your turn.”",
-          score: 0,
-          feedback: "Neutral but still provides attention for the call-out.",
-          next: "step2B"
-        },
-        C: {
-          text: "Say loudly, “Stop interrupting!”",
-          score: -10,
-          feedback: "Public attention can increase future blurting.",
-          next: "step2C"
-        }
-      }
-    },
-
-    step2A: {
-      text: "KeKu quiets and raises his hand, watching you closely.",
-      choices: {
-        A: {
-          text: "Acknowledge briefly: “Thanks — I’ll call on you soon.”",
-          score: 10,
-          feedback: "Reinforces the replacement behavior immediately.",
-          next: "step3A"
-        },
-        B: {
-          text: "Continue the discussion without acknowledging him.",
-          score: 0,
-          feedback: "Neutral, but missed reinforcement for hand-raising.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell him to put his hand down because he blurted earlier.",
-          score: -10,
-          feedback: "Punishes appropriate behavior and can increase future blurting.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2B: {
-      text: "KeKu mutters, “I knew it already,” and leans toward a peer.",
-      choices: {
-        A: {
-          text: "Nonverbal cue: gesture to the raised-hand expectation (model hand up).",
-          score: 10,
-          feedback: "Nice low-attention cue back to the routine.",
-          next: "step3A"
-        },
-        B: {
-          text: "Give a brief “shh” gesture.",
-          score: 0,
-          feedback: "Neutral; still attention.",
-          next: "step3B"
-        },
-        C: {
-          text: "Address the class about blurting and respect.",
-          score: -10,
-          feedback: "Creates a spotlight moment.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2C: {
-      text: "A few students giggle. KeKu smirks and repeats the answer louder.",
-      choices: {
-        A: {
-          text: "Repair quietly: “Reset — hand up if you want to share.”",
-          score: 10,
-          feedback: "Good repair; reduces peer audience and re-teaches the routine.",
-          next: "step3A"
-        },
-        B: {
-          text: "Give a stern look.",
-          score: 0,
-          feedback: "Neutral attention; may not change behavior.",
-          next: "step3B"
-        },
-        C: {
-          text: "Lecture about expectations in front of the class.",
-          score: -10,
-          feedback: "Long attention moment reinforces attention-seeking.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step3A: {
-      text: "KeKu holds his hand up and stays quiet.",
-      choices: {
-        A: { text: "Continue.", score: 10, feedback: "Strong replacement behavior.", next: "step4" }
-      }
-    },
-
-    step3B: {
-      text: "KeKu quiets but continues scanning peers for reactions.",
-      choices: {
-        A: { text: "Continue.", score: 0, feedback: "Regulated but attention-seeking lingers.", next: "step4" }
-      }
-    },
-
-    step3C: {
-      text: "KeKu calls out again and begins talking over others.",
-      choices: {
-        A: { text: "Continue.", score: -10, feedback: "Blurting cycle continues with attention payoff.", next: "step4" }
-      }
-    },
-
-    step4: {
-      text: "How do you reinforce appropriate participation?",
-      choices: {
-        A: {
-          text: "Call on him soon and mark a Chart Move for hand-raising/quiet voice.",
-          score: 10,
-          feedback: "Perfect reinforcement of the replacement behavior.",
-          ending: "success"
-        },
-        B: {
-          text: "Call on him without praise or Chart Move.",
-          score: 0,
-          feedback: "Partial reinforcement; less likely to stick.",
-          ending: "mixed"
-        },
-        C: {
-          text: "Skip him because of earlier blurting.",
-          score: -10,
-          feedback: "Punishes appropriate participation and increases blurting next time.",
-          ending: "fail"
-        }
-      }
-    }
-  },
-
-  endings: {
-    success: {
-      title: "Success – Participation Routine Strengthened",
-      text: "KeKu earned attention by raising his hand and using a quiet voice."
-    },
-    mixed: {
-      title: "Mixed – Participation Happened Without Reinforcement",
-      text: "KeKu participated, but reinforcement was not clearly tied to replacement behavior."
-    },
-    fail: {
-      title: "Fail – Blurting Maintained",
-      text: "Public attention and inconsistent reinforcement increased blurting behavior."
-    }
-  }
-});
-
-/*************************************************
- * DAILY SCENARIO 9 — Help-Seeking During Work Time
- **************************************************/
-POOL.daily.push({
-  id: "daily_9_help_seeking_work_time",
-  title: "Daily Mission: Help-Seeking During Work Time",
-  start: "step1",
-  steps: {
-
-    step1: {
-      text: "During independent work, KeKu gets stuck. Instead of using the expected help routine, he calls out loudly across the room, “I DON’T GET THIS!” and looks around for reactions.",
-      choices: {
-        A: {
-          text: "Prompt the replacement: “Use your help signal / help card.” (quietly, from close by).",
-          score: 10,
-          feedback: "Great. Teaches the replacement behavior with minimal attention.",
-          next: "step2A"
-        },
-        B: {
-          text: "Say, “Just keep trying.”",
-          score: 0,
-          feedback: "Neutral but doesn’t teach what to do instead.",
-          next: "step2B"
-        },
-        C: {
-          text: "Say loudly, “Stop yelling and figure it out.”",
-          score: -10,
-          feedback: "Public correction increases frustration and attention-seeking.",
-          next: "step2C"
-        }
-      }
-    },
-
-    step2A: {
-      text: "KeKu hesitates, then uses the help signal / help card (or raises his hand quietly).",
-      choices: {
-        A: {
-          text: "Acknowledge quietly: “Thanks — I’ll be right there.”",
-          score: 10,
-          feedback: "Excellent. Reinforces the exact replacement routine.",
-          next: "step3A"
-        },
-        B: {
-          text: "Give a thumbs up but continue helping another student without acknowledgement.",
-          score: 0,
-          feedback: "Neutral; may not reinforce the routine enough.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell him he should know this already.",
-          score: -10,
-          feedback: "Critical attention undermines help-seeking and may escalate refusal.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2B: {
-      text: "KeKu taps his pencil loudly and says, “This is stupid,” while glancing at peers.",
-      choices: {
-        A: {
-          text: "Precision direction: “Circle the part you don’t understand and use your help signal.”",
-          score: 10,
-          feedback: "Strong — gives a concrete action and reinforces the help routine.",
-          next: "step3A"
-        },
-        B: {
-          text: "Ignore and continue teaching.",
-          score: 0,
-          feedback: "Neutral; could de-escalate or could allow disruption to grow.",
-          next: "step3B"
-        },
-        C: {
-          text: "Respond with a lecture about attitude.",
-          score: -10,
-          feedback: "Long verbal attention increases disruption.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2C: {
-      text: "Peers look over. KeKu repeats, “I don’t get it!” louder and pushes his paper slightly away.",
-      choices: {
-        A: {
-          text: "Repair calmly: “Help signal.” (gesture to the visual) and reduce audience attention.",
-          score: 10,
-          feedback: "Good repair — minimal verbal attention + clear cue.",
-          next: "step3A"
-        },
-        B: {
-          text: "Tell him to calm down.",
-          score: 0,
-          feedback: "Neutral but not skill-focused.",
-          next: "step3B"
-        },
-        C: {
-          text: "Publicly call out that he is disrupting others.",
-          score: -10,
-          feedback: "Public attention escalates the pattern.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step3A: {
-      text: "KeKu stays seated and waits using the help routine.",
-      choices: {
-        A: { text: "Continue.", score: 10, feedback: "Replacement behavior maintained.", next: "step4" }
-      }
-    },
-
-    step3B: {
-      text: "KeKu quiets but continues fidgeting and watching peers.",
-      choices: {
-        A: { text: "Continue.", score: 0, feedback: "Stabilized, but help routine is inconsistent.", next: "step4" }
-      }
-    },
-
-    step3C: {
-      text: "KeKu pushes his work away and starts talking to peers to avoid the task.",
-      choices: {
-        A: { text: "Continue.", score: -10, feedback: "Escape + attention is active.", next: "step4" }
-      }
-    },
-
-    step4: {
-      text: "How do you finalize support once he uses the help routine?",
-      choices: {
-        A: {
-          text: "Provide quick help, then mark a Chart Move for appropriate help-seeking.",
-          score: 10,
-          feedback: "Perfect — help + reinforcement tied to replacement behavior.",
-          ending: "success"
-        },
-        B: {
-          text: "Help him but do not provide praise/Chart Move.",
-          score: 0,
-          feedback: "Support provided, but replacement behavior not strengthened.",
-          ending: "mixed"
-        },
-        C: {
-          text: "Delay help and bring up earlier yelling.",
-          score: -10,
-          feedback: "Risks re-escalation and weakens help routine.",
-          ending: "fail"
-        }
-      }
-    }
-  },
-
-  endings: {
-    success: {
-      title: "Success – Help Routine Strengthened",
-      text: "KeKu learned that using the help routine results in quick support and reinforcement."
-    },
-    mixed: {
-      title: "Mixed – Help Given Without Reinforcement",
-      text: "KeKu received support, but the help routine may not maintain without reinforcement."
-    },
-    fail: {
-      title: "Fail – Disruption Replaced Help-Seeking",
-      text: "Calling out and avoidance behaviors were unintentionally reinforced."
-    }
-  }
-});
-
-/*************************************************
- * DAILY SCENARIO 10 — End-of-Day Cleanup / Dismissal
- **************************************************/
-POOL.daily.push({
-  id: "daily_10_end_of_day_cleanup",
-  title: "Daily Mission: End-of-Day Cleanup",
-  start: "step1",
-  steps: {
-
-    step1: {
-      text: "During end-of-day cleanup, KeKu leaves his area and drifts toward peers, touching items on other desks and joking around instead of packing up (Unexpected Location).",
-      choices: {
-        A: {
-          text: "Calm, specific directive: “Pack up first — backpack, folder, then line.”",
-          score: 10,
-          feedback: "Great. Clear sequence reduces wandering and keeps attention low.",
-          next: "step2A"
-        },
-        B: {
-          text: "Say, “Please pack up.”",
-          score: 0,
-          feedback: "Neutral but not structured enough.",
-          next: "step2B"
-        },
-        C: {
-          text: "Say loudly, “Stop touching other people’s stuff!”",
-          score: -10,
-          feedback: "Public attention can increase the behavior.",
-          next: "step2C"
-        }
-      }
-    },
-
-    step2A: {
-      text: "KeKu pauses and returns toward his desk, still looking at peers.",
-      choices: {
-        A: {
-          text: "Say: “Sit and zip your backpack.”",
-          score: 10,
-          feedback: "Excellent. Clear motor action anchors him in place.",
-          next: "step3A"
-        },
-        B: {
-          text: "Give him space and hope he follows through.",
-          score: 0,
-          feedback: "Neutral; may drift again.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell him, “You’re being disruptive right now.”",
-          score: -10,
-          feedback: "Vague correction adds attention.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2B: {
-      text: "KeKu picks up one item, then wanders again toward a peer.",
-      choices: {
-        A: {
-          text: "Precision prompt: “Backpack first.” (gesture to his spot).",
-          score: 10,
-          feedback: "Strong — quick, clear, low attention.",
-          next: "step3A"
-        },
-        B: {
-          text: "Repeat, “Go pack up.”",
-          score: 0,
-          feedback: "Neutral but repeated attention.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell the peer to stop engaging with him.",
-          score: -10,
-          feedback: "Creates a peer audience moment.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step2C: {
-      text: "Peers laugh. KeKu grins and moves faster between desks.",
-      choices: {
-        A: {
-          text: "Repair calmly: move closer, reduce audience, and direct: “Back to your desk.”",
-          score: 10,
-          feedback: "Good repair — reduces peer reinforcement and redirects safely.",
-          next: "step3A"
-        },
-        B: {
-          text: "Give a stern look from across the room.",
-          score: 0,
-          feedback: "Neutral but may not interrupt movement.",
-          next: "step3B"
-        },
-        C: {
-          text: "Lecture him about respect and property.",
-          score: -10,
-          feedback: "Long attention moment reinforces the pattern.",
-          next: "step3C"
-        }
-      }
-    },
-
-    step3A: {
-      text: "KeKu packs up at his desk and stays there.",
-      choices: {
-        A: { text: "Continue.", score: 10, feedback: "Routine back on track.", next: "step4" }
-      }
-    },
-
-    step3B: {
-      text: "KeKu packs slowly but keeps looking around.",
-      choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial compliance; needs reinforcement.", next: "step4" }
-      }
-    },
-
-    step3C: {
-      text: "KeKu continues wandering and talking to peers to avoid packing.",
-      choices: {
-        A: { text: "Continue.", score: -10, feedback: "Attention + movement cycle continues.", next: "step4" }
-      }
-    },
-
-    step4: {
-      text: "How do you reinforce the end-of-day routine?",
-      choices: {
-        A: {
-          text: "Quiet praise and mark a Chart Move for packing up in his space.",
-          score: 10,
-          feedback: "Perfect reinforcement for staying in location and completing routine.",
-          ending: "success"
-        },
-        B: {
-          text: "Line the class up without feedback.",
-          score: 0,
-          feedback: "Routine completed, but not strengthened for tomorrow.",
-          ending: "mixed"
-        },
-        C: {
-          text: "Mention earlier wandering in front of the class as you dismiss.",
-          score: -10,
-          feedback: "Public attention can restart the behavior.",
-          ending: "fail"
-        }
-      }
-    }
-  },
-
-  endings: {
-    success: {
-      title: "Success – End-of-Day Routine Completed",
-      text: "KeKu stayed in his space, packed up, and earned reinforcement for following the routine."
-    },
-    mixed: {
-      title: "Mixed – Routine Completed Without Reinforcement",
-      text: "KeKu packed up, but reinforcement wasn’t tied to the expected behaviors."
-    },
-    fail: {
-      title: "Fail – Wandering Reinforced",
-      text: "Public attention and inconsistent reinforcement maintained wandering and peer-seeking."
-    }
-  }
-});
-
-/*************************************************
- * CRISIS SCENARIO 1 — KYHFOOTY Toward Peers
+ * CRISIS SCENARIO 1 — Loud Work Refusal (ELA)
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_1_kyhfooty_peer",
-  title: "Crisis Drill: Peer Safety",
+  id: "crisis_1_loud_work_refusal_ela",
+  title: "Crisis Drill: Loud Work Refusal (ELA)",
   start: "step1",
   steps: {
 
     step1: {
-      text: "During line-up, KeKu suddenly kicks toward a peer and swings his arm when they get too close (KYHFOOTY). Several students react.",
+      text: "During ELA, SR looks at the assignment and says loudly, “No. I am not doing this.” A few peers look up.",
       choices: {
         A: {
-          text: "Immediately create space: calmly block peers away, give a brief incompatible direction (“Hands down. Walk with me.”), and signal for support.",
+          text: "Use calm, brief directive: “Start the first sentence with me. Then you do the next one.” Prompt: “If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Correct. Safety first: space, calm direction, and support activation.",
+          feedback: "Great fidelity. You reduce the start-up barrier and avoid an argument.",
           next: "step2A"
         },
         B: {
-          text: "Talk him through feelings and ask why he’s upset.",
+          text: "Say neutrally, “You need to do your work,” and stand nearby.",
           score: 0,
-          feedback: "Supportive, but too slow for immediate peer safety.",
+          feedback: "Neutral. It is a directive, but it does not give a clear entry step or replacement behavior.",
           next: "step2B"
         },
         C: {
-          text: "Yell and physically restrain him in front of peers.",
+          text: "Correct publicly: “Stop it. You are being disrespectful.”",
           score: -10,
-          feedback: "High risk escalation and unsafe practice.",
+          feedback: "Public correction can increase attention and escalate refusal.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "Peers move away. KeKu slows slightly but is still tense.",
+      text: "SR crosses his arms but quiets. He looks at the page, still tense.",
       choices: {
         A: {
-          text: "Repeat a brief incompatible direction and guide to the calm/reset spot.",
+          text: "Private stop-and: “We will debrief after.” Then: “1–10, how hard are you working?” Offer a choice: “Start with #1 or #2.”",
           score: 10,
-          feedback: "Good — predictable, low-language guidance supports de-escalation.",
+          feedback: "Excellent. You use your scale and give a small choice that supports re-entry.",
           next: "step3A"
         },
         B: {
-          text: "Begin explaining consequences.",
+          text: "Give him space and work with other students for a few minutes.",
           score: 0,
-          feedback: "Neutral, but adds verbal load during crisis.",
+          feedback: "Neutral. Space can help, but without a clear entry plan he may stay stuck.",
           next: "step3B"
         },
         C: {
-          text: "Threaten loss of rewards.",
+          text: "Ask, “Why are you refusing?” and continue questioning.",
           score: -10,
-          feedback: "Escalates power struggle during crisis.",
+          feedback: "Extended interaction often reinforces refusal through attention and delay.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu continues to swing his arms as you talk.",
+      text: "SR makes a loud “Uhhhh” sound and looks around at peers, then pushes his paper away again.",
       choices: {
         A: {
-          text: "Shift to safety mode: create space, brief direction, call for support.",
+          text: "Use proximity and calm directive: “Show me the hardest part. We start together.”",
           score: 10,
-          feedback: "Good recovery — prioritize safety immediately.",
+          feedback: "Great repair. You reduce demands and move him into action.",
           next: "step3A"
         },
         B: {
-          text: "Keep talking to calm him down.",
+          text: "Repeat, “Do your work,” one more time and wait.",
           score: 0,
-          feedback: "Neutral but ineffective in this moment.",
+          feedback: "Neutral. It may not reduce escape if he feels stuck.",
           next: "step3B"
         },
         C: {
-          text: "Raise your voice to regain control.",
+          text: "Call him out across the room and tell him to stop making noises.",
           score: -10,
-          feedback: "Escalation risk increases.",
+          feedback: "Public attention increases the payoff and can escalate behavior.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "Peers cry and the situation escalates quickly.",
+      text: "SR raises his voice: “This is dumb!” Peers are watching.",
       choices: {
         A: {
-          text: "Reset: release pressure, create space, and get immediate support.",
+          text: "Calm and brief: “We will talk after.” Then: “One sentence with me.”",
           score: 10,
-          feedback: "Correct recovery move after escalation.",
+          feedback: "Strong repair. You reduce audience effect and give a clear next step.",
           next: "step3A"
         },
         B: {
-          text: "Continue restraining and lecturing.",
+          text: "Say, “Lower your voice,” and continue teaching.",
           score: 0,
-          feedback: "Neutral but unsafe.",
+          feedback: "Neutral. It may reduce volume but does not address the escape function.",
           next: "step3B"
         },
         C: {
-          text: "Remove all rewards and argue.",
+          text: "Lecture about attitude and respect.",
           score: -10,
-          feedback: "Escalation continues.",
+          feedback: "Extended attention can increase refusal and delay work re-entry.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu is separated from peers and begins to calm.",
+      text: "SR completes a small part with support and starts working quietly.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Crisis stabilized.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He re-entered the task using support and replacement behavior.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu remains dysregulated but no longer aggressive.",
+      text: "SR sits quietly but does not begin working yet.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stabilization.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Stabilized, but he may need a clearer entry step and reinforcement.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu continues aggressive movements.",
+      text: "SR refuses again and tries to engage peers with comments.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Safety still at risk.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Refusal is being reinforced through attention and escape.", next: "step4" }
       }
     },
 
     step4: {
-      text: "Once KeKu is calm and safe, how do you support recovery?",
+      text: "How do you finalize support once he re-engages?",
       choices: {
         A: {
-          text: "Allow a brief reset/break, then reinforce calm re-entry with a Chart Move.",
+          text: "Praise specifically: “Thanks for doing what you could and asking for help.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Excellent — reinforces recovery, not aggression.",
+          feedback: "Perfect. Reinforces recovery, persistence, and help-seeking.",
           ending: "success"
         },
         B: {
-          text: "Return him to class without comment.",
+          text: "Let him work without acknowledgment to keep things calm.",
           score: 0,
-          feedback: "Neutral; recovery not reinforced.",
+          feedback: "Neutral. Calm, but the replacement behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Lecture about what he did wrong.",
+          text: "Re-address the refusal with a corrective talk.",
           score: -10,
-          feedback: "Teaching during recovery can restart escalation.",
+          feedback: "Adds attention and can restart avoidance.",
           ending: "fail"
         }
       }
@@ -2034,166 +2031,158 @@ POOL.crisis.push({
   },
 
   endings: {
-    success: {
-      title: "Crisis Managed Safely",
-      text: "Peer safety was prioritized and calm re-entry was reinforced."
-    },
-    mixed: {
-      title: "Crisis Stabilized Without Reinforcement",
-      text: "Safety was restored, but recovery behavior was not strengthened."
-    },
-    fail: {
-      title: "Crisis Escalation",
-      text: "Escalation increased due to attention, threats, or unsafe responses."
-    }
+    success: { title: "Success – Re-entry Reinforced", text: "SR re-entered the task with structured support and earned reinforcement for recovery." },
+    mixed: { title: "Mixed – Stabilized, Weakly Reinforced", text: "SR calmed and worked, but replacement behaviors were not clearly strengthened." },
+    fail: { title: "Fail – Refusal Cycle Continued", text: "Public attention and extended correction increased escape and attention payoffs." }
   }
 });
 
+
 /*************************************************
- * CRISIS SCENARIO 2 — Work Refusal Escalation
+ * CRISIS SCENARIO 2 — Shutdown (Head Down, Refuses Help)
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_2_work_refusal",
-  title: "Crisis Drill: Escalating Refusal",
+  id: "crisis_2_shutdown_head_down",
+  title: "Crisis Drill: Shutdown (Head Down)",
   start: "step1",
   steps: {
 
     step1: {
-      text: "During a challenging task, KeKu refuses, pushes materials away, and begins yelling, “I’m not doing this!”",
+      text: "During independent work, SR puts his head down and refuses to respond. He does not start any work. A peer whispers, “What’s he doing?”",
       choices: {
         A: {
-          text: "Reduce language: offer break/reset option and step back.",
+          text: "Use quiet proximity: “We will debrief after.” Then offer a tiny entry: “Point to the hardest part. We start together.”",
           score: 10,
-          feedback: "Correct — reduces pressure and supports de-escalation.",
+          feedback: "Great. Low attention, low verbal load, and a clear entry step.",
           next: "step2A"
         },
         B: {
-          text: "Explain why the work is important.",
+          text: "Ask, “Are you okay?” and keep asking questions until he answers.",
           score: 0,
-          feedback: "Neutral but adds verbal demand.",
+          feedback: "Neutral. Caring, but it can increase attention and delay work re-entry.",
           next: "step2B"
         },
         C: {
-          text: "Insist he comply immediately.",
+          text: "Say, “Sit up right now,” where others can hear.",
           score: -10,
-          feedback: "Escalates escape-maintained behavior.",
+          feedback: "Public demands can increase escalation and refusal.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu pauses and lowers his voice slightly.",
+      text: "SR lifts his head slightly and points at a question, still quiet.",
       choices: {
         A: {
-          text: "Maintain calm presence and allow space.",
+          text: "Prompt help-seeking: “Ask for help.” Then do the first part together and fade: “Now you do the next one.”",
           score: 10,
-          feedback: "Good — keeps escalation from reigniting.",
+          feedback: "Excellent. You teach the replacement and use start-together then fade support.",
           next: "step3A"
         },
         B: {
-          text: "Start re-teaching expectations.",
+          text: "Tell him you will come back later and move away.",
           score: 0,
-          feedback: "Neutral but premature.",
+          feedback: "Neutral. Space can help, but he may remain stuck without a clear plan.",
           next: "step3B"
         },
         C: {
-          text: "Remind him of consequences.",
+          text: "Tell him he is choosing to fail if he does not work.",
           score: -10,
-          feedback: "Power struggle risk.",
+          feedback: "Threat-based attention increases distress and avoidance.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu yells louder and knocks materials onto the floor.",
+      text: "SR stays silent and keeps his head down. He makes a small noise when you speak.",
       choices: {
         A: {
-          text: "Shift to crisis mode: clear materials, offer reset/break, get support if needed.",
+          text: "Reduce verbal load and offer the scale: show fingers and ask quietly, “1–10 effort?” Then prompt a tiny next step.",
           score: 10,
-          feedback: "Correct safety-focused response.",
+          feedback: "Great repair. Minimal talking and a structured check-in supports regulation.",
           next: "step3A"
         },
         B: {
-          text: "Continue explaining.",
+          text: "Give him a few minutes with no plan and hope he starts.",
           score: 0,
-          feedback: "Neutral but ineffective.",
+          feedback: "Neutral. It might work, but it is less predictable.",
           next: "step3B"
         },
         C: {
-          text: "Threaten loss of privileges.",
+          text: "Announce to the class that SR is not participating.",
           score: -10,
-          feedback: "Escalation increases.",
+          feedback: "Public attention increases shame and escalation risk.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu screams and kicks his chair.",
+      text: "SR mutters, “No,” and peers are watching.",
       choices: {
         A: {
-          text: "Back off, create space, and allow reset with support.",
+          text: "Quiet repair: move closer, lower voice, and say, “We will talk after. One small part with me.”",
           score: 10,
-          feedback: "Correct — safety and de-escalation first.",
+          feedback: "Strong repair. Removes the audience and gives a clear entry step.",
           next: "step3A"
         },
         B: {
-          text: "Continue demanding compliance.",
+          text: "Tell him again to sit up and start.",
           score: 0,
-          feedback: "Neutral but unsafe.",
+          feedback: "Neutral. Repetition can increase resistance if the task feels hard.",
           next: "step3B"
         },
         C: {
-          text: "Argue about behavior.",
+          text: "Argue about why he has to do it now.",
           score: -10,
-          feedback: "Escalation continues.",
+          feedback: "Debate increases attention and keeps escape efficient.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu calms and stops yelling.",
+      text: "SR completes a small part and begins working quietly.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Escalation resolved.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Recovery and task initiation occurred.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu quiets but remains tense.",
+      text: "SR sits up but stays slow and does very little work.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial recovery.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial recovery. He may need reinforcement and another small entry step.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu remains escalated.",
+      text: "SR stays shut down and begins trying to avoid the task completely.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Crisis persists.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Avoidance is being maintained.", next: "step4" }
       }
     },
 
     step4: {
-      text: "How do you support recovery after the refusal?",
+      text: "How do you reinforce recovery?",
       choices: {
         A: {
-          text: "Allow a brief break, then reinforce calm re-engagement with a Chart Move.",
+          text: "Praise quietly: “Thanks for rejoining and trying.” Give a Yeehaw ticket for starting.",
           score: 10,
-          feedback: "Excellent — reinforces recovery and flexibility.",
+          feedback: "Perfect. Reinforces recovery and effort.",
           ending: "success"
         },
         B: {
-          text: "Return to work without comment.",
+          text: "Let him work without comment to avoid triggering him again.",
           score: 0,
-          feedback: "Neutral but recovery not reinforced.",
+          feedback: "Neutral. Calm, but less likely to strengthen recovery behavior.",
           ending: "mixed"
         },
         C: {
-          text: "Discuss the refusal in detail.",
+          text: "Bring up the shutdown and correct him in front of others.",
           score: -10,
-          feedback: "Risk of restarting escalation.",
+          feedback: "Public attention increases shame and future avoidance.",
           ending: "fail"
         }
       }
@@ -2201,166 +2190,158 @@ POOL.crisis.push({
   },
 
   endings: {
-    success: {
-      title: "Crisis De-Escalated",
-      text: "KeKu calmed with reduced demands and recovery was reinforced."
-    },
-    mixed: {
-      title: "Crisis Ended Without Reinforcement",
-      text: "Behavior stabilized, but recovery was not strengthened."
-    },
-    fail: {
-      title: "Crisis Maintained",
-      text: "Escalation continued due to pressure and attention."
-    }
+    success: { title: "Success – Shutdown Recovery", text: "SR rejoined with low-attention support and earned reinforcement for effort." },
+    mixed: { title: "Mixed – Calmed, Weak Reinforcement", text: "SR stabilized but did not receive strong reinforcement for recovery." },
+    fail: { title: "Fail – Avoidance Strengthened", text: "Public attention and pressure increased escape and refusal patterns." }
   }
 });
 
+
 /*************************************************
- * CRISIS SCENARIO 3 — Unexpected Location
+ * CRISIS SCENARIO 3 — Escalation via Noises and Peer Attention
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_3_unexpected_location",
-  title: "Crisis Drill: Unexpected Location",
+  id: "crisis_3_noises_peer_attention_escalation",
+  title: "Crisis Drill: Noises Escalation (Peers Watching)",
   start: "step1",
   steps: {
 
     step1: {
-      text: "During work time, KeKu suddenly leaves his area and walks quickly toward the hallway.",
+      text: "During a quiet work block, SR starts making louder noises and comments under his breath. Two students turn and smirk.",
       choices: {
         A: {
-          text: "Maintain line-of-sight, notify support immediately, and use calm, brief prompts.",
+          text: "Use proximity and quiet cue: “No noises. If it’s hard, ask for help.” Then shift your attention away.",
           score: 10,
-          feedback: "Correct — safety, support, and minimal language.",
+          feedback: "Great. Private, brief, and matches the plan without building a stage.",
           next: "step2A"
         },
         B: {
-          text: "Follow him quietly without notifying anyone.",
+          text: "Say from your desk, “SR, stop,” and keep watching.",
           score: 0,
-          feedback: "Neutral; support delayed.",
+          feedback: "Neutral. It addresses the behavior but can still provide attention.",
           next: "step2B"
         },
         C: {
-          text: "Chase and physically block him.",
+          text: "Stop the class and address the noises publicly.",
           score: -10,
-          feedback: "Chasing increases risk.",
+          feedback: "Public attention can reinforce the behavior and escalate.",
           next: "step2C"
         }
       }
     },
 
     step2A: {
-      text: "KeKu slows near the doorway but looks unsure.",
+      text: "SR quiets briefly, then stares at the assignment and looks stuck.",
       choices: {
         A: {
-          text: "Offer a brief choice: “Walk with me back or wait here with support.”",
+          text: "Start together quickly: “Show me the hardest part.” Do the first step with him, then fade support.",
           score: 10,
-          feedback: "Excellent — predictable options reduce flight.",
+          feedback: "Excellent. Addresses the root escape trigger and prevents the noise cycle.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to explain why he left.",
+          text: "Walk away to give space and hope he starts.",
           score: 0,
-          feedback: "Neutral but adds verbal load.",
+          feedback: "Neutral. Space can help but may not create entry if he is stuck.",
           next: "step3B"
         },
         C: {
-          text: "Threaten consequences for leaving.",
+          text: "Tell him, “You’re fine,” and insist he just do it.",
           score: -10,
-          feedback: "Escalation risk increases.",
+          feedback: "Invalidation and pressure can increase escalation.",
           next: "step3C"
         }
       }
     },
 
     step2B: {
-      text: "KeKu continues walking farther from the room.",
+      text: "SR makes another loud noise and glances at peers again to see their reaction.",
       choices: {
         A: {
-          text: "Notify support now and switch to safety protocol.",
+          text: "Stop-and privately: “We will debrief after.” Then prompt: “1–10 effort?” and give a tiny work goal.",
           score: 10,
-          feedback: "Good recovery — prioritize safety.",
+          feedback: "Great repair. You cut attention and move him toward action with your routine.",
           next: "step3A"
         },
         B: {
-          text: "Keep following quietly.",
+          text: "Repeat, “Stop,” again and keep monitoring.",
           score: 0,
-          feedback: "Neutral but unsafe.",
+          feedback: "Neutral. Repetition can turn into a pattern of attention.",
           next: "step3B"
         },
         C: {
-          text: "Call out loudly for him to stop.",
+          text: "Correct him sarcastically or with frustration.",
           score: -10,
-          feedback: "Attention may escalate flight.",
+          feedback: "Adds emotion and attention, which increases the payoff.",
           next: "step3C"
         }
       }
     },
 
     step2C: {
-      text: "KeKu runs faster as you block him.",
+      text: "SR smiles and increases the volume, clearly enjoying the audience.",
       choices: {
         A: {
-          text: "Back off, create space, and get immediate support.",
+          text: "Shift class attention away, move closer, and quietly cue: “No noises. Show me the hardest part.”",
           score: 10,
-          feedback: "Correct recovery move.",
+          feedback: "Excellent. Removes peer reinforcement and redirects to the task support plan.",
           next: "step3A"
         },
         B: {
-          text: "Continue blocking.",
+          text: "Give a stern look and continue teaching.",
           score: 0,
-          feedback: "Neutral but risky.",
+          feedback: "Neutral. Might reduce attention, but it does not teach the replacement behavior.",
           next: "step3B"
         },
         C: {
-          text: "Yell for compliance.",
+          text: "Lecture about how he is disrupting everyone.",
           score: -10,
-          feedback: "Escalation continues.",
+          feedback: "Big attention moment that can lock in the behavior.",
           next: "step3C"
         }
       }
     },
 
     step3A: {
-      text: "KeKu stops and waits with support nearby.",
+      text: "SR becomes quiet, completes a small chunk, and stays seated.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Safety restored.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He regulated and re-entered work.", next: "step4" }
       }
     },
 
     step3B: {
-      text: "KeKu slows but remains outside the area.",
+      text: "SR quiets but stays slow and keeps looking around.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial safety.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Stable, but he may need reinforcement and a clearer work entry step.", next: "step4" }
       }
     },
 
     step3C: {
-      text: "KeKu continues moving away.",
+      text: "SR continues making noises and peers keep reacting.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Safety risk persists.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Peer attention is maintaining the escalation cycle.", next: "step4" }
       }
     },
 
     step4: {
-      text: "Once KeKu is calm and safe, how do you support recovery?",
+      text: "How do you finalize support after he calms?",
       choices: {
         A: {
-          text: "Reinforce safe return and calm behavior with a Chart Move.",
+          text: "Praise specifically and reinforce: “Thanks for staying quiet and getting started.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Excellent — reinforces recovery and safety.",
+          feedback: "Perfect. Reinforces the calm behavior and work initiation.",
           ending: "success"
         },
         B: {
-          text: "Return to class without feedback.",
+          text: "Let him work without comment to keep it calm.",
           score: 0,
-          feedback: "Neutral but recovery not strengthened.",
+          feedback: "Neutral. Calm, but less likely to strengthen future regulation.",
           ending: "mixed"
         },
         C: {
-          text: "Discuss the danger in detail.",
+          text: "Revisit the noise behavior with a public correction.",
           score: -10,
-          feedback: "Teaching during recovery may re-escalate.",
+          feedback: "Public attention can trigger the cycle again.",
           ending: "fail"
         }
       }
@@ -2368,189 +2349,158 @@ POOL.crisis.push({
   },
 
   endings: {
-    success: {
-      title: "Crisis Managed – Safe Return",
-      text: "Unexpected location was handled with safety and reinforcement of recovery."
-    },
-    mixed: {
-      title: "Crisis Ended Without Reinforcement",
-      text: "Safety restored, but recovery behavior not strengthened."
-    },
-    fail: {
-      title: "Crisis Escalated",
-      text: "Escalation increased due to chasing, threats, or attention."
-    }
+    success: { title: "Success – Noise Cycle Interrupted", text: "SR re-entered work with low attention support and earned reinforcement for calm behavior." },
+    mixed: { title: "Mixed – Stabilized, Not Strengthened", text: "SR calmed, but reinforcement was unclear and future cycles may repeat." },
+    fail: { title: "Fail – Escalation Maintained", text: "Public attention increased peer reinforcement and strengthened the pattern." }
   }
 });
 
+
 /*************************************************
- * CRISIS SCENARIO 4 — Property Misuse (Throwing/Breaking)
+ * CRISIS SCENARIO 4 — Hallway Transition Refusal
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_4_property_misuse",
-  title: "Crisis Drill: Property Misuse",
+  id: "crisis_4_hallway_transition_refusal",
+  title: "Crisis Drill: Hallway Transition Refusal",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "During a demanding task, KeKu grabs a classroom item (pencil bin / paper stack) and begins throwing materials onto the floor. Peers turn to watch.",
+      text: "It is time to line up. SR stays seated and says, “I’m not going,” while peers are lining up and watching.",
       choices: {
         A: {
-          text: "Reduce audience + secure environment: calmly move peers back, remove other throwable items, and use a brief directive (“Hands down. Step back.”). Signal for support.",
+          text: "Calm, brief directive: “Stand up and join the line.” Then: “We will talk after.” Offer a tiny choice: “Front or back of line?”",
           score: 10,
-          feedback: "Correct. You reduce risk, reduce attention, and keep language minimal.",
+          feedback: "Great. Clear direction, private debrief later, and a small choice reduces resistance.",
           next: "step2A"
         },
         B: {
-          text: "Tell him to stop and explain why it’s not okay.",
+          text: "Say, “It’s time,” and wait for him to comply.",
           score: 0,
-          feedback: "Neutral, but too much language for an active crisis.",
+          feedback: "Neutral. Waiting can work, but it may allow escape and peer attention to grow.",
           next: "step2B"
         },
         C: {
-          text: "Scold him loudly in front of the class.",
+          text: "Say loudly, “SR is holding us up,” so the class hears.",
           score: -10,
-          feedback: "Public attention + intensity can escalate property misuse.",
+          feedback: "Public pressure increases attention and escalates refusal.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "With peers moved away and items reduced, KeKu pauses, breathing hard.",
+      text: "SR stands slowly, still tense, and looks at peers.",
       choices: {
         A: {
-          text: "Offer reset/break space with a calm gesture and minimal words (“Reset.”).",
+          text: "Use proximity and quiet cue: “Quiet line.” Then move attention away and start the line moving.",
           score: 10,
-          feedback: "Excellent. Low language + predictable option supports de-escalation.",
+          feedback: "Excellent. You reduce audience and reinforce the routine with low attention.",
           next: "step3A"
         },
         B: {
-          text: "Ask him to explain what happened.",
+          text: "Keep watching him closely the whole time.",
           score: 0,
-          feedback: "Neutral, but increases verbal load while still activated.",
+          feedback: "Neutral. Monitoring helps, but it can become attention-heavy.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he has to clean up immediately.",
+          text: "Remind him again about consequences if he refuses.",
           score: -10,
-          feedback: "Demand during peak escalation can restart or intensify behavior.",
+          feedback: "Threat-based attention can re-escalate him in the hallway.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "As you explain, KeKu throws another item and looks toward peers to see reactions.",
+      text: "SR makes a loud noise, then looks around to see if anyone reacts.",
       choices: {
         A: {
-          text: "Shift to crisis steps: reduce audience, remove items, brief directive, signal support.",
+          text: "Quiet repair: move closer and say, “Stand up now.” Then: “We will debrief after.”",
           score: 10,
-          feedback: "Good recovery. You moved from talking to safety-focused responding.",
+          feedback: "Great. Brief and private, reduces peer attention.",
           next: "step3A"
         },
         B: {
-          text: "Keep explaining and asking questions.",
+          text: "Repeat the request again and keep waiting.",
           score: 0,
-          feedback: "Neutral but likely maintains behavior.",
+          feedback: "Neutral. May work, but it keeps attention on the refusal.",
           next: "step3B"
         },
         C: {
-          text: "Threaten loss of privileges.",
+          text: "Argue about why he has to line up right now.",
           score: -10,
-          feedback: "Threats often escalate and prolong the episode.",
+          feedback: "Debate increases attention and delays the transition, reinforcing escape.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu escalates, tossing items faster while peers react.",
+      text: "Peers stare. SR smirks and stays seated longer.",
       choices: {
         A: {
-          text: "Reset: lower intensity, move peers back, reduce items, and call for support.",
+          text: "Shift class attention away, start the line moving, and quietly cue SR: “Join us now.”",
           score: 10,
-          feedback: "Correct recovery — safety and de-escalation first.",
+          feedback: "Excellent. Removes the audience and reduces reinforcement for refusal.",
           next: "step3A"
         },
         B: {
-          text: "Continue scolding and arguing.",
+          text: "Give a stern look and wait.",
           score: 0,
-          feedback: "Neutral but likely maintains escalation.",
+          feedback: "Neutral. Might work, but refusal may continue.",
           next: "step3B"
         },
         C: {
-          text: "Physically grab items from his hands without support.",
+          text: "Continue the public correction and call out his behavior.",
           score: -10,
-          feedback: "Risky and may escalate aggression.",
+          feedback: "High attention increases escalation and refusal patterns.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu moves toward reset space and stops throwing. Breathing slows.",
+      text: "SR joins the line and walks quietly.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 10,
-          feedback: "Crisis is de-escalating safely.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 10, feedback: "Transition occurred with low attention support.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu stops throwing but stays tense and mutters.",
+      text: "SR joins but continues small noises and glances at peers.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "Partial stabilization; keep language low.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 0, feedback: "Partial transition success. Reinforcement may be needed.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu keeps throwing or begins moving toward others.",
+      text: "SR refuses again and talks louder, now attention-driven.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "Safety risk continues — support needed.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: -10, feedback: "Escape and attention payoffs are increasing.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "Once KeKu is calm and safe, what is the best recovery step?",
+      text: "How do you reinforce a successful transition?",
       choices: {
         A: {
-          text: "Reinforce calm recovery with a Chart Move, then do cleanup later when fully regulated (with support if needed).",
+          text: "At the destination, praise quietly: “Thanks for joining the line.” Give a Yeehaw ticket for a quiet transition.",
           score: 10,
-          feedback: "Excellent. Reinforces recovery first and avoids re-triggering escalation.",
+          feedback: "Perfect. Reinforces the hallway routine and recovery.",
           ending: "success"
         },
         B: {
-          text: "Have him clean immediately without reinforcement.",
+          text: "Move on without acknowledging to keep it calm.",
           score: 0,
-          feedback: "Neutral; may work sometimes but risks re-escalation if too soon.",
+          feedback: "Neutral. Calm, but less likely to strengthen future transitions.",
           ending: "mixed"
         },
         C: {
-          text: "Lecture about respect and make him apologize publicly.",
+          text: "Debrief the refusal in front of peers.",
           score: -10,
-          feedback: "Public attention and demands can restart escalation.",
+          feedback: "Public attention increases the likelihood of future refusal in transitions.",
           ending: "fail"
         }
       }
@@ -2558,189 +2508,158 @@ POOL.crisis.push({
   },
 
   endings: {
-    success: {
-      title: "Crisis Managed – Recovery Reinforced",
-      text: "Safety was restored, attention was reduced, and KeKu’s calm recovery was reinforced before demands resumed."
-    },
-    mixed: {
-      title: "Stabilized – Recovery Not Strengthened",
-      text: "Behavior stopped, but recovery behaviors were not reinforced and demands may have returned too quickly."
-    },
-    fail: {
-      title: "Escalation Maintained",
-      text: "High attention, threats, or premature demands prolonged the episode or increased risk."
-    }
+    success: { title: "Success – Transition Restored", text: "SR joined the transition with low attention support and earned reinforcement for recovery." },
+    mixed: { title: "Mixed – Transition Occurred, Weakly Reinforced", text: "SR transitioned, but reinforcement for recovery and quiet behavior was unclear." },
+    fail: { title: "Fail – Refusal Reinforced", text: "Public attention and delays increased the payoff for refusal and escape." }
   }
 });
 
+
 /*************************************************
- * CRISIS SCENARIO 5 — KYHFOOTY + Attempt to Leave
+ * CRISIS SCENARIO 5 — Escalation After Correction (Power Struggle Risk)
  **************************************************/
 POOL.crisis.push({
-  id: "crisis_5_kyhfooty_leave_combo",
-  title: "Crisis Drill: Aggression + Leaving Area",
+  id: "crisis_5_power_struggle_after_correction",
+  title: "Crisis Drill: Power Struggle After Correction",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "KeKu becomes escalated, kicks toward a peer (KYHFOOTY), then immediately turns and moves quickly toward the door.",
+      text: "You give SR a quiet reminder to stop talking during work. SR snaps back, “Why do you always pick on me?” and looks around to see who is watching.",
       choices: {
         A: {
-          text: "Prioritize safety: move peers back, maintain line-of-sight, use brief directive (“Stop. With me.”), and signal for immediate support.",
+          text: "Stay calm and brief: “We will debrief after.” Then give the next step: “One small part, then check in.”",
           score: 10,
-          feedback: "Correct. This is a high-risk combo — safety + support activation is essential.",
+          feedback: "Excellent. You avoid the debate and move directly to a doable action.",
           next: "step2A"
         },
         B: {
-          text: "Follow him into the hall without notifying anyone.",
+          text: "Explain why you corrected him and try to convince him it is fair.",
           score: 0,
-          feedback: "Neutral but unsafe — support is delayed.",
+          feedback: "Neutral. It is well-meaning, but it can extend the attention and fuel the power struggle.",
           next: "step2B"
         },
         C: {
-          text: "Chase him and grab his arm to stop him.",
+          text: "Respond emotionally: “Do not talk to me like that,” where others can hear.",
           score: -10,
-          feedback: "High risk escalation and injury.",
+          feedback: "Public emotional correction can escalate and reinforce attention-seeking.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "With peers separated and support signaled, KeKu pauses at the doorway, breathing hard.",
+      text: "SR is still tense but looks back at the work and makes a small noise.",
       choices: {
         A: {
-          text: "Offer a brief, safe choice: “Reset here” (gesture) or “Walk with me back.” Keep voice calm and minimal.",
+          text: "Use the scale privately: “1–10 effort?” Then: “Show me the hardest part. We start together.”",
           score: 10,
-          feedback: "Excellent — predictable options reduce flight and aggression.",
+          feedback: "Great. Structured check-in and immediate entry to reduce escape.",
           next: "step3A"
         },
         B: {
-          text: "Ask him to explain what he was thinking.",
+          text: "Walk away to avoid conflict and hope he starts.",
           score: 0,
-          feedback: "Neutral but too much language during high activation.",
+          feedback: "Neutral. Avoids a fight, but he may learn that pushback ends the demand.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he’s in big trouble and can’t leave.",
+          text: "Ask him to explain himself and keep pressing for an answer.",
           score: -10,
-          feedback: "Threats often increase fleeing and aggression.",
+          feedback: "Extended back-and-forth increases attention and delays work re-entry.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "KeKu keeps moving down the hall. You are alone with him and the class is unattended.",
+      text: "SR argues: “I wasn’t even talking. Everyone else talks!” Peers begin watching.",
       choices: {
         A: {
-          text: "Recover: notify support immediately and re-engage safety protocol while maintaining line-of-sight.",
+          text: "Cut debate calmly: “We will talk after.” Then point to the work: “Start here with me.”",
           score: 10,
-          feedback: "Correct recovery — support and supervision are required.",
+          feedback: "Excellent repair. You end the argument and restore structure.",
           next: "step3A"
         },
         B: {
-          text: "Keep following without contacting anyone.",
+          text: "Keep explaining why it is different and go back and forth.",
           score: 0,
-          feedback: "Neutral but unsafe.",
+          feedback: "Neutral. It may feel fair, but it keeps attention on the argument.",
           next: "step3B"
         },
         C: {
-          text: "Yell his name repeatedly to make him stop.",
+          text: "Publicly list his past behaviors or warn about consequences.",
           score: -10,
-          feedback: "Increases attention and can speed up flight.",
+          feedback: "Public attention and shame can escalate and increase refusal.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu pulls away and escalates, kicking again while trying to move forward.",
+      text: "SR gets louder: “This class is stupid!” Peers react.",
       choices: {
         A: {
-          text: "Back off to reduce intensity, keep line-of-sight, clear peers, and get immediate support.",
+          text: "Shift attention away, move closer, and say quietly: “Reset. One small part with me.”",
           score: 10,
-          feedback: "Correct recovery — safety, space, and support.",
+          feedback: "Strong repair. Removes the audience and sets a tiny action step.",
           next: "step3A"
         },
         B: {
-          text: "Hold tighter to stop him.",
+          text: "Tell him to lower his voice and keep teaching.",
           score: 0,
-          feedback: "Neutral but risky and may escalate.",
+          feedback: "Neutral. It addresses volume but not the escape function.",
           next: "step3B"
         },
         C: {
-          text: "Argue and threaten consequences.",
+          text: "Lecture about respect and embarrassment in front of peers.",
           score: -10,
-          feedback: "Escalation continues.",
+          feedback: "Public attention increases the payoff and can lock in the power struggle pattern.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu slows, stays within supervision range, and begins to calm with support present.",
+      text: "SR calms, completes a small part, and stops the argument.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 10,
-          feedback: "Safety restored; continue low language.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 10, feedback: "He de-escalated and re-entered the task.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu stops moving but remains tense and reactive.",
+      text: "SR quiets but stays rigid and does very little work.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: 0,
-          feedback: "Partial stabilization; keep demands low.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: 0, feedback: "Stabilized, but reinforcement and a clearer finish line may be needed.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu continues trying to leave and/or engages in more KYHFOOTY behaviors.",
+      text: "SR keeps arguing and tries to gain peer attention.",
       choices: {
-        A: {
-          text: "Continue.",
-          score: -10,
-          feedback: "High risk persists — follow crisis plan and support procedures.",
-          next: "step4"
-        }
+        A: { text: "Continue.", score: -10, feedback: "Attention and escape are both being reinforced.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS)ucker) ----------
     step4: {
-      text: "Once KeKu is calm and safely back under supervision, what is the best next step?",
+      text: "How do you finalize support after de-escalation?",
       choices: {
         A: {
-          text: "Reinforce calm recovery with a Chart Move, then re-enter with a low-demand task before returning to full demands.",
+          text: "Praise recovery privately: “Thanks for resetting and getting started.” Give a Yeehaw ticket for re-entry.",
           score: 10,
-          feedback: "Excellent. Reinforces recovery and prevents immediate re-triggering.",
+          feedback: "Perfect. Reinforces de-escalation and task initiation.",
           ending: "success"
         },
         B: {
-          text: "Return to the original task without reinforcement.",
+          text: "Let him move on without reinforcement to keep things calm.",
           score: 0,
-          feedback: "Neutral; recovery isn’t strengthened and demands may be too fast.",
+          feedback: "Neutral. Calm, but less likely to strengthen recovery behavior.",
           ending: "mixed"
         },
         C: {
-          text: "Have him explain the behavior and apologize to peers immediately.",
+          text: "Revisit the argument publicly to teach him a lesson.",
           score: -10,
-          feedback: "High-language social demands can restart escalation.",
+          feedback: "Public attention can restart the power struggle and increase future escalation.",
           ending: "fail"
         }
       }
@@ -2748,174 +2667,157 @@ POOL.crisis.push({
   },
 
   endings: {
-    success: {
-      title: "Crisis Managed – Safe Recovery",
-      text: "Peers were protected, flight risk was contained, support was activated, and calm recovery was reinforced."
-    },
-    mixed: {
-      title: "Stabilized – Risk of Repeat",
-      text: "Safety was restored, but recovery wasn’t reinforced and demands may have returned too quickly."
-    },
-    fail: {
-      title: "Escalation Continued",
-      text: "Chasing, threats, or high-language demands maintained or increased crisis behavior."
-    }
+    success: { title: "Success – Power Struggle Avoided", text: "SR de-escalated with minimal attention and earned reinforcement for recovery and re-entry." },
+    mixed: { title: "Mixed – Calmed, Weakly Reinforced", text: "SR stabilized, but reinforcement and structure were not strong enough to prevent future cycles." },
+    fail: { title: "Fail – Power Struggle Reinforced", text: "Debate and public attention increased escape and attention payoffs, making escalation more likely next time." }
   }
 });
 
 /*************************************************
- * WILDCARD SCENARIO 1 — Unexpected Location Change (Assembly/Room Switch)
+ * WILDCARD SCENARIO 1 — Surprise Schedule Change (Assembly)
  **************************************************/
 POOL.wild.push({
-  id: "wild_1_unexpected_location_change",
-  title: "Wildcard Mission: Unexpected Location Change",
+  id: "wild_1_surprise_schedule_change_assembly_sr",
+  title: "Wildcard Mission: Surprise Assembly",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "An announcement comes over the intercom: your class must move to a different room right away (assembly/room swap). KeKu tenses, looks around, and says loudly, “No—why are we going THERE?!” while stepping away from the line.",
+      text: "An unexpected announcement comes over the intercom: the class must head to an assembly right now. SR freezes, then mutters, “Seriously?” and starts making quiet noises while looking around at peers.",
       choices: {
         A: {
-          text: "Use brief, calm directive + predictability: “We go together. Stay with me.” and gesture where to stand.",
+          text: "Use calm directive with structure: “Line up now. We go together.” Then quietly pre-correct: “Quiet line.”",
           score: 10,
-          feedback: "Great fidelity. Low language, clear anchor, reduces escalation during unexpected transitions.",
+          feedback: "Great fidelity. Clear direction, low attention, and strong structure during a change.",
           next: "step2A"
         },
         B: {
-          text: "Explain the reason for the change and reassure him it will be fine.",
+          text: "Say neutrally, “It’s fine, let’s go,” and move the class out.",
           score: 0,
-          feedback: "Neutral, but extra talking can increase activation during uncertainty.",
+          feedback: "Neutral. It moves things along, but does not pre-correct SR’s trigger behaviors.",
           next: "step2B"
         },
         C: {
-          text: "Say sharply, “Stop arguing and get in line.”",
+          text: "Say, “Stop with the noises,” where others can hear.",
           score: -10,
-          feedback: "High-intensity correction during a change can escalate behavior and increase risk of leaving area.",
+          feedback: "Public correction can increase attention and escalate during an already unstructured moment.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "KeKu steps closer but keeps scanning the hallway and peers.",
+      text: "SR stands and joins the line, still tense, looking at peers as if to see who is watching.",
       choices: {
         A: {
-          text: "Offer a simple choice: “Walk next to me” OR “Walk behind me” (gesture both).",
+          text: "Quietly cue: “Eyes forward. Save conversation for later.” Then shift attention away and move the line.",
           score: 10,
-          feedback: "Excellent. Choices increase compliance without a debate and reduce flight risk.",
+          feedback: "Excellent. Brief, private, and reduces audience reinforcement.",
           next: "step3A"
         },
         B: {
-          text: "Tell him, “You’re okay,” repeatedly while walking.",
+          text: "Keep watching SR closely the whole time.",
           score: 0,
-          feedback: "Neutral; repeated verbal attention may not help regulation.",
+          feedback: "Neutral. Monitoring helps, but it can turn into attention.",
           next: "step3B"
         },
         C: {
-          text: "Warn him he’ll lose a privilege if he doesn’t comply.",
+          text: "Explain in detail why schedules change and why he needs to comply.",
           score: -10,
-          feedback: "Threats during high uncertainty can increase escalation and attempts to leave.",
+          feedback: "Extended talking can increase attention and delay, reinforcing escape.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "As you explain, KeKu interrupts, “I’m NOT going!” and backs up further, drawing peer attention.",
+      text: "SR shuffles slowly and starts a quiet side comment to a peer to avoid lining up.",
       choices: {
         A: {
-          text: "Cut the debate: “With me.” (gesture) and begin moving the class attention forward.",
+          text: "Use proximity and quiet reminder: “Quiet line. Join us now.”",
           score: 10,
-          feedback: "Nice recovery. Minimal language + removing audience attention supports de-escalation.",
+          feedback: "Great. Private correction without creating a peer attention moment.",
           next: "step3A"
         },
         B: {
-          text: "Keep explaining and negotiating.",
+          text: "Repeat, “Let’s go,” to the class again.",
           score: 0,
-          feedback: "Neutral but may maintain refusal through attention.",
+          feedback: "Neutral. Classwide reminders can become background noise for SR.",
           next: "step3B"
         },
         C: {
-          text: "Publicly call him out for refusing.",
+          text: "Stop and call out SR’s behavior in front of the line.",
           score: -10,
-          feedback: "Public attention can reinforce escalation and increase risk behavior.",
+          feedback: "Public attention can increase side talk and resistance.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu’s voice gets louder. He steps toward the door and looks ready to bolt.",
+      text: "SR smirks slightly and makes a louder noise, clearly checking peer reactions.",
       choices: {
         A: {
-          text: "Safety-first: reduce audience, keep line-of-sight, signal support if needed, and use a brief directive: “Stop. With me.”",
+          text: "Repair quietly: “We will debrief after.” Then: “Line up now.” Shift the class forward to reduce the audience.",
           score: 10,
-          feedback: "Correct. You shift to safety and support procedures without escalating verbal intensity.",
+          feedback: "Excellent repair. Removes the audience and gives a clear next step.",
           next: "step3A"
         },
         B: {
-          text: "Follow him while telling him to calm down.",
+          text: "Give a stern look and keep moving.",
           score: 0,
-          feedback: "Neutral; support activation may be delayed.",
+          feedback: "Neutral. Might work, but it is not explicit prompting.",
           next: "step3B"
         },
         C: {
-          text: "Chase him and grab him to stop him.",
+          text: "Continue correcting him publicly until he stops.",
           score: -10,
-          feedback: "High risk. Physical intervention can escalate aggression and flight.",
+          feedback: "Sustained attention can escalate and reinforce the behavior.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu stays close enough to move with you and begins to settle as the group walks.",
+      text: "SR walks with the class quietly and keeps his focus forward.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Regulation is improving with structure and low attention.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Successful transition during a schedule change.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu walks but mutters and keeps looking for an escape route.",
+      text: "SR walks but continues small noises and glances around.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stabilization; keep directives brief and proximity steady.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial stabilization. Reinforcement may be needed.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu escalates further—refuses to move or tries to pull away.",
+      text: "SR continues noises and peer attention increases.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Risk remains high; follow safety/support procedures.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Attention and escape payoffs are increasing.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "Once you arrive at the new location and KeKu is calm enough to participate, what’s the best next step?",
+      text: "How do you support SR during the assembly transition?",
       choices: {
         A: {
-          text: "Reinforce coping + compliance with a Chart Move and start with a low-demand entry task.",
+          text: "Quietly praise at the destination: “Thanks for walking quietly.” Give a Yeehaw ticket for the transition.",
           score: 10,
-          feedback: "Perfect. Reinforces flexibility and prevents immediate re-triggering.",
+          feedback: "Perfect. Reinforces flexibility and hallway expectations.",
           ending: "success"
         },
         B: {
-          text: "Proceed immediately with full expectations without reinforcement.",
+          text: "Let him settle without comment since things are busy.",
           score: 0,
-          feedback: "Neutral; participation may occur, but flexibility coping isn’t strengthened.",
+          feedback: "Neutral. Calm, but the coping behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Process the refusal publicly and require an apology before he can join.",
+          text: "Discuss his noises in front of the group.",
           score: -10,
-          feedback: "High language + public attention can restart escalation.",
+          feedback: "Public attention increases the chance of future noise behavior during schedule changes.",
           ending: "fail"
         }
       }
@@ -2923,175 +2825,158 @@ POOL.wild.push({
   },
 
   endings: {
-    success: {
-      title: "Success – Flexibility Reinforced",
-      text: "KeKu tolerated an unexpected location change with predictable structure, and coping was reinforced with a Chart Move."
-    },
-    mixed: {
-      title: "Mixed – Moved, But Not Strengthened",
-      text: "KeKu complied, but flexibility and coping weren’t clearly reinforced, increasing risk of future refusal."
-    },
-    fail: {
-      title: "Fail – Escalation Maintained",
-      text: "Public attention, threats, or high demands increased escalation and risk of leaving area."
-    }
+    success: { title: "Success – Change Managed", text: "SR followed the transition routine during a surprise change and earned reinforcement for coping." },
+    mixed: { title: "Mixed – Managed, Weakly Reinforced", text: "SR made it through the change, but replacement behaviors were not clearly reinforced." },
+    fail: { title: "Fail – Attention Fueled Escalation", text: "Public attention increased the payoff for noises and resistance during change." }
   }
 });
 
 
 /*************************************************
- * WILDCARD SCENARIO 2 — Unstructured/Free Time (Peer Attention + KYHFOOTY Risk)
+ * WILDCARD SCENARIO 2 — Substitute Day (Lower Structure)
  **************************************************/
 POOL.wild.push({
-  id: "wild_2_unstructured_free_time",
-  title: "Wildcard Mission: Unstructured Time Surge",
+  id: "wild_2_substitute_day_structure_slips_sr",
+  title: "Wildcard Mission: Substitute Teacher Day",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "A planned activity ends early and you suddenly have 10 minutes of open time. KeKu seeks a peer, gets too close, and begins bumping bodies while trying to get a reaction. A peer says, “Stop,” and KeKu’s posture stiffens.",
+      text: "A substitute is leading the class. SR notices the lower structure and starts whispering to peers and making quiet noises while tasks are being explained.",
       choices: {
         A: {
-          text: "Pre-correct and structure immediately: assign a clear option (“Choose: drawing or puzzle”) and set a boundary (“Hands to self”).",
+          text: "Pre-correct privately: “Routine stays the same. Quiet during directions. If it’s hard, ask for help.”",
           score: 10,
-          feedback: "Excellent. You remove ambiguity that fuels behavior and set expectations before escalation.",
+          feedback: "Great. Preserves expectations without creating a spotlight.",
           next: "step2A"
         },
         B: {
-          text: "Say, “Be nice,” and hope it settles.",
+          text: "Tell the substitute, “He can be off task sometimes,” in front of students.",
           score: 0,
-          feedback: "Neutral; not enough structure for a known risk time.",
+          feedback: "Neutral, but it can increase attention on SR and invite peer reactions.",
           next: "step2B"
         },
         C: {
-          text: "Call him out loudly in front of peers for being unsafe.",
+          text: "Publicly reprimand: “SR, stop trying to distract everyone.”",
           score: -10,
-          feedback: "Public attention can increase peer-maintained behavior and intensify KYHFOOTY risk.",
+          feedback: "Public correction can make the behavior more reinforcing and escalate.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "KeKu hesitates, then looks at the options, still buzzing with energy.",
+      text: "SR quiets briefly but stares at the worksheet, then begins to stall before starting.",
       choices: {
         A: {
-          text: "Offer a small choice + proximity: “Pick your spot—table or rug.” Stay nearby without hovering.",
+          text: "Start together quickly: “Show me the hardest part.” Do the first step together, then fade support.",
           score: 10,
-          feedback: "Great. Structured choice + calm proximity reduces peer-driven escalation.",
+          feedback: "Excellent. Keeps structure and prevents escape from starting.",
           next: "step3A"
         },
         B: {
-          text: "Let him roam as long as he’s not hurting anyone.",
+          text: "Let him sit for a bit to see if he starts on his own.",
           score: 0,
-          feedback: "Neutral; roaming can quickly trigger peer conflict.",
+          feedback: "Neutral. He may stall without a clear entry step.",
           next: "step3B"
         },
         C: {
-          text: "Tell him he is on a ‘last warning’ and watch him closely.",
+          text: "Explain the worksheet in detail while he listens.",
           score: -10,
-          feedback: "Threat-based attention can intensify performance behaviors for peers.",
+          feedback: "Extended attention can reinforce stalling and avoidance.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "KeKu moves closer to the peer again and the peer pulls away. KeKu raises his voice: “I didn’t DO anything!”",
+      text: "SR smirks and whispers, “See?” to a peer, then keeps talking quietly.",
       choices: {
         A: {
-          text: "Repair with structure: “Option time. Choose drawing or puzzle. Hands to self.” (gesture toward materials).",
+          text: "Quietly redirect with proximity: “Save conversation for later. Start with #1.”",
           score: 10,
-          feedback: "Good recovery. You replace ambiguity with clear, doable actions.",
+          feedback: "Great repair. Low attention and clear direction.",
           next: "step3A"
         },
         B: {
-          text: "Try to talk through what happened in the moment.",
+          text: "Give a stern look and move away.",
           score: 0,
-          feedback: "Neutral; extended talking during activation can escalate.",
+          feedback: "Neutral. Might work, but the replacement behaviors are not prompted.",
           next: "step3B"
         },
         C: {
-          text: "Make the peer explain what KeKu did wrong in front of others.",
+          text: "Tell the class to ignore SR.",
           score: -10,
-          feedback: "Creates a social spotlight and can trigger aggression.",
+          feedback: "Creates a big attention moment for SR.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "Peers stare. KeKu steps toward the peer and lifts a foot like he might kick.",
+      text: "SR laughs softly and increases whispering to peers because the class is watching.",
       choices: {
         A: {
-          text: "Safety-first: move peers back, give a brief directive (“Back.”), and redirect KeKu to a defined space with minimal language.",
+          text: "Shift attention away, move closer, and quietly say, “We will debrief after. Start here with me.”",
           score: 10,
-          feedback: "Correct. You reduce risk and prevent reinforcement through peer attention.",
+          feedback: "Excellent repair. Removes the audience and restores structure.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to calm down and stop acting that way.",
+          text: "Tell him to lower his voice and keep going.",
           score: 0,
-          feedback: "Neutral; may not reduce danger quickly.",
+          feedback: "Neutral. May reduce volume but does not address escape or teach replacement behavior.",
           next: "step3B"
         },
         C: {
-          text: "Yell at him to stop and threaten office referral.",
+          text: "Lecture about respecting substitutes in front of the class.",
           score: -10,
-          feedback: "High intensity + attention can escalate KYHFOOTY behaviors.",
+          feedback: "Long public attention often reinforces the behavior.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu moves to a chosen activity spot and begins engaging with materials.",
+      text: "SR starts the task and works quietly with minimal support.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Strong regulation and safe participation.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "Routine held even with a substitute.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu engages briefly but keeps scanning peers for reactions.",
+      text: "SR starts slowly and keeps scanning for peer attention.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stability; keep structure and proximity.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial engagement. Reinforcement may be needed.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu escalates—more body contact, louder voice, or attempts to kick toward a peer.",
+      text: "SR continues whispering and avoids starting the work.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Risk is increasing; shift to safety and support procedures.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Low structure increased escape and attention payoffs.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "How do you finish this unstructured block successfully?",
+      text: "How do you reinforce routine success with a substitute?",
       choices: {
         A: {
-          text: "Reinforce safe participation with a Chart Move and preview the next structured activity with a simple cue.",
+          text: "Quietly praise: “Thanks for starting and staying quiet during directions.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Excellent. Reinforces the right behavior and bridges to the next transition.",
+          feedback: "Perfect. Reinforces coping with reduced structure.",
           ending: "success"
         },
         B: {
-          text: "Let time run out and move on without reinforcement or preview.",
+          text: "Let the substitute handle praise without tying it to the plan.",
           score: 0,
-          feedback: "Neutral; doesn’t strengthen safe unstructured behavior.",
+          feedback: "Neutral. Praise helps, but structure may be unclear.",
           ending: "mixed"
         },
         C: {
-          text: "Publicly remind everyone about KeKu’s behavior before transitioning.",
+          text: "Bring up his earlier behavior publicly to teach a lesson.",
           score: -10,
-          feedback: "Public attention can re-trigger peer-maintained behavior.",
+          feedback: "Public attention increases the likelihood of future substitute-day issues.",
           ending: "fail"
         }
       }
@@ -3099,175 +2984,158 @@ POOL.wild.push({
   },
 
   endings: {
-    success: {
-      title: "Success – Unstructured Time Stabilized",
-      text: "KeKu stayed safe during an unstructured block because structure was added quickly and safe behavior was reinforced."
-    },
-    mixed: {
-      title: "Mixed – Safe Enough, But Weak Support",
-      text: "The moment passed without a major incident, but structure and reinforcement weren’t strong enough to reduce future risk."
-    },
-    fail: {
-      title: "Fail – Peer Attention Fueled Escalation",
-      text: "Public attention and weak structure allowed peer conflict to grow, increasing KYHFOOTY risk."
-    }
+    success: { title: "Success – Substitute Day Stability", text: "SR maintained expectations and earned reinforcement despite lower structure." },
+    mixed: { title: "Mixed – Participated, Weak Structure", text: "SR engaged somewhat, but routines were not clearly reinforced." },
+    fail: { title: "Fail – Attention Flew Wild", text: "Public attention and low structure increased avoidance and peer-driven behavior." }
   }
 });
 
 
 /*************************************************
- * WILDCARD SCENARIO 3 — Substitute / New Adult (Test of Limits)
+ * WILDCARD SCENARIO 3 — Technology Glitch (Frustration Trigger)
  **************************************************/
 POOL.wild.push({
-  id: "wild_3_new_adult_substitute",
-  title: "Wildcard Mission: New Adult / Substitute Day",
+  id: "wild_3_technology_glitch_frustration_sr",
+  title: "Wildcard Mission: Tech Glitch",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "A substitute (or a new adult) is in the room. KeKu notices immediately and begins testing limits: refusing a direction and looking at peers with a grin like he’s performing.",
+      text: "SR is working on a short online task. The page freezes and his work disappears. He sighs loudly and starts making noises under his breath while glancing at peers.",
       choices: {
         A: {
-          text: "Keep routine predictable: give the sub a quick script and use a brief directive to KeKu (“Same routine. Start now.”).",
+          text: "Calm directive: “Take a breath. Show me the problem.” Then: “We will fix it together, then you do the next part.”",
           score: 10,
-          feedback: "Excellent. Predictability reduces attention-seeking and prevents limit-testing from escalating.",
+          feedback: "Great. Calm structure reduces frustration and prevents escape behaviors.",
           next: "step2A"
         },
         B: {
-          text: "Tell the sub, “He can be difficult,” within earshot of peers.",
+          text: "Say, “That’s annoying,” and tell him to try again.",
           score: 0,
-          feedback: "Neutral but risks reinforcing behavior by giving him a public identity/spotlight.",
+          feedback: "Neutral. Acknowledges, but does not provide a clear coping routine.",
           next: "step2B"
         },
         C: {
-          text: "Publicly confront him: “Don’t try that today.”",
+          text: "Say, “Stop making noises,” where others can hear.",
           score: -10,
-          feedback: "Public challenge can escalate and increase peer attention.",
+          feedback: "Public correction increases attention and can escalate frustration.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "KeKu hesitates, then starts moving but watches peers to see if they’re impressed.",
+      text: "SR calms a little but still looks frustrated. He starts to stall and avoid reopening the assignment.",
       choices: {
         A: {
-          text: "Reinforce quickly and quietly: a brief specific praise + Chart Move once he initiates.",
+          text: "Use the scale quietly: “1–10 effort?” Then: “One small step: reopen it, then I check.”",
           score: 10,
-          feedback: "Perfect. You reinforce task initiation under new-adult conditions.",
+          feedback: "Excellent. Structured check-in plus a tiny action step prevents avoidance.",
           next: "step3A"
         },
         B: {
-          text: "Let him start without any reinforcement.",
+          text: "Tell him to figure it out on his own since it is not hard.",
           score: 0,
-          feedback: "Neutral; initiation isn’t strengthened and testing may return.",
+          feedback: "Neutral. Might work, but could increase avoidance if he feels stuck.",
           next: "step3B"
         },
         C: {
-          text: "Add extra rules and reminders because it’s a sub day.",
+          text: "Explain for a long time what he did wrong with technology.",
           score: -10,
-          feedback: "More talk and more rules can increase activation and resistance.",
+          feedback: "Extended attention can increase escape and frustration.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "KeKu smirks and says loudly, “See? They said I’m hard. I don’t have to listen.” Peers laugh.",
+      text: "SR starts whispering to a peer about how “stupid” the computer is and avoids restarting the task.",
       choices: {
         A: {
-          text: "Repair fast: remove audience attention and restate routine briefly (“Same routine. Start with #1.”).",
+          text: "Quiet reminder: “Save conversation for later.” Then: “Show me the hardest part and we start together.”",
           score: 10,
-          feedback: "Good recovery. You cut off the spotlight and reset expectations without debate.",
+          feedback: "Great repair. Low attention and immediate re-entry support.",
           next: "step3A"
         },
         B: {
-          text: "Explain to the class what you meant and clarify.",
+          text: "Let him vent a bit so he feels heard.",
           score: 0,
-          feedback: "Neutral, but more public talking keeps the attention on him.",
+          feedback: "Neutral. Venting can help, but it may also reinforce delay and escape if it continues.",
           next: "step3B"
         },
         C: {
-          text: "Argue with KeKu and tell him he’s wrong in front of peers.",
+          text: "Publicly correct the complaining and call him out.",
           score: -10,
-          feedback: "Public arguing increases attention and escalates the performance.",
+          feedback: "Public attention increases peer involvement and escalation.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu refuses harder, raises his voice, and postures near peers like he’s building an audience.",
+      text: "SR smirks and makes another noise, now louder, testing for reactions.",
       choices: {
         A: {
-          text: "Safety + de-escalation: reduce audience, brief directive, and redirect to a defined spot; signal support if needed.",
+          text: "Shift attention away, move close, and say quietly: “We will debrief after. One small step: reopen the page.”",
           score: 10,
-          feedback: "Correct. You prevent peer reinforcement and reduce risk of escalation.",
+          feedback: "Excellent repair. Removes audience and creates a clear next step.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to calm down repeatedly.",
+          text: "Give a stern look and keep moving.",
           score: 0,
-          feedback: "Neutral but may not change behavior quickly.",
+          feedback: "Neutral. Might reduce attention, but coping steps are unclear.",
           next: "step3B"
         },
         C: {
-          text: "Threaten consequences loudly.",
+          text: "Lecture about attitude and technology in front of peers.",
           score: -10,
-          feedback: "Threats + public attention can trigger aggression or leaving area.",
+          feedback: "Extended attention strengthens escape and peer attention cycles.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu begins participating in the routine with the substitute present and stays within expectations.",
+      text: "SR reopens the task, completes one small part, and settles back into work.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Strong task initiation with predictability.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He recovered and re-entered the task successfully.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu participates but continues to glance at peers and push boundaries.",
+      text: "SR reopens the task but stays slow and keeps glancing around.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stability; keep reinforcement tight.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial recovery. Reinforcement may be needed to maintain effort.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu escalates: louder refusal, moves toward peers, or hints at unsafe behavior.",
+      text: "SR refuses to restart the task and continues noises and peer comments.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "High risk; shift fully to safety and support procedures.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Avoidance is being reinforced through delay and attention.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "How do you conclude the substitute/new adult period successfully?",
+      text: "How do you reinforce coping after the glitch?",
       choices: {
         A: {
-          text: "Reinforce participation and coping with a Chart Move, and briefly preview that the same routine will stay in place next time too.",
+          text: "Praise specifically: “Nice job resetting and getting back to work.” Give a Yeehaw ticket.",
           score: 10,
-          feedback: "Excellent. Reinforces stability across adult changes and builds generalization.",
+          feedback: "Perfect. Reinforces coping and task re-entry.",
           ending: "success"
         },
         B: {
-          text: "Let the period end without reinforcement or preview.",
+          text: "Let him continue without comment since he is back on track.",
           score: 0,
-          feedback: "Neutral; doesn’t strengthen generalization.",
+          feedback: "Neutral. Calm, but coping behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Debrief publicly about how he acted with the substitute.",
+          text: "Bring up his earlier noises again with a corrective talk.",
           score: -10,
-          feedback: "Public attention can reinforce the performance and increase future testing.",
+          feedback: "Reintroduces attention and can trigger avoidance again.",
           ending: "fail"
         }
       }
@@ -3275,350 +3143,158 @@ POOL.wild.push({
   },
 
   endings: {
-    success: {
-      title: "Success – Routine Generalized",
-      text: "KeKu followed the routine with a new adult present and earned reinforcement for task initiation and coping."
-    },
-    mixed: {
-      title: "Mixed – Participated, But Testing May Return",
-      text: "KeKu participated, but generalization wasn’t clearly reinforced."
-    },
-    fail: {
-      title: "Fail – Spotlight Increased Escalation",
-      text: "Public attention, threats, or labeling increased peer reinforcement and escalated behavior."
-    }
-  }
-});
-
-/*************************************************
- * WILDCARD SCENARIO 4 — Technology Glitch / “Not Working!” (Frustration Spike)
- **************************************************/
-POOL.wild.push({
-  id: "wild_4_technology_glitch",
-  title: "Wildcard Mission: Technology Glitch",
-  start: "step1",
-  steps: {
-
-    // ---------- STEP 1 ----------
-    step1: {
-      text: "KeKu is using a Chromebook/tablet for an activity. The screen freezes. He jabs the keys, then raises his voice: “It’s NOT WORKING!” and looks around to see who is watching.",
-      choices: {
-        A: {
-          text: "Use calm, brief directive + support: “Hands down. Show me.” (move closer, low voice).",
-          score: 10,
-          feedback: "Great fidelity. You reduce intensity, cue safe hands, and offer help without a big attention moment.",
-          next: "step2A"
-        },
-        B: {
-          text: "Say, “Just be patient,” from across the room.",
-          score: 0,
-          feedback: "Neutral; it doesn’t give him a clear action or coping step.",
-          next: "step2B"
-        },
-        C: {
-          text: "Say loudly, “Stop yelling! You’re fine.”",
-          score: -10,
-          feedback: "Public correction + invalidation can escalate frustration and increase peer attention.",
-          next: "step2C"
-        }
-      }
-    },
-
-    // ---------- STEP 2A ----------
-    step2A: {
-      text: "KeKu lowers his hands but keeps breathing fast and glancing at peers.",
-      choices: {
-        A: {
-          text: "Offer a simple choice: “Reset chair for 1 minute OR swap to paper version.”",
-          score: 10,
-          feedback: "Excellent—gives control, reduces frustration, and prevents escalation.",
-          next: "step3A"
-        },
-        B: {
-          text: "Keep troubleshooting while talking him through every step.",
-          score: 0,
-          feedback: "Neutral—helpful, but lots of talk can prolong attention and activation.",
-          next: "step3B"
-        },
-        C: {
-          text: "Tell him he’s losing tech time because of his attitude.",
-          score: -10,
-          feedback: "Threats during frustration can trigger aggression or refusal.",
-          next: "step3C"
-        }
-      }
-    },
-
-    // ---------- STEP 2B ----------
-    step2B: {
-      text: "KeKu slaps the trackpad and says louder, “See?! It’s BROKEN!” A peer giggles.",
-      choices: {
-        A: {
-          text: "Repair quickly: move in, low voice: “Hands down. Reset or paper.”",
-          score: 10,
-          feedback: "Strong recovery—reduces audience attention and gives two clear coping options.",
-          next: "step3A"
-        },
-        B: {
-          text: "Explain that glitches happen and he needs to calm down.",
-          score: 0,
-          feedback: "Neutral, but can turn into a debate during activation.",
-          next: "step3B"
-        },
-        C: {
-          text: "Publicly warn the class about respecting technology.",
-          score: -10,
-          feedback: "Creates a stage and reinforces the performance.",
-          next: "step3C"
-        }
-      }
-    },
-
-    // ---------- STEP 2C ----------
-    step2C: {
-      text: "KeKu shoves the device away and starts to stand up quickly, body tight, looking like he might bolt or lash out.",
-      choices: {
-        A: {
-          text: "Safety-first: reduce peer audience, brief directive: “Stop. With me.” and guide him to a defined space; signal support if needed.",
-          score: 10,
-          feedback: "Correct—prioritizes safety, minimal language, and prevents escalation through attention.",
-          next: "step3A"
-        },
-        B: {
-          text: "Tell him to sit down and calm down repeatedly.",
-          score: 0,
-          feedback: "Neutral; may not reduce risk quickly enough.",
-          next: "step3B"
-        },
-        C: {
-          text: "Threaten office referral and take the device away in front of peers.",
-          score: -10,
-          feedback: "Public removal + threat can intensify escalation and peer-maintained behavior.",
-          next: "step3C"
-        }
-      }
-    },
-
-    // ---------- STEP 3A ----------
-    step3A: {
-      text: "KeKu chooses an option (reset or paper) and his breathing slows. He’s able to re-engage.",
-      choices: {
-        A: { text: "Continue.", score: 10, feedback: "Coping and task re-entry are happening.", next: "step4" }
-      }
-    },
-
-    // ---------- STEP 3B ----------
-    step3B: {
-      text: "KeKu stays in his spot but continues muttering and scanning for reactions.",
-      choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stability; keep language brief and reduce audience attention.", next: "step4" }
-      }
-    },
-
-    // ---------- STEP 3C ----------
-    step3C: {
-      text: "KeKu escalates—louder voice, unsafe hands, or moves toward peers for a reaction.",
-      choices: {
-        A: { text: "Continue.", score: -10, feedback: "Risk is increasing; shift fully to safety/support procedures.", next: "step4" }
-      }
-    },
-
-    // ---------- STEP 4 (ENDINGS) ----------
-    step4: {
-      text: "Once KeKu is calm and participating again, what’s the best wrap-up?",
-      choices: {
-        A: {
-          text: "Reinforce coping + re-entry with a Chart Move and a brief praise (“Nice reset / nice switch to paper”).",
-          score: 10,
-          feedback: "Perfect. Reinforces the skill you want when frustration hits.",
-          ending: "success"
-        },
-        B: {
-          text: "Move on without reinforcement to avoid making it a big deal.",
-          score: 0,
-          feedback: "Neutral; coping happened, but it won’t be strengthened.",
-          ending: "mixed"
-        },
-        C: {
-          text: "Rehash what he did wrong and require an apology before continuing.",
-          score: -10,
-          feedback: "High language + attention can restart escalation and make tech a trigger.",
-          ending: "fail"
-        }
-      }
-    }
-  },
-
-  endings: {
-    success: {
-      title: "Success – Frustration Coping Strengthened",
-      text: "KeKu used a coping option (reset or alternative task) and rejoined successfully; coping was reinforced with a Chart Move."
-    },
-    mixed: {
-      title: "Mixed – Re-Engaged, But Not Strengthened",
-      text: "KeKu returned to task, but without reinforcement the coping routine may not generalize."
-    },
-    fail: {
-      title: "Fail – Escalation Reinforced",
-      text: "Public attention, threats, or shame increased escalation and made future tech glitches more likely to trigger unsafe behavior."
-    }
+    success: { title: "Success – Tech Frustration Managed", text: "SR used a calm routine to recover from the glitch and earned reinforcement for re-entry." },
+    mixed: { title: "Mixed – Back on Track, Weak Reinforcement", text: "SR resumed work, but coping behavior was not clearly reinforced for next time." },
+    fail: { title: "Fail – Glitch Reinforced Avoidance", text: "Public attention and delays increased escape and attention payoffs." }
   }
 });
 
 
 /*************************************************
- * WILDCARD SCENARIO 5 — Guest / Observation Day (Performance + Peer Attention)
+ * WILDCARD SCENARIO 4 — Peer Teasing (Attention + Escape Combo)
  **************************************************/
 POOL.wild.push({
-  id: "wild_5_guest_observation_day",
-  title: "Wildcard Mission: Guest in the Room",
+  id: "wild_4_peer_teasing_trigger_sr",
+  title: "Wildcard Mission: Peer Teasing Moment",
   start: "step1",
   steps: {
 
-    // ---------- STEP 1 ----------
     step1: {
-      text: "A visitor (admin/counselor/observer) enters and sits in the back of the room. KeKu notices instantly. He starts narrating loudly, making jokes, and watching peers to see if they laugh.",
+      text: "A peer quietly teases SR about his work. SR reacts by making noises and whispering back, trying to pull others into it instead of working.",
       choices: {
         A: {
-          text: "Pre-correct quietly and keep routine: “Same expectations. Start with #1.” Then give the visitor a quick, neutral update out of earshot if needed.",
+          text: "Use calm proximity: “Save conversation for later.” Then redirect: “Show me the hardest part. We start together.”",
           score: 10,
-          feedback: "Excellent. You avoid spotlighting KeKu and keep structure predictable.",
+          feedback: "Great. You reduce peer attention and return to task entry support.",
           next: "step2A"
         },
         B: {
-          text: "Tell the visitor, in front of KeKu, “He sometimes struggles with behavior.”",
+          text: "Say to the group, “Stop teasing,” and keep teaching.",
           score: 0,
-          feedback: "Neutral, but it can create a performance stage and reinforce peer attention behavior.",
+          feedback: "Neutral. Addresses peers, but SR may still escape the task without support steps.",
           next: "step2B"
         },
         C: {
-          text: "Publicly correct KeKu: “Stop trying to show off because someone is here.”",
+          text: "Publicly ask SR to explain what happened.",
           score: -10,
-          feedback: "Public calling-out increases attention and can escalate into KYHFOOTY behaviors.",
+          feedback: "Public attention can escalate peer dynamics and increase avoidance.",
           next: "step2C"
         }
       }
     },
 
-    // ---------- STEP 2A ----------
     step2A: {
-      text: "KeKu quiets slightly and starts the task, but keeps glancing at the visitor.",
+      text: "SR quiets but stays tense and looks like he may start up again if peers look at him.",
       choices: {
         A: {
-          text: "Tighten reinforcement: provide a quick, low-key Chart Move when he initiates and stays on-task for a short interval.",
+          text: "Quietly cue the scale: “1–10 effort?” Then set a tiny goal: “One problem, then check in.”",
           score: 10,
-          feedback: "Perfect. Reinforces task initiation under ‘audience’ conditions.",
+          feedback: "Excellent. Structured check-in plus a clear finish line reduces escape.",
           next: "step3A"
         },
         B: {
-          text: "Ignore all of it so it doesn’t become a big deal.",
+          text: "Tell him to ignore it and keep working.",
           score: 0,
-          feedback: "Neutral; could work, but you might miss a key reinforcement opportunity.",
+          feedback: "Neutral. It may help, but he may still be stuck or escalated.",
           next: "step3B"
         },
         C: {
-          text: "Give him lots of reminders about the visitor watching.",
+          text: "Tell him the teasing is his fault because he reacts.",
           score: -10,
-          feedback: "Too much attention and talk can maintain the performance.",
+          feedback: "Blame increases shame and can escalate behavior.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2B ----------
     step2B: {
-      text: "KeKu smirks and announces, “See? They’re talking about me!” Peers look over and laugh.",
+      text: "SR keeps whispering and now a second peer is watching. Work is not started.",
       choices: {
         A: {
-          text: "Repair fast: shift peer attention back to work, then quietly cue KeKu: “Start with #1.”",
+          text: "Quietly separate the attention: move closer and cue: “Save conversation for later.” Then: “Start here with me.”",
           score: 10,
-          feedback: "Good recovery—cuts off audience reinforcement and resets expectations.",
+          feedback: "Great repair. Removes peer reinforcement and provides entry support.",
           next: "step3A"
         },
         B: {
-          text: "Explain to KeKu and the visitor what you meant.",
+          text: "Wait a minute and see if it stops.",
           score: 0,
-          feedback: "Neutral, but it keeps the attention on him.",
+          feedback: "Neutral. Waiting can allow peer attention to grow.",
           next: "step3B"
         },
         C: {
-          text: "Argue with him or correct him publicly.",
+          text: "Stop the class and lecture about bullying and respect.",
           score: -10,
-          feedback: "Public interaction escalates the performance and increases risk behavior.",
+          feedback: "Creates a big attention event and can reinforce SR’s reaction.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 2C ----------
     step2C: {
-      text: "KeKu escalates—louder jokes, moving toward peers, body language stiffening like he might bump/kick for laughs.",
+      text: "SR gets louder, defending himself, and more peers are now looking over.",
       choices: {
         A: {
-          text: "Safety + de-escalation: reduce the peer audience, use minimal language (“Back.” “With me.”), and redirect to a defined spot; signal support if needed.",
+          text: "Shift class attention away and say quietly: “We will debrief after.” Then redirect to a tiny work goal.",
           score: 10,
-          feedback: "Correct. You prevent reinforcement and prioritize safety without adding intensity.",
+          feedback: "Excellent. Removes audience and returns to structure.",
           next: "step3A"
         },
         B: {
-          text: "Tell him to calm down and behave because a guest is here.",
+          text: "Tell him to stop talking and keep moving.",
           score: 0,
-          feedback: "Neutral; may not reduce risk quickly.",
+          feedback: "Neutral. Volume may drop, but task avoidance may remain.",
           next: "step3B"
         },
         C: {
-          text: "Threaten consequences loudly so the guest sees you’re in control.",
+          text: "Argue in the moment about who started it.",
           score: -10,
-          feedback: "Public threats + audience often escalate behavior and increase peer attention.",
+          feedback: "Back-and-forth increases attention and delays work, reinforcing escape.",
           next: "step3C"
         }
       }
     },
 
-    // ---------- STEP 3A ----------
     step3A: {
-      text: "KeKu stabilizes and works within expectations even with the visitor present.",
+      text: "SR returns to work and completes a small part quietly.",
       choices: {
-        A: { text: "Continue.", score: 10, feedback: "Great regulation under attention pressure.", next: "step4" }
+        A: { text: "Continue.", score: 10, feedback: "He recovered and re-entered the task.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3B ----------
     step3B: {
-      text: "KeKu works intermittently but keeps trying to pull attention toward himself.",
+      text: "SR is quieter but still not working consistently.",
       choices: {
-        A: { text: "Continue.", score: 0, feedback: "Partial stability; keep reinforcement tight and avoid public attention.", next: "step4" }
+        A: { text: "Continue.", score: 0, feedback: "Partial stabilization. He may need reinforcement and clearer entry steps.", next: "step4" }
       }
     },
 
-    // ---------- STEP 3C ----------
     step3C: {
-      text: "KeKu escalates further—unsafe proximity, louder voice, or attempts to provoke peers.",
+      text: "SR continues whispering and avoids the work, with peers still engaged.",
       choices: {
-        A: { text: "Continue.", score: -10, feedback: "Risk rising; follow safety/support procedures.", next: "step4" }
+        A: { text: "Continue.", score: -10, feedback: "Peer attention is maintaining avoidance and escalation.", next: "step4" }
       }
     },
 
-    // ---------- STEP 4 (ENDINGS) ----------
     step4: {
-      text: "How do you end the observation period to support future success?",
+      text: "How do you wrap up this peer situation?",
       choices: {
         A: {
-          text: "Reinforce regulation and on-task behavior with a Chart Move and a short, private praise (“You handled the guest day well”).",
+          text: "Praise recovery privately: “Nice job resetting and getting back to work.” Give a Yeehaw ticket for re-entry.",
           score: 10,
-          feedback: "Excellent. Reinforces coping under ‘audience’ conditions without spotlighting.",
+          feedback: "Perfect. Reinforces coping and task re-entry without spotlighting the peer issue.",
           ending: "success"
         },
         B: {
-          text: "End class as normal without reinforcement.",
+          text: "Move on once he is quiet without reinforcement.",
           score: 0,
-          feedback: "Neutral; does not strengthen future guest-day coping.",
+          feedback: "Neutral. Calm, but coping behavior is not strengthened.",
           ending: "mixed"
         },
         C: {
-          text: "Discuss his attention-seeking in front of the visitor and peers.",
+          text: "Process the teasing incident publicly in front of the group.",
           score: -10,
-          feedback: "Public processing can reinforce performance behavior and increase future risk.",
+          feedback: "Public attention increases the likelihood of future peer-driven escalations.",
           ending: "fail"
         }
       }
@@ -3626,18 +3302,168 @@ POOL.wild.push({
   },
 
   endings: {
-    success: {
-      title: "Success – Guest Day Coping Reinforced",
-      text: "KeKu stayed regulated and engaged with routines even with a visitor present, and coping was reinforced privately."
+    success: { title: "Success – Peer Moment Managed", text: "SR returned to work with low attention support and earned reinforcement for recovery." },
+    mixed: { title: "Mixed – Quieter, Weak Reinforcement", text: "SR stabilized, but coping and re-entry were not clearly reinforced." },
+    fail: { title: "Fail – Peer Attention Maintained", text: "Public processing increased attention and escape payoffs." }
+  }
+});
+
+
+/*************************************************
+ * WILDCARD SCENARIO 5 — Fire Drill (Noise + Transition)
+ **************************************************/
+POOL.wild.push({
+  id: "wild_5_fire_drill_noise_transition_sr",
+  title: "Wildcard Mission: Fire Drill Noise and Transition",
+  start: "step1",
+  steps: {
+
+    step1: {
+      text: "The fire alarm blares unexpectedly. SR startles, makes loud noises, and looks around while the class begins lining up. Peers are watching.",
+      choices: {
+        A: {
+          text: "Use calm directive: “Stand with me. We go together.” Then quietly cue: “Quiet line, eyes forward.”",
+          score: 10,
+          feedback: "Excellent. Anchors him with structure and keeps attention low during a high-noise event.",
+          next: "step2A"
+        },
+        B: {
+          text: "Say, “It’s just a drill,” and push the class to line up quickly.",
+          score: 0,
+          feedback: "Neutral. It may move things along, but SR may still escalate without a clear routine.",
+          next: "step2B"
+        },
+        C: {
+          text: "Tell him to stop making noises and hurry up where others can hear.",
+          score: -10,
+          feedback: "Public correction during overwhelm can escalate quickly.",
+          next: "step2C"
+        }
+      }
     },
-    mixed: {
-      title: "Mixed – Got Through It",
-      text: "KeKu managed, but without reinforcement guest days may still trigger attention-seeking."
+
+    step2A: {
+      text: "SR stands and stays close, still tense. He starts to whisper to a peer while walking.",
+      choices: {
+        A: {
+          text: "Quiet reminder: “Save conversation for later. Stay with me.” Then shift attention away and keep moving.",
+          score: 10,
+          feedback: "Great. Brief and private, keeps the transition safe and structured.",
+          next: "step3A"
+        },
+        B: {
+          text: "Keep watching him closely the whole time.",
+          score: 0,
+          feedback: "Neutral. Monitoring helps, but it can become attention-heavy.",
+          next: "step3B"
+        },
+        C: {
+          text: "Explain why he should not talk during drills while walking.",
+          score: -10,
+          feedback: "Extended talking increases attention and can increase escalation.",
+          next: "step3C"
+        }
+      }
     },
-    fail: {
-      title: "Fail – Audience Reinforced Escalation",
-      text: "Public attention and threats turned the guest into a performance trigger, increasing risk of unsafe behavior."
+
+    step2B: {
+      text: "SR makes another loud noise and slows down, looking around to see if peers react.",
+      choices: {
+        A: {
+          text: "Repair with calm proximity: move beside him and gesture forward: “Right here with me.”",
+          score: 10,
+          feedback: "Excellent repair. Minimal verbal load and strong anchoring support.",
+          next: "step3A"
+        },
+        B: {
+          text: "Repeat, “Keep moving,” from ahead of the line.",
+          score: 0,
+          feedback: "Neutral. It may help, but SR may still be escalated.",
+          next: "step3B"
+        },
+        C: {
+          text: "Call out SR’s behavior so he stops.",
+          score: -10,
+          feedback: "Public attention increases peer involvement and escalates the moment.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step2C: {
+      text: "SR becomes more reactive and louder as the alarm continues. Peers are definitely watching now.",
+      choices: {
+        A: {
+          text: "Shift class attention away and use a calm directive close to him: “With me. We are going now.”",
+          score: 10,
+          feedback: "Strong repair. Removes the audience and anchors him through the drill.",
+          next: "step3A"
+        },
+        B: {
+          text: "Ignore it and move the class out quickly.",
+          score: 0,
+          feedback: "Neutral. It avoids attention, but SR may freeze or lag behind.",
+          next: "step3B"
+        },
+        C: {
+          text: "Increase your volume to get him moving faster.",
+          score: -10,
+          feedback: "Adds intensity during overwhelm and can escalate behavior.",
+          next: "step3C"
+        }
+      }
+    },
+
+    step3A: {
+      text: "SR walks close and stays moving safely, quieter now.",
+      choices: {
+        A: { text: "Continue.", score: 10, feedback: "He stabilized and completed the transition safely.", next: "step4" }
+      }
+    },
+
+    step3B: {
+      text: "SR walks but stays tense and occasionally makes noises.",
+      choices: {
+        A: { text: "Continue.", score: 0, feedback: "Partial stabilization. He may need reinforcement to strengthen coping.", next: "step4" }
+      }
+    },
+
+    step3C: {
+      text: "SR continues to escalate and peers keep watching.",
+      choices: {
+        A: { text: "Continue.", score: -10, feedback: "Attention and overwhelm are maintaining the escalation pattern.", next: "step4" }
+      }
+    },
+
+    step4: {
+      text: "Outside, the alarm stops. How do you support SR now?",
+      choices: {
+        A: {
+          text: "Quietly praise: “Thanks for staying with me and walking safely.” Give a Yeehaw ticket for coping.",
+          score: 10,
+          feedback: "Perfect. Reinforces safe coping and transition behavior.",
+          ending: "success"
+        },
+        B: {
+          text: "Let him recover without comment since things are busy.",
+          score: 0,
+          feedback: "Neutral. Calm, but coping behavior is not strengthened.",
+          ending: "mixed"
+        },
+        C: {
+          text: "Discuss his noises in front of peers while waiting outside.",
+          score: -10,
+          feedback: "Public attention increases future escalations during drills.",
+          ending: "fail"
+        }
+      }
     }
+  },
+
+  endings: {
+    success: { title: "Success – Drill Coping Reinforced", text: "SR stayed safe and regulated with structured support and earned reinforcement for coping." },
+    mixed: { title: "Mixed – Safe, Weak Reinforcement", text: "SR completed the drill, but coping behaviors were not clearly reinforced." },
+    fail: { title: "Fail – Overwhelm + Public Attention", text: "Public attention increased the likelihood of future escalation during drills." }
   }
 });
 
@@ -3819,34 +3645,38 @@ function showNode(id) {
 
    let actionSteps = "";
 
+// SR (escape-maintained work avoidance + noises/talking) — updated action steps
+
 if (pct >= 80) {
   actionSteps = `
     <ul>
-      <li>Keep front-loading supports before known triggers (whole group, transitions, downtime).</li>
-      <li>Stay consistent with short, neutral directions and two-choice prompts instead of “no.”</li>
-      <li>Continue reinforcing quickly with Chart Moves for safe hands/body, task start, and appropriate requests (keep it private).</li>
-      <li>When early signs show up, your quick reset + redirection is working—keep that timing.</li>
+      <li>Keep front-loading supports before known triggers (ELA reading and writing, starting independent work, lining up and hallway).</li>
+      <li>Stay consistent with short, neutral directions plus “start-together then you go on your own” instead of repeating “just do it.”</li>
+      <li>Prompt the replacement behavior early: “If it’s hard, ask for help” and “Save conversation for later.”</li>
+      <li>Reinforce quickly and quietly with a Yeehaw ticket and specific praise for task start, persistence, and appropriate help-seeking.</li>
+      <li>When early noises or side talk show up, your quick proximity cue and immediate task-entry support are working. Keep that timing.</li>
     </ul>`;
-} 
+}
 else if (pct >= 50) {
   actionSteps = `
     <ul>
-      <li>Add pre-corrections earlier—especially before line, unstructured time, and new activities.</li>
-      <li>Prompt the replacement behavior sooner (hand raise → request break/help/alternative) before peers become the audience.</li>
-      <li>Shorten your language to one clear step and reinforce immediately with a Chart Move when he responds.</li>
-      <li>If attention-seeking starts, shift to reducing the audience rather than explaining.</li>
+      <li>Add pre-corrections earlier, especially before ELA transitions, independent work time, and lining up.</li>
+      <li>Prompt the replacement behavior sooner (help request + “show me the hardest part”) before he shifts into noises or peer conversation.</li>
+      <li>Shorten your language to one clear next step (one sentence, one problem, first step) and reinforce immediately with a Yeehaw ticket when he re-enters.</li>
+      <li>Use the 1–10 effort check-in as soon as you see stalling so you can intervene before refusal escalates.</li>
+      <li>If attention-seeking starts, reduce the audience with proximity and move class attention forward rather than explaining or debating.</li>
     </ul>`;
-} 
+}
 else {
   actionSteps = `
     <ul>
-      <li>Rebuild the proactive setup: clear expectations, defined space, and a visible “how to earn” path.</li>
-      <li>Practice the replacement script outside of tough moments so it’s ready during escalation.</li>
-      <li>During escalation, use minimal language and predictable reset options—avoid public correction or debates.</li>
-      <li>If there’s KYHFOOTY or leaving-area risk, follow the safety steps exactly: create space, maintain line-of-sight, get support (no chasing or blocking).</li>
+      <li>Rebuild the proactive setup for work blocks: a clear “start here” step, a small chunk goal, and a visible “how to earn” path (Yeehaw ticket for starting and sticking with it).</li>
+      <li>Practice the replacement script outside tough moments: “If it’s hard, ask for help,” “Show me the hardest part,” and “Save conversation for later.”</li>
+      <li>During escalation, use minimal language and predictable steps: “We will debrief after,” followed by one small supported action (start together for one step).</li>
+      <li>Avoid public correction, extended explanations, or repeated directives that turn stalling into an attention routine.</li>
+      <li>If you see leaving-area risk or unsafe behavior, follow the safety plan exactly (create space, maintain line of sight, and get support. Do not chase or block).</li>
     </ul>`;
 }
-
 
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
