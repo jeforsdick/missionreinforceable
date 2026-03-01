@@ -86,7 +86,7 @@ if (pct >= 50) {
   return "Getting there. Use fewer words and move faster into the routine: prompt “in your area/seat/spot,” point to the sticker chart, and give the sticker right when he returns. If silly noises start, redirect peers first and keep your support private. Use warning → clip down quietly if it repeats, then reinforce recovery.";
 }
 return "Not aligned yet. Reset your approach: minimal language, no public corrections or long talks, and go straight to the predictable steps (close prompt to area/seat/spot, point to the chart, immediate sticker for returning). Reduce the audience first. If he heads toward the door or you cannot respond fully, activate support early (aide/tech/office chat) and prioritize safety and line-of-sight.";
-
+}
 /* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
