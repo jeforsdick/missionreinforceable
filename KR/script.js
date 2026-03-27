@@ -86,7 +86,7 @@ if (pct >= 50) {
   return "Getting there. Use fewer words and move faster into the plan: one-step prompt, reduce the task immediately (tiny chunk), and offer a quick choice. Prompt the replacement behavior right away (break/help/calm space request) and reinforce the first safe step with points. Reduce the audience if peers start watching.";
 }
 return "Not aligned yet. Reset your approach: minimal language, no public corrections or long debates, and go straight to predictable steps (stay in the room, safe body/safe words, break/help request, calm space when needed, then a tiny re-entry chunk). If safety risk shows up (throwing, window/furniture, bolting), follow the safety plan exactly: clear peers, create space, maintain line-of-sight, activate support, and re-enter only after calm.";
-
+}  
 
 /* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
