@@ -104,10 +104,8 @@ function updateHearts(delta, countsForHearts = true) {
   const before = hearts;
 
   if (delta > 0) {
-    // Correct answer: stay full if already full, restore 1/2 heart if damaged
-    if (hearts < maxHearts) {
-      hearts = Math.min(maxHearts, hearts + 0.5);
-    }
+    // Correct answer: no change
+    hearts = hearts;
   } else if (delta === 0) {
     // Neutral answer: lose 1/4 heart
     hearts = Math.max(0, hearts - 0.25);
