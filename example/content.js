@@ -3,7 +3,7 @@
  * Each mission uses true branching: teacher choices change the next scene.
  */
 
-GAME_CONFIG.resultEndpoint = "https://script.google.com/macros/s/AKfycbyZ4Z7Axzzb0hwMSJ2wQ1127sjNeeK3P9T-sOSr9P2teZpKyogHPOUAkZllVK13-XeR/exec";
+GAME_CONFIG.resultEndpoint = "https://script.google.com/macros/s/AKfycbxGRR5ZeWvPSRGR3e7XEP7rxdBlmsHh65WTtSga06cce_lNJR9sH7hzlFcLZRzKtfud/exec";
 GAME_CONFIG.defaultStudent = "Test";
 
 GAME_CONFIG.fidelityHigh = `High fidelity. You stayed calm, brief, and plan-aligned. You protected access to instruction, reduced the audience for behavior, and reinforced the replacement behavior quickly enough for Student to stay connected to the routine.`;
