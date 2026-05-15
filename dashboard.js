@@ -259,7 +259,7 @@ function renderProgressDashboardFromHistory(history) {
           <img src="../mr-wizard-think.png" alt="MR Wizard">
         </div>
         <div class="wizard-summary-text">
-          <h3>Wizard Coach Summary</h3>
+          <h3>The Wise Wizard Says...</h3>
           <p>${dashboardEscape(coachSummary)}</p>
         </div>
       </div>
@@ -287,7 +287,7 @@ function renderProgressDashboardFromHistory(history) {
       </div>
 
       <div class="dashboard-section">
-        <h3>Mission Calendar</h3>
+        <h3>Past Missions</h3>
         <p class="dashboard-hint">Tap a session to review your score, choices, and overall feedback.</p>
         <div class="dashboard-session-list">
           ${recentSessionCards}
