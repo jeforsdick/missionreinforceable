@@ -448,15 +448,28 @@ function showNode(id) {
     btn.textContent = opt.text;
     ['scenario-btn', 'primary', 'big', 'option-btn'].forEach(c => btn.classList.add(c));
 
-    btn.addEventListener('click', () => {
-      if (node.feedback && opt.nextId === 'home') {
-        resetGame();
-        renderIntroCards();
-        return;
-      }
+   btn.addEventListener('click', () => {
+  if (!node.feedback && typeof opt.delta === 'number') {
+    addPoints(opt.delta);
 
-      if (!node.feedback && typeof opt.delta === 'number') {
-  addPoints(opt.delta);
+    const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
+
+    const countsForHearts =
+      node.options.length > 1 &&
+      !isContinueButton;
+
+    updateHearts(opt.delta, countsForHearts);
+  }
+
+  showFeedback(opt.feedback || '', opt.feedbackType, opt.delta);
+  logDecision(node.id, opt);
+
+  if (opt.nextId === 'home') {
+    renderIntroCards();
+  } else {
+    showNode(opt.nextId);
+  }
+});
 
   const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
 
