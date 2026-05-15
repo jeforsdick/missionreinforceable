@@ -388,8 +388,9 @@ function showNode(id) {
   if (node.feedback) {
     if (storyText) storyText.style.display = 'none';
 
-    const pct        = percentScore();
-    const msg        = fidelityMessage();
+    const pct = percentScore();
+    const msg = fidelityMessage();
+
     const actionSteps = pct >= 80
       ? GAME_CONFIG.actionHigh
       : pct >= 50
@@ -417,7 +418,9 @@ function showNode(id) {
       storyText.insertAdjacentElement('afterend', panel);
     }
 
-    let scoreHint, coachLine;
+    let scoreHint;
+    let coachLine;
+
     if (pct >= 80) {
       scoreHint = +10;
       coachLine = "Mission complete. Results have been sent to the team. Review your overall feedback below.";
@@ -428,17 +431,21 @@ function showNode(id) {
       scoreHint = -10;
       coachLine = "Mission failed. Results have been sent to the team. Review your overall feedback below.";
     }
+
     showFeedback(coachLine, null, scoreHint);
     sendResultsOnce();
 
   } else {
     if (storyText) {
       storyText.style.display = 'block';
-      storyText.textContent   = node.text;
+      storyText.textContent = node.text;
     }
+
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
   }
+
+  if (!choicesDiv) return;
 
   choicesDiv.innerHTML = '';
   const options = shuffledOptions(node.options);
@@ -448,39 +455,26 @@ function showNode(id) {
     btn.textContent = opt.text;
     ['scenario-btn', 'primary', 'big', 'option-btn'].forEach(c => btn.classList.add(c));
 
-   btn.addEventListener('click', () => {
-  if (!node.feedback && typeof opt.delta === 'number') {
-    addPoints(opt.delta);
+    btn.addEventListener('click', () => {
+      if (node.feedback && opt.nextId === 'home') {
+        resetGame();
+        renderIntroCards();
+        return;
+      }
 
-    const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
+      if (!node.feedback && typeof opt.delta === 'number') {
+        addPoints(opt.delta);
 
-    const countsForHearts =
-      node.options.length > 1 &&
-      !isContinueButton;
+        const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
 
-    updateHearts(opt.delta, countsForHearts);
-  }
+        const countsForHearts =
+          node.options.length > 1 &&
+          !isContinueButton;
 
-  showFeedback(opt.feedback || '', opt.feedbackType, opt.delta);
-  logDecision(node.id, opt);
+        updateHearts(opt.delta, countsForHearts);
 
-  if (opt.nextId === 'home') {
-    renderIntroCards();
-  } else {
-    showNode(opt.nextId);
-  }
-});
-
-  const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
-
-  const countsForHearts =
-    node.options.length > 1 &&
-    !isContinueButton;
-
-  updateHearts(opt.delta, countsForHearts);
-}
-
-      if (!node.feedback) logDecision(node.id, opt);
+        logDecision(node.id, opt);
+      }
 
       if (opt.feedback) {
         showFeedback(opt.feedback, opt.feedbackType || 'coach', opt.delta);
@@ -488,7 +482,12 @@ function showNode(id) {
         showFeedback('', null, 0);
       }
 
-      showNode(opt.nextId);
+      if (opt.nextId === 'home') {
+        resetGame();
+        renderIntroCards();
+      } else {
+        showNode(opt.nextId);
+      }
     });
 
     choicesDiv.appendChild(btn);
