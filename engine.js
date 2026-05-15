@@ -193,6 +193,42 @@ function logDecision(nodeId, opt) {
     choice: opt.text
   });
 }
+/* -------- Same-Day Completion / Return Screen -------- */
+function todayKey() {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function todayStorageKey() {
+  return `mr-today-result:${getTeacherCode()}:${GAME_CONFIG.defaultStudent}:${todayKey()}`;
+}
+
+function saveTodayResult(payload) {
+  try {
+    localStorage.setItem(todayStorageKey(), JSON.stringify(payload));
+  } catch (e) {
+    console.warn("Could not save today's result:", e);
+  }
+}
+
+function getTodayResult() {
+  try {
+    const raw = localStorage.getItem(todayStorageKey());
+    if (!raw) return null;
+
+    const data = JSON.parse(raw);
+
+    if (data.date !== todayKey()) return null;
+
+    return data;
+  } catch (e) {
+    console.warn("Could not read today's result:", e);
+    return null;
+  }
+}
 
 function sendResultsOnce() {
   if (sentThisRun) return;
@@ -218,7 +254,8 @@ function sendResultsOnce() {
     mode,
     student
   };
-
+saveTodayResult(payload);
+  
   if (!GAME_CONFIG.resultEndpoint) return;
   try {
     fetch(GAME_CONFIG.resultEndpoint, {
@@ -316,7 +353,98 @@ function renderIntroCards() {
     startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
   });
 }
+function startMissionByType(type) {
+  resetGame();
 
+  const rnd = srandom(seedFromDate());
+
+  if (type === "Daily") {
+    currentMode = "Daily";
+    startDynamicMission('Daily Drill', pickScenario(POOL.daily, rnd));
+  } else if (type === "Crisis") {
+    currentMode = "Crisis";
+    startDynamicMission('Emergency Sim', pickScenario(POOL.crisis, rnd));
+  } else {
+    currentMode = "Wildcard";
+    startDynamicMission('Shuffle Quest', pickScenario(POOL.wild, rnd));
+  }
+}
+
+function renderSameDayReturnScreen(result) {
+  if (storyText) storyText.style.display = 'block';
+
+  const oldSummary = document.getElementById('summary-panel');
+  if (oldSummary) oldSummary.remove();
+
+  if (scenarioTitle) {
+    scenarioTitle.textContent = "Mission Already Completed Today";
+  }
+
+  const pct = Math.round(result.percent || 0);
+  const completedTime = result.timestamp
+    ? new Date(result.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+    : "earlier today";
+
+  if (storyText) {
+    storyText.innerHTML = `
+You already completed a Mission: Reinforceable session today.
+
+<strong>Today's recap:</strong>
+Mission type: ${result.mode || "Mission"}
+Score: ${result.points} / ${result.max_possible} (${pct}%)
+Completed: ${completedTime}
+
+${result.feedback_message || ""}
+
+<strong>What would you like to do next?</strong>`;
+  }
+
+  if (!choicesDiv) return;
+
+  choicesDiv.innerHTML = `
+    <div class="mission-intro">
+      <div class="mission-grid">
+        <div class="mission-card">
+          <h3>Daily Mission</h3>
+          <p>Replay today's regular skill practice mission.</p>
+          <div class="action">
+            <button id="same-day-daily">Play the Daily Mission again ▶</button>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <h3>Wildcard Mission</h3>
+          <p>Try a less predictable classroom situation.</p>
+          <div class="action">
+            <button id="same-day-wildcard">Play a Wildcard Mission ▶</button>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <h3>Crisis Mission</h3>
+          <p>Practice a higher-intensity response scenario.</p>
+          <div class="action">
+            <button id="same-day-crisis">Play a Crisis Mission ▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  showFeedback("Welcome back. You already completed today's mission, but you can keep practicing.", "correct", 10);
+
+  document.getElementById('same-day-daily')?.addEventListener('click', () => {
+    startMissionByType("Daily");
+  });
+
+  document.getElementById('same-day-wildcard')?.addEventListener('click', () => {
+    startMissionByType("Wildcard");
+  });
+
+  document.getElementById('same-day-crisis')?.addEventListener('click', () => {
+    startMissionByType("Crisis");
+  });
+}
 let DYN     = { nodes: [], ids: [] };
 let NEXT_ID = 1000;
 function newId() { return NEXT_ID++; }
@@ -457,10 +585,17 @@ function showNode(id) {
 
     btn.addEventListener('click', () => {
       if (node.feedback && opt.nextId === 'home') {
-        resetGame();
-        renderIntroCards();
-        return;
-      }
+resetGame();
+
+const todayResult = getTodayResult();
+
+if (todayResult) {
+  renderSameDayReturnScreen(todayResult);
+} else {
+  renderIntroCards();
+}
+    return;
+  }
 
       if (!node.feedback && typeof opt.delta === 'number') {
         addPoints(opt.delta);
@@ -504,7 +639,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   setTeacherBadge(getTeacherCode());
-  resetGame();
+resetGame();
+
+const todayResult = getTodayResult();
+
+if (todayResult) {
+  renderSameDayReturnScreen(todayResult);
+} else {
   renderIntroCards();
   showFeedback("The Wizard will chime in after every move.", "correct", +10);
-});
+}
