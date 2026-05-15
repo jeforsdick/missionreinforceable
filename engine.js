@@ -183,6 +183,112 @@ function showFeedback(text, type, scoreHint) {
   requestAnimationFrame(() => feedbackEl.classList.add('flash'));
 }
 
+/* -------- Wizard Pop-Up Feedback -------- */
+function escapeHTML(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function wizardStateFromDelta(delta) {
+  if (delta > 0) return 'plus';
+  if (delta < 0) return 'minus';
+  return 'meh';
+}
+
+function wizardTitleFromDelta(delta) {
+  if (delta > 0) return 'The Wizard nods approvingly!';
+  if (delta === 0) return 'The Wizard pauses...';
+  return 'The Wizard sounds the alarm!';
+}
+
+function wizardButtonTextFromDelta(delta) {
+  if (delta > 0) return 'Lock in the good move ▶';
+  if (delta === 0) return 'I read it. Continue carefully ▶';
+  return 'I read it. Recover the mission ▶';
+}
+
+function buildWizardFeedback(opt) {
+  const base = opt.feedback || '';
+
+  // If you later add custom wizard text in content.js, it will use that first.
+  if (opt.wizard) return opt.wizard;
+
+  if (opt.delta > 0) {
+    return `Strong move. The classroom stays steady because you gave the student a clear path forward.
+
+The student knows exactly what to do next, the peer audience stays quiet, and the routine keeps moving.
+
+${base}`;
+  }
+
+  if (opt.delta === 0) {
+    return `The moment wobbles. The student is not fully escalated, but the support is not strong enough yet.
+
+The student pauses, scans for peer attention, and the routine starts to lose momentum. You still have a chance to tighten the next move.
+
+${base}`;
+  }
+
+  return `Uh oh. That choice feeds the problem.
+
+The student gets more attention, peers start watching, and the routine begins to unravel. The next response matters because you now need to repair momentum and reduce escalation risk.
+
+${base}`;
+}
+
+function showWizardPopup(opt, onContinue) {
+  const state = wizardStateFromDelta(opt.delta);
+  const title = wizardTitleFromDelta(opt.delta);
+  const body = buildWizardFeedback(opt);
+  const buttonText = wizardButtonTextFromDelta(opt.delta);
+
+  setWizardSprite(state);
+
+  const old = document.getElementById('wizard-modal');
+  if (old) old.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'wizard-modal';
+  modal.className = `wizard-modal state-${state}`;
+
+  modal.innerHTML = `
+    <div class="wizard-modal-card" role="dialog" aria-modal="true" aria-labelledby="wizard-modal-title">
+      <div class="wizard-modal-top">
+        <div class="wizard-modal-icon">
+          <img src="${state === 'plus' ? WIZ.plus : state === 'minus' ? WIZ.minus : WIZ.meh}" alt="MR Wizard">
+        </div>
+        <div>
+          <h2 id="wizard-modal-title">${escapeHTML(title)}</h2>
+          <div class="wizard-modal-tag">${state === 'plus' ? 'Fidelity strengthened' : state === 'minus' ? 'Mission risk increased' : 'Partial support'}</div>
+        </div>
+      </div>
+
+      <div class="wizard-modal-body">
+        ${escapeHTML(body).replaceAll('\n', '<br>')}
+      </div>
+
+      <button id="wizard-continue-btn" class="wizard-continue-btn">
+        ${escapeHTML(buttonText)}
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const continueBtn = document.getElementById('wizard-continue-btn');
+  if (continueBtn) {
+    continueBtn.focus();
+    continueBtn.addEventListener('click', () => {
+      modal.remove();
+      onContinue();
+    });
+  }
+}
+
 /* -------- Results → Google Apps Script -------- */
 function getTeacherCode() {
   const u = new URL(window.location.href);
@@ -483,13 +589,14 @@ function startDynamicMission(modeLabel, scn) {
     const node = { id: stepIds[stepKey], scenario: modeLabel, text: step.text, options: [] };
     for (let chKey in step.choices) {
       const ch  = step.choices[chKey];
-      const opt = {
-        text:        ch.text,
-        delta:       ch.score,
-        feedback:    ch.feedback,
-        feedbackType: ch.score > 0 ? 'correct' : 'coach',
-        nextId:      ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
-      };
+const opt = {
+  text:        ch.text,
+  delta:       ch.score,
+  feedback:    ch.feedback,
+  wizard:      ch.wizard || '',
+  feedbackType: ch.score > 0 ? 'correct' : 'coach',
+  nextId:      ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
+};
       node.options.push(opt);
     }
     DYN.nodes.push(node);
@@ -602,50 +709,58 @@ function showNode(id) {
     btn.textContent = opt.text;
     ['scenario-btn', 'primary', 'big', 'option-btn'].forEach(c => btn.classList.add(c));
 
-    btn.addEventListener('click', () => {
-      if (node.feedback && opt.nextId === 'home') {
-        resetGame();
+   btn.addEventListener('click', () => {
+  if (node.feedback && opt.nextId === 'home') {
+    resetGame();
 
-        const todayResult =
-          typeof getTodayResult === 'function'
-            ? getTodayResult()
-            : null;
+    const todayResult =
+      typeof getTodayResult === 'function'
+        ? getTodayResult()
+        : null;
 
-        if (todayResult && typeof renderSameDayReturnScreen === 'function') {
-          renderSameDayReturnScreen(todayResult);
-        } else {
-          renderIntroCards();
-        }
+    if (todayResult && typeof renderSameDayReturnScreen === 'function') {
+      renderSameDayReturnScreen(todayResult);
+    } else {
+      renderIntroCards();
+    }
 
-        return;
-      }
+    return;
+  }
 
-      if (!node.feedback && typeof opt.delta === 'number') {
-        addPoints(opt.delta);
+  if (!node.feedback && typeof opt.delta === 'number') {
+    addPoints(opt.delta);
 
-        const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
+    const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
 
-        const countsForHearts =
-          node.options.length > 1 &&
-          !isContinueButton;
+    const countsForHearts =
+      node.options.length > 1 &&
+      !isContinueButton;
 
-        updateHearts(opt.delta, countsForHearts);
-        logDecision(node.id, opt);
-      }
+    updateHearts(opt.delta, countsForHearts);
+    logDecision(node.id, opt);
+  }
 
-      if (opt.feedback) {
-        showFeedback(opt.feedback, opt.feedbackType || 'coach', opt.delta);
-      } else if (!node.feedback) {
-        showFeedback('', null, 0);
-      }
+  if (opt.feedback) {
+    showFeedback(opt.feedback, opt.feedbackType || 'coach', opt.delta);
+  } else if (!node.feedback) {
+    showFeedback('', null, 0);
+  }
 
-      if (opt.nextId === 'home') {
-        resetGame();
-        renderIntroCards();
-      } else {
-        showNode(opt.nextId);
-      }
-    });
+  const goToNextNode = () => {
+    if (opt.nextId === 'home') {
+      resetGame();
+      renderIntroCards();
+    } else {
+      showNode(opt.nextId);
+    }
+  };
+
+  if (!node.feedback && opt.feedback) {
+    showWizardPopup(opt, goToNextNode);
+  } else {
+    goToNextNode();
+  }
+});
 
     choicesDiv.appendChild(btn);
   });
