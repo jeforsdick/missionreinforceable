@@ -33,16 +33,16 @@ body {
 
 body {
   display: flex;
-  justify-content: top;
+  justify-content: center;
   align-items: flex-start;
 }
 
 #game-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   background: var(--panel);
   padding: 7px 30px 10px 30px;
-  margin: 16px;
+  margin: 16px auto;
   border-radius: 12px;
   box-shadow: 0 0 15px var(--glow);
   box-sizing: border-box;
