@@ -747,31 +747,279 @@ body {
   }
 }
 
-/* ---------- Phone ---------- */
+/* ============================================================
+   MOBILE APP-STYLE LAYOUT OVERRIDE
+   Paste at very bottom of style.css
+   ============================================================ */
+
 @media (max-width: 700px) {
+
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    background: #111;
+  }
+
+  body {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Make the game feel like an app, not a shrunken desktop box */
+  #game-container {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 10px 10px 16px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+    line-height: 1.15;
+    margin: 4px 0 4px;
+    letter-spacing: 0.5px;
+  }
+
+  h2,
+  #scenario-title {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+
+  /* Mobile HUD */
   #toolbar {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "teacher points"
       "hearts hearts"
       "feedback feedback"
       "home home";
-    gap: 10px;
+    gap: 7px;
+    margin-bottom: 10px;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  #teacher-badge {
+    grid-area: teacher;
+  }
+
+  #score-badge {
+    grid-area: points;
   }
 
   #teacher-badge,
-  #score-badge,
-  #toolbar .ghost {
+  #score-badge {
     width: 100%;
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    text-align: center;
+    border-radius: 9px;
   }
 
   #hearts-display {
+    grid-area: hearts;
     justify-content: center;
+    gap: 12px;
+    padding: 2px 0 0;
+    min-width: 0;
   }
 
+  .heart-pixel {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    line-height: 30px;
+  }
+
+  /* Make top wizard small on phone because the pop-up now carries the real feedback */
   #feedback {
+    grid-area: feedback;
     width: 100%;
+    min-height: 52px;
+    padding: 7px 9px;
+    flex-direction: row;
+    gap: 8px;
+    text-align: left;
+    border-radius: 10px;
+  }
+
+  #coach-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+  }
+
+  #coach-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  #feedback-text {
+    font-size: 0.82rem;
+    line-height: 1.25;
+  }
+
+  #toolbar .ghost {
+    grid-area: home;
+    width: 100%;
+    min-height: 38px;
+    margin-left: 0;
+    padding: 6px 10px;
+    font-size: 0.86rem;
+    border-radius: 9px;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  /* Story becomes readable but not huge */
+  #story-text {
+    font-size: 0.94rem;
+    line-height: 1.38;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    max-height: 34vh;
+    overflow-y: auto;
+  }
+
+  /* Mission menu */
+  .mission-intro {
+    padding: 10px;
+    margin: 8px 0 0;
+    border-radius: 10px;
+  }
+
+  .mission-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .mission-card {
+    padding: 10px;
+    border-radius: 10px;
+    gap: 7px;
+  }
+
+  .mission-card h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .mission-card p {
+    font-size: 0.82rem;
+    line-height: 1.25;
+  }
+
+  .mission-card .action button {
+    min-height: 46px;
+    padding: 9px 10px;
+    font-size: 0.9rem;
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  /* Scenario answer choices */
+  #choices {
+    gap: 8px;
+  }
+
+  #choices > button {
+    min-height: auto;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    line-height: 1.25;
+    border-radius: 10px;
+    white-space: normal;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  #choices button,
+  .mission-card .action button {
+    box-shadow:
+      inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+      0 2px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  /* Summary screen */
+  #summary-panel {
+    font-size: 0.9rem;
+    line-height: 1.35;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+  }
+
+  #summary-panel .summary-score {
+    font-size: 1rem;
+  }
+
+  #summary-panel ul {
+    margin-left: 16px;
+    padding-left: 8px;
+  }
+
+  /* Wizard modal on phone */
+  .wizard-modal {
+    padding: 10px;
+    align-items: center;
+  }
+
+  .wizard-modal-card {
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .wizard-modal-top {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .wizard-modal-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .wizard-modal h2 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .wizard-modal-tag {
+    font-size: 0.78rem;
+    padding: 3px 7px;
+  }
+
+  .wizard-modal-body {
+    font-size: 0.93rem;
+    line-height: 1.45;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .wizard-continue-btn {
+    min-height: 48px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
   }
 }
