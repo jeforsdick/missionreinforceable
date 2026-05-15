@@ -85,20 +85,24 @@ function renderHearts() {
   el.innerHTML = html;
 }
 
-function updateHearts(delta) {
+function updateHearts(delta, countsForHearts = true) {
   if (typeof delta !== 'number') return;
+  if (!countsForHearts) return;
+
   if (delta > 0) {
-    if (heartsPreviouslyLost && hearts < maxHearts) {
+    // Correct answer: stays full if full, restores 1/2 heart if any hearts were lost
+    if (hearts < maxHearts) {
       hearts = Math.min(maxHearts, hearts + 0.5);
-      heartsPreviouslyLost = false;
     }
   } else if (delta === 0) {
+    // Neutral answer: lose 1/4 heart
     hearts = Math.max(0, hearts - 0.25);
-    if (hearts < maxHearts) heartsPreviouslyLost = true;
   } else {
+    // Incorrect answer: lose 1/2 heart
     hearts = Math.max(0, hearts - 0.5);
-    if (hearts < maxHearts) heartsPreviouslyLost = true;
   }
+
+  hearts = Math.round(hearts * 4) / 4;
   renderHearts();
 }
 
@@ -452,9 +456,16 @@ function showNode(id) {
       }
 
       if (!node.feedback && typeof opt.delta === 'number') {
-        addPoints(opt.delta);
-        updateHearts(opt.delta);
-      }
+  addPoints(opt.delta);
+
+  const isContinueButton = /^continue\.?$/i.test((opt.text || '').trim());
+
+  const countsForHearts =
+    node.options.length > 1 &&
+    !isContinueButton;
+
+  updateHearts(opt.delta, countsForHearts);
+}
 
       if (!node.feedback) logDecision(node.id, opt);
 
