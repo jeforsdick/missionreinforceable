@@ -66,8 +66,9 @@ let currentScenario = null;
 let currentMode     = null;
 
 /* -------- Hearts system -------- */
-let hearts    = 3;
-let maxHearts = 3;
+let hearts               = 3;
+let maxHearts            = 3;
+let heartsPreviouslyLost = false;
 
 function renderHearts() {
   const el = document.getElementById('hearts-display');
@@ -86,12 +87,17 @@ function renderHearts() {
 
 function updateHearts(delta) {
   if (typeof delta !== 'number') return;
-  if (delta > 0 && hearts < maxHearts) {
-    hearts = Math.min(maxHearts, hearts + 0.5);
+  if (delta > 0) {
+    if (heartsPreviouslyLost && hearts < maxHearts) {
+      hearts = Math.min(maxHearts, hearts + 0.5);
+      heartsPreviouslyLost = false;
+    }
   } else if (delta === 0) {
     hearts = Math.max(0, hearts - 0.25);
-  } else if (delta < 0) {
+    if (hearts < maxHearts) heartsPreviouslyLost = true;
+  } else {
     hearts = Math.max(0, hearts - 0.5);
+    if (hearts < maxHearts) heartsPreviouslyLost = true;
   }
   renderHearts();
 }
@@ -118,8 +124,9 @@ function addPoints(delta) {
 function resetGame() {
   points      = 0;
   maxPossible = 0;
-  hearts      = maxHearts;
-  events      = [];
+  hearts   = maxHearts;
+  heartsPreviouslyLost = false;
+  events               = [];
   sentThisRun = false;
   SESSION_ID  = newSessionId();
   setPoints(0);
