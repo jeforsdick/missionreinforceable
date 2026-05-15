@@ -309,8 +309,9 @@ hideDashboardTopFeedback();
 
 
   document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
-    renderIntroCards();
-  });
+  showDashboardTopFeedback();
+  renderIntroCards();
+});
 
   document.querySelectorAll(".dashboard-session-card").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -417,11 +418,10 @@ hideDashboardTopFeedback();
   }
 
   try {
-    const history = await dashboardFetchHistory();
-    renderProgressDashboardFromHistory(history);
-    const feedbackBox = document.getElementById("feedback");
-if (feedbackBox) feedbackBox.style.display = "none";
-  } catch (err) {
+  const history = await dashboardFetchHistory();
+  renderProgressDashboardFromHistory(history);
+}
+  catch (err) {
     console.error(err);
 
     if (choicesDiv) {
