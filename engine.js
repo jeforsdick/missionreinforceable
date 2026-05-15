@@ -52,9 +52,9 @@ const coachImgEl     = document.getElementById('coach-img');
 
 /* -------- Wizard sprites -------- */
 const WIZ = {
-  plus:  'mr-wizard-plus10.png',
-  meh:   'mr-wizard-0.png',
-  minus: 'mr-wizard-minus10.png'
+  plus:  '../mr-wizard-plus10.png',
+  meh:   '../mr-wizard-0.png',
+  minus: '../mr-wizard-minus10.png'
 };
 function setWizardSprite(state) {
   const src = state === 'plus' ? WIZ.plus : state === 'minus' ? WIZ.minus : WIZ.meh;
