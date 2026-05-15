@@ -90,35 +90,10 @@ function renderHearts() {
   }
 
   el.innerHTML = html;
+  el.setAttribute('aria-label', `${hearts} out of ${maxHearts} hearts`);
 
   el.classList.remove('flash-hearts');
   requestAnimationFrame(() => el.classList.add('flash-hearts'));
-
-  el.setAttribute('aria-label', `${hearts} out of ${maxHearts} hearts`);
-}
-
-function updateHearts(delta, countsForHearts = true) {
-  if (typeof delta !== 'number') return;
-  if (!countsForHearts) return;
-
-  const before = hearts;
-
-  if (delta > 0) {
-    // Correct answer: no change
-    hearts = hearts;
-  } else if (delta === 0) {
-    // Neutral answer: lose 1/4 heart
-    hearts = Math.max(0, hearts - 0.25);
-  } else {
-    // Incorrect answer: lose 1/2 heart
-    hearts = Math.max(0, hearts - 0.5);
-  }
-
-  hearts = Math.round(hearts * 4) / 4;
-
-  console.log(`HEARTS: ${before} → ${hearts}, score delta: ${delta}`);
-
-  renderHearts();
 }
 
 /* -------- Scoring -------- */
