@@ -748,39 +748,15 @@ body {
 }
 
 /* ---------- Phone ---------- */
-@media (max-width: 600px) {
-  body {
-    padding: 0;
-  }
-
-  #game-container {
-    width: calc(100vw - 12px);
-    margin: 6px auto;
-    padding: 14px 12px 18px;
-    border-radius: 10px;
-    box-shadow:
-      0 0 14px rgba(255, 0, 0, 0.18),
-      0 0 28px rgba(255, 0, 0, 0.08);
-  }
-
-  h1 {
-    font-size: 1.45rem;
-    line-height: 1.15;
-    margin-bottom: 8px;
-  }
-
-  h2,
-  #scenario-title {
-    font-size: 1.05rem;
-    line-height: 1.2;
-    margin-bottom: 12px;
-  }
-
+@media (max-width: 700px) {
   #toolbar {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    align-items: stretch;
+    grid-template-areas:
+      "teacher points"
+      "hearts hearts"
+      "feedback feedback"
+      "home home";
+    gap: 10px;
   }
 
   #teacher-badge,
@@ -788,76 +764,14 @@ body {
   #toolbar .ghost {
     width: 100%;
     justify-content: center;
-    font-size: 0.9rem;
-    padding: 8px;
+    text-align: center;
   }
 
   #hearts-display {
-    grid-column: 1 / -1;
     justify-content: center;
-    padding: 4px 0;
-  }
-
-  .heart-pixel {
-    width: 34px;
-    height: 34px;
-    font-size: 34px;
-    line-height: 34px;
   }
 
   #feedback {
-    grid-column: 1 / -1;
     width: 100%;
-    min-height: auto;
-    flex-direction: row;
-    text-align: left;
-    padding: 10px;
-  }
-
-  #coach-icon {
-    width: 58px;
-    height: 58px;
-  }
-
-  #feedback-text {
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-
-  #toolbar .ghost {
-    grid-column: 1 / -1;
-  }
-
-  #story-text {
-    font-size: 0.98rem;
-    line-height: 1.45;
-    padding: 14px;
-  }
-
-  .mission-intro {
-    padding: 12px;
-  }
-
-  .mission-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .mission-card {
-    padding: 14px;
-  }
-
-  .mission-card h3 {
-    font-size: 1.05rem;
-  }
-
-  .mission-card .action button,
-  #choices button {
-    width: 100%;
-    min-height: 60px;
-    font-size: 0.95rem;
-    white-space: normal;
-    padding: 12px 14px;
   }
 }
