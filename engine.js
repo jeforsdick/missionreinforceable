@@ -652,3 +652,4 @@ if (todayResult) {
   renderIntroCards();
   showFeedback("The Wizard will chime in after every move.", "correct", +10);
 }
+  });
