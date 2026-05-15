@@ -438,7 +438,7 @@ function renderIntroCards() {
   menu.innerHTML = `
     <div class="mission-card">
       <h3>Daily Mission</h3>
-      <div class="action"><button id="btn-drill">Start Behavior Skill Practice ▶</button></div>
+      <div class="action"><button id="btn-drill">Start Daily Practice ▶</button></div>
     </div>
     <div class="mission-card">
       <h3>Red Alert</h3>
