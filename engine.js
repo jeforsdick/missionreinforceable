@@ -66,43 +66,58 @@ let currentScenario = null;
 let currentMode     = null;
 
 /* -------- Hearts system -------- */
-let hearts               = 3;
-let maxHearts            = 3;
-let heartsPreviouslyLost = false;
+/* -------- Hearts system -------- */
+const HEARTS_START = 3;
+
+let hearts = HEARTS_START;
+let maxHearts = HEARTS_START;
+
+function getHeartClass(val) {
+  if (val >= 0.875) return 'h-full';
+  if (val >= 0.625) return 'h-three-qtr';
+  if (val >= 0.375) return 'h-half';
+  if (val >= 0.125) return 'h-quarter';
+  return 'h-empty';
+}
 
 function renderHearts() {
   const el = document.getElementById('hearts-display');
   if (!el) return;
+
   let html = '';
+
   for (let i = 0; i < maxHearts; i++) {
     const val = Math.max(0, Math.min(1, hearts - i));
-    if      (val >= 0.875) html += '<span class="heart h-full">&#9829;</span>';
-    else if (val >= 0.625) html += '<span class="heart h-three-qtr">&#9829;</span>';
-    else if (val >= 0.375) html += '<span class="heart h-half">&#9829;</span>';
-    else if (val >= 0.125) html += '<span class="heart h-quarter">&#9829;</span>';
-    else                   html += '<span class="heart h-empty">&#9825;</span>';
+    const cls = getHeartClass(val);
+    html += `<span class="heart ${cls}" aria-hidden="true">♥</span>`;
   }
+
   el.innerHTML = html;
+  el.setAttribute('aria-label', `${hearts} out of ${maxHearts} hearts`);
 }
 
 function updateHearts(delta, countsForHearts = true) {
   if (typeof delta !== 'number') return;
   if (!countsForHearts) return;
 
+  const before = hearts;
+
   if (delta > 0) {
-    // Correct answer: stays full if full, restores 1/2 heart if any hearts were lost
+    // correct answer
     if (hearts < maxHearts) {
       hearts = Math.min(maxHearts, hearts + 0.5);
     }
   } else if (delta === 0) {
-    // Neutral answer: lose 1/4 heart
+    // neutral answer
     hearts = Math.max(0, hearts - 0.25);
   } else {
-    // Incorrect answer: lose 1/2 heart
+    // incorrect answer
     hearts = Math.max(0, hearts - 0.5);
   }
 
   hearts = Math.round(hearts * 4) / 4;
+
+  console.log(`Hearts: ${before} → ${hearts} (delta: ${delta})`);
   renderHearts();
 }
 
@@ -126,17 +141,22 @@ function addPoints(delta) {
 }
 
 function resetGame() {
-  points      = 0;
+  points = 0;
   maxPossible = 0;
-  hearts   = maxHearts;
-  heartsPreviouslyLost = false;
-  events               = [];
+
+  hearts = HEARTS_START;
+  maxHearts = HEARTS_START;
+
+  events = [];
   sentThisRun = false;
-  SESSION_ID  = newSessionId();
+  SESSION_ID = newSessionId();
+
   setPoints(0);
   renderHearts();
   showFeedback('', null, 0);
+
   if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator";
+
   const old = document.getElementById('summary-panel');
   if (old) old.remove();
 }
