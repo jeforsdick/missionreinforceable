@@ -4,7 +4,7 @@
  */
 
 GAME_CONFIG.resultEndpoint = "https://script.google.com/macros/s/AKfycbyZ4Z7Axzzb0hwMSJ2wQ1127sjNeeK3P9T-sOSr9P2teZpKyogHPOUAkZllVK13-XeR/exec";
-GAME_CONFIG.defaultStudent = "KK";
+GAME_CONFIG.defaultStudent = "Test";
 
 GAME_CONFIG.fidelityHigh = `High fidelity. You stayed calm, brief, and plan-aligned. You protected access to instruction, reduced the audience for behavior, and reinforced the replacement behavior quickly enough for Student to stay connected to the routine.`;
 GAME_CONFIG.fidelityMid  = `Developing fidelity. Some parts of your response matched the plan, but the timing, specificity, or reinforcement was not strong enough yet. Tighten the next move: fewer words, clearer action, and immediate reinforcement for the replacement behavior.`;
