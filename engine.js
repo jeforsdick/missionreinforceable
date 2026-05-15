@@ -585,17 +585,21 @@ function showNode(id) {
 
     btn.addEventListener('click', () => {
       if (node.feedback && opt.nextId === 'home') {
-resetGame();
+        resetGame();
 
-const todayResult = getTodayResult();
+        const todayResult =
+          typeof getTodayResult === 'function'
+            ? getTodayResult()
+            : null;
 
-if (todayResult) {
-  renderSameDayReturnScreen(todayResult);
-} else {
-  renderIntroCards();
-}
-    return;
-  }
+        if (todayResult && typeof renderSameDayReturnScreen === 'function') {
+          renderSameDayReturnScreen(todayResult);
+        } else {
+          renderIntroCards();
+        }
+
+        return;
+      }
 
       if (!node.feedback && typeof opt.delta === 'number') {
         addPoints(opt.delta);
@@ -607,7 +611,6 @@ if (todayResult) {
           !isContinueButton;
 
         updateHearts(opt.delta, countsForHearts);
-
         logDecision(node.id, opt);
       }
 
