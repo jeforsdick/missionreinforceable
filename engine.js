@@ -244,16 +244,18 @@ function sendResultsOnce() {
   const student = url.searchParams.get("student") || GAME_CONFIG.defaultStudent;
 
   const payload = {
-    teacher_code: getTeacherCode(),
-    session_id:   SESSION_ID,
-    points,
-    max_possible: maxPossible,
-    percent:      percentScore(),
-    timestamp:    new Date().toISOString(),
-    log:          events,
-    mode,
-    student
-  };
+  teacher_code: getTeacherCode(),
+  session_id:   SESSION_ID,
+  points,
+  max_possible: maxPossible,
+  percent:      percentScore(),
+  timestamp:    new Date().toISOString(),
+  date:         todayKey(),
+  log:          events,
+  mode,
+  student,
+  feedback_message: fidelityMessage()
+};
 saveTodayResult(payload);
   
   if (!GAME_CONFIG.resultEndpoint) return;
