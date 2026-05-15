@@ -189,55 +189,66 @@ h2{
 /* ---------- Hearts display ---------- */
 #hearts-display {
   display: flex;
+  align-items: center;
   gap: 8px;
-  align-items: center;
   flex-shrink: 0;
-  min-width: 130px;
-  padding: 4px 0;
+  background: transparent;
+  padding: 0 4px;
+  min-width: 132px;
 }
 
-.heart {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  font-size: 34px;
-  line-height: 1;
+.heart-pixel {
+  --fill: 100%;
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 38px;
+  font-size: 38px;
+  line-height: 38px;
   font-family: 'Courier New', monospace;
-  font-weight: 700;
+  font-weight: 900;
   transform: translateY(-1px);
-
-  /* pixel-ish / game-ish look */
-  text-shadow:
-    2px 0 0 rgba(90, 0, 0, 0.95),
-    0 2px 0 rgba(90, 0, 0, 0.95),
-    2px 2px 0 rgba(90, 0, 0, 0.95),
-    0 0 8px rgba(255, 40, 40, 0.35);
+  filter: drop-shadow(2px 2px 0 #520000)
+          drop-shadow(0 0 6px rgba(255, 0, 0, .5));
 }
 
-.heart.h-full {
-  color: #ff2b2b;
+.heart-pixel .heart-empty,
+.heart-pixel .heart-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-.heart.h-three-qtr {
-  color: #ff5a3a;
-}
-
-.heart.h-half {
-  color: #ff8a3a;
-}
-
-.heart.h-quarter {
-  color: #b86a1e;
-}
-
-.heart.h-empty {
+.heart-pixel .heart-empty {
   color: #3a3a3a;
-  text-shadow: none;
-  opacity: 0.95;
+  text-shadow:
+    1px 0 #111,
+    -1px 0 #111,
+    0 1px #111,
+    0 -1px #111;
 }
 
+.heart-pixel .heart-fill {
+  color: #ff2020;
+  width: var(--fill);
+  overflow: hidden;
+  white-space: nowrap;
+  text-shadow:
+    1px 0 #8b0000,
+    -1px 0 #8b0000,
+    0 1px #8b0000,
+    0 -1px #8b0000,
+    0 0 10px rgba(255, 60, 60, .75);
+}
+
+#hearts-display.flash-hearts {
+  animation: heartPop .22s ease-out;
+}
+
+@keyframes heartPop {
+  from { transform: scale(1.12); }
+  to   { transform: scale(1); }
+}
 /* ---------- Choices ---------- */
 #choices{
   display:grid;
