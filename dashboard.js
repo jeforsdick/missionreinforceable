@@ -7,8 +7,7 @@
 function dashboardResultLabel(delta) {
   const n = Number(delta);
   if (n > 0) return "Correct";
-  if (n === 0) return "Meh";
-  if (n < 0) return "Needs repair";
+  if (n <= 0) return "Missed";
   return "Review";
 }
 
@@ -134,7 +133,15 @@ function dashboardEscape(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+function hideDashboardTopFeedback() {
+  const feedbackBox = document.getElementById("feedback");
+  if (feedbackBox) feedbackBox.style.display = "none";
+}
 
+function showDashboardTopFeedback() {
+  const feedbackBox = document.getElementById("feedback");
+  if (feedbackBox) feedbackBox.style.display = "";
+}
 async function dashboardFetchHistory() {
   const endpoint = GAME_CONFIG.resultEndpoint;
 
@@ -206,7 +213,7 @@ function renderProgressDashboardFromHistory(history) {
   const storyText = document.getElementById("story-text");
   const choicesDiv = document.getElementById("choices");
   const scenarioTitle = document.getElementById("scenario-title");
-
+hideDashboardTopFeedback();
   if (!choicesDiv) return;
 
   if (storyText) storyText.style.display = "none";
@@ -256,7 +263,7 @@ function renderProgressDashboardFromHistory(history) {
     <div id="progress-dashboard">
       <div class="wizard-summary-bubble">
         <div class="wizard-summary-icon">
-          <img src="../mr-wizard-think.png" alt="MR Wizard">
+          <img src="../mr-wizard-plus10.png" alt="MR Wizard">
         </div>
         <div class="wizard-summary-text">
           <h3>The Wise Wizard Says...</h3>
@@ -300,9 +307,6 @@ function renderProgressDashboardFromHistory(history) {
     </div>
   `;
 
-  if (typeof showFeedback === "function") {
-    showFeedback("The Wizard reviewed your mission history.", "correct", 10);
-  }
 
   document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
     renderIntroCards();
@@ -322,7 +326,7 @@ function renderSessionDetails(session, decisions, fullHistory) {
   const storyText = document.getElementById("story-text");
   const choicesDiv = document.getElementById("choices");
   const scenarioTitle = document.getElementById("scenario-title");
-
+hideDashboardTopFeedback();
   if (!choicesDiv || !session) return;
 
   if (storyText) storyText.style.display = "none";
@@ -372,7 +376,7 @@ function renderSessionDetails(session, decisions, fullHistory) {
 
       <div class="wizard-summary-bubble">
         <div class="wizard-summary-icon">
-          <img src="../mr-wizard-think.png" alt="MR Wizard">
+          <img src="../mr-wizard-plus10.png" alt="MR Wizard">
         </div>
         <div class="wizard-summary-text">
           <h3>Overall Feedback</h3>
@@ -400,7 +404,7 @@ async function openProgressDashboard() {
   const choicesDiv = document.getElementById("choices");
   const storyText = document.getElementById("story-text");
   const scenarioTitle = document.getElementById("scenario-title");
-
+hideDashboardTopFeedback();
   if (storyText) storyText.style.display = "none";
   if (scenarioTitle) scenarioTitle.textContent = "Loading Progress";
 
@@ -415,6 +419,8 @@ async function openProgressDashboard() {
   try {
     const history = await dashboardFetchHistory();
     renderProgressDashboardFromHistory(history);
+    const feedbackBox = document.getElementById("feedback");
+if (feedbackBox) feedbackBox.style.display = "none";
   } catch (err) {
     console.error(err);
 
@@ -429,14 +435,10 @@ async function openProgressDashboard() {
           </button>
         </div>
       `;
-    }
-
-    document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
-      renderIntroCards();
-    });
-
-    if (typeof showFeedback === "function") {
-      showFeedback("The dashboard is ready, but the history endpoint is not connected yet.", "coach", 0);
+     document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
+  showDashboardTopFeedback();
+  renderIntroCards();
+});
     }
   }
 }
