@@ -66,19 +66,10 @@ let currentScenario = null;
 let currentMode     = null;
 
 /* -------- Hearts system -------- */
-/* -------- Hearts system -------- */
 const HEARTS_START = 3;
 
 let hearts = HEARTS_START;
 let maxHearts = HEARTS_START;
-
-function getHeartClass(val) {
-  if (val >= 0.875) return 'h-full';
-  if (val >= 0.625) return 'h-three-qtr';
-  if (val >= 0.375) return 'h-half';
-  if (val >= 0.125) return 'h-quarter';
-  return 'h-empty';
-}
 
 function renderHearts() {
   const el = document.getElementById('hearts-display');
@@ -87,12 +78,22 @@ function renderHearts() {
   let html = '';
 
   for (let i = 0; i < maxHearts; i++) {
-    const val = Math.max(0, Math.min(1, hearts - i));
-    const cls = getHeartClass(val);
-    html += `<span class="heart ${cls}" aria-hidden="true">♥</span>`;
+    const fill = Math.max(0, Math.min(1, hearts - i));
+    const pct = Math.round(fill * 100);
+
+    html += `
+      <span class="heart-pixel" style="--fill:${pct}%;" aria-hidden="true">
+        <span class="heart-empty">♥</span>
+        <span class="heart-fill">♥</span>
+      </span>
+    `;
   }
 
   el.innerHTML = html;
+
+  el.classList.remove('flash-hearts');
+  requestAnimationFrame(() => el.classList.add('flash-hearts'));
+
   el.setAttribute('aria-label', `${hearts} out of ${maxHearts} hearts`);
 }
 
@@ -103,21 +104,22 @@ function updateHearts(delta, countsForHearts = true) {
   const before = hearts;
 
   if (delta > 0) {
-    // correct answer
+    // Correct answer: stay full if already full, restore 1/2 heart if damaged
     if (hearts < maxHearts) {
       hearts = Math.min(maxHearts, hearts + 0.5);
     }
   } else if (delta === 0) {
-    // neutral answer
+    // Neutral answer: lose 1/4 heart
     hearts = Math.max(0, hearts - 0.25);
   } else {
-    // incorrect answer
+    // Incorrect answer: lose 1/2 heart
     hearts = Math.max(0, hearts - 0.5);
   }
 
   hearts = Math.round(hearts * 4) / 4;
 
-  console.log(`Hearts: ${before} → ${hearts} (delta: ${delta})`);
+  console.log(`HEARTS: ${before} → ${hearts}, score delta: ${delta}`);
+
   renderHearts();
 }
 
