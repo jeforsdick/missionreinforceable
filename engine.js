@@ -133,11 +133,11 @@ function updateHearts(delta, countsForHearts = true) {
     // Correct answer: no heart change
     hearts = hearts;
   } else if (delta === 0) {
-    // Neutral/missed answer: lose 1/4 heart
-    hearts = Math.max(0, hearts - 0.25);
-  } else {
-    // Incorrect/missed answer: lose 1/2 heart
+    // Neutral/missed answer: lose 1/2 heart
     hearts = Math.max(0, hearts - 0.5);
+  } else {
+    // Incorrect/missed answer: lose heart
+    hearts = Math.max(0, hearts - 1.0);
   }
 
   hearts = Math.round(hearts * 4) / 4;
