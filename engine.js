@@ -551,7 +551,7 @@ function renderSameDayReturnScreen(result) {
 
   if (storyText) {
     storyText.innerHTML = `
-You already completed a Mission: Reinforceable session today.
+  <p class="same-day-lead">You already completed a Mission: Reinforceable session today.</p>
 
 <strong>Today's recap:</strong>
 Mission type: ${result.mode || "Mission"}
