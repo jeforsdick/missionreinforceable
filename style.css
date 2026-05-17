@@ -371,20 +371,28 @@ button {
   margin-top:8px;
 }
 /* ---------- Wizard Pop-Up Feedback ---------- */
+body.modal-open {
+  overflow: hidden;
+}
+
 .wizard-modal {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100dvh;
   background: rgba(0, 0, 0, .78);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 99999;
   padding: 12px;
   animation: wizardBackdropIn .18s ease-out;
 }
 
 .wizard-modal-card {
   width: min(760px, 96vw);
+  max-height: 92dvh;
+  overflow-y: auto;
   background: #1f1f1f;
   border: 3px solid var(--accent2);
   border-radius: 18px;
@@ -420,12 +428,12 @@ button {
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .wizard-modal-icon {
-  width: 112px;
-  height: 112px;
+  width: 96px;
+  height: 96px;
   flex: 0 0 auto;
   border: 3px solid currentColor;
   border-radius: 14px;
@@ -446,7 +454,7 @@ button {
 .wizard-modal h2 {
   margin: 0 0 8px 0;
   text-align: left;
-  font-size: 2rem;
+  font-size: 1.7rem;
   line-height: 1.15;
   color: #fff;
   text-shadow: 0 0 8px currentColor;
@@ -455,7 +463,7 @@ button {
 .wizard-modal-tag {
   display: inline-block;
   font-weight: 700;
-  font-size: .95rem;
+  font-size: .9rem;
   padding: 5px 9px;
   border: 1px solid #555;
   border-radius: 999px;
@@ -468,28 +476,28 @@ button {
   border: 1px solid #444;
   border-radius: 14px;
   padding: 12px;
-  font-size: 1.2rem;
-  line-height: 1.65;
+  font-size: 1.05rem;
+  line-height: 1.5;
   white-space: normal;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .wizard-continue-btn {
   width: 100%;
-  background: var(--accent);
-  color: #fff;
+  background: var(--accent2);
+  color: #000;
   border: 2px solid #111;
   border-radius: 12px;
-  padding: 12px 12px;
-  font-size: 1.15rem;
+  padding: 12px;
+  font-size: 1rem;
   font-weight: 900;
   cursor: pointer;
 }
 
 .wizard-continue-btn:hover,
 .wizard-continue-btn:focus {
-  background: var(--accent2);
-  color: #000;
+  background: var(--accent);
+  color: #fff;
   outline: none;
 }
 
@@ -510,29 +518,43 @@ button {
 }
 
 @media (max-width: 600px) {
+  .wizard-modal {
+    padding: 10px;
+  }
+
   .wizard-modal-card {
     padding: 12px;
+    max-height: 92dvh;
   }
 
   .wizard-modal-top {
     align-items: flex-start;
+    gap: 10px;
   }
 
   .wizard-modal-icon {
-    width: 76px;
-    height: 76px;
+    width: 68px;
+    height: 68px;
   }
 
   .wizard-modal h2 {
-    font-size: 1.35rem;
+    font-size: 1.2rem;
+  }
+
+  .wizard-modal-tag {
+    font-size: .78rem;
   }
 
   .wizard-modal-body {
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: .95rem;
+    line-height: 1.45;
+  }
+
+  .wizard-continue-btn {
+    font-size: .95rem;
+    min-height: 46px;
   }
 }
-
 /* ============================================================
    WEEBLY + MOBILE POLISH OVERRIDES
    Put this at the very bottom of style.css
