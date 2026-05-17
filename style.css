@@ -1244,3 +1244,88 @@ body {
     font-size: 0.95rem;
   }
 }
+/* ============================================================
+   DESKTOP SPLIT-SCREEN PLAY MODE
+   Applies only during active missions on wider screens
+   ============================================================ */
+
+@media (min-width: 900px) {
+  body.playing-mission #game-container {
+    max-width: 1180px;
+    padding: 24px 34px 30px;
+  }
+
+  body.playing-mission #toolbar {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr auto auto;
+    grid-template-areas:
+      "teacher points hearts spacer progress home";
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  body.playing-mission #teacher-badge {
+    grid-area: teacher;
+  }
+
+  body.playing-mission #score-badge {
+    grid-area: points;
+  }
+
+  body.playing-mission #hearts-display {
+    grid-area: hearts;
+  }
+
+  body.playing-mission #progress-btn {
+    grid-area: progress;
+  }
+
+  body.playing-mission #home-btn {
+    grid-area: home;
+  }
+
+  body.playing-mission .spacer {
+    grid-area: spacer;
+  }
+
+  /* Hide top wizard during mission play.
+     Wizard still appears in the pop-up after answers. */
+  body.playing-mission #feedback {
+    display: none;
+  }
+
+  /* Split the play area */
+  body.playing-mission #story-text {
+    width: 48%;
+    min-height: 340px;
+    float: left;
+    margin: 0 22px 0 0;
+    padding: 22px;
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  body.playing-mission #choices {
+    width: calc(52% - 22px);
+    float: right;
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+
+  body.playing-mission #choices::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  body.playing-mission #choices > button {
+    min-height: 92px;
+    padding: 18px 22px;
+    font-size: 1rem;
+    line-height: 1.35;
+    text-align: left;
+    justify-content: flex-start;
+  }
+}
