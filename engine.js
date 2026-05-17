@@ -305,17 +305,21 @@ function showWizardPopup(opt, onContinue) {
     </div>
   `;
 
-  document.body.appendChild(modal);
+  document.body.classList.add('modal-open');
 
-  const continueBtn = document.getElementById('wizard-continue-btn');
-  if (continueBtn) {
-    continueBtn.focus();
-    continueBtn.addEventListener('click', () => {
-      modal.remove();
-      onContinue();
-    });
-  }
-}
+  setTimeout(() => {
+    document.body.appendChild(modal);
+
+    const continueBtn = document.getElementById('wizard-continue-btn');
+    if (continueBtn) {
+      continueBtn.focus();
+      continueBtn.addEventListener('click', () => {
+        modal.remove();
+        document.body.classList.remove('modal-open');
+        onContinue();
+      });
+    }
+  }, 180);
 
 /* -------- Results → Google Apps Script -------- */
 function getTeacherCode() {
