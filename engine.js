@@ -305,7 +305,7 @@ function showWizardPopup(opt, onContinue) {
     </div>
   `;
 
-  document.body.classList.add('modal-open');
+    document.body.classList.add('modal-open');
 
   setTimeout(() => {
     document.body.appendChild(modal);
@@ -320,6 +320,10 @@ function showWizardPopup(opt, onContinue) {
       });
     }
   }, 180);
+}
+
+/* -------- Results → Google Apps Script -------- */
+function getTeacherCode() {
 
 /* -------- Results → Google Apps Script -------- */
 function getTeacherCode() {
