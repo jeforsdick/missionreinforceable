@@ -370,19 +370,7 @@ button {
   margin-left:20px;
   margin-top:8px;
 }
-/* ---------- Put Wizard Pop-Up Near Top of Screen ---------- */
-.wizard-modal {
-  align-items: flex-start !important;
-  justify-content: center !important;
-  padding-top: clamp(18px, 6vh, 70px) !important;
-  padding-left: 14px !important;
-  padding-right: 14px !important;
-  padding-bottom: 14px !important;
-}
 
-.wizard-modal-card {
-  margin-top: 0 !important;
-}
 /* ============================================================
    WEEBLY + MOBILE POLISH OVERRIDES
    Put this at the very bottom of style.css
@@ -1550,4 +1538,165 @@ body {
   font-size: 1.08rem !important;
   line-height: 1.35 !important;
   text-align: left !important;
+}
+/* ============================================================
+   STABLE WIZARD POP-UP FEEDBACK
+   ============================================================ */
+
+body.modal-open {
+  overflow: hidden !important;
+}
+
+.wizard-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  background: rgba(0, 0, 0, .82) !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
+  padding-top: clamp(18px, 6vh, 70px) !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+.wizard-modal-card {
+  width: min(760px, 94vw) !important;
+  max-height: 88dvh !important;
+  overflow-y: auto !important;
+  background: #1f1f1f !important;
+  border: 3px solid var(--accent2) !important;
+  border-radius: 18px !important;
+  padding: 16px !important;
+  margin-top: 0 !important;
+  box-shadow:
+    0 0 24px rgba(22, 243, 248, .45),
+    inset 0 0 14px rgba(22, 243, 248, .08) !important;
+}
+
+.wizard-modal.state-plus .wizard-modal-card {
+  border-color: var(--good) !important;
+}
+
+.wizard-modal.state-meh .wizard-modal-card {
+  border-color: var(--meh) !important;
+}
+
+.wizard-modal.state-minus .wizard-modal-card {
+  border-color: var(--bad) !important;
+}
+
+.wizard-modal-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 12px !important;
+}
+
+.wizard-modal-icon {
+  width: 88px !important;
+  height: 88px !important;
+  flex: 0 0 88px !important;
+  border: 3px solid currentColor !important;
+  border-radius: 14px !important;
+  background: #111 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.wizard-modal-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: pixelated !important;
+  image-rendering: crisp-edges !important;
+}
+
+.wizard-modal h2 {
+  margin: 0 0 6px 0 !important;
+  text-align: left !important;
+  font-size: 1.55rem !important;
+  line-height: 1.15 !important;
+  color: #fff !important;
+  text-shadow: 0 0 8px currentColor !important;
+}
+
+.wizard-modal-tag {
+  display: inline-block !important;
+  font-weight: 700 !important;
+  font-size: .85rem !important;
+  padding: 5px 9px !important;
+  border: 1px solid #555 !important;
+  border-radius: 999px !important;
+  background: #2c2c2c !important;
+  color: #f4f4f4 !important;
+}
+
+.wizard-modal-body {
+  background: #303030 !important;
+  border: 1px solid #444 !important;
+  border-radius: 14px !important;
+  padding: 14px !important;
+  font-size: 1.05rem !important;
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  margin-bottom: 14px !important;
+}
+
+.wizard-continue-btn {
+  width: 100% !important;
+  background: var(--accent2) !important;
+  color: #000 !important;
+  border: 2px solid #111 !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+
+.wizard-continue-btn:hover,
+.wizard-continue-btn:focus {
+  background: var(--accent) !important;
+  color: #fff !important;
+  outline: none !important;
+}
+
+@media (max-width: 700px) {
+  .wizard-modal {
+    padding-top: 12px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .wizard-modal-card {
+    width: 100% !important;
+    max-height: 90dvh !important;
+    padding: 12px !important;
+  }
+
+  .wizard-modal-top {
+    gap: 10px !important;
+    align-items: flex-start !important;
+  }
+
+  .wizard-modal-icon {
+    width: 64px !important;
+    height: 64px !important;
+    flex-basis: 64px !important;
+  }
+
+  .wizard-modal h2 {
+    font-size: 1.15rem !important;
+  }
+
+  .wizard-modal-body {
+    font-size: .95rem !important;
+    line-height: 1.45 !important;
+  }
 }
