@@ -422,7 +422,9 @@ saveTodayResult(payload);
     console.error("Fetch threw:", e);
   }
 }
-
+function setPlayMode(isPlaying) {
+  document.body.classList.toggle("playing-mission", !!isPlaying);
+}
 /* -------- Utilities -------- */
 function shuffledOptions(options) { return (options || []).map(o => ({...o})).sort(() => Math.random() - 0.5); }
 function shuffle(a, rnd = Math.random) {
@@ -452,6 +454,8 @@ function srandom(seed) {
 function pickScenario(pool, rnd) { return sample(pool, 1, rnd)[0]; }
 
 function renderIntroCards() {
+  setPlayMode(false);
+
   if (storyText) storyText.style.display = 'block';
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
@@ -524,6 +528,8 @@ function startMissionByType(type) {
 }
 
 function renderSameDayReturnScreen(result) {
+  setPlayMode(false);
+
   if (storyText) storyText.style.display = 'block';
 
   const oldSummary = document.getElementById('summary-panel');
@@ -604,6 +610,9 @@ function newId() { return NEXT_ID++; }
 
 function startDynamicMission(modeLabel, scn) {
   if (!scn) return;
+
+  setPlayMode(true);
+
   currentScenario = scn;
   DYN = { nodes: [], ids: [] };
 
@@ -667,8 +676,10 @@ function showNode(id) {
       : node.scenario || "Choose Your Next Move";
   }
 
-  if (node.feedback) {
-    if (storyText) storyText.style.display = 'none';
+if (node.feedback) {
+  setPlayMode(false);
+
+  if (storyText) storyText.style.display = 'none';
 
     const pct = percentScore();
     const msg = fidelityMessage();
