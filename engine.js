@@ -269,6 +269,14 @@ ${base}`;
 }
 
 function showWizardPopup(opt, onContinue) {
+  // Jump to the top of the game immediately so the modal opens cleanly
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) {
+    gameContainer.scrollIntoView({ behavior: 'auto', block: 'start' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
   const state = wizardStateFromDelta(opt.delta);
   const title = wizardTitleFromDelta(opt.delta);
   const body = buildWizardFeedback(opt);
@@ -291,7 +299,9 @@ function showWizardPopup(opt, onContinue) {
         </div>
         <div>
           <h2 id="wizard-modal-title">${escapeHTML(title)}</h2>
-          <div class="wizard-modal-tag">${state === 'plus' ? 'Fidelity strengthened' : state === 'minus' ? 'Mission risk increased' : 'Partial support'}</div>
+          <div class="wizard-modal-tag">
+            ${state === 'plus' ? 'Fidelity strengthened' : state === 'minus' ? 'Mission risk increased' : 'Partial support'}
+          </div>
         </div>
       </div>
 
@@ -305,21 +315,19 @@ function showWizardPopup(opt, onContinue) {
     </div>
   `;
 
-    document.body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
+  document.body.appendChild(modal);
 
-  setTimeout(() => {
-    document.body.appendChild(modal);
+  const continueBtn = document.getElementById('wizard-continue-btn');
+  if (continueBtn) {
+    continueBtn.focus();
 
-    const continueBtn = document.getElementById('wizard-continue-btn');
-    if (continueBtn) {
-      continueBtn.focus();
-      continueBtn.addEventListener('click', () => {
-        modal.remove();
-        document.body.classList.remove('modal-open');
-        onContinue();
-      });
-    }
-  }, 180);
+    continueBtn.addEventListener('click', () => {
+      modal.remove();
+      document.body.classList.remove('modal-open');
+      onContinue();
+    });
+  }
 }
 
 /* -------- Results → Google Apps Script -------- */
