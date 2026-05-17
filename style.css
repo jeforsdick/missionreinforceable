@@ -1554,7 +1554,7 @@ body.modal-open {
   height: 100dvh !important;
   background: rgba(0, 0, 0, .82) !important;
   display: flex !important;
-  align-items: center !important;
+  align-items: top !important;
   justify-content: center !important;
   z-index: 999999 !important;
   padding-top: clamp(18px, 6vh, 70px) !important;
