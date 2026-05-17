@@ -729,8 +729,24 @@ function showNode(id) {
 
   if (!choicesDiv) return;
 
-  choicesDiv.innerHTML = '';
-  const options = shuffledOptions(node.options);
+choicesDiv.innerHTML = '';
+
+if (!node.feedback) {
+  const wizardPrompt = document.createElement('div');
+  wizardPrompt.className = 'choice-wizard-card';
+  wizardPrompt.innerHTML = `
+    <div class="choice-wizard-icon">
+      <img src="${WIZ.meh}" alt="MR Wizard">
+    </div>
+    <div class="choice-wizard-text">
+      <strong>Wizard Check</strong>
+      <span>Choose your move carefully. Your decision changes what happens next.</span>
+    </div>
+  `;
+  choicesDiv.appendChild(wizardPrompt);
+}
+
+const options = shuffledOptions(node.options);
 
   options.forEach(opt => {
     const btn = document.createElement('button');
