@@ -324,9 +324,6 @@ function showWizardPopup(opt, onContinue) {
 
 /* -------- Results → Google Apps Script -------- */
 function getTeacherCode() {
-
-/* -------- Results → Google Apps Script -------- */
-function getTeacherCode() {
   const u = new URL(window.location.href);
   return (u.searchParams.get("teacher")
        || document.getElementById("teacher-code")?.textContent
