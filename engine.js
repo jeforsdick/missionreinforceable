@@ -79,12 +79,35 @@ function renderHearts() {
 
   for (let i = 0; i < maxHearts; i++) {
     const fill = Math.max(0, Math.min(1, hearts - i));
-    const pct = Math.round(fill * 100);
+    const width = Math.round(fill * 16);
+    const clipId = `heart-clip-${i}`;
 
     html += `
-      <span class="zelda-heart" style="--fill:${pct}%;" aria-hidden="true">
-        <span class="zelda-heart-empty"></span>
-        <span class="zelda-heart-fill"></span>
+      <span class="zelda-heart" aria-hidden="true">
+        <svg viewBox="0 0 16 14" class="zelda-heart-svg" shape-rendering="crispEdges">
+          <defs>
+            <clipPath id="${clipId}">
+              <rect x="0" y="0" width="${width}" height="14"></rect>
+            </clipPath>
+          </defs>
+
+          <path class="heart-shadow"
+            d="M2 0h4v1h1v2h2V1h1V0h4v1h1v1h1v4h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1H8v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V6H0V2h1V1h1z"
+            transform="translate(1,1)"
+          />
+
+          <path class="heart-empty"
+            d="M2 0h4v1h1v2h2V1h1V0h4v1h1v1h1v4h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1H8v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V6H0V2h1V1h1z"
+          />
+
+          <path class="heart-fill"
+            clip-path="url(#${clipId})"
+            d="M2 0h4v1h1v2h2V1h1V0h4v1h1v1h1v4h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1H8v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V6H0V2h1V1h1z"
+          />
+
+          <rect class="heart-highlight" x="3" y="2" width="2" height="2" clip-path="url(#${clipId})"></rect>
+          <rect class="heart-highlight-soft" x="5" y="2" width="1" height="2" clip-path="url(#${clipId})"></rect>
+        </svg>
       </span>
     `;
   }
@@ -95,30 +118,6 @@ function renderHearts() {
   el.classList.remove('flash-hearts');
   requestAnimationFrame(() => el.classList.add('flash-hearts'));
 }
-function updateHearts(delta, countsForHearts = true) {
-  if (typeof delta !== 'number') return;
-  if (!countsForHearts) return;
-
-  const before = hearts;
-
-  if (delta > 0) {
-    // Correct answer: no heart change
-    hearts = hearts;
-  } else if (delta === 0) {
-    // Neutral/missed answer: lose 1/4 heart
-    hearts = Math.max(0, hearts - 0.25);
-  } else {
-    // Incorrect/missed answer: lose 1/2 heart
-    hearts = Math.max(0, hearts - 0.5);
-  }
-
-  hearts = Math.round(hearts * 4) / 4;
-
-  console.log(`HEARTS: ${before} → ${hearts}, score delta: ${delta}`);
-
-  renderHearts();
-}
-
 /* -------- Scoring -------- */
 let points     = 0;
 let maxPossible = 0;
