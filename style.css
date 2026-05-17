@@ -555,6 +555,18 @@ body.modal-open {
     min-height: 46px;
   }
 }
+
+/* ---------- Same Day Return Screen ---------- */
+#story-text.same-day-return {
+  padding-top: 18px;
+}
+
+#story-text.same-day-return .same-day-lead {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: clamp(1.15rem, 1.35vw, 1.4rem);
+  line-height: 1.45;
+ } 
 /* ============================================================
    WEEBLY + MOBILE POLISH OVERRIDES
    Put this at the very bottom of style.css
