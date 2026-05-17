@@ -370,71 +370,48 @@ button {
   margin-left:20px;
   margin-top:8px;
 }
-/* ---------- Wizard Pop-Up Feedback ---------- */
+/* ---------- Stable Wizard Pop-Up Feedback ---------- */
 body.modal-open {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .wizard-modal {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
-  background: rgba(0, 0, 0, .78);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  padding: 12px;
-  animation: wizardBackdropIn .18s ease-out;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  background: rgba(0, 0, 0, .82);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
+  padding: 14px;
 }
 
 .wizard-modal-card {
-  width: min(760px, 96vw);
-  max-height: 92dvh;
+  width: min(760px, 94vw);
+  max-height: 88dvh;
   overflow-y: auto;
   background: #1f1f1f;
   border: 3px solid var(--accent2);
   border-radius: 18px;
-  padding: 12px;
+  padding: 16px;
   box-shadow:
     0 0 24px rgba(22, 243, 248, .45),
     inset 0 0 14px rgba(22, 243, 248, .08);
-  animation: wizardCardPop .22s ease-out;
-}
-
-.wizard-modal.state-plus .wizard-modal-card {
-  border-color: var(--good);
-  box-shadow:
-    0 0 28px rgba(22, 243, 248, .55),
-    inset 0 0 16px rgba(22, 243, 248, .12);
-}
-
-.wizard-modal.state-meh .wizard-modal-card {
-  border-color: var(--meh);
-  box-shadow:
-    0 0 28px rgba(255, 216, 77, .45),
-    inset 0 0 16px rgba(255, 216, 77, .12);
-}
-
-.wizard-modal.state-minus .wizard-modal-card {
-  border-color: var(--bad);
-  box-shadow:
-    0 0 32px rgba(255, 77, 77, .58),
-    inset 0 0 18px rgba(255, 77, 77, .14);
 }
 
 .wizard-modal-top {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   margin-bottom: 12px;
 }
 
 .wizard-modal-icon {
-  width: 96px;
-  height: 96px;
-  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  flex: 0 0 88px;
   border: 3px solid currentColor;
   border-radius: 14px;
   background: #111;
@@ -452,9 +429,9 @@ body.modal-open {
 }
 
 .wizard-modal h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   text-align: left;
-  font-size: 1.7rem;
+  font-size: 1.55rem;
   line-height: 1.15;
   color: #fff;
   text-shadow: 0 0 8px currentColor;
@@ -463,7 +440,7 @@ body.modal-open {
 .wizard-modal-tag {
   display: inline-block;
   font-weight: 700;
-  font-size: .9rem;
+  font-size: .85rem;
   padding: 5px 9px;
   border: 1px solid #555;
   border-radius: 999px;
@@ -475,7 +452,7 @@ body.modal-open {
   background: #303030;
   border: 1px solid #444;
   border-radius: 14px;
-  padding: 12px;
+  padding: 14px;
   font-size: 1.05rem;
   line-height: 1.5;
   white-space: normal;
@@ -501,20 +478,16 @@ body.modal-open {
   outline: none;
 }
 
-@keyframes wizardBackdropIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+.wizard-modal.state-plus .wizard-modal-card {
+  border-color: var(--good);
 }
 
-@keyframes wizardCardPop {
-  from {
-    transform: scale(.92) translateY(10px);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
+.wizard-modal.state-meh .wizard-modal-card {
+  border-color: var(--meh);
+}
+
+.wizard-modal.state-minus .wizard-modal-card {
+  border-color: var(--bad);
 }
 
 @media (max-width: 600px) {
@@ -523,40 +496,31 @@ body.modal-open {
   }
 
   .wizard-modal-card {
+    width: 100%;
+    max-height: 90dvh;
     padding: 12px;
-    max-height: 92dvh;
   }
 
   .wizard-modal-top {
-    align-items: flex-start;
     gap: 10px;
+    align-items: flex-start;
   }
 
   .wizard-modal-icon {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
   }
 
   .wizard-modal h2 {
-    font-size: 1.2rem;
-  }
-
-  .wizard-modal-tag {
-    font-size: .78rem;
+    font-size: 1.15rem;
   }
 
   .wizard-modal-body {
     font-size: .95rem;
     line-height: 1.45;
   }
-
-  .wizard-continue-btn {
-    font-size: .95rem;
-    min-height: 46px;
-  }
 }
-
-
 /* ============================================================
    WEEBLY + MOBILE POLISH OVERRIDES
    Put this at the very bottom of style.css
