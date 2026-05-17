@@ -187,60 +187,81 @@ h2{
 }
 
 /* ---------- Hearts display ---------- */
+/* ---------- Pixel / Zelda-style Hearts ---------- */
 #hearts-display {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
   flex-shrink: 0;
   background: transparent;
-  padding: 0 4px;
-  min-width: 132px;
+  padding: 0 6px;
+  min-width: 150px;
 }
 
-.heart-pixel {
+.zelda-heart {
   --fill: 100%;
   position: relative;
   display: inline-block;
-  width: 38px;
+  width: 42px;
   height: 38px;
-  font-size: 38px;
-  line-height: 38px;
-  font-family: 'Courier New', monospace;
-  font-weight: 900;
-  transform: translateY(-1px);
-  filter: drop-shadow(2px 2px 0 #520000)
-          drop-shadow(0 0 6px rgba(255, 0, 0, .5));
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter:
+    drop-shadow(3px 3px 0 #4b0000)
+    drop-shadow(0 0 8px rgba(255, 0, 0, .65));
 }
 
-.heart-pixel .heart-empty,
-.heart-pixel .heart-fill {
+/* This is the blocky pixel-heart shape */
+.zelda-heart-empty,
+.zelda-heart-fill {
   position: absolute;
-  left: 0;
-  top: 0;
+  inset: 0;
+  display: block;
+
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath fill='black' d='M2 0h4v1h1v2h2V1h1V0h4v1h1v1h1v4h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1H8v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V6H0V2h1V1h1z'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath fill='black' d='M2 0h4v1h1v2h2V1h1V0h4v1h1v1h1v4h-1v2h-1v1h-1v1h-1v1h-1v1h-1v1H8v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V6H0V2h1V1h1z'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
 }
 
-.heart-pixel .heart-empty {
-  color: #3a3a3a;
-  text-shadow:
-    1px 0 #111,
-    -1px 0 #111,
-    0 1px #111,
-    0 -1px #111;
+.zelda-heart-empty {
+  background: #3b3b3b;
+  opacity: .95;
+  filter: drop-shadow(1px 1px 0 #111);
 }
 
-.heart-pixel .heart-fill {
-  color: #ff2020;
+.zelda-heart-fill {
+  background:
+    linear-gradient(
+      135deg,
+      #ff6b6b 0%,
+      #ff1f1f 40%,
+      #b90000 100%
+    );
   width: var(--fill);
   overflow: hidden;
-  white-space: nowrap;
-  text-shadow:
-    1px 0 #8b0000,
-    -1px 0 #8b0000,
-    0 1px #8b0000,
-    0 -1px #8b0000,
-    0 0 10px rgba(255, 60, 60, .75);
 }
 
+/* Add a tiny pixel highlight */
+.zelda-heart-fill::after {
+  content: "";
+  position: absolute;
+  left: 22%;
+  top: 18%;
+  width: 18%;
+  height: 18%;
+  background: rgba(255, 220, 220, .9);
+  box-shadow:
+    6px 0 0 rgba(255, 180, 180, .55);
+}
+
+/* Optional: little bump when hearts change */
 #hearts-display.flash-hearts {
   animation: heartPop .22s ease-out;
 }
@@ -829,20 +850,17 @@ body {
     border-radius: 9px;
   }
 
+  @media (max-width: 700px) {
   #hearts-display {
-    grid-area: hearts;
-    justify-content: center;
-    gap: 12px;
-    padding: 2px 0 0;
+    gap: 10px;
     min-width: 0;
   }
 
-  .heart-pixel {
-    width: 30px;
-    height: 30px;
-    font-size: 30px;
-    line-height: 30px;
+  .zelda-heart {
+    width: 34px;
+    height: 31px;
   }
+}
 
   /* Make top wizard small on phone because the pop-up now carries the real feedback */
   #feedback {
