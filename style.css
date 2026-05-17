@@ -1,20 +1,27 @@
-:root{
-  --bg:#111;
-  --panel:#222;
-  --panel2:#2a2a2a;
-  --text:#f4f4f4;
-  --accent:#1e90ff;
-  --accent2:#16f3f8;
-  --glow: rgba(255,0,0,.7);
+:root {
+  --bg: #111;
+  --panel: #222;
+  --panel2: #2a2a2a;
+  --card: #333;
+  --text: #f4f4f4;
 
-  /* feedback colors */
-  --good:#16f3f8;   /* +10 */
-  --meh:#ffd84d;    /* 0 */
-  --bad:#ff4d4d;    /* -10 */
+  --accent: #1e90ff;
+  --accent2: #16f3f8;
 
-  /* wizard size */
+  --good: #16f3f8;
+  --meh: #ffd84d;
+  --bad: #ff4d4d;
+
+  --glow-red: rgba(255, 0, 0, .32);
+  --glow-cyan: rgba(22, 243, 248, .35);
+
   --wiz-size: 64px;
+  --radius: 12px;
 }
+
+/* ============================================================
+   BASE
+   ============================================================ */
 
 * {
   box-sizing: border-box;
@@ -24,11 +31,13 @@ html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   line-height: 1.6;
-  min-height: 100vh;
 }
 
 body {
@@ -37,172 +46,159 @@ body {
   align-items: flex-start;
 }
 
+button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
 #game-container {
-  width: 100%;
-  max-width: 1200px;
+  width: min(1650px, calc(100vw - 48px));
+  max-width: 1650px;
+  margin: clamp(8px, 1.5vh, 18px) auto;
+  padding:
+    clamp(14px, 2vh, 24px)
+    clamp(24px, 3vw, 38px)
+    clamp(18px, 3vh, 30px);
   background: var(--panel);
-  padding: 7px 30px 10px 30px;
-  margin: 16px auto;
-  border-radius: 12px;
-  box-shadow: 0 0 15px var(--glow);
-  box-sizing: border-box;
+  border: 1px solid rgba(255, 80, 80, .35);
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 22px rgba(255, 0, 0, .22),
+    0 0 60px rgba(255, 0, 0, .10);
 }
 
-/* ---------- Titles ---------- */
-h1{
-  margin:0 0 6px 0;
-  text-align:center;
-  text-shadow:0 0 6px #fdd;
-}
-h2{
-  margin:0 0 12px 0;
-  text-align:center;
-  color:var(--accent2);
-  text-shadow:0 0 6px #0ff;
+#game-container::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
-/* ---------- Toolbar ---------- */
-#toolbar{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:16px;
-  flex-wrap:nowrap;
-  overflow:hidden;
+/* ============================================================
+   TITLES
+   ============================================================ */
+
+h1 {
+  margin: 0 0 clamp(2px, .7vh, 6px);
+  text-align: center;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  line-height: 1.08;
+  text-shadow: 0 0 6px #fdd;
 }
 
-#teacher-badge,#score-badge{
-  background:#333;
-  padding:8px 10px;
-  border:1px solid #444;
-  border-radius:10px;
-  font-weight:700;
-  font-size:14px;
-  flex-shrink:0;
+h2,
+#scenario-title {
+  margin: 0 0 clamp(8px, 1.4vh, 14px);
+  text-align: center;
+  color: var(--accent2);
+  font-size: clamp(1.05rem, 2vw, 1.55rem);
+  line-height: 1.12;
+  text-shadow: 0 0 6px #0ff;
 }
 
-#toolbar .ghost{
-  background:transparent;
-  color:#fff;
-  border:1px solid #555;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  flex-shrink:0;
-  margin-left:auto;
-}
-#toolbar .ghost:hover{ border-color:#777; }
+/* ============================================================
+   TOOLBAR / HUD
+   ============================================================ */
 
-/* ---------- Feedback Panel ---------- */
-#feedback{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 12px;
-  border-radius:12px;
-  font-size:15px;
-  background:var(--panel);
-  border:1px solid #333;
-  flex:1 1 auto;
-  min-width:0;
-  transition:all .25s ease;
+#toolbar {
+  display: grid;
+  grid-template-columns:
+    max-content
+    max-content
+    max-content
+    minmax(360px, 520px)
+    max-content
+    max-content;
+  grid-template-areas:
+    "teacher points hearts feedback progress home";
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: clamp(10px, 1.6vh, 16px);
+  overflow: visible;
 }
 
-#coach-icon{
-  width:var(--wiz-size);
-  height:var(--wiz-size);
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:8px;
-  overflow:hidden;
-  background:#222;
-  border:2px solid transparent;
+#teacher-badge {
+  grid-area: teacher;
 }
 
-#coach-img{
-  width:100%; height:100%;
-  image-rendering:pixelated;
-  image-rendering:crisp-edges;
+#score-badge {
+  grid-area: points;
 }
 
-#feedback-text{
-  flex:1;
-  overflow:hidden;
-  white-space:normal;
-  word-wrap:break-word;
+#hearts-display {
+  grid-area: hearts;
 }
 
-/* --- Feedback states --- */
-#feedback.state-plus{
-  border-color:var(--good);
-  box-shadow:0 0 12px rgba(22,243,248,.3),
-              inset 0 0 6px rgba(22,243,248,.15);
-  color:#e6fdff;
-}
-#feedback.state-plus #coach-icon{
-  border-color:var(--good);
-  box-shadow:0 0 14px rgba(22,243,248,.6);
+#feedback {
+  grid-area: feedback;
 }
 
-#feedback.state-meh{
-  border-color:var(--meh);
-  box-shadow:0 0 12px rgba(255,216,77,.3),
-              inset 0 0 6px rgba(255,216,77,.15);
-  color:#fff7d6;
-}
-#feedback.state-meh #coach-icon{
-  border-color:var(--meh);
-  box-shadow:0 0 14px rgba(255,216,77,.6);
+#progress-btn {
+  grid-area: progress;
 }
 
-#feedback.state-minus{
-  border-color:var(--bad);
-  box-shadow:0 0 12px rgba(255,77,77,.3),
-              inset 0 0 6px rgba(255,77,77,.15);
-  color:#ffe0e0;
-}
-#feedback.state-minus #coach-icon{
-  border-color:var(--bad);
-  box-shadow:0 0 14px rgba(255,77,77,.6);
+#home-btn {
+  grid-area: home;
 }
 
-/* Flash */
-.flash{
-  animation:flash .25s ease-out;
-}
-@keyframes flash{
-  from{ transform:scale(1.02); opacity:0.85; }
-  to{   transform:scale(1);    opacity:1; }
+.spacer {
+  display: none;
 }
 
-/* ---------- Story Text ---------- */
-#story-text{
-  background:#333;
-  padding:8px 14px 8px 14px;
-  border-radius:10px;
-  margin-bottom:14px;
-  white-space:pre-wrap;
+#teacher-badge,
+#score-badge {
+  min-height: clamp(40px, 5vh, 52px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+  padding: clamp(5px, .9vh, 8px) clamp(9px, 1.2vw, 12px);
+  border: 1px solid #444;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: clamp(.78rem, 1.1vw, .95rem);
+  white-space: nowrap;
 }
 
-/* ---------- Hearts display ---------- */
+#toolbar .ghost {
+  min-height: clamp(38px, 5vh, 46px);
+  min-width: 120px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid #555;
+  padding: clamp(6px, .9vh, 8px) clamp(10px, 1.4vw, 14px);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: clamp(.8rem, 1vw, .95rem);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+#toolbar .ghost:hover {
+  border-color: var(--accent2);
+  box-shadow: 0 0 10px rgba(22, 243, 248, .25);
+}
+
+/* ============================================================
+   HEARTS
+   ============================================================ */
+
 #hearts-display {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  flex-shrink: 0;
+  gap: clamp(6px, .9vw, 10px);
+  min-width: 0;
+  padding: 0 8px;
   background: transparent;
-  padding: 0 6px;
-  min-width: 150px;
 }
 
 .zelda-heart {
   display: inline-block;
-  width: 42px;
-  height: 36px;
-  filter: drop-shadow(0 0 8px rgba(255, 40, 40, 0.45));
+  width: clamp(30px, 3.1vw, 42px);
+  height: clamp(26px, 2.7vw, 36px);
+  filter: drop-shadow(0 0 8px rgba(255, 40, 40, .45));
 }
 
 .zelda-heart-svg {
@@ -215,20 +211,20 @@ h2{
 
 .zelda-heart-svg .heart-shadow {
   fill: #5a0b0b;
-  opacity: 0.95;
+  opacity: .95;
 }
 
 .zelda-heart-svg .heart-empty {
   fill: #f2f2f2;
   stroke: #000;
-  stroke-width: 0.7;
+  stroke-width: .7;
   paint-order: stroke fill;
 }
 
 .zelda-heart-svg .heart-fill {
   fill: #df4332;
   stroke: #000;
-  stroke-width: 0.7;
+  stroke-width: .7;
   paint-order: stroke fill;
 }
 
@@ -241,56 +237,169 @@ h2{
 }
 
 #hearts-display.flash-hearts {
-  animation: heartPop 0.22s ease-out;
+  animation: heartPop .22s ease-out;
 }
 
 @keyframes heartPop {
   from { transform: scale(1.08); }
-  to   { transform: scale(1); }
+  to { transform: scale(1); }
 }
 
-@media (max-width: 700px) {
-  .zelda-heart {
-    width: 34px;
-    height: 29px;
+/* ============================================================
+   TOP WIZARD FEEDBACK PANEL
+   ============================================================ */
+
+#feedback {
+  width: 100%;
+  max-width: 520px;
+  min-width: 360px;
+  min-height: clamp(58px, 9vh, 96px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: clamp(7px, 1vh, 12px) clamp(9px, 1.3vw, 14px);
+  color: var(--text);
+  transition: all .25s ease;
+}
+
+#coach-icon {
+  width: clamp(44px, 5vw, var(--wiz-size));
+  height: clamp(44px, 5vw, var(--wiz-size));
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #222;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#coach-img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#feedback-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: break-word;
+  font-size: clamp(.82rem, 1vw, .98rem);
+  line-height: 1.3;
+}
+
+#feedback.state-plus {
+  border-color: var(--good);
+  box-shadow:
+    0 0 12px rgba(22, 243, 248, .3),
+    inset 0 0 6px rgba(22, 243, 248, .15);
+  color: #e6fdff;
+}
+
+#feedback.state-meh {
+  border-color: var(--meh);
+  box-shadow:
+    0 0 12px rgba(255, 216, 77, .3),
+    inset 0 0 6px rgba(255, 216, 77, .15);
+  color: #fff7d6;
+}
+
+#feedback.state-minus {
+  border-color: var(--bad);
+  box-shadow:
+    0 0 12px rgba(255, 77, 77, .3),
+    inset 0 0 6px rgba(255, 77, 77, .15);
+  color: #ffe0e0;
+}
+
+#feedback.state-plus #coach-icon {
+  border-color: var(--good);
+  box-shadow: 0 0 14px rgba(22, 243, 248, .6);
+}
+
+#feedback.state-meh #coach-icon {
+  border-color: var(--meh);
+  box-shadow: 0 0 14px rgba(255, 216, 77, .6);
+}
+
+#feedback.state-minus #coach-icon {
+  border-color: var(--bad);
+  box-shadow: 0 0 14px rgba(255, 77, 77, .6);
+}
+
+.flash {
+  animation: flash .25s ease-out;
+}
+
+@keyframes flash {
+  from {
+    transform: scale(1.02);
+    opacity: .85;
   }
-
-  #hearts-display {
-    gap: 8px;
-    min-width: 0;
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
-/* ---------- Choices ---------- */
-#choices{
-  display:grid;
-  gap:10px;
-  grid-template-columns:1fr;
+
+/* ============================================================
+   STORY + CHOICES
+   ============================================================ */
+
+#story-text {
+  background: #333;
+  padding: clamp(12px, 2vh, 22px);
+  border-radius: 10px;
+  margin-bottom: clamp(8px, 1.5vh, 14px);
+  white-space: pre-wrap;
+  font-size: clamp(.9rem, 1.05vw, 1.05rem);
+  line-height: clamp(1.32, 1.6vw, 1.55);
 }
 
-/* Item 7: uniform button size so appearance doesn't reveal the answer */
-#choices button{
-  width:100%;
-  background:var(--accent);
-  border:2px solid #111;
-  color:#fff;
-  padding:8px 8px;
-  border-radius:10px;
-  text-align:center;
-  font-weight:700;
-  cursor:pointer;
-  transition:transform .12s ease, background .12s ease;
-  min-height:64px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:15px;
-  line-height:1.4;
+#choices {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(8px, 1.4vh, 14px);
 }
-#choices button:hover{
-  background:var(--accent2);
-  color:#000;
-  transform:translateY(-2px);
+
+#choices button,
+.mission-card .action button {
+  width: 100%;
+  min-height: clamp(56px, 8.5vh, 92px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid #111;
+  border-radius: 12px;
+  padding: clamp(10px, 1.7vh, 18px) clamp(14px, 1.8vw, 22px);
+  font-size: clamp(.84rem, 1vw, 1rem);
+  line-height: 1.28;
+  font-weight: 700;
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+  box-shadow:
+    inset 0 -3px 0 rgba(0, 0, 0, .35),
+    0 4px 0 rgba(0, 0, 0, .35);
+  transition: transform .12s ease, background .12s ease;
 }
+
+#choices button:hover,
+.mission-card .action button:hover {
+  background: var(--accent2);
+  color: #000;
+  transform: translateY(-2px);
+}
+
 #choices button:focus,
 #choices button:active {
   outline: none;
@@ -299,150 +408,15 @@ h2{
   transform: none;
 }
 
-button {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* ---------- Points Popup ---------- */
-#points.flash{
-  animation:pop .35s ease;
-}
-@keyframes pop{
-  0%{transform:scale(1)}
-  30%{transform:scale(1.25)}
-  100%{transform:scale(1)}
-}
-
-/* ---------- Mission Cards ---------- */
-.mission-intro{
-  background:#333;
-  padding:12px;
-  border-radius:10px;
-  margin-top:6px;
-  margin-bottom:14px;
-}
-
-.mission-grid{
-  display:grid;
-  gap:12px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.mission-card{
-  background:#2a2a2a;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.mission-card h3{ margin:0; color:#fff; }
-.mission-card p { margin:0; font-size:14px; color:#ddd; opacity:.9; }
-.mission-card .action{ margin-top:auto; }
-.mission-card .action button{ width:100%; }
-.mission-card .action button:hover{ transform:translateY(-2px); }
-
-/* ---------- Summary Panel ---------- */
-#summary-panel{
-  background:var(--panel2);
-  border:1px solid #444;
-  padding:12px;
-  margin-top:16px;
-  border-radius:10px;
-  width:100%;
-  overflow-wrap:break-word;
-  word-break:break-word;
-  box-sizing:border-box;
-}
-
-#summary-panel .summary-score{
-  font-size:1.1rem;
-  margin-bottom:10px;
-}
-
-#summary-panel .summary-section{
-  margin-top:14px;
-}
-
-#summary-panel ul{
-  margin-left:20px;
-  margin-top:8px;
-}
-
 /* ============================================================
-   WEEBLY + MOBILE POLISH OVERRIDES
-   Put this at the very bottom of style.css
+   MISSION CARDS / HOME SCREEN
    ============================================================ */
 
-/* Keep the game centered inside Weebly embeds/pages */
-html,
-body {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0;
-}
-
-/* Softer, cleaner game frame */
-#game-container {
-  width: min(1200px, calc(100vw - 32px));
-  max-width: 1200px;
-  margin: 18px auto;
-  padding: 24px 38px 30px;
-  border: 1px solid rgba(255, 80, 80, 0.35);
-  box-shadow:
-    0 0 22px rgba(255, 0, 0, 0.22),
-    0 0 60px rgba(255, 0, 0, 0.10);
-}
-
-/* Let toolbar breathe instead of squeezing */
-#toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 14px;
-  overflow: visible;
-}
-
-#teacher-badge,
-#score-badge {
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-}
-
-/* Keep hearts visually grouped */
-#hearts-display {
-  min-width: auto;
-  padding: 0 8px;
-}
-
-/* Make the wizard feedback panel look intentional */
-#feedback {
-  flex: 0 1 480px;
-  max-width: 520px;
-  min-height: 96px;
-}
-
-/* Start Over should not fly too far right in Weebly */
-#toolbar .ghost {
-  margin-left: 0;
-  min-height: 46px;
-  white-space: nowrap;
-}
-
-/* Better card spacing */
 .mission-intro {
+  background: #333;
   padding: 12px;
-  margin-top: 18px;
+  border-radius: 10px;
+  margin: 18px 0 14px;
 }
 
 .mission-grid {
@@ -452,61 +426,356 @@ body {
 }
 
 .mission-card {
-  padding: 12px;
-  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   background: #262626;
+  border: 1px solid #444;
+  border-radius: 14px;
+  padding: 12px;
 }
 
-/* Home screen mission buttons: cleaner and one-line on desktop */
+.mission-card h3 {
+  margin: 0;
+  color: #fff;
+}
+
+.mission-card p {
+  margin: 0;
+  color: #ddd;
+  opacity: .9;
+  font-size: .9rem;
+  line-height: 1.35;
+}
+
+.mission-card .action {
+  margin-top: auto;
+}
+
 .mission-card .action button {
   min-height: 62px;
-  padding: 12px 14px;
-  font-size: 1rem;
-  line-height: 1.2;
   white-space: nowrap;
-  border-radius: 12px;
 }
 
-/* Scenario answer buttons: allow wrapping because answers are longer */
-#choices > button {
-  min-height: 78px;
-  padding: 10px 12px;
+/* ============================================================
+   SAME-DAY RETURN SCREEN
+   ============================================================ */
+
+#story-text.same-day-return {
+  padding: 14px 20px;
+  margin: 0 0 12px;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+  display: block;
+  text-align: left;
   white-space: normal;
   line-height: 1.35;
 }
 
-/* Better button visual depth */
-#choices button,
-.mission-card .action button {
+#story-text.same-day-return .same-day-lead {
+  display: block;
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 1.35rem;
+  line-height: 1.3;
+  font-weight: 900;
+  color: #fff;
+  text-align: left;
+}
+
+#story-text.same-day-return .same-day-recap,
+#story-text.same-day-return .same-day-feedback {
+  margin: 0 0 12px;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+#story-text.same-day-return .same-day-next {
+  margin: 0;
+  padding: 0;
+  font-size: 1.08rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+/* ============================================================
+   SUMMARY PANEL
+   ============================================================ */
+
+#summary-panel {
+  width: 100%;
+  background: var(--panel2);
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 16px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+#summary-panel .summary-score {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+#summary-panel .summary-section {
+  margin-top: 14px;
+}
+
+#summary-panel ul {
+  margin: 8px 0 0 20px;
+}
+
+/* ============================================================
+   ACTIVE MISSION DESKTOP SPLIT SCREEN
+   ============================================================ */
+
+@media (min-width: 900px) {
+  body.playing-mission #toolbar {
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      1fr
+      max-content
+      max-content;
+    grid-template-areas:
+      "teacher points hearts spacer progress home";
+  }
+
+  body.playing-mission #feedback {
+    display: none;
+  }
+
+  body.playing-mission #story-text {
+    width: 45%;
+    float: left;
+    min-height: clamp(230px, 42vh, 360px);
+    max-height: clamp(260px, 48vh, 450px);
+    overflow-y: auto;
+    margin: 0 clamp(14px, 2vw, 24px) 0 0;
+    padding: clamp(16px, 2.2vh, 22px);
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  body.playing-mission #choices {
+    width: calc(55% - clamp(14px, 2vw, 24px));
+    float: right;
+    display: grid;
+    gap: clamp(8px, 1.4vh, 14px);
+    margin: 0;
+  }
+
+  body.playing-mission #choices > button {
+    min-height: clamp(56px, 10vh, 92px);
+    text-align: left;
+    justify-content: flex-start;
+  }
+}
+
+/* Very short laptop/browser windows */
+@media (min-width: 900px) and (max-height: 720px) {
+  body.playing-mission #story-text {
+    min-height: 220px;
+    max-height: 38vh;
+  }
+
+  body.playing-mission #choices > button {
+    min-height: 54px;
+  }
+
+  h1 {
+    font-size: 1.55rem;
+  }
+
+  h2,
+  #scenario-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* ============================================================
+   CHOICE WIZARD CARD DURING PLAY
+   ============================================================ */
+
+.choice-wizard-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #222;
+  border: 2px solid var(--accent2);
+  border-radius: 14px;
+  padding: 12px;
   box-shadow:
-    inset 0 -3px 0 rgba(0, 0, 0, 0.35),
-    0 4px 0 rgba(0, 0, 0, 0.35);
+    0 0 14px rgba(22, 243, 248, .28),
+    inset 0 0 8px rgba(22, 243, 248, .08);
 }
 
-#choices button:hover,
-.mission-card .action button:hover {
-  transform: translateY(-2px);
+.choice-wizard-icon {
+  width: clamp(52px, 5vw, 70px);
+  height: clamp(52px, 5vw, 70px);
+  flex: 0 0 clamp(52px, 5vw, 70px);
+  border: 2px solid var(--accent2);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #111;
 }
 
-/* ---------- Tablet ---------- */
-@media (max-width: 900px) {
-  #game-container {
-    width: min(760px, calc(100vw - 24px));
-    padding: 18px 22px 24px;
-  }
+.choice-wizard-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
 
-  .mission-grid {
-    grid-template-columns: 1fr;
-  }
+.choice-wizard-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.35;
+}
 
-  .mission-card .action button {
-    white-space: normal;
-  }
+.choice-wizard-text strong {
+  color: var(--accent2);
+  font-size: clamp(.95rem, 1.1vw, 1.1rem);
+}
 
-  #feedback {
-    flex: 1 1 100%;
-    max-width: none;
-  }
+.choice-wizard-text span {
+  color: #f4f4f4;
+  font-size: clamp(.78rem, .95vw, .95rem);
+  line-height: 1.25;
+}
+
+/* ============================================================
+   WIZARD POP-UP MODAL
+   ============================================================ */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.wizard-modal {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: rgba(0, 0, 0, .82);
+  z-index: 999999;
+  padding:
+    clamp(18px, 6vh, 70px)
+    14px
+    14px;
+}
+
+.wizard-modal-card {
+  width: min(760px, 94vw);
+  max-height: 88dvh;
+  overflow-y: auto;
+  background: #1f1f1f;
+  border: 3px solid var(--accent2);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow:
+    0 0 24px rgba(22, 243, 248, .45),
+    inset 0 0 14px rgba(22, 243, 248, .08);
+}
+
+.wizard-modal.state-plus .wizard-modal-card {
+  border-color: var(--good);
+}
+
+.wizard-modal.state-meh .wizard-modal-card {
+  border-color: var(--meh);
+}
+
+.wizard-modal.state-minus .wizard-modal-card {
+  border-color: var(--bad);
+}
+
+.wizard-modal-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.wizard-modal-icon {
+  width: 88px;
+  height: 88px;
+  flex: 0 0 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  border: 3px solid currentColor;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.wizard-modal-icon img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.wizard-modal h2 {
+  margin: 0 0 6px;
+  text-align: left;
+  color: #fff;
+  font-size: 1.55rem;
+  line-height: 1.15;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.wizard-modal-tag {
+  display: inline-block;
+  background: #2c2c2c;
+  color: #f4f4f4;
+  border: 1px solid #555;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.wizard-modal-body {
+  background: #303030;
+  border: 1px solid #444;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.wizard-continue-btn {
+  width: 100%;
+  background: var(--accent2);
+  color: #000;
+  border: 2px solid #111;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.wizard-continue-btn:hover,
+.wizard-continue-btn:focus {
+  background: var(--accent);
+  color: #fff;
+  outline: none;
 }
 
 /* ============================================================
@@ -515,16 +784,16 @@ body {
 
 #progress-dashboard,
 #session-details {
+  width: 100%;
   background: #333;
   border-radius: 14px;
   padding: 12px;
-  width: 100%;
 }
 
 .wizard-summary-bubble {
   display: flex;
-  gap: 14px;
   align-items: flex-start;
+  gap: 14px;
   background: #252525;
   border: 2px solid var(--accent2);
   border-radius: 16px;
@@ -539,9 +808,9 @@ body {
   width: 74px;
   height: 74px;
   flex: 0 0 auto;
+  background: #111;
   border: 2px solid var(--accent2);
   border-radius: 12px;
-  background: #111;
   overflow: hidden;
 }
 
@@ -578,15 +847,15 @@ body {
 }
 
 .dashboard-number {
+  color: var(--accent2);
   font-size: 2rem;
   font-weight: 900;
-  color: var(--accent2);
   text-shadow: 0 0 8px rgba(22, 243, 248, .6);
 }
 
 .dashboard-label {
-  font-size: .9rem;
   color: #ddd;
+  font-size: .9rem;
 }
 
 .dashboard-section {
@@ -634,8 +903,8 @@ body {
 }
 
 .dashboard-session-date {
-  font-weight: 900;
   color: var(--accent2);
+  font-weight: 900;
 }
 
 .dashboard-session-main {
@@ -649,24 +918,25 @@ body {
 }
 
 .dashboard-session-link {
-  font-weight: 900;
   color: var(--accent2);
+  font-weight: 900;
   white-space: nowrap;
 }
 
-.dashboard-empty {
+.dashboard-empty,
+.session-detail-header,
+.decision-review-card {
   background: #252525;
   border: 1px solid #444;
   border-radius: 12px;
   padding: 12px;
+}
+
+.dashboard-empty {
   text-align: center;
 }
 
 .session-detail-header {
-  background: #252525;
-  border: 1px solid #444;
-  border-radius: 12px;
-  padding: 12px;
   margin-bottom: 16px;
 }
 
@@ -680,9 +950,9 @@ body {
 }
 
 .session-score-large {
+  color: #fff;
   font-size: 2rem;
   font-weight: 900;
-  color: #fff;
 }
 
 .session-score-large span {
@@ -692,9 +962,6 @@ body {
 
 .decision-review-card {
   background: #202020;
-  border: 1px solid #444;
-  border-radius: 12px;
-  padding: 12px;
   margin-bottom: 10px;
 }
 
@@ -727,12 +994,222 @@ body {
 }
 
 .decision-review-meta {
-  font-size: .85rem;
   color: #ddd;
   opacity: .85;
+  font-size: .85rem;
 }
 
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+  #game-container {
+    width: min(760px, calc(100vw - 24px));
+    padding: 18px 22px 24px;
+  }
+
+  #toolbar {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "teacher points"
+      "hearts hearts"
+      "feedback feedback"
+      "progress home";
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  #feedback {
+    min-width: 0;
+    max-width: none;
+  }
+
+  .mission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-card .action button {
+    white-space: normal;
+  }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
 @media (max-width: 700px) {
+  html,
+  body {
+    min-height: 100%;
+    background: #111;
+  }
+
+  body {
+    display: block;
+  }
+
+  #game-container {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    padding: 10px 10px 16px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  h1 {
+    font-size: 1.35rem;
+    line-height: 1.15;
+    margin: 4px 0;
+    letter-spacing: .5px;
+  }
+
+  h2,
+  #scenario-title {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+
+  #teacher-badge,
+  #score-badge {
+    width: 100%;
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: .82rem;
+  }
+
+  #hearts-display {
+    gap: 8px;
+    padding: 2px 0;
+  }
+
+  .zelda-heart {
+    width: 34px;
+    height: 29px;
+  }
+
+  #feedback {
+    width: 100%;
+    min-height: 52px;
+    padding: 7px 9px;
+    gap: 8px;
+    text-align: left;
+    border-radius: 10px;
+  }
+
+  #coach-icon,
+  #coach-img {
+    width: 42px;
+    height: 42px;
+  }
+
+  #feedback-text {
+    font-size: .82rem;
+    line-height: 1.25;
+  }
+
+  #progress-btn,
+  #home-btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: .82rem;
+  }
+
+  #story-text {
+    font-size: .94rem;
+    line-height: 1.38;
+    padding: 12px;
+    margin-bottom: 10px;
+    max-height: 34vh;
+    overflow-y: auto;
+  }
+
+  .mission-intro {
+    padding: 10px;
+    margin: 8px 0 0;
+  }
+
+  .mission-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .mission-card {
+    padding: 10px;
+    gap: 7px;
+    border-radius: 10px;
+  }
+
+  .mission-card h3 {
+    font-size: 1rem;
+  }
+
+  .mission-card p {
+    font-size: .82rem;
+    line-height: 1.25;
+  }
+
+  .mission-card .action button {
+    min-height: 46px;
+    padding: 9px 10px;
+    font-size: .9rem;
+    line-height: 1.15;
+  }
+
+  #choices {
+    gap: 8px;
+  }
+
+  #choices > button {
+    min-height: auto;
+    padding: 8px 10px;
+    font-size: .88rem;
+    line-height: 1.25;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .choice-wizard-card {
+    display: none;
+  }
+
+  .wizard-modal {
+    padding: 12px 10px 10px;
+  }
+
+  .wizard-modal-card {
+    width: 100%;
+    max-height: 90dvh;
+    padding: 12px;
+  }
+
+  .wizard-modal-top {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .wizard-modal-icon {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+  }
+
+  .wizard-modal h2 {
+    font-size: 1.15rem;
+  }
+
+  .wizard-modal-body {
+    font-size: .95rem;
+    line-height: 1.45;
+  }
+
   #progress-dashboard,
   #session-details {
     padding: 12px;
@@ -791,936 +1268,5 @@ body {
   .decision-review-top {
     flex-direction: column;
     gap: 2px;
-  }
-}
-
-/* ============================================================
-   CLEAN MOBILE APP-STYLE LAYOUT
-   Single source of truth for phone layout
-   ============================================================ */
-
-@media (max-width: 700px) {
-  html,
-  body {
-    width: 100%;
-    min-height: 100%;
-    overflow-x: hidden;
-    background: #111;
-  }
-
-  body {
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  #game-container {
-    width: 100%;
-    max-width: none;
-    min-height: 100vh;
-    margin: 0;
-    padding: 10px 10px 16px;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-  }
-
-  h1 {
-    font-size: 1.35rem;
-    line-height: 1.15;
-    margin: 4px 0 4px;
-    letter-spacing: 0.5px;
-  }
-
-  h2,
-  #scenario-title {
-    font-size: 1rem;
-    line-height: 1.2;
-    margin: 0 0 8px;
-  }
-
-  /* Mobile HUD */
-  #toolbar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "teacher points"
-      "hearts hearts"
-      "feedback feedback"
-      "progress home";
-    gap: 8px;
-    margin-bottom: 10px;
-    align-items: stretch;
-    overflow: visible;
-  }
-
-  #teacher-badge {
-    grid-area: teacher;
-  }
-
-  #score-badge {
-    grid-area: points;
-  }
-
-  #teacher-badge,
-  #score-badge {
-    width: 100%;
-    min-height: 38px;
-    padding: 6px 8px;
-    font-size: 0.82rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9px;
-    margin: 0;
-  }
-
-  #hearts-display {
-    grid-area: hearts;
-    justify-content: center;
-    gap: 8px;
-    min-width: 0;
-    padding: 2px 0;
-  }
-
-  .zelda-heart {
-    width: 34px;
-    height: 29px;
-  }
-
-  #feedback {
-    grid-area: feedback;
-    width: 100%;
-    min-height: 52px;
-    padding: 7px 9px;
-    flex-direction: row;
-    gap: 8px;
-    text-align: left;
-    border-radius: 10px;
-    max-width: none;
-  }
-
-  #coach-icon {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-  }
-
-  #coach-img {
-    width: 42px;
-    height: 42px;
-  }
-
-  #feedback-text {
-    font-size: 0.82rem;
-    line-height: 1.25;
-  }
-
-  #progress-btn {
-    grid-area: progress;
-  }
-
-  #home-btn {
-    grid-area: home;
-  }
-
-  #progress-btn,
-  #home-btn {
-    width: 100%;
-    min-width: 0;
-    min-height: 40px;
-    margin: 0;
-    padding: 8px 10px;
-    font-size: 0.82rem;
-    white-space: nowrap;
-    justify-content: center;
-    text-align: center;
-  }
-
-  #toolbar .ghost {
-    margin-left: 0;
-    grid-column: auto;
-  }
-
-  .spacer {
-    display: none;
-  }
-
-  #story-text {
-    font-size: 0.94rem;
-    line-height: 1.38;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    max-height: 34vh;
-    overflow-y: auto;
-  }
-
-  .mission-intro {
-    padding: 10px;
-    margin: 8px 0 0;
-    border-radius: 10px;
-  }
-
-  .mission-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-
-  .mission-card {
-    padding: 10px;
-    border-radius: 10px;
-    gap: 7px;
-  }
-
-  .mission-card h3 {
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .mission-card p {
-    font-size: 0.82rem;
-    line-height: 1.25;
-  }
-
-  .mission-card .action button {
-    width: 100%;
-    min-height: 46px;
-    padding: 9px 10px;
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.15;
-    white-space: normal;
-  }
-
-  #choices {
-    gap: 8px;
-  }
-
-  #choices > button {
-    width: 100%;
-    min-height: auto;
-    padding: 8px 8px;
-    margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.25;
-    border-radius: 10px;
-    white-space: normal;
-    text-align: left;
-    justify-content: flex-start;
-  }
-
-  #choices button,
-  .mission-card .action button {
-    box-shadow:
-      inset 0 -2px 0 rgba(0, 0, 0, 0.35),
-      0 2px 0 rgba(0, 0, 0, 0.35);
-  }
-
-  #summary-panel {
-    font-size: 0.9rem;
-    line-height: 1.35;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 10px;
-  }
-
-  #summary-panel .summary-score {
-    font-size: 1rem;
-  }
-
-  #summary-panel ul {
-    margin-left: 16px;
-    padding-left: 8px;
-  }
-
-  .wizard-modal {
-    padding: 10px;
-    align-items: center;
-  }
-
-  .wizard-modal-card {
-    width: 100%;
-    max-height: 92vh;
-    overflow-y: auto;
-    padding: 14px;
-    border-radius: 14px;
-  }
-
-  .wizard-modal-top {
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .wizard-modal-icon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .wizard-modal h2 {
-    font-size: 1.1rem;
-    line-height: 1.2;
-    margin-bottom: 4px;
-  }
-
-  .wizard-modal-tag {
-    font-size: 0.78rem;
-    padding: 3px 7px;
-  }
-
-  .wizard-modal-body {
-    font-size: 0.93rem;
-    line-height: 1.45;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .wizard-continue-btn {
-    min-height: 48px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
-  }
-}
-/* ============================================================
-   DESKTOP SPLIT-SCREEN PLAY MODE
-   Applies only during active missions on wider screens
-   ============================================================ */
-
-@media (min-width: 900px) {
-  body.playing-mission #game-container {
-    max-width: 1180px;
-    padding: 24px 34px 30px;
-  }
-
-  body.playing-mission #toolbar {
-    display: grid;
-    grid-template-columns: auto auto auto 1fr auto auto;
-    grid-template-areas:
-      "teacher points hearts spacer progress home";
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  body.playing-mission #teacher-badge {
-    grid-area: teacher;
-  }
-
-  body.playing-mission #score-badge {
-    grid-area: points;
-  }
-
-  body.playing-mission #hearts-display {
-    grid-area: hearts;
-  }
-
-  body.playing-mission #progress-btn {
-    grid-area: progress;
-  }
-
-  body.playing-mission #home-btn {
-    grid-area: home;
-  }
-
-  body.playing-mission .spacer {
-    grid-area: spacer;
-  }
-
-  /* Hide top wizard during mission play.
-     Wizard still appears in the pop-up after answers. */
-  body.playing-mission #feedback {
-    display: none;
-  }
-
-  /* Split the play area */
-  body.playing-mission #story-text {
-    width: 48%;
-    min-height: 340px;
-    float: left;
-    margin: 0 22px 0 0;
-    padding: 18px;
-    font-size: 1.05rem;
-    line-height: 1.55;
-  }
-
-  body.playing-mission #choices {
-    width: calc(52% - 22px);
-    float: right;
-    display: grid;
-    gap: 12px;
-    margin: 0;
-  }
-
-  body.playing-mission #choices::after {
-    content: "";
-    display: block;
-    clear: both;
-  }
-
-  body.playing-mission #choices > button {
-    min-height: 92px;
-    padding: 10px 12px;
-    font-size: 1rem;
-    line-height: 1.35;
-    text-align: left;
-    justify-content: flex-start;
-  }
-}
-@media (min-width: 900px) {
-  body.playing-mission .choice-wizard-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: #222;
-    border: 2px solid var(--accent2);
-    border-radius: 14px;
-    padding: 12px;
-    box-shadow:
-      0 0 14px rgba(22, 243, 248, .28),
-      inset 0 0 8px rgba(22, 243, 248, .08);
-  }
-
-  body.playing-mission .choice-wizard-icon {
-    width: 70px;
-    height: 70px;
-    flex: 0 0 auto;
-    border: 2px solid var(--accent2);
-    border-radius: 10px;
-    overflow: hidden;
-    background: #111;
-  }
-
-  body.playing-mission .choice-wizard-icon img {
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-  }
-
-  body.playing-mission .choice-wizard-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    line-height: 1.35;
-  }
-
-  body.playing-mission .choice-wizard-text strong {
-    color: var(--accent2);
-    font-size: 1.1rem;
-  }
-
-  body.playing-mission .choice-wizard-text span {
-    color: #f4f4f4;
-    font-size: .95rem;
-  }
-}
-/* ---------- Safe Choice Wizard Card Sizing ---------- */
-.choice-wizard-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: #222;
-  border: 2px solid var(--accent2);
-  border-radius: 14px;
-  padding: 12px;
-  box-shadow:
-    0 0 14px rgba(22, 243, 248, .28),
-    inset 0 0 8px rgba(22, 243, 248, .08);
-}
-
-.choice-wizard-icon {
-  width: 70px;
-  height: 70px;
-  flex: 0 0 70px;
-  border: 2px solid var(--accent2);
-  border-radius: 10px;
-  overflow: hidden;
-  background: #111;
-}
-
-.choice-wizard-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-.choice-wizard-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  line-height: 1.35;
-}
-
-.choice-wizard-text strong {
-  color: var(--accent2);
-  font-size: 1.1rem;
-}
-
-.choice-wizard-text span {
-  color: #f4f4f4;
-  font-size: .95rem;
-}
-
-@media (max-width: 700px) {
-  .choice-wizard-card {
-    display: none;
-  }
-}
-/* ============================================================
-   ADAPTIVE DESKTOP / LAPTOP GAME VIEW
-   Makes the game scale to available screen space
-   ============================================================ */
-
-@media (min-width: 900px) {
-  #game-container {
-    width: min(1450px, calc(100vw - 24px));
-    max-width: 1450px;
-
-    /* Shrinks padding on shorter screens, expands on taller screens */
-    padding:
-      clamp(12px, 2vh, 24px)
-      clamp(20px, 3vw, 38px)
-      clamp(16px, 3vh, 30px);
-
-    margin: clamp(6px, 1.6vh, 18px) auto;
-  }
-
-  h1 {
-    font-size: clamp(1.65rem, 3vw, 2.35rem);
-    line-height: 1.08;
-    margin: 0 0 clamp(2px, .7vh, 6px);
-  }
-
-  h2,
-  #scenario-title {
-    font-size: clamp(1.05rem, 2vw, 1.55rem);
-    line-height: 1.12;
-    margin: 0 0 clamp(6px, 1.4vh, 14px);
-  }
-
-  #toolbar {
-    gap: clamp(8px, 1.4vw, 14px);
-    margin-bottom: clamp(8px, 1.6vh, 16px);
-  }
-
-  #teacher-badge,
-  #score-badge {
-    min-height: clamp(38px, 5vh, 52px);
-    padding: clamp(5px, .9vh, 8px) clamp(8px, 1.2vw, 12px);
-    font-size: clamp(0.78rem, 1.1vw, 0.95rem);
-  }
-
-  .zelda-heart {
-    width: clamp(30px, 3.1vw, 42px);
-    height: clamp(26px, 2.7vw, 36px);
-  }
-
-  #hearts-display {
-    gap: clamp(6px, .9vw, 10px);
-  }
-
-  #feedback {
-    min-height: clamp(58px, 9vh, 96px);
-    max-width: clamp(390px, 38vw, 520px);
-    padding: clamp(7px, 1vh, 12px) clamp(9px, 1.3vw, 14px);
-  }
-
-  #coach-icon {
-    width: clamp(44px, 5vw, 64px);
-    height: clamp(44px, 5vw, 64px);
-  }
-
-  #feedback-text {
-    font-size: clamp(0.82rem, 1vw, 0.98rem);
-    line-height: 1.3;
-  }
-
-  #toolbar .ghost {
-    min-height: clamp(38px, 5vh, 46px);
-    padding: clamp(6px, .9vh, 8px) clamp(10px, 1.4vw, 14px);
-    font-size: clamp(0.8rem, 1vw, 0.95rem);
-  }
-
-  #story-text {
-    padding: clamp(12px, 2vh, 22px);
-    font-size: clamp(0.9rem, 1.05vw, 1.05rem);
-    line-height: clamp(1.32, 1.6vw, 1.55);
-    margin-bottom: clamp(8px, 1.5vh, 14px);
-  }
-
-  #choices {
-    gap: clamp(8px, 1.4vh, 14px);
-  }
-
-  #choices > button {
-    min-height: clamp(56px, 8.5vh, 92px);
-    padding: clamp(10px, 1.7vh, 18px) clamp(14px, 1.8vw, 22px);
-    font-size: clamp(0.84rem, 1vw, 1rem);
-    line-height: 1.28;
-  }
-}
-
-/* ============================================================
-   ADAPTIVE DESKTOP SPLIT-SCREEN PLAY MODE
-   Keeps story + choices visible on different screen sizes
-   ============================================================ */
-
-@media (min-width: 900px) {
-  body.playing-mission #game-container {
-    max-width: min(1450px, calc(100vw - 24px));
-  }
-
-  body.playing-mission #toolbar {
-    display: grid;
-    grid-template-columns: auto auto auto 1fr auto auto;
-    grid-template-areas:
-      "teacher points hearts spacer progress home";
-    align-items: center;
-    gap: clamp(8px, 1.3vw, 14px);
-    margin-bottom: clamp(8px, 1.5vh, 16px);
-  }
-
-  body.playing-mission #teacher-badge {
-    grid-area: teacher;
-  }
-
-  body.playing-mission #score-badge {
-    grid-area: points;
-  }
-
-  body.playing-mission #hearts-display {
-    grid-area: hearts;
-  }
-
-  body.playing-mission #progress-btn {
-    grid-area: progress;
-  }
-
-  body.playing-mission #home-btn {
-    grid-area: home;
-  }
-
-  body.playing-mission .spacer {
-    grid-area: spacer;
-  }
-
-  body.playing-mission #feedback {
-    display: none;
-  }
-
-  body.playing-mission #story-text {
-    width: 47%;
-    float: left;
-    min-height: clamp(230px, 42vh, 360px);
-    max-height: clamp(260px, 48vh, 450px);
-    overflow-y: auto;
-    margin: 0 clamp(14px, 2vw, 24px) 0 0;
-    padding: clamp(18px, 2.2vh, 22px);
-    font-size: clamp(1.05rem, 1.05vw, 1.05rem);
-    line-height: clamp(1.32, 1.5vw, 1.55);
-  }
-
-  body.playing-mission #choices {
-    width: calc(53% - clamp(14px, 2vw, 24px));
-    float: right;
-    display: grid;
-    gap: clamp(8px, 1.4vh, 14px);
-    margin: 0;
-  }
-
-  body.playing-mission #choices > button {
-    min-height: clamp(56px, 10vh, 92px);
-    padding: clamp(10px, 1.8vh, 18px) clamp(14px, 1.8vw, 22px);
-    font-size: clamp(0.84rem, 1vw, 1rem);
-    line-height: 1.28;
-    text-align: left;
-    justify-content: flex-start;
-  }
-
-  body.playing-mission .choice-wizard-card {
-    padding: clamp(10px, 1.6vh, 10px);
-    gap: clamp(10px, 1.2vw, 14px);
-  }
-
-  body.playing-mission .choice-wizard-icon {
-    width: clamp(52px, 5vw, 70px);
-    height: clamp(52px, 5vw, 70px);
-    flex-basis: clamp(52px, 5vw, 70px);
-  }
-
-  body.playing-mission .choice-wizard-text strong {
-    font-size: clamp(0.95rem, 1.1vw, 1.1rem);
-  }
-
-  body.playing-mission .choice-wizard-text span {
-    font-size: clamp(0.78rem, .95vw, .95rem);
-    line-height: 1.25;
-  }
-}
-
-/* Very short laptop/browser windows */
-@media (min-width: 900px) and (max-height: 720px) {
-  body.playing-mission #story-text {
-    min-height: 220px;
-    max-height: 38vh;
-  }
-
-  body.playing-mission #choices > button {
-    min-height: 54px;
-  }
-
-  h1 {
-    font-size: 1.55rem;
-  }
-
-  h2,
-  #scenario-title {
-    font-size: 1.05rem;
-  }
-}
-
-/* ============================================================
- Same-Day Return Screen
-   ============================================================ */
-
-#story-text.same-day-return {
-  padding: 14px 20px !important;
-  margin: 0 0 12px 0 !important;
-
-  min-height: 0 !important;
-  max-height: none !important;
-  height: auto !important;
-
-  display: block !important;
-  text-align: left !important;
-  white-space: normal !important;
-  line-height: 1.35 !important;
-}
-
-#story-text.same-day-return .same-day-lead {
-  display: block !important;
-  margin: 0 0 12px 0 !important;
-  padding: 0 !important;
-
-  font-size: 1.35rem !important;
-  line-height: 1.3 !important;
-  font-weight: 900 !important;
-  color: #fff !important;
-  text-align: left !important;
-}
-
-#story-text.same-day-return .same-day-recap {
-  margin: 0 0 12px 0 !important;
-  padding: 0 !important;
-
-  font-size: 1rem !important;
-  line-height: 1.4 !important;
-  text-align: left !important;
-}
-
-#story-text.same-day-return .same-day-feedback {
-  margin: 0 0 12px 0 !important;
-  padding: 0 !important;
-
-  font-size: 1rem !important;
-  line-height: 1.4 !important;
-  text-align: left !important;
-}
-
-#story-text.same-day-return .same-day-next {
-  margin: 0 !important;
-  padding: 0 !important;
-
-  font-size: 1.08rem !important;
-  line-height: 1.35 !important;
-  text-align: left !important;
-}
-/* ============================================================
-   STABLE WIZARD POP-UP FEEDBACK
-   ============================================================ */
-
-body.modal-open {
-  overflow: hidden !important;
-}
-
-.wizard-modal {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100dvh !important;
-  background: rgba(0, 0, 0, .82) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 999999 !important;
-  padding-top: clamp(18px, 6vh, 70px) !important;
-  padding-left: 14px !important;
-  padding-right: 14px !important;
-  padding-bottom: 14px !important;
-}
-
-.wizard-modal-card {
-  width: min(760px, 94vw) !important;
-  max-height: 88dvh !important;
-  overflow-y: auto !important;
-  background: #1f1f1f !important;
-  border: 3px solid var(--accent2) !important;
-  border-radius: 18px !important;
-  padding: 16px !important;
-  margin-top: 0 !important;
-  box-shadow:
-    0 0 24px rgba(22, 243, 248, .45),
-    inset 0 0 14px rgba(22, 243, 248, .08) !important;
-}
-
-.wizard-modal.state-plus .wizard-modal-card {
-  border-color: var(--good) !important;
-}
-
-.wizard-modal.state-meh .wizard-modal-card {
-  border-color: var(--meh) !important;
-}
-
-.wizard-modal.state-minus .wizard-modal-card {
-  border-color: var(--bad) !important;
-}
-
-.wizard-modal-top {
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-  margin-bottom: 12px !important;
-}
-
-.wizard-modal-icon {
-  width: 88px !important;
-  height: 88px !important;
-  flex: 0 0 88px !important;
-  border: 3px solid currentColor !important;
-  border-radius: 14px !important;
-  background: #111 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  overflow: hidden !important;
-}
-
-.wizard-modal-icon img {
-  width: 100% !important;
-  height: 100% !important;
-  image-rendering: pixelated !important;
-  image-rendering: crisp-edges !important;
-}
-
-.wizard-modal h2 {
-  margin: 0 0 6px 0 !important;
-  text-align: left !important;
-  font-size: 1.55rem !important;
-  line-height: 1.15 !important;
-  color: #fff !important;
-  text-shadow: 0 0 8px currentColor !important;
-}
-
-.wizard-modal-tag {
-  display: inline-block !important;
-  font-weight: 700 !important;
-  font-size: .85rem !important;
-  padding: 5px 9px !important;
-  border: 1px solid #555 !important;
-  border-radius: 999px !important;
-  background: #2c2c2c !important;
-  color: #f4f4f4 !important;
-}
-
-.wizard-modal-body {
-  background: #303030 !important;
-  border: 1px solid #444 !important;
-  border-radius: 14px !important;
-  padding: 14px !important;
-  font-size: 1.05rem !important;
-  line-height: 1.5 !important;
-  white-space: normal !important;
-  margin-bottom: 14px !important;
-}
-
-.wizard-continue-btn {
-  width: 100% !important;
-  background: var(--accent2) !important;
-  color: #000 !important;
-  border: 2px solid #111 !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  font-size: 1rem !important;
-  font-weight: 900 !important;
-  cursor: pointer !important;
-}
-
-.wizard-continue-btn:hover,
-.wizard-continue-btn:focus {
-  background: var(--accent) !important;
-  color: #fff !important;
-  outline: none !important;
-}
-
-@media (max-width: 700px) {
-  .wizard-modal {
-    padding-top: 12px !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    padding-bottom: 10px !important;
-  }
-
-  .wizard-modal-card {
-    width: 100% !important;
-    max-height: 90dvh !important;
-    padding: 12px !important;
-  }
-
-  .wizard-modal-top {
-    gap: 10px !important;
-    align-items: flex-start !important;
-  }
-
-  .wizard-modal-icon {
-    width: 64px !important;
-    height: 64px !important;
-    flex-basis: 64px !important;
-  }
-
-  .wizard-modal h2 {
-    font-size: 1.15rem !important;
-  }
-
-  .wizard-modal-body {
-    font-size: .95rem !important;
-    line-height: 1.45 !important;
-  }
-}
-/* ============================================================
-   FINAL WIDTH OVERRIDE FOR WEEBLY DESKTOP
-   Lets game use more horizontal space
-   ============================================================ */
-
-@media (min-width: 900px) {
-  #game-container {
-    width: min(1720px, calc(100vw - 40px)) !important;
-    max-width: 1720px !important;
-  }
-
-  body.playing-mission #game-container {
-    width: min(1720px, calc(100vw - 40px)) !important;
-    max-width: 1720px !important;
-  }
-
-  body.playing-mission #story-text {
-    width: 45% !important;
-  }
-
-  body.playing-mission #choices {
-    width: calc(55% - clamp(14px, 2vw, 24px)) !important;
   }
 }
