@@ -1700,3 +1700,27 @@ body.modal-open {
     line-height: 1.45 !important;
   }
 }
+/* ============================================================
+   FINAL WIDTH OVERRIDE FOR WEEBLY DESKTOP
+   Lets game use more horizontal space
+   ============================================================ */
+
+@media (min-width: 900px) {
+  #game-container {
+    width: min(1720px, calc(100vw - 40px)) !important;
+    max-width: 1720px !important;
+  }
+
+  body.playing-mission #game-container {
+    width: min(1720px, calc(100vw - 40px)) !important;
+    max-width: 1720px !important;
+  }
+
+  body.playing-mission #story-text {
+    width: 45% !important;
+  }
+
+  body.playing-mission #choices {
+    width: calc(55% - clamp(14px, 2vw, 24px)) !important;
+  }
+}
