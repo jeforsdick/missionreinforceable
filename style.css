@@ -98,7 +98,7 @@ h2{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:10px 14px;
+  padding:8px 12px;
   border-radius:12px;
   font-size:15px;
   background:var(--panel);
@@ -180,7 +180,7 @@ h2{
 /* ---------- Story Text ---------- */
 #story-text{
   background:#333;
-  padding:8px 18px 8px 18px;
+  padding:8px 14px 8px 14px;
   border-radius:10px;
   margin-bottom:14px;
   white-space:pre-wrap;
@@ -273,7 +273,7 @@ h2{
   background:var(--accent);
   border:2px solid #111;
   color:#fff;
-  padding:14px 18px;
+  padding:10px 10px;
   border-radius:10px;
   text-align:center;
   font-weight:700;
@@ -348,7 +348,7 @@ button {
 #summary-panel{
   background:var(--panel2);
   border:1px solid #444;
-  padding:18px;
+  padding:12px;
   margin-top:16px;
   border-radius:10px;
   width:100%;
@@ -379,7 +379,7 @@ button {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: 18px;
+  padding: 12px;
   animation: wizardBackdropIn .18s ease-out;
 }
 
@@ -388,7 +388,7 @@ button {
   background: #1f1f1f;
   border: 3px solid var(--accent2);
   border-radius: 18px;
-  padding: 24px;
+  padding: 12px;
   box-shadow:
     0 0 24px rgba(22, 243, 248, .45),
     inset 0 0 14px rgba(22, 243, 248, .08);
@@ -467,7 +467,7 @@ button {
   background: #303030;
   border: 1px solid #444;
   border-radius: 14px;
-  padding: 18px;
+  padding: 12px;
   font-size: 1.2rem;
   line-height: 1.65;
   white-space: normal;
@@ -480,7 +480,7 @@ button {
   color: #fff;
   border: 2px solid #111;
   border-radius: 12px;
-  padding: 16px 18px;
+  padding: 12px 12px;
   font-size: 1.15rem;
   font-weight: 900;
   cursor: pointer;
@@ -511,7 +511,7 @@ button {
 
 @media (max-width: 600px) {
   .wizard-modal-card {
-    padding: 16px;
+    padding: 12px;
   }
 
   .wizard-modal-top {
@@ -603,7 +603,7 @@ body {
 
 /* Better card spacing */
 .mission-intro {
-  padding: 18px;
+  padding: 12px;
   margin-top: 18px;
 }
 
@@ -614,7 +614,7 @@ body {
 }
 
 .mission-card {
-  padding: 16px;
+  padding: 12px;
   border-radius: 14px;
   background: #262626;
 }
@@ -622,7 +622,7 @@ body {
 /* Home screen mission buttons: cleaner and one-line on desktop */
 .mission-card .action button {
   min-height: 62px;
-  padding: 14px 18px;
+  padding: 12px 14px;
   font-size: 1rem;
   line-height: 1.2;
   white-space: nowrap;
@@ -632,7 +632,7 @@ body {
 /* Scenario answer buttons: allow wrapping because answers are longer */
 #choices > button {
   min-height: 78px;
-  padding: 16px 20px;
+  padding: 10px 12px;
   white-space: normal;
   line-height: 1.35;
 }
@@ -679,7 +679,7 @@ body {
 #session-details {
   background: #333;
   border-radius: 14px;
-  padding: 18px;
+  padding: 12px;
   width: 100%;
 }
 
@@ -690,7 +690,7 @@ body {
   background: #252525;
   border: 2px solid var(--accent2);
   border-radius: 16px;
-  padding: 16px;
+  padding: 12px;
   margin-bottom: 18px;
   box-shadow:
     0 0 18px rgba(22, 243, 248, .25),
@@ -735,7 +735,7 @@ body {
   background: #252525;
   border: 1px solid #444;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   text-align: center;
 }
 
@@ -755,7 +755,7 @@ body {
   background: #282828;
   border: 1px solid #444;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   margin-bottom: 16px;
 }
 
@@ -820,7 +820,7 @@ body {
   background: #252525;
   border: 1px solid #444;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   text-align: center;
 }
 
@@ -828,7 +828,7 @@ body {
   background: #252525;
   border: 1px solid #444;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   margin-bottom: 16px;
 }
 
@@ -1301,7 +1301,7 @@ body {
     min-height: 340px;
     float: left;
     margin: 0 22px 0 0;
-    padding: 22px;
+    padding: 12px;
     font-size: 1.05rem;
     line-height: 1.55;
   }
@@ -1322,7 +1322,7 @@ body {
 
   body.playing-mission #choices > button {
     min-height: 92px;
-    padding: 18px 22px;
+    padding: 12px 14px;
     font-size: 1rem;
     line-height: 1.35;
     text-align: left;
@@ -1337,7 +1337,7 @@ body {
     background: #222;
     border: 2px solid var(--accent2);
     border-radius: 14px;
-    padding: 14px;
+    padding: 12px;
     box-shadow:
       0 0 14px rgba(22, 243, 248, .28),
       inset 0 0 8px rgba(22, 243, 248, .08);
@@ -1385,7 +1385,7 @@ body {
   background: #222;
   border: 2px solid var(--accent2);
   border-radius: 14px;
-  padding: 14px;
+  padding: 12px;
   box-shadow:
     0 0 14px rgba(22, 243, 248, .28),
     inset 0 0 8px rgba(22, 243, 248, .08);
@@ -1604,7 +1604,7 @@ body {
   }
 
   body.playing-mission .choice-wizard-card {
-    padding: clamp(10px, 1.6vh, 14px);
+    padding: clamp(10px, 1.6vh, 10px);
     gap: clamp(10px, 1.2vw, 14px);
   }
 
