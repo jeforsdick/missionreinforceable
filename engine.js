@@ -461,6 +461,7 @@ function pickScenario(pool, rnd) { return sample(pool, 1, rnd)[0]; }
 function renderIntroCards() {
   setPlayMode(false);
 
+  if (storyText) storyText.classList.remove('same-day-return');
   if (storyText) storyText.style.display = 'block';
   const oldSummary = document.getElementById('summary-panel');
   if (oldSummary) oldSummary.remove();
@@ -550,18 +551,29 @@ function renderSameDayReturnScreen(result) {
     : "earlier today";
 
   if (storyText) {
-    storyText.innerHTML = `
-  <p class="same-day-lead">You already completed a Mission: Reinforceable session today.</p>
+  storyText.classList.add('same-day-return');
 
-<strong>Today's recap:</strong>
-Mission type: ${result.mode || "Mission"}
-Score: ${result.points} / ${result.max_possible} (${pct}%)
-Completed: ${completedTime}
+  storyText.innerHTML = `
+    <div class="same-day-lead">
+      You already completed a Mission: Reinforceable session today.
+    </div>
 
-${result.feedback_message || ""}
+    <div class="same-day-recap">
+      <strong>Today's recap:</strong><br>
+      Mission type: ${result.mode || "Mission"}<br>
+      Score: ${result.points} / ${result.max_possible} (${pct}%)<br>
+      Completed: ${completedTime}
+    </div>
 
-<strong>What would you like to do next?</strong>`;
-  }
+    <div class="same-day-feedback">
+      ${result.feedback_message || ""}
+    </div>
+
+    <div class="same-day-next">
+      <strong>What would you like to do next?</strong>
+    </div>
+  `;
+}
 
   if (!choicesDiv) return;
 
@@ -735,9 +747,10 @@ if (node.feedback) {
 
   } else {
     if (storyText) {
-      storyText.style.display = 'block';
-      storyText.textContent = node.text;
-    }
+  storyText.classList.remove('same-day-return');
+  storyText.style.display = 'block';
+  storyText.textContent = node.text;
+}
 
     const old = document.getElementById('summary-panel');
     if (old) old.remove();
