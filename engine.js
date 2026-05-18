@@ -242,11 +242,21 @@ function wizardButtonTextFromDelta(delta) {
 function buildWizardFeedback(opt) {
   const base = opt.feedback || '';
 
-  // If you later add custom wizard text in content.js, it will use that first.
-  if (opt.wizard) return opt.wizard;
+  const heartLine = opt.heartReview
+    ? `Heart change: ${opt.heartReview}\n\n`
+    : '';
+
+  const outcomeLine = opt.studentOutcome
+    ? `Student outcome: ${opt.studentOutcome}\n\n`
+    : '';
+
+  // Custom content text comes from the mission file.
+  if (opt.wizard) {
+    return `${heartLine}${outcomeLine}${opt.wizard}`;
+  }
 
   if (opt.delta > 0) {
-    return `Strong move. The classroom stays steady because you gave the student a clear path forward.
+    return `${heartLine}${outcomeLine}Strong move. The classroom stays steady because you gave the student a clear path forward.
 
 The student knows exactly what to do next, the peer audience stays quiet, and the routine keeps moving.
 
@@ -254,14 +264,14 @@ ${base}`;
   }
 
   if (opt.delta === 0) {
-    return `The moment wobbles. The student is not fully escalated, but the support is not strong enough yet.
+    return `${heartLine}${outcomeLine}The moment wobbles. The student is not fully escalated, but the support is not strong enough yet.
 
 The student pauses, scans for peer attention, and the routine starts to lose momentum. You still have a chance to tighten the next move.
 
 ${base}`;
   }
 
-  return `Uh oh. That choice feeds the problem.
+  return `${heartLine}${outcomeLine}Uh oh. That choice feeds the problem.
 
 The student gets more attention, peers start watching, and the routine begins to unravel. The next response matters because you now need to repair momentum and reduce escalation risk.
 
@@ -560,6 +570,26 @@ function buildStepDisplayText(step) {
 
   return step.text || '';
 }
+
+function formatHeartAmount(value) {
+  const rounded = Math.round(value * 4) / 4;
+  return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+}
+
+function buildHeartReview(before, after, countsForHearts) {
+  if (!countsForHearts) return '';
+
+  const change = Math.round((after - before) * 4) / 4;
+
+  if (change === 0) {
+    return `Hearts unchanged (${formatHeartAmount(after)} of ${maxHearts} hearts left)`;
+  }
+
+  const sign = change > 0 ? '+' : '';
+  const heartWord = Math.abs(change) === 1 ? 'heart' : 'hearts';
+
+  return `${sign}${formatHeartAmount(change)} ${heartWord} (${formatHeartAmount(after)} of ${maxHearts} hearts left)`;
+}
 /* ============================================================
    DYNAMIC MISSION BUILDER
    ============================================================ */
@@ -782,13 +812,15 @@ for (let stepKey in scn.steps) {
     for (let chKey in step.choices) {
       const ch  = step.choices[chKey];
 const opt = {
-  text:         ch.text,
-  delta:        ch.score,
-  feedback:     ch.feedback,
-  wizard:       ch.wizard || '',
-  meta:         ch.meta || null,
-  feedbackType: ch.score > 0 ? 'correct' : 'coach',
-  nextId:       ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
+  text:           ch.text,
+  delta:          ch.score,
+  feedback:       ch.feedback,
+  wizard:         ch.wizard || '',
+  studentOutcome: ch.studentOutcome || '',
+  heartReview:    '',
+  meta:           ch.meta || null,
+  feedbackType:   ch.score > 0 ? 'correct' : 'coach',
+  nextId:         ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
 };
       node.options.push(opt);
     }
@@ -895,7 +927,22 @@ if (node.feedback) {
     if (storyText) {
   storyText.classList.remove('same-day-return');
   storyText.style.display = 'block';
-  storyText.textContent = node.text;
+
+  if (node.scene || node.prompt) {
+    storyText.innerHTML = `
+      ${node.scene ? `
+        <div class="story-section-label">Scene</div>
+        <div class="story-scene">${escapeHTML(node.scene).replaceAll('\n', '<br>')}</div>
+      ` : ''}
+
+      ${node.prompt ? `
+        <div class="story-section-label">Your move</div>
+        <div class="story-prompt"><strong>${escapeHTML(node.prompt).replaceAll('\n', '<br>')}</strong></div>
+      ` : ''}
+    `;
+  } else {
+    storyText.textContent = node.text;
+  }
 }
 
     const old = document.getElementById('summary-panel');
@@ -955,8 +1002,13 @@ const options = shuffledOptions(node.options);
       node.options.length > 1 &&
       !isContinueButton;
 
-    updateHearts(opt.delta, countsForHearts);
-    logDecision(node.id, opt);
+    const heartsBefore = hearts;
+
+updateHearts(opt.delta, countsForHearts);
+
+opt.heartReview = buildHeartReview(heartsBefore, hearts, countsForHearts);
+
+logDecision(node.id, opt);
   }
 
   if (opt.feedback) {
