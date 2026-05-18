@@ -556,48 +556,62 @@ h2,
     width: 45%;
     float: left;
 
-    /* This creates the shared height target */
-    height: clamp(340px, 48vh, 470px);
+    /* Match the right side, but keep it compact */
+    height: clamp(300px, 42vh, 390px);
     min-height: 0;
     max-height: none;
     overflow-y: auto;
 
     margin: 0 clamp(14px, 2vw, 24px) 0 0;
-    padding: clamp(16px, 2.2vh, 22px);
+    padding: 18px 22px;
     font-size: 1.05rem;
-    line-height: 1.5;
+    line-height: 1.42;
   }
 
   body.playing-mission #choices {
     width: calc(55% - clamp(14px, 2vw, 24px));
     float: right;
 
-    /* Same height as story box */
-    height: clamp(340px, 48vh, 470px);
+    /* Same height as story */
+    height: clamp(300px, 42vh, 390px);
 
     display: grid;
-    grid-template-rows: auto 1fr 1fr 1fr;
-    gap: 10px;
+    grid-template-rows: auto repeat(3, 1fr);
+    gap: 8px;
     margin: 0;
   }
 
   body.playing-mission .choice-wizard-card {
     min-height: 0;
-    padding: 10px 12px;
+    padding: 8px 12px;
+  }
+
+  body.playing-mission .choice-wizard-icon {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+  }
+
+  body.playing-mission .choice-wizard-text strong {
+    font-size: 1rem;
+  }
+
+  body.playing-mission .choice-wizard-text span {
+    font-size: .86rem;
+    line-height: 1.2;
   }
 
   body.playing-mission #choices > button {
     min-height: 0;
     height: 100%;
-    padding: 10px 14px;
-    font-size: 0.95rem;
-    line-height: 1.25;
+    padding: 8px 14px;
+    font-size: .95rem;
+    line-height: 1.22;
     text-align: left;
     justify-content: flex-start;
     align-items: center;
   }
 }
-
 /* ============================================================
    CHOICE WIZARD CARD DURING PLAY
    ============================================================ */
