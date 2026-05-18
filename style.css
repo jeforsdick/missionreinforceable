@@ -573,8 +573,8 @@ h2,
     float: right;
 
     /* Same height as story */
-    height: clamp(300px, 42vh, 390px);
-
+height: clamp(280px, 38vh, 360px);
+    
     display: grid;
     grid-template-rows: auto repeat(3, 1fr);
     gap: 8px;
