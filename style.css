@@ -355,12 +355,12 @@ h2,
 
 #story-text {
   background: #333;
-  padding: clamp(12px, 2vh, 22px);
+  padding: clamp(14px, 2vh, 22px);
   border-radius: 10px;
   margin-bottom: clamp(8px, 1.5vh, 14px);
   white-space: pre-wrap;
-  font-size: clamp(.9rem, 1.05vw, 1.05rem);
-  line-height: clamp(1.32, 1.6vw, 1.55);
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  line-height: 1.5;
 }
 
 #choices {
@@ -453,8 +453,10 @@ h2,
 }
 
 .mission-card .action button {
-  min-height: 62px;
+  min-height: 68px;
   white-space: nowrap;
+  font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+  line-height: 1.25;
 }
 
 /* ============================================================
