@@ -1449,3 +1449,104 @@ body.modal-open {
     grid-area: home !important;
   }
 }
+/* ============================================================
+   SAFE FINAL OVERRIDE: Move My Progress + Start Over below cards
+   ============================================================ */
+
+#toolbar {
+  display: grid !important;
+  grid-template-columns:
+    max-content
+    max-content
+    max-content
+    minmax(320px, 520px) !important;
+  grid-template-areas:
+    "teacher points hearts feedback" !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+#progress-btn {
+  grid-area: auto !important;
+}
+
+#home-btn {
+  grid-area: auto !important;
+}
+
+#bottom-action-slot {
+  width: 100%;
+  clear: both;
+  margin-top: 22px;
+  margin-bottom: 8px;
+}
+
+#bottom-action-slot .utility-actions {
+  display: grid !important;
+  grid-template-columns: minmax(170px, 260px) minmax(170px, 260px);
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#bottom-action-slot .ghost {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 56px !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+  padding: 10px 16px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  font-family: "Courier New", monospace !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+#bottom-action-slot .ghost:hover {
+  border-color: var(--accent2) !important;
+  box-shadow: 0 0 10px rgba(22, 243, 248, .25) !important;
+}
+
+/* During missions, keep the buttons below the mission area instead of in the HUD */
+body.playing-mission #bottom-action-slot {
+  clear: both;
+  padding-top: 18px;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  #toolbar {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas:
+      "teacher points"
+      "hearts hearts"
+      "feedback feedback" !important;
+  }
+
+  #bottom-action-slot .utility-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  #bottom-action-slot {
+    margin-top: 12px;
+  }
+
+  #bottom-action-slot .utility-actions {
+    gap: 8px;
+  }
+
+  #bottom-action-slot .ghost {
+    min-height: 42px !important;
+    font-size: .82rem !important;
+    padding: 8px 10px !important;
+  }
+}
