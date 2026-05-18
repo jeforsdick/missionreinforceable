@@ -1550,22 +1550,3 @@ body.playing-mission #bottom-action-slot {
     padding: 8px 10px !important;
   }
 }
-
-.story-section-label {
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #2563eb;
-  margin-bottom: 0.35rem;
-}
-
-.story-scene {
-  margin-bottom: 1rem;
-}
-
-.story-prompt {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(0,0,0,0.12);
-}
