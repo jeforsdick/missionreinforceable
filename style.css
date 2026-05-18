@@ -1284,3 +1284,30 @@ body.modal-open {
     gap: 2px;
   }
 }
+/* ============================================================
+   HOTFIX: Keep desktop HUD inside the game frame
+   ============================================================ */
+
+@media (min-width: 900px) {
+  #toolbar {
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      minmax(260px, 420px)
+      max-content
+      max-content;
+    gap: 8px;
+  }
+
+  #feedback {
+    max-width: 420px;
+  }
+
+  #progress-btn,
+  #home-btn,
+  #toolbar .ghost {
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+}
