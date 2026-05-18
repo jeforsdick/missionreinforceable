@@ -339,13 +339,16 @@ function showBipBriefingPopup(scn, briefingText, onContinue) {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
-  setWizardSprite('mr-wizard-plus10.png');
+  // Use the +10 wizard sprite in the toolbar too
+  setWizardSprite('plus');
 
   const old = document.getElementById('wizard-modal');
   if (old) old.remove();
 
   const modal = document.createElement('div');
   modal.id = 'wizard-modal';
+
+  // Keep your blue/correct styling
   modal.className = 'wizard-modal state-correct';
 
   const missionTitle = scn?.title || 'Mission';
@@ -355,7 +358,7 @@ function showBipBriefingPopup(scn, briefingText, onContinue) {
     <div class="wizard-modal-card" role="dialog" aria-modal="true" aria-labelledby="wizard-modal-title">
       <div class="wizard-modal-top">
         <div class="wizard-modal-icon">
-          <img src="${WIZ.plus10}" alt="MR Wizard">
+          <img src="${WIZ.plus}" alt="MR Wizard">
         </div>
         <div>
           <h2 id="wizard-modal-title">BIP Briefing</h2>
