@@ -38,7 +38,7 @@
             text: `Add structure quickly: "Choose drawing at the back table or book bin by the rug. Hands stay to self."`,
             score: 10,
             feedback: `High fidelity. You reduced ambiguity and gave Student two safe ways to access open time.`,
-            wizard: `The Wizard drops a game board onto the chaos. Open time now has locations, choices, and a body boundary. Student can still access something interesting, but the peer reaction is no longer the easiest path. ABA Anchor: Structure changes the antecedent conditions before peer attention becomes the routine.`,
+            wizard: `The Wizard drops a game board onto the chaos. Open time now has locations, choices, and a body boundary. Student can still access something interesting, but the peer reaction is no longer the easiest path. Structure changes the antecedent conditions before peer attention becomes the routine.`,
             next: "step2_supported",
             meta: {
               bipComponent: "Prevent",
@@ -51,7 +51,7 @@
             text: `Remind the class to be kind and make good choices while you organize the next materials.`,
             score: 0,
             feedback: `Developing fidelity. The reminder is appropriate, but it is not structured enough for a known trigger.`,
-            wizard: `The Wizard hears the reminder float across the room like mist. It is not wrong, but it does not give Student a place, activity, or replacement response. The peer smile is still more concrete than the expectation. ABA Anchor: General expectations are weaker than specific choices and boundaries during unstructured time.`,
+            wizard: `The Wizard hears the reminder float across the room like mist. It is not wrong, but it does not give Student a place, activity, or replacement response. The peer smile is still more concrete than the expectation. General expectations are weaker than specific choices and boundaries during unstructured time.`,
             next: "step2_wobble",
             meta: {
               bipComponent: "Prevent",
@@ -64,7 +64,7 @@
             text: `Call Student over and say, "Stop bothering people. You need to stay away from that peer."`,
             score: -10,
             feedback: `Low fidelity. Public correction may increase adult attention and make the peer interaction more powerful.`,
-            wizard: `The Wizard's alarm flashes over the peer pair. Student got adult attention, the peer is now named as important, and open time has a new stage. ABA Anchor: Public correction can strengthen the attention pathway when peer reactions are part of the function.`,
+            wizard: `The Wizard's alarm flashes over the peer pair. Student got adult attention, the peer is now named as important, and open time has a new stage. Public correction can strengthen the attention pathway when peer reactions are part of the function.`,
             next: "step2_escalated",
             meta: {
               bipComponent: "Respond",
@@ -83,7 +83,7 @@
             text: `Point to the exact drawing spot and reinforce when Student moves there safely.`,
             score: 10,
             feedback: `High fidelity. You turned the activity choice into a safe location response.`,
-            wizard: `The Wizard marks the landing zone with a glowing circle. Student now knows where his body should go, not just what activity exists. When safe movement earns reinforcement, the peer bump loses power. ABA Anchor: Choice becomes effective when it leads to an observable response that contacts reinforcement.`,
+            wizard: `The Wizard marks the landing zone with a glowing circle. Student now knows where his body should go, not just what activity exists. When safe movement earns reinforcement, the peer bump loses power. Choice becomes effective when it leads to an observable response that contacts reinforcement.`,
             next: "step3_strong",
             meta: {
               bipComponent: "Teach",
@@ -96,7 +96,7 @@
             text: `Let Student transition independently because he already picked an activity.`,
             score: 0,
             feedback: `Developing fidelity. The choice helped, but the location response is still weak.`,
-            wizard: `The Wizard watches Student hover. The activity choice opened the door, but the peer is still pulling like a magnet. Without a location prompt, the choice may not become safe engagement. ABA Anchor: During known trigger routines, independence may need to be shaped after a reinforced first step.`,
+            wizard: `The Wizard watches Student hover. The activity choice opened the door, but the peer is still pulling like a magnet. Without a location prompt, the choice may not become safe engagement. During known trigger routines, independence may need to be shaped after a reinforced first step.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Teach",
@@ -109,7 +109,7 @@
             text: `Tell Student, "You chose drawing, so stop wandering and go do it."`,
             score: -10,
             feedback: `Low fidelity. This adds adult attention without teaching the next response.`,
-            wizard: `The Wizard winces as the correction keeps wandering in the spotlight. Student hears pressure before he has a clear landing place. The peer interaction still glows nearby. ABA Anchor: Corrective language does not replace a prompted, reinforced location response.`,
+            wizard: `The Wizard winces as the correction keeps wandering in the spotlight. Student hears pressure before he has a clear landing place. The peer interaction still glows nearby. Corrective language does not replace a prompted, reinforced location response.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -128,7 +128,7 @@
             text: `Move closer, structure the space, and prompt Student to choose a defined activity spot.`,
             score: 10,
             feedback: `High fidelity repair. You added structure and reduced the peer payoff.`,
-            wizard: `The Wizard pulls the peer audience out of the center and draws two activity paths on the floor. Student gets a defined spot before the bumping becomes the main event. ABA Anchor: Adding structure interrupts peer-maintained behavior and prompts a replacement routine.`,
+            wizard: `The Wizard pulls the peer audience out of the center and draws two activity paths on the floor. Student gets a defined spot before the bumping becomes the main event. Adding structure interrupts peer-maintained behavior and prompts a replacement routine.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Prevent",
@@ -141,7 +141,7 @@
             text: `Tell the peer to ignore it and remind Student to keep his body calm.`,
             score: 0,
             feedback: `Developing fidelity. Ignoring may help, but the routine still lacks structure.`,
-            wizard: `The Wizard sees the peer trying, but the room is still loose. Ignoring helps only if Student has something better to do with his body and attention. ABA Anchor: Reducing attention should be paired with a replacement activity and reinforcement.`,
+            wizard: `The Wizard sees the peer trying, but the room is still loose. Ignoring helps only if Student has something better to do with his body and attention. Reducing attention should be paired with a replacement activity and reinforcement.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -154,7 +154,7 @@
             text: `Warn Student that one more bump means he loses open-time choice.`,
             score: -10,
             feedback: `Low fidelity. Threats add attention and can make the moment more dramatic.`,
-            wizard: `The Wizard's red light glows over the open-time choices. The behavior now controls the stakes of the room. Student may push once more just to test the boundary. ABA Anchor: Threats can increase adult attention without teaching safe engagement.`,
+            wizard: `The Wizard's red light glows over the open-time choices. The behavior now controls the stakes of the room. Student may push once more just to test the boundary. Threats can increase adult attention without teaching safe engagement.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -173,7 +173,7 @@
             text: `Reduce the audience, move near Student, and offer a structured activity away from the peer.`,
             score: 10,
             feedback: `High fidelity repair. You reduced attention and added a safer alternative.`,
-            wizard: `The Wizard sweeps the spotlight away from the peer. Student gets a route to something else before the performance becomes the whole open-time routine. ABA Anchor: Repair means reducing maintaining consequences and prompting safe engagement.`,
+            wizard: `The Wizard sweeps the spotlight away from the peer. Student gets a route to something else before the performance becomes the whole open-time routine. Repair means reducing maintaining consequences and prompting safe engagement.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Respond",
@@ -186,7 +186,7 @@
             text: `Separate Student from the peer and wait silently until the group settles.`,
             score: 0,
             feedback: `Developing fidelity. Safety may improve, but replacement behavior is not taught clearly.`,
-            wizard: `The Wizard steadies the room. The bumping may stop, but Student has not learned what to do during open time instead. ABA Anchor: Separation can reduce immediate risk, but it needs a re-entry or replacement activity.`,
+            wizard: `The Wizard steadies the room. The bumping may stop, but Student has not learned what to do during open time instead. Separation can reduce immediate risk, but it needs a re-entry or replacement activity.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -199,7 +199,7 @@
             text: `Explain publicly that bumping is unsafe and Student needs to apologize now.`,
             score: -10,
             feedback: `Low fidelity. Public processing can intensify peer-maintained behavior.`,
-            wizard: `The Wizard's alarm rings. The whole room is now part of the consequence. Student has more audience than before, and the peer conflict grows. ABA Anchor: Apology and processing demands should wait until regulation and re-entry are stable.`,
+            wizard: `The Wizard's alarm rings. The whole room is now part of the consequence. Student has more audience than before, and the peer conflict grows. Apology and processing demands should wait until regulation and re-entry are stable.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -218,7 +218,7 @@
             text: `Mark a Chart Move for safe engagement and preview the upcoming lunch transition.`,
             score: 10,
             feedback: `High fidelity. You reinforced safe unstructured behavior and prepared the next transition.`,
-            wizard: `The Wizard places a bright marker on the map. Student learns that safe engagement during loose time works. The lunch transition is now less likely to surprise him because you previewed what comes next. ABA Anchor: Reinforcement plus predictability builds fluency across routines.`,
+            wizard: `The Wizard places a bright marker on the map. Student learns that safe engagement during loose time works. The lunch transition is now less likely to surprise him because you previewed what comes next. Reinforcement plus predictability builds fluency across routines.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -231,7 +231,7 @@
             text: `Let Student draw quietly and avoid interrupting the calm moment with reinforcement.`,
             score: 0,
             feedback: `Developing fidelity. Calm is good, but the safe behavior is not strengthened.`,
-            wizard: `The Wizard whispers, almost. The quiet is good, but the plan needs the safe behavior to be noticed before it fades into the room's noise. ABA Anchor: Reinforcement can be brief and private without disrupting calm.`,
+            wizard: `The Wizard whispers, almost. The quiet is good, but the plan needs the safe behavior to be noticed before it fades into the room's noise. Reinforcement can be brief and private without disrupting calm.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -244,7 +244,7 @@
             text: `Tell nearby peers to notice that Student is finally making a better choice.`,
             score: -10,
             feedback: `Low fidelity. This returns peer attention to Student's behavior.`,
-            wizard: `The Wizard blocks the spotlight, but too late. Peers look over again. The safe choice becomes a performance instead of a routine. ABA Anchor: Reinforcement should not rebuild the peer audience.`,
+            wizard: `The Wizard blocks the spotlight, but too late. Peers look over again. The safe choice becomes a performance instead of a routine. Reinforcement should not rebuild the peer audience.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -263,7 +263,7 @@
             text: `Reinforce safe body and engagement, then stay nearby through the next transition.`,
             score: 10,
             feedback: `High fidelity. You reinforced the replacement and planned for the next risk point.`,
-            wizard: `The Wizard repairs the open-time routine. Student gets credit for moving away and engaging safely. The next transition is guarded before it becomes another trigger. ABA Anchor: Reinforcing recovery helps ensure the episode ends with safe engagement, not peer disruption.`,
+            wizard: `The Wizard repairs the open-time routine. Student gets credit for moving away and engaging safely. The next transition is guarded before it becomes another trigger. Reinforcing recovery helps ensure the episode ends with safe engagement, not peer disruption.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -276,7 +276,7 @@
             text: `Let Student continue the activity and monitor from across the room.`,
             score: 0,
             feedback: `Developing fidelity. The activity is safer, but support fades before the routine is strong.`,
-            wizard: `The Wizard watches from a distance. Student is safer, but the peer magnet is still in the room. The routine may hold, or it may wobble again. ABA Anchor: Fade support after the replacement behavior contacts reinforcement.`,
+            wizard: `The Wizard watches from a distance. Student is safer, but the peer magnet is still in the room. The routine may hold, or it may wobble again. Fade support after the replacement behavior contacts reinforcement.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -289,7 +289,7 @@
             text: `Use the calm moment to explain why bumping peers causes problems.`,
             score: -10,
             feedback: `Low fidelity. Processing may pull attention back to the peer behavior.`,
-            wizard: `The Wizard raises a warning hand. Student was almost out of the peer loop. The explanation brings the bumping story back to center stage. ABA Anchor: Process later, after safe engagement and re-entry are stable.`,
+            wizard: `The Wizard raises a warning hand. Student was almost out of the peer loop. The explanation brings the bumping story back to center stage. Process later, after safe engagement and re-entry are stable.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -308,7 +308,7 @@
             text: `Prompt one specific activity action and reinforce safe engagement immediately.`,
             score: 10,
             feedback: `High fidelity repair. You turned loose time into reinforced engagement.`,
-            wizard: `The Wizard locks a piece into place. Student has a concrete action, and the safe engagement finally has a payoff. The peer reaction fades because something better is available. ABA Anchor: Replacement behavior needs to be observable and reinforced.`,
+            wizard: `The Wizard locks a piece into place. Student has a concrete action, and the safe engagement finally has a payoff. The peer reaction fades because something better is available. Replacement behavior needs to be observable and reinforced.`,
             ending: "success",
             meta: {
               bipComponent: "Teach",
@@ -321,7 +321,7 @@
             text: `Keep the room calm and wait to see whether Student stays settled.`,
             score: 0,
             feedback: `Developing fidelity. This may preserve calm, but the replacement routine remains weak.`,
-            wizard: `The Wizard waits with the room. Nothing explodes, but the skill is still thin. Open time may be hard again tomorrow. ABA Anchor: Waiting is not the same as teaching safe engagement.`,
+            wizard: `The Wizard waits with the room. Nothing explodes, but the skill is still thin. Open time may be hard again tomorrow. Waiting is not the same as teaching safe engagement.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -334,7 +334,7 @@
             text: `Tell Student the next open time will be removed if this happens again.`,
             score: -10,
             feedback: `Low fidelity. Threats may make unstructured time more aversive and do not teach replacement behavior.`,
-            wizard: `The Wizard darkens the open-time card. The routine now predicts future loss, not supported success. Student may comply briefly, but the next open time becomes more loaded. ABA Anchor: Threats add pressure without building safe engagement fluency.`,
+            wizard: `The Wizard darkens the open-time card. The routine now predicts future loss, not supported success. Student may comply briefly, but the next open time becomes more loaded. Threats add pressure without building safe engagement fluency.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -353,7 +353,7 @@
             text: `Create a brief reset, remove the audience, and return with one structured activity choice.`,
             score: 10,
             feedback: `High fidelity repair. You reduced attention and rebuilt structure.`,
-            wizard: `The Wizard sweeps the stage clean. The audience fades, the reset cools the moment, and Student gets a safer route back into open time. ABA Anchor: Repair means reducing the maintaining consequence and prompting a replacement routine.`,
+            wizard: `The Wizard sweeps the stage clean. The audience fades, the reset cools the moment, and Student gets a safer route back into open time. Repair means reducing the maintaining consequence and prompting a replacement routine.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -366,7 +366,7 @@
             text: `Separate Student and wait quietly until the lunch transition begins.`,
             score: 0,
             feedback: `Developing fidelity. This may prevent more conflict, but replacement behavior is not practiced.`,
-            wizard: `The Wizard contains the scene. It may prevent more bumping, but open time became something to survive rather than something to learn. ABA Anchor: Stabilization should be followed by low-demand re-entry.`,
+            wizard: `The Wizard contains the scene. It may prevent more bumping, but open time became something to survive rather than something to learn. Stabilization should be followed by low-demand re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -379,7 +379,7 @@
             text: `Require Student to apologize to the peer before he can do another activity.`,
             score: -10,
             feedback: `Low fidelity during activation. Social demands can prolong the performance.`,
-            wizard: `The Wizard's alarm returns. The peer is now even more central. Student is pulled deeper into the social conflict instead of toward safe engagement. ABA Anchor: Apology and reflection should wait until regulation and re-entry are stable.`,
+            wizard: `The Wizard's alarm returns. The peer is now even more central. Student is pulled deeper into the social conflict instead of toward safe engagement. Apology and reflection should wait until regulation and re-entry are stable.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
