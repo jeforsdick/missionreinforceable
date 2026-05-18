@@ -553,7 +553,13 @@ function extractBipBriefingFromText(text) {
     storyText: `Scene: ${match[2].trim()}`
   };
 }
+function buildStepDisplayText(step) {
+  if (step.scene || step.prompt) {
+    return [step.scene, step.prompt].filter(Boolean).join('\n\n');
+  }
 
+  return step.text || '';
+}
 /* ============================================================
    DYNAMIC MISSION BUILDER
    ============================================================ */
@@ -739,14 +745,22 @@ function startDynamicMission(modeLabel, scn) {
   for (let k in scn.steps)   stepIds[k]   = newId();
   for (let k in scn.endings) endingIds[k] = newId();
 
-  let missionBriefing = scn.bipBriefing || null;
+let missionBriefing = scn.bipBriefing || scn.briefing || null;
 
-  for (let stepKey in scn.steps) {
-    const step = scn.steps[stepKey];
+for (let stepKey in scn.steps) {
+  const step = scn.steps[stepKey];
 
-    let displayText = step.text;
+  let displayText = buildStepDisplayText(step);
+  let sceneText = step.scene || null;
+  let promptText = step.prompt || null;
 
-    if (stepKey === scn.start) {
+  if (stepKey === scn.start) {
+    if (!missionBriefing && step.briefing) {
+      missionBriefing = step.briefing;
+    }
+
+    // Backward compatibility for older content using one big text block
+    if (!step.briefing && !step.scene && !step.prompt) {
       const extracted = extractBipBriefingFromText(step.text);
 
       if (!missionBriefing && extracted.briefing) {
@@ -755,13 +769,16 @@ function startDynamicMission(modeLabel, scn) {
 
       displayText = extracted.storyText;
     }
+  }
 
-    const node = {
-      id: stepIds[stepKey],
-      scenario: scn.title || modeLabel,
-      text: displayText,
-      options: []
-    };  
+  const node = {
+    id: stepIds[stepKey],
+    scenario: scn.title || modeLabel,
+    text: displayText,
+    scene: sceneText,
+    prompt: promptText,
+    options: []
+  };
     for (let chKey in step.choices) {
       const ch  = step.choices[chKey];
 const opt = {
