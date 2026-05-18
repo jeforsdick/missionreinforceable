@@ -105,14 +105,14 @@ h2,
     max-content
     max-content
     max-content
-    minmax(360px, 520px)
+    minmax(320px, 520px)
     max-content
     max-content;
   grid-template-areas:
     "teacher points hearts feedback progress home";
   justify-content: center;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   margin-bottom: clamp(10px, 1.6vh, 16px);
   overflow: visible;
@@ -148,29 +148,29 @@ h2,
 
 #teacher-badge,
 #score-badge {
-  min-height: clamp(40px, 5vh, 52px);
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #333;
-  padding: clamp(5px, .9vh, 8px) clamp(9px, 1.2vw, 12px);
+  padding: 6px 12px;
   border: 1px solid #444;
   border-radius: 10px;
   font-weight: 700;
-  font-size: clamp(.78rem, 1.1vw, .95rem);
+  font-size: 0.95rem;
   white-space: nowrap;
 }
 
 #toolbar .ghost {
-  min-height: clamp(38px, 5vh, 46px);
+  min-height: 44px;
   min-width: 120px;
   background: transparent;
   color: #fff;
   border: 1px solid #555;
-  padding: clamp(6px, .9vh, 8px) clamp(10px, 1.4vw, 14px);
+  padding: 8px 14px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: clamp(.8rem, 1vw, .95rem);
+  font-size: 0.95rem;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -178,6 +178,21 @@ h2,
 #toolbar .ghost:hover {
   border-color: var(--accent2);
   box-shadow: 0 0 10px rgba(22, 243, 248, .25);
+}
+
+/* When the full HUD cannot fit, put the buttons on a neat second row */
+@media (min-width: 900px) and (max-width: 1250px) {
+  #toolbar {
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      minmax(320px, 520px);
+    grid-template-areas:
+      "teacher points hearts feedback"
+      ". . progress home";
+    gap: 10px 12px;
+  }
 }
 
 /* ============================================================
