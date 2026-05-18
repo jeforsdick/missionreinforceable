@@ -106,10 +106,9 @@ h2,
     max-content
     max-content
     minmax(320px, 520px)
-    max-content
     max-content;
   grid-template-areas:
-    "teacher points hearts feedback progress home";
+    "teacher points hearts feedback actions";
   justify-content: center;
   align-items: center;
   gap: 12px;
@@ -134,12 +133,8 @@ h2,
   grid-area: feedback;
 }
 
-#progress-btn {
-  grid-area: progress;
-}
-
-#home-btn {
-  grid-area: home;
+.utility-actions {
+  grid-area: actions;
 }
 
 .spacer {
@@ -161,9 +156,23 @@ h2,
   white-space: nowrap;
 }
 
-#toolbar .ghost {
+/* ============================================================
+   UTILITY ACTION BUTTONS
+   My Progress + Start Over
+   ============================================================ */
+
+.utility-actions {
+  display: grid;
+  grid-template-columns: 150px 150px;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.utility-actions .ghost {
+  width: 150px;
+  min-width: 150px;
   min-height: 44px;
-  min-width: 120px;
   background: transparent;
   color: #fff;
   border: 1px solid #555;
@@ -175,13 +184,72 @@ h2,
   white-space: nowrap;
 }
 
-#toolbar .ghost:hover {
+.utility-actions .ghost:hover {
   border-color: var(--accent2);
   box-shadow: 0 0 10px rgba(22, 243, 248, .25);
 }
 
-/* When the full HUD cannot fit, put the buttons on a neat second row */
+#bottom-action-slot {
+  width: 100%;
+  margin-top: 18px;
+}
+
+#bottom-action-slot .utility-actions {
+  display: grid;
+  grid-template-columns: 150px 150px;
+  justify-content: center;
+}
+
+/* ============================================================
+   START SCREEN
+   Buttons move below everything
+   ============================================================ */
+
+body.start-screen #toolbar {
+  grid-template-columns:
+    max-content
+    max-content
+    max-content
+    minmax(320px, 520px);
+  grid-template-areas:
+    "teacher points hearts feedback";
+}
+
+body.start-screen #bottom-action-slot {
+  display: block;
+}
+
+body.start-screen #bottom-action-slot .utility-actions {
+  margin: 18px auto 0;
+}
+
+/* ============================================================
+   END SCREEN
+   Buttons return to top and stay same size
+   ============================================================ */
+
+body.end-screen #toolbar {
+  grid-template-columns:
+    max-content
+    max-content
+    max-content
+    minmax(320px, 520px)
+    max-content;
+  grid-template-areas:
+    "teacher points hearts feedback actions";
+}
+
+body.end-screen .utility-actions {
+  justify-self: center;
+}
+
+/* ============================================================
+   NARROW DESKTOP
+   Prevent toolbar overlap
+   ============================================================ */
+
 @media (min-width: 900px) and (max-width: 1250px) {
+  body.end-screen #toolbar,
   #toolbar {
     grid-template-columns:
       max-content
@@ -190,11 +258,40 @@ h2,
       minmax(320px, 520px);
     grid-template-areas:
       "teacher points hearts feedback"
-      ". . progress home";
+      ". . actions actions";
     gap: 10px 12px;
+  }
+
+  body.start-screen #toolbar {
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      minmax(320px, 520px);
+    grid-template-areas:
+      "teacher points hearts feedback";
   }
 }
 
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+  .utility-actions,
+  #bottom-action-slot .utility-actions {
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .utility-actions .ghost {
+    width: 100%;
+    min-width: 0;
+    font-size: .82rem;
+    min-height: 40px;
+  }
+}
 /* ============================================================
    HEARTS
    ============================================================ */
