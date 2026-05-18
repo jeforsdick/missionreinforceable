@@ -557,7 +557,7 @@ h2,
     float: left;
 
     /* Match the right side, but keep it compact */
-height: clamp(280px, 38vh, 360px);
+height: clamp(300px, 42vh, 390px);
     min-height: 0;
     max-height: none;
     overflow-y: auto;
@@ -573,7 +573,7 @@ height: clamp(280px, 38vh, 360px);
     float: right;
 
     /* Same height as story */
-height: clamp(280px, 38vh, 360px);
+height: clamp(300px, 42vh, 390px);
     
     display: grid;
     grid-template-rows: auto repeat(3, 1fr);
@@ -1285,29 +1285,96 @@ body.modal-open {
   }
 }
 /* ============================================================
-   HOTFIX: Keep desktop HUD inside the game frame
+   HUD FIX: Prevent toolbar overlap on Weebly/narrow desktop
    ============================================================ */
 
-@media (min-width: 900px) {
+/* Default desktop HUD: everything on one row when there is room */
+@media (min-width: 1200px) {
   #toolbar {
+    display: grid;
     grid-template-columns:
       max-content
       max-content
       max-content
-      minmax(260px, 420px)
+      minmax(360px, 520px)
       max-content
       max-content;
-    gap: 8px;
+    grid-template-areas:
+      "teacher points hearts feedback progress home";
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
   }
 
   #feedback {
-    max-width: 420px;
+    min-width: 0;
+    max-width: 520px;
   }
 
   #progress-btn,
   #home-btn,
   #toolbar .ghost {
-    min-width: 100px;
-    font-size: 0.85rem;
+    min-width: 118px;
+    margin-left: 0;
+  }
+}
+
+/* Narrow desktop / Weebly view:
+   keep stats + wizard on row 1, put buttons together on row 2 */
+@media (min-width: 900px) and (max-width: 1199px) {
+  #toolbar {
+    display: grid;
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      minmax(320px, 520px);
+    grid-template-areas:
+      "teacher points hearts feedback"
+      ". . progress home";
+    justify-content: center;
+    align-items: center;
+    gap: 10px 12px;
+  }
+
+  #feedback {
+    min-width: 0;
+    max-width: 520px;
+  }
+
+  #progress-btn,
+  #home-btn,
+  #toolbar .ghost {
+    min-width: 120px;
+    margin-left: 0;
+  }
+}
+
+/* During active mission play, the top Wizard bubble is hidden,
+   so the buttons can stay on the same line */
+@media (min-width: 900px) {
+  body.playing-mission #toolbar {
+    display: grid;
+    grid-template-columns:
+      max-content
+      max-content
+      max-content
+      1fr
+      max-content
+      max-content;
+    grid-template-areas:
+      "teacher points hearts spacer progress home";
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  body.playing-mission #feedback {
+    display: none;
+  }
+
+  body.playing-mission #progress-btn,
+  body.playing-mission #home-btn {
+    min-width: 120px;
   }
 }
