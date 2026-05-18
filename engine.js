@@ -339,7 +339,7 @@ function showBipBriefingPopup(scn, briefingText, onContinue) {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
-  setWizardSprite('plus10');
+  setWizardSprite('mr-wizard-plus10.png');
 
   const old = document.getElementById('wizard-modal');
   if (old) old.remove();
