@@ -330,6 +330,68 @@ function showWizardPopup(opt, onContinue) {
   }
 }
 
+function showBipBriefingPopup(scn, briefingText, onContinue) {
+  const gameContainer = document.getElementById('game-container');
+
+  if (gameContainer) {
+    gameContainer.scrollIntoView({ behavior: 'auto', block: 'start' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  setWizardSprite('meh');
+
+  const old = document.getElementById('wizard-modal');
+  if (old) old.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'wizard-modal';
+  modal.className = 'wizard-modal state-meh';
+
+  const missionTitle = scn?.title || 'Mission';
+  const missionFocus = scn?.focus || '';
+
+  modal.innerHTML = `
+    <div class="wizard-modal-card" role="dialog" aria-modal="true" aria-labelledby="wizard-modal-title">
+      <div class="wizard-modal-top">
+        <div class="wizard-modal-icon">
+          <img src="${WIZ.meh}" alt="MR Wizard">
+        </div>
+        <div>
+          <h2 id="wizard-modal-title">BIP Briefing</h2>
+          <div class="wizard-modal-tag">
+            ${escapeHTML(missionTitle)}
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-modal-body">
+        ${missionFocus ? `<strong>Mission focus:</strong> ${escapeHTML(missionFocus)}<br><br>` : ''}
+        ${escapeHTML(briefingText).replaceAll('\n', '<br>')}
+      </div>
+
+      <button id="wizard-continue-btn" class="wizard-continue-btn">
+        Start Mission ▶
+      </button>
+    </div>
+  `;
+
+  document.body.classList.add('modal-open');
+  document.body.appendChild(modal);
+
+  const continueBtn = document.getElementById('wizard-continue-btn');
+
+  if (continueBtn) {
+    continueBtn.focus();
+
+    continueBtn.addEventListener('click', () => {
+      modal.remove();
+      document.body.classList.remove('modal-open');
+      onContinue();
+    });
+  }
+}
+
 /* -------- Results → Google Apps Script -------- */
 function getTeacherCode() {
   const u = new URL(window.location.href);
@@ -466,6 +528,27 @@ function seedFromDate() {
 function srandom(seed) {
   let x = (seed >>> 0) || 1234567;
   return function () { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return (x >>> 0) / 4294967295; };
+}
+function extractBipBriefingFromText(text) {
+  const raw = String(text || '');
+
+  // Looks for:
+  // BIP Briefing: ...
+  //
+  // Scene: ...
+  const match = raw.match(/^BIP Briefing:\s*([\s\S]*?)\n\nScene:\s*([\s\S]*)$/);
+
+  if (!match) {
+    return {
+      briefing: null,
+      storyText: raw
+    };
+  }
+
+  return {
+    briefing: match[1].trim(),
+    storyText: `Scene: ${match[2].trim()}`
+  };
 }
 
 /* ============================================================
@@ -653,14 +736,30 @@ function startDynamicMission(modeLabel, scn) {
   for (let k in scn.steps)   stepIds[k]   = newId();
   for (let k in scn.endings) endingIds[k] = newId();
 
+  let missionBriefing = scn.bipBriefing || null;
+
   for (let stepKey in scn.steps) {
     const step = scn.steps[stepKey];
-const node = {
-  id: stepIds[stepKey],
-  scenario: scn.title || modeLabel,
-  text: step.text,
-  options: []
-};    for (let chKey in step.choices) {
+
+    let displayText = step.text;
+
+    if (stepKey === scn.start) {
+      const extracted = extractBipBriefingFromText(step.text);
+
+      if (!missionBriefing && extracted.briefing) {
+        missionBriefing = extracted.briefing;
+      }
+
+      displayText = extracted.storyText;
+    }
+
+    const node = {
+      id: stepIds[stepKey],
+      scenario: scn.title || modeLabel,
+      text: displayText,
+      options: []
+    };  
+    for (let chKey in step.choices) {
       const ch  = step.choices[chKey];
 const opt = {
   text:         ch.text,
@@ -689,8 +788,16 @@ const opt = {
     DYN.nodes.push(node);
   }
 
-  showNode(stepIds[scn.start]);
-  showFeedback("Mission launched! Good luck.", "correct", +10);
+  const launchMission = () => {
+    showNode(stepIds[scn.start]);
+    showFeedback("Mission launched! Good luck.", "correct", +10);
+  };
+
+  if (missionBriefing) {
+    showBipBriefingPopup(scn, missionBriefing, launchMission);
+  } else {
+    launchMission();
+  }
 }
 
 /* -------- Static fallback summary node -------- */
