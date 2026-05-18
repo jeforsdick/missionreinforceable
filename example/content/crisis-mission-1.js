@@ -38,7 +38,7 @@
             text: `Maintain line of sight, signal for support, and use one calm direction: "Stop by the door."`,
             score: 10,
             feedback: `High fidelity. You prioritized safety while avoiding chase, blocking, and extra language.`,
-            wizard: `The Wizard moves like a shadow instead of a storm. Student is visible, support is coming, and your words are short enough to process. The doorway is still risky, but the moment has not become a race. ABA Anchor: In a safety moment, reduce stimulation and preserve line of sight before teaching.`,
+            wizard: `The Wizard moves like a shadow instead of a storm. Student is visible, support is coming, and your words are short enough to process. The doorway is still risky, but the moment has not become a race. In a safety moment, reduce stimulation and preserve line of sight before teaching.`,
             next: "step2_supported",
             meta: {
               bipComponent: "Crisis Respond",
@@ -51,7 +51,7 @@
             text: `Follow closely behind Student and ask where he is going so you can understand what he needs.`,
             score: 0,
             feedback: `Developing fidelity. Line of sight helps, but close following and questions can increase flight risk.`,
-            wizard: `The Wizard follows carefully, but the space between adult and Student shrinks. Student may feel pursued before he can hear the question. His feet prepare to move faster. ABA Anchor: During potential elopement, questions and close pursuit can function like pressure.`,
+            wizard: `The Wizard follows carefully, but the space between adult and Student shrinks. Student may feel pursued before he can hear the question. His feet prepare to move faster. During potential elopement, questions and close pursuit can function like pressure.`,
             next: "step2_wobble",
             meta: {
               bipComponent: "Crisis Respond",
@@ -64,7 +64,7 @@
             text: `Move quickly to block the doorway and tell Student, "You cannot leave this room."`,
             score: -10,
             feedback: `Low fidelity. Blocking can increase panic, aggression, or bolting unless required by safety protocol.`,
-            wizard: `The Wizard's warning flare lights the doorway. Student sees the exit closing and the adult body in the path. His safest route is no longer obvious, so his body may choose speed or force. ABA Anchor: Physical blocking can create a power struggle and increase crisis risk.`,
+            wizard: `The Wizard's warning flare lights the doorway. Student sees the exit closing and the adult body in the path. His safest route is no longer obvious, so his body may choose speed or force. Physical blocking can create a power struggle and increase crisis risk.`,
             next: "step2_escalated",
             meta: {
               bipComponent: "Crisis Respond",
@@ -83,7 +83,7 @@
             text: `Offer two safe choices: "Stand here with space or walk with me to the calm spot."`,
             score: 10,
             feedback: `High fidelity. You gave predictable choices that both preserve safety.`,
-            wizard: `The Wizard creates two safe paths at the doorway. Student does not have to invent an escape route. Both choices keep him supervised, reduce danger, and leave room for recovery. ABA Anchor: Safe choices reduce escalation while maintaining adult support and line of sight.`,
+            wizard: `The Wizard creates two safe paths at the doorway. Student does not have to invent an escape route. Both choices keep him supervised, reduce danger, and leave room for recovery. Safe choices reduce escalation while maintaining adult support and line of sight.`,
             next: "step3_strong",
             meta: {
               bipComponent: "Crisis Respond",
@@ -96,7 +96,7 @@
             text: `Ask, "Do you need a break or do you want to tell me what happened?"`,
             score: 0,
             feedback: `Developing fidelity. The intent is supportive, but talking may be too much during activation.`,
-            wizard: `The Wizard watches Student's breathing. The words are kind, but the question asks Student to explain while his body is still in motion. The doorway remains too important. ABA Anchor: When safety is active, use fewer words and clearer choices.`,
+            wizard: `The Wizard watches Student's breathing. The words are kind, but the question asks Student to explain while his body is still in motion. The doorway remains too important. When safety is active, use fewer words and clearer choices.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -109,7 +109,7 @@
             text: `Tell Student he will lose his next preferred activity if he steps into the hallway.`,
             score: -10,
             feedback: `Low fidelity. Threats near the exit can increase flight or emotional escalation.`,
-            wizard: `The Wizard's alarm echoes down the hallway. Student is already near the door, and now the doorway carries a threat. The pressure rises right where safety is most fragile. ABA Anchor: Threats can intensify escape behavior during crisis.`,
+            wizard: `The Wizard's alarm echoes down the hallway. Student is already near the door, and now the doorway carries a threat. The pressure rises right where safety is most fragile. Threats can intensify escape behavior during crisis.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -128,7 +128,7 @@
             text: `Increase space, keep line of sight, reduce language, and signal support clearly.`,
             score: 10,
             feedback: `High fidelity repair. You reduced pursuit cues while maintaining safety.`,
-            wizard: `The Wizard slows the scene down. More space makes your presence less threatening. Student can pause without feeling caught, and support has a clearer way to enter. ABA Anchor: Safety support should reduce chase energy, not increase it.`,
+            wizard: `The Wizard slows the scene down. More space makes your presence less threatening. Student can pause without feeling caught, and support has a clearer way to enter. Safety support should reduce chase energy, not increase it.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Crisis Respond",
@@ -141,7 +141,7 @@
             text: `Keep following and repeat, "Stop walking. You need to stop walking now."`,
             score: 0,
             feedback: `Developing fidelity. The safety intent is clear, but repeated prompts may increase flight.`,
-            wizard: `The Wizard keeps pace uneasily. Each repeated prompt may sound like the chase is still on. Student's feet remain ready to move because the demand is following him. ABA Anchor: Repeated verbal demands can become pressure during flight-risk moments.`,
+            wizard: `The Wizard keeps pace uneasily. Each repeated prompt may sound like the chase is still on. Student's feet remain ready to move because the demand is following him. Repeated verbal demands can become pressure during flight-risk moments.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -154,7 +154,7 @@
             text: `Call loudly, "Stop before you get yourself in trouble."`,
             score: -10,
             feedback: `Low fidelity. Public intensity can increase speed, shame, or unsafe movement.`,
-            wizard: `The Wizard's cloak snaps. The doorway turns into a stage. Student hears volume, urgency, and trouble, which can make running more likely. ABA Anchor: Public intensity can escalate unsafe movement.`,
+            wizard: `The Wizard's cloak snaps. The doorway turns into a stage. Student hears volume, urgency, and trouble, which can make running more likely. Public intensity can escalate unsafe movement.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -173,7 +173,7 @@
             text: `Back off the block, maintain sight, clear nearby peers, and wait for support.`,
             score: 10,
             feedback: `High fidelity repair. You reduced physical pressure and protected safety.`,
-            wizard: `The Wizard opens space before the collision happens. The mission is tense, but the physical contest ends. Support can now help without a blocked-doorway battle. ABA Anchor: Removing pressure can de-escalate unsafe movement while preserving supervision.`,
+            wizard: `The Wizard opens space before the collision happens. The mission is tense, but the physical contest ends. Support can now help without a blocked-doorway battle. Removing pressure can de-escalate unsafe movement while preserving supervision.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Crisis Respond",
@@ -186,7 +186,7 @@
             text: `Stand aside but continue telling Student he needs to make a safe choice.`,
             score: 0,
             feedback: `Developing fidelity. Stepping aside helps, but repeated language may keep activation high.`,
-            wizard: `The Wizard watches the doorway. The physical pressure lowers somewhat, but Student is still hearing demands while his body is in alarm mode. ABA Anchor: When activation is high, fewer words are usually safer.`,
+            wizard: `The Wizard watches the doorway. The physical pressure lowers somewhat, but Student is still hearing demands while his body is in alarm mode. When activation is high, fewer words are usually safer.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -199,7 +199,7 @@
             text: `Hold the doorway position and insist Student return to his desk first.`,
             score: -10,
             feedback: `Low fidelity. Continuing to block may escalate into aggression or bolting.`,
-            wizard: `The Wizard sounds the red alarm. The doorway becomes a contest. Student's safest path is no longer obvious, and the risk climbs. ABA Anchor: Do not turn a safety support into a physical power struggle.`,
+            wizard: `The Wizard sounds the red alarm. The doorway becomes a contest. Student's safest path is no longer obvious, and the risk climbs. Do not turn a safety support into a physical power struggle.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -218,7 +218,7 @@
             text: `Privately reinforce safe stopping and offer one low-demand return step.`,
             score: 10,
             feedback: `High fidelity. You reinforced safety and rebuilt a small path back to the routine.`,
-            wizard: `The Wizard lights the return path. Student learns that stopping safely, not leaving, opens the next door. The return step is small enough that re-entry feels possible. ABA Anchor: Reinforcing safe recovery helps the crisis end with regulation and access, not escape.`,
+            wizard: `The Wizard lights the return path. Student learns that stopping safely, not leaving, opens the next door. The return step is small enough that re-entry feels possible. Reinforcing safe recovery helps the crisis end with regulation and access, not escape.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -231,7 +231,7 @@
             text: `Let Student stand there quietly until he decides he is ready to return.`,
             score: 0,
             feedback: `Developing fidelity. Safety is improved, but the return routine is vague.`,
-            wizard: `The Wizard waits beside the doorway. Student is safer, but readiness becomes the rule. The classroom routine remains distant. ABA Anchor: Stabilization should be followed by a clear, low-demand re-entry step.`,
+            wizard: `The Wizard waits beside the doorway. Student is safer, but readiness becomes the rule. The classroom routine remains distant. Stabilization should be followed by a clear, low-demand re-entry step.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -244,7 +244,7 @@
             text: `Ask Student to explain why he tried to leave before he can come back.`,
             score: -10,
             feedback: `Low fidelity. Explanation demands can restart leaving or refusal during recovery.`,
-            wizard: `The Wizard blocks the question. Student's body just stopped moving. Asking for reasons now may push him back toward escape. ABA Anchor: Reflection belongs after regulation, re-entry, and reinforcement.`,
+            wizard: `The Wizard blocks the question. Student's body just stopped moving. Asking for reasons now may push him back toward escape. Reflection belongs after regulation, re-entry, and reinforcement.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -263,7 +263,7 @@
             text: `Reinforce the safe slowdown and prompt one small step toward the calm spot or desk.`,
             score: 10,
             feedback: `High fidelity repair. You reinforced recovery and shaped safe re-entry.`,
-            wizard: `The Wizard rebuilds the path one safe step at a time. Student does not have to jump from crisis to full work. He only has to take the next safe step. ABA Anchor: Low-demand re-entry preserves safety while preventing escape from becoming the final outcome.`,
+            wizard: `The Wizard rebuilds the path one safe step at a time. Student does not have to jump from crisis to full work. He only has to take the next safe step. Low-demand re-entry preserves safety while preventing escape from becoming the final outcome.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -276,7 +276,7 @@
             text: `Keep line of sight and wait silently until support decides what to do next.`,
             score: 0,
             feedback: `Developing fidelity. This may preserve safety, but active recovery support is limited.`,
-            wizard: `The Wizard stands guard. Safety is the priority, and you have protected it. But the replacement path remains faint until a small return step is prompted. ABA Anchor: Containment is sometimes necessary, but teaching resumes with safe re-entry.`,
+            wizard: `The Wizard stands guard. Safety is the priority, and you have protected it. But the replacement path remains faint until a small return step is prompted. Containment is sometimes necessary, but teaching resumes with safe re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -289,7 +289,7 @@
             text: `Tell Student he can only return after promising not to leave again.`,
             score: -10,
             feedback: `Low fidelity. Verbal contracts during activation can become another demand.`,
-            wizard: `The Wizard's warning light returns. The promise becomes a hurdle. Student is asked to talk his way back before his body is ready. ABA Anchor: Recovery should begin with safe behavior, not a verbal performance.`,
+            wizard: `The Wizard's warning light returns. The promise becomes a hurdle. Student is asked to talk his way back before his body is ready. Recovery should begin with safe behavior, not a verbal performance.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -308,7 +308,7 @@
             text: `Prompt one safe return step and reinforce immediately when Student takes it.`,
             score: 10,
             feedback: `High fidelity repair. You taught and reinforced the return behavior.`,
-            wizard: `The Wizard turns the doorway into a bridge instead of a reward. One safe step back earns reinforcement, and the classroom routine becomes reachable again. ABA Anchor: Re-entry must contact reinforcement for safe return to become stronger than leaving.`,
+            wizard: `The Wizard turns the doorway into a bridge instead of a reward. One safe step back earns reinforcement, and the classroom routine becomes reachable again. Re-entry must contact reinforcement for safe return to become stronger than leaving.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -321,7 +321,7 @@
             text: `Allow a longer doorway reset and plan to re-enter once the class is quiet.`,
             score: 0,
             feedback: `Developing fidelity. Calm may improve, but the doorway may remain valuable.`,
-            wizard: `The Wizard watches the reset stretch. Calm improves, but the doorway is doing a lot of work. The routine needs a clearer return signal. ABA Anchor: Open-ended resets can become escape if re-entry is not planned.`,
+            wizard: `The Wizard watches the reset stretch. Calm improves, but the doorway is doing a lot of work. The routine needs a clearer return signal. Open-ended resets can become escape if re-entry is not planned.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -334,7 +334,7 @@
             text: `Use the calm moment to explain that leaving the room is unsafe and not allowed.`,
             score: -10,
             feedback: `Low fidelity. Processing too soon can restart the episode or add adult attention.`,
-            wizard: `The Wizard raises both hands. The crisis was cooling, but the explanation warms it again. Student's attention moves from safe return to defending why he left. ABA Anchor: Safety teaching happens after regulation and successful re-entry.`,
+            wizard: `The Wizard raises both hands. The crisis was cooling, but the explanation warms it again. Student's attention moves from safe return to defending why he left. Safety teaching happens after regulation and successful re-entry.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -353,7 +353,7 @@
             text: `Reduce language, keep line of sight, and let support help create a calm return path.`,
             score: 10,
             feedback: `High fidelity repair. You reduced escalation and preserved safety.`,
-            wizard: `The Wizard steadies the doorway. The scene is not fully recovered, but it is safer. The chase energy drains away, and support can rebuild the path back. ABA Anchor: In crisis, the best repair may be reducing pressure and restoring safety before teaching.`,
+            wizard: `The Wizard steadies the doorway. The scene is not fully recovered, but it is safer. The chase energy drains away, and support can rebuild the path back. In crisis, the best repair may be reducing pressure and restoring safety before teaching.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -366,7 +366,7 @@
             text: `Monitor quietly while support arrives and delay the classroom return demand.`,
             score: 0,
             feedback: `Developing fidelity. This may reduce immediate danger, but teaching is limited.`,
-            wizard: `The Wizard stands guard. Safety is the priority, but the replacement routine will need more practice later. ABA Anchor: Stabilization is useful, but the plan still needs a safe re-entry step when possible.`,
+            wizard: `The Wizard stands guard. Safety is the priority, but the replacement routine will need more practice later. Stabilization is useful, but the plan still needs a safe re-entry step when possible.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -379,7 +379,7 @@
             text: `Continue insisting Student return immediately so leaving does not work.`,
             score: -10,
             feedback: `Low fidelity. Immediate insistence can intensify flight or aggression.`,
-            wizard: `The Wizard's alarm fills the doorway. The demand to return becomes another reason to flee. The crisis remains active because the pressure keeps rising. ABA Anchor: Crisis support should not become a contest over compliance.`,
+            wizard: `The Wizard's alarm fills the doorway. The demand to return becomes another reason to flee. The crisis remains active because the pressure keeps rising. Crisis support should not become a contest over compliance.`,
             ending: "fail",
             meta: {
               bipComponent: "Crisis Respond",
