@@ -468,7 +468,8 @@ function pickScenario(pool, rnd) { return sample(pool, 1, rnd)[0]; }
 
 function renderIntroCards() {
   setPlayMode(false);
-
+placeUtilityActions('bottom');
+  
   if (storyText) storyText.classList.remove('same-day-return');
   if (storyText) storyText.style.display = 'block';
   const oldSummary = document.getElementById('summary-panel');
@@ -703,7 +704,7 @@ function showNode(id) {
 
 if (node.feedback) {
   setPlayMode(false);
-
+placeUtilityActions('top');
   if (storyText) storyText.style.display = 'none';
 
     const pct = percentScore();
@@ -868,3 +869,20 @@ if (todayResult) {
   showFeedback("The Wizard will chime in after every move.", "correct", +10);
 }
   });
+function placeUtilityActions(location) {
+  const actions = document.getElementById('utility-actions');
+  const toolbar = document.getElementById('toolbar');
+  const bottomSlot = document.getElementById('bottom-action-slot');
+
+  if (!actions || !toolbar || !bottomSlot) return;
+
+  if (location === 'bottom') {
+    bottomSlot.appendChild(actions);
+    document.body.classList.add('start-screen');
+    document.body.classList.remove('end-screen');
+  } else {
+    toolbar.appendChild(actions);
+    document.body.classList.add('end-screen');
+    document.body.classList.remove('start-screen');
+  }
+}
