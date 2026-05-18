@@ -38,7 +38,7 @@
             text: `Tell Student, "Everyone has a partner today. Pick someone quickly so we can start."`,
             score: 0,
             feedback: `Developing fidelity. The expectation is clear, but the support is not specific enough for this routine.`,
-            wizard: `The Wizard hears the clock ticking. Partner work remains the goal, but Student still has to solve the hardest parts: who to join, what role to take, and how to begin. Peers keep watching the delay. ABA Anchor: Expectations need to be paired with a replacement response and first action.`,
+            wizard: `The Wizard hears the clock ticking. Partner work remains the goal, but Student still has to solve the hardest parts: who to join, what role to take, and how to begin. Peers keep watching the delay. Expectations need to be paired with a replacement response and first action.`,
             next: "step2_wobble",
             meta: {
               bipComponent: "Prevent",
@@ -51,7 +51,7 @@
             text: `Privately offer, "Reader or checker? Choose your role, then sit beside the table partner with the card."`,
             score: 10,
             feedback: `High fidelity. You gave control within the expected routine and made the first action visible.`,
-            wizard: `The Wizard lays two role cards on the table like safe paths. Student does not have to escape partner work to gain control. He can choose how to enter it. ABA Anchor: Role choice reduces uncertainty while preserving access to peer instruction.`,
+            wizard: `The Wizard lays two role cards on the table like safe paths. Student does not have to escape partner work to gain control. He can choose how to enter it. Role choice reduces uncertainty while preserving access to peer instruction.`,
             next: "step2_supported",
             meta: {
               bipComponent: "Prevent",
@@ -64,7 +64,7 @@
             text: `Let Student work alone today so the rest of the class can begin partner practice smoothly.`,
             score: -10,
             feedback: `Low fidelity. This may reinforce refusal by removing the partner-work demand.`,
-            wizard: `The Wizard watches the partner bridge vanish. Student refused, and the peer routine disappeared. The class may start smoothly, but Student's escape pathway just got stronger. ABA Anchor: Adaptations should preserve the function-based goal whenever possible.`,
+            wizard: `The Wizard watches the partner bridge vanish. Student refused, and the peer routine disappeared. The class may start smoothly, but Student's escape pathway just got stronger. Adaptations should preserve the function-based goal whenever possible.`,
             next: "step2_escape_opened",
             meta: {
               bipComponent: "Respond",
@@ -83,7 +83,7 @@
             text: `Point to the seat and say, "Sit beside your partner and check number one with your finger."`,
             score: 10,
             feedback: `High fidelity. You turned the role choice into an observable partner-work response.`,
-            wizard: `The Wizard anchors the role card to a real action. Student has a place, a peer, and a first move. The transition becomes physical and doable instead of social and vague. ABA Anchor: Prompting the first role action builds fluency with the replacement routine.`,
+            wizard: `The Wizard anchors the role card to a real action. Student has a place, a peer, and a first move. The transition becomes physical and doable instead of social and vague. Prompting the first role action builds fluency with the replacement routine.`,
             next: "step3_strong",
             meta: {
               bipComponent: "Teach",
@@ -96,7 +96,7 @@
             text: `Give him a moment because he accepted the role and may sit when he is ready.`,
             score: 0,
             feedback: `Developing fidelity. The role was accepted, but the entry response still needs support.`,
-            wizard: `The Wizard watches Student hover between refusal and participation. The role card is helpful, but it is not yet behavior in the routine. ABA Anchor: Reinforce and shape the first movement into partner work.`,
+            wizard: `The Wizard watches Student hover between refusal and participation. The role card is helpful, but it is not yet behavior in the routine. Reinforce and shape the first movement into partner work.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Teach",
@@ -109,7 +109,7 @@
             text: `Tell him, "You picked checker, so now you need to stop delaying."`,
             score: -10,
             feedback: `Low fidelity. This adds pressure after a successful choice and may restart refusal.`,
-            wizard: `The Wizard sees the safe path turn sharp. Student's role choice starts to feel like a trap, and the peer audience flickers back to life. ABA Anchor: Avoid turning replacement behavior into a new demand conflict.`,
+            wizard: `The Wizard sees the safe path turn sharp. Student's role choice starts to feel like a trap, and the peer audience flickers back to life. Avoid turning replacement behavior into a new demand conflict.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -128,7 +128,7 @@
             text: `Ask him why he is refusing partner work today so you can solve the real problem.`,
             score: -10,
             feedback: `Low fidelity in the moment. Public problem solving increases attention and delays re-entry.`,
-            wizard: `The Wizard watches the transition turn into an interview. Student now has words, attention, and an audience instead of a role and first step. ABA Anchor: Problem solving belongs later, after the routine is stabilized.`,
+            wizard: `The Wizard watches the transition turn into an interview. Student now has words, attention, and an audience instead of a role and first step. Problem solving belongs later, after the routine is stabilized.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -141,7 +141,7 @@
             text: `Offer two role choices quietly and point to the exact seat where he can start.`,
             score: 10,
             feedback: `High fidelity repair. You added privacy, role clarity, and a first action.`,
-            wizard: `The Wizard narrows the noisy room into one seat and two roles. Student can stop performing and enter the routine through a choice that still leads to partner work. ABA Anchor: Antecedent support reduces uncertainty and prevents escape.`,
+            wizard: `The Wizard narrows the noisy room into one seat and two roles. Student can stop performing and enter the routine through a choice that still leads to partner work. Antecedent support reduces uncertainty and prevents escape.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Prevent",
@@ -154,7 +154,7 @@
             text: `Tell him you will come back in one minute and continue organizing the other partners.`,
             score: 0,
             feedback: `Developing fidelity. This reduces adult attention, but it delays active support for joining.`,
-            wizard: `The Wizard lets the room move on. The audience shrinks, which helps, but Student remains outside the routine. A minute can become a quiet escape window. ABA Anchor: Low attention is helpful only if re-entry is still prompted.`,
+            wizard: `The Wizard lets the room move on. The audience shrinks, which helps, but Student remains outside the routine. A minute can become a quiet escape window. Low attention is helpful only if re-entry is still prompted.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -173,7 +173,7 @@
             text: `Let him work alone today and plan to practice partner roles tomorrow.`,
             score: 0,
             feedback: `Developing fidelity. The class is calm, but the refusal sequence ended with escape from partner work.`,
-            wizard: `The Wizard closes today's partner bridge. The room is quiet, but Student avoided the exact routine the BIP is trying to protect. Tomorrow's partner transition may be harder. ABA Anchor: Delayed practice rarely competes with immediate escape.`,
+            wizard: `The Wizard closes today's partner bridge. The room is quiet, but Student avoided the exact routine the BIP is trying to protect. Tomorrow's partner transition may be harder. Delayed practice rarely competes with immediate escape.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -186,7 +186,7 @@
             text: `Bring a role card over and say, "Check number one here, then join the partner for number two."`,
             score: 10,
             feedback: `High fidelity repair. You made a temporary adaptation while preserving re-entry to partner work.`,
-            wizard: `The Wizard rebuilds the bridge in two steps. Student gets a lower-demand start, but the path still leads back to the peer routine. ABA Anchor: Adaptation should preserve the function-based goal and include a return plan.`,
+            wizard: `The Wizard rebuilds the bridge in two steps. Student gets a lower-demand start, but the path still leads back to the peer routine. Adaptation should preserve the function-based goal and include a return plan.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Respond",
@@ -199,7 +199,7 @@
             text: `Tell him working alone is not fair because everyone else has to work with a partner.`,
             score: -10,
             feedback: `Low fidelity. This adds social pressure and may restart refusal.`,
-            wizard: `The Wizard's warning light glows over the empty seat. Student hears fairness, but his body hears pressure. The partner routine becomes heavier, not safer. ABA Anchor: Social comparison does not teach the replacement behavior.`,
+            wizard: `The Wizard's warning light glows over the empty seat. Student hears fairness, but his body hears pressure. The partner routine becomes heavier, not safer. Social comparison does not teach the replacement behavior.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -218,7 +218,7 @@
             text: `Mark a Chart Move and say privately, "Flexible joining. You are checking number one."`,
             score: 10,
             feedback: `High fidelity. You reinforced flexible entry into the partner routine immediately.`,
-            wizard: `The Wizard stamps the role card before the moment cools. Student learns that joining the peer routine, not refusing it, changes the outcome. The partner task now has a first step and a payoff. ABA Anchor: Immediate, specific reinforcement strengthens flexible participation.`,
+            wizard: `The Wizard stamps the role card before the moment cools. Student learns that joining the peer routine, not refusing it, changes the outcome. The partner task now has a first step and a payoff. Immediate, specific reinforcement strengthens flexible participation.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -231,7 +231,7 @@
             text: `Let the pair begin and save praise until Student completes the first partner item.`,
             score: 0,
             feedback: `Developing fidelity. Completion matters, but flexible joining was the fragile target behavior.`,
-            wizard: `The Wizard watches the first success pass quietly. Student joined, which was the hard part, but the consequence waits for a later behavior. ABA Anchor: Reinforce the response you most need to see again.`,
+            wizard: `The Wizard watches the first success pass quietly. Student joined, which was the hard part, but the consequence waits for a later behavior. Reinforce the response you most need to see again.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -244,7 +244,7 @@
             text: `Tell the partner, "Thanks for helping Student join even though it was hard."`,
             score: -10,
             feedback: `Low fidelity. This makes Student's difficulty public and shifts attention to the peer.`,
-            wizard: `The Wizard winces as the peer becomes part of the consequence. Student joined, but now the routine feels like a public rescue story. ABA Anchor: Reinforcement should name Student's replacement behavior without rebuilding the audience.`,
+            wizard: `The Wizard winces as the peer becomes part of the consequence. Student joined, but now the routine feels like a public rescue story. Reinforcement should name Student's replacement behavior without rebuilding the audience.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -263,7 +263,7 @@
             text: `Review the refusal privately before he starts so he understands the expectation.`,
             score: -10,
             feedback: `Low fidelity. Processing before re-entry can restart resistance and delay the routine.`,
-            wizard: `The Wizard sees the bridge pause just before Student crosses it. The refusal story returns, and the partner task waits in the background. ABA Anchor: Process later, after regulation and successful re-entry.`,
+            wizard: `The Wizard sees the bridge pause just before Student crosses it. The refusal story returns, and the partner task waits in the background. Process later, after regulation and successful re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -276,7 +276,7 @@
             text: `Let him join silently so the moment stays small and does not become a spotlight.`,
             score: 0,
             feedback: `Developing fidelity. The low-attention approach helps, but flexible joining is not reinforced.`,
-            wizard: `The Wizard keeps the room quiet, and that matters. But Student's successful return slips by without a clear signal. ABA Anchor: Reinforcement can stay private and still be immediate.`,
+            wizard: `The Wizard keeps the room quiet, and that matters. But Student's successful return slips by without a clear signal. Reinforcement can stay private and still be immediate.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -289,7 +289,7 @@
             text: `Reinforce the move toward the partner, then prompt one low-demand role action.`,
             score: 10,
             feedback: `High fidelity. You reinforced re-entry and shaped the next partner-work response.`,
-            wizard: `The Wizard lights the bridge one plank at a time. Student gets credit for moving toward the routine, then receives a small action that makes joining possible. ABA Anchor: Re-entry plus low-demand action builds fluency after hesitation.`,
+            wizard: `The Wizard lights the bridge one plank at a time. Student gets credit for moving toward the routine, then receives a small action that makes joining possible. Re-entry plus low-demand action builds fluency after hesitation.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -308,7 +308,7 @@
             text: `Prompt one role-based action and reinforce it immediately when Student starts.`,
             score: 10,
             feedback: `High fidelity repair. You converted partial presence into reinforced participation.`,
-            wizard: `The Wizard points to the role card again. Student finally has a concrete job, and the Chart Move makes that job matter. The partner routine becomes more than sitting near someone. ABA Anchor: Participation must be observable before it can become fluent.`,
+            wizard: `The Wizard points to the role card again. Student finally has a concrete job, and the Chart Move makes that job matter. The partner routine becomes more than sitting near someone. Participation must be observable before it can become fluent.`,
             ending: "success",
             meta: {
               bipComponent: "Teach",
@@ -321,7 +321,7 @@
             text: `Keep the room calm and wait to see whether Student joins more fully on his own.`,
             score: 0,
             feedback: `Developing fidelity. Calm is useful, but the replacement routine remains weak.`,
-            wizard: `The Wizard watches the partner routine wobble forward. Nothing is getting worse, but Student's role is still blurry. ABA Anchor: Waiting may preserve calm, but it does not build the replacement response.`,
+            wizard: `The Wizard watches the partner routine wobble forward. Nothing is getting worse, but Student's role is still blurry. Waiting may preserve calm, but it does not build the replacement response.`,
             ending: "mixed",
             meta: {
               bipComponent: "Teach",
@@ -334,7 +334,7 @@
             text: `Tell Student that if he refuses partner work again, he will lose the next choice activity.`,
             score: -10,
             feedback: `Low fidelity. Threats make partner work more aversive and do not teach the replacement response.`,
-            wizard: `The Wizard darkens the partner card. Student may comply for the moment, but the routine now predicts future loss. The next partner transition just became heavier. ABA Anchor: Consequence threats add pressure without building fluency.`,
+            wizard: `The Wizard darkens the partner card. Student may comply for the moment, but the routine now predicts future loss. The next partner transition just became heavier. Consequence threats add pressure without building fluency.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -353,7 +353,7 @@
             text: `Reduce language, shrink the audience, and offer one quiet role action that leads back to the partner.`,
             score: 10,
             feedback: `High fidelity repair. You reduced attention and rebuilt a small path back into the routine.`,
-            wizard: `The Wizard lowers the noise around the table. The argument, fairness talk, and peer watching fade behind one role action. Student can return without needing a public win or a public apology. ABA Anchor: Repair means reducing maintaining consequences and prompting re-entry.`,
+            wizard: `The Wizard lowers the noise around the table. The argument, fairness talk, and peer watching fade behind one role action. Student can return without needing a public win or a public apology. Repair means reducing maintaining consequences and prompting re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -366,7 +366,7 @@
             text: `Have Student work away from the group until he can explain how partner work should look.`,
             score: -10,
             feedback: `Low fidelity. This removes access and adds a language demand after escalation.`,
-            wizard: `The Wizard closes the peer routine and opens an adult conversation instead. Student escapes partner work and now has to talk his way back before he can practice. ABA Anchor: Exclusion plus processing can strengthen escape from peer routines.`,
+            wizard: `The Wizard closes the peer routine and opens an adult conversation instead. Student escapes partner work and now has to talk his way back before he can practice. Exclusion plus processing can strengthen escape from peer routines.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -379,7 +379,7 @@
             text: `Wait quietly until the class is settled, then decide whether to invite him back.`,
             score: 0,
             feedback: `Developing fidelity. This may reduce escalation, but the return path is still unclear.`,
-            wizard: `The Wizard lets the storm pass, but the bridge remains unfinished. Student may calm down, yet the partner routine has not been practiced or reinforced. ABA Anchor: Stabilization should be followed by a low-demand re-entry step.`,
+            wizard: `The Wizard lets the storm pass, but the bridge remains unfinished. Student may calm down, yet the partner routine has not been practiced or reinforced. Stabilization should be followed by a low-demand re-entry step.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
