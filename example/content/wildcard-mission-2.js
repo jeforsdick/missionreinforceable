@@ -38,7 +38,7 @@
             text: `Privately move near Student and say, "Number one first. Point to the problem and start with your name."`,
             score: 10,
             feedback: `High fidelity. You kept the visitor boring and anchored Student in an observable task response.`,
-            wizard: `The Wizard dims the visitor's clipboard until the math page glows brighter. Student gets a concrete action that competes with performing. The audience cue loses power because your response is private, brief, and task-focused. ABA Anchor: You reduced attention and prompted task engagement before the performance grew.`,
+            wizard: `The Wizard dims the visitor's clipboard until the math page glows brighter. Student gets a concrete action that competes with performing. The audience cue loses power because your response is private, brief, and task-focused. You reduced attention and prompted task engagement before the performance grew.`,
             next: "step2_supported",
             meta: {
               bipComponent: "Teach",
@@ -51,7 +51,7 @@
             text: `Ignore the comment completely and continue helping another student nearby.`,
             score: 0,
             feedback: `Developing fidelity. Adult attention stays low, but Student still needs a replacement task cue.`,
-            wizard: `The Wizard keeps your attention off the performance, which helps. But the pencil drum still has classmates and a visitor to play for. Student has not yet been shown what to do instead. ABA Anchor: Ignoring is incomplete when other attention sources remain available and task engagement is not prompted.`,
+            wizard: `The Wizard keeps your attention off the performance, which helps. But the pencil drum still has classmates and a visitor to play for. Student has not yet been shown what to do instead. Ignoring is incomplete when other attention sources remain available and task engagement is not prompted.`,
             next: "step2_wobble",
             meta: {
               bipComponent: "Respond",
@@ -64,7 +64,7 @@
             text: `Say, "Remember, we have a visitor today, so show them your best work."`,
             score: -10,
             feedback: `Low fidelity. This makes the visitor more important and increases the audience value.`,
-            wizard: `The Wizard's spotlight snaps onto the clipboard. Student now knows the visitor matters, the class knows the visitor matters, and the math task becomes a stage. ABA Anchor: Naming the audience can strengthen audience-maintained behavior.`,
+            wizard: `The Wizard's spotlight snaps onto the clipboard. Student now knows the visitor matters, the class knows the visitor matters, and the math task becomes a stage. Naming the audience can strengthen audience-maintained behavior.`,
             next: "step2_escalated",
             meta: {
               bipComponent: "Respond",
@@ -83,7 +83,7 @@
             text: `Wait to reinforce until he completes several problems so the visitor does not become a bigger deal.`,
             score: 0,
             feedback: `Developing fidelity. The instinct to keep it small is good, but the first task response needs reinforcement.`,
-            wizard: `The Wizard watches the first success cool on the page. Student did the hard part under audience pressure, but the consequence waits too long. ABA Anchor: Reinforcement can be private and brief while still happening immediately.`,
+            wizard: `The Wizard watches the first success cool on the page. Student did the hard part under audience pressure, but the consequence waits too long. Reinforcement can be private and brief while still happening immediately.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -96,7 +96,7 @@
             text: `Privately mark a Chart Move and say, "Started number one while the room changed. Nice focus."`,
             score: 10,
             feedback: `High fidelity. You reinforced task engagement under audience conditions without spotlighting the visitor.`,
-            wizard: `The Wizard slips the reinforcement onto the page like a secret key. Student gets attention for working, not performing, and the visitor stays boring in the background. ABA Anchor: Immediate, private reinforcement strengthens task engagement when an audience cue appears.`,
+            wizard: `The Wizard slips the reinforcement onto the page like a secret key. Student gets attention for working, not performing, and the visitor stays boring in the background. Immediate, private reinforcement strengthens task engagement when an audience cue appears.`,
             next: "step3_strong",
             meta: {
               bipComponent: "Reinforce",
@@ -109,7 +109,7 @@
             text: `Say loudly, "Great job staying focused even with someone watching."`,
             score: -10,
             feedback: `Low fidelity. The praise is positive, but it makes the audience cue explicit.`,
-            wizard: `The Wizard winces as the visitor's chair lights up again. The praise tells Student exactly what made the moment special: someone watching. The task becomes public performance instead of quiet engagement. ABA Anchor: Positive attention can still strengthen the wrong stimulus control.`,
+            wizard: `The Wizard winces as the visitor's chair lights up again. The praise tells Student exactly what made the moment special: someone watching. The task becomes public performance instead of quiet engagement. Positive attention can still strengthen the wrong stimulus control.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -128,7 +128,7 @@
             text: `Move closer, privately cue one task action, and reinforce the first quiet work response.`,
             score: 10,
             feedback: `High fidelity repair. You reduced the audience and gave Student a better way to access attention.`,
-            wizard: `The Wizard steps between the pencil drum and the audience. Student gets a path back to the task before the performance becomes the routine. ABA Anchor: Prompting and reinforcing task engagement competes with attention-maintained disruption.`,
+            wizard: `The Wizard steps between the pencil drum and the audience. Student gets a path back to the task before the performance becomes the routine. Prompting and reinforcing task engagement competes with attention-maintained disruption.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Teach",
@@ -141,7 +141,7 @@
             text: `Remind the class not to react because Student is trying to get attention.`,
             score: -10,
             feedback: `Low fidelity. This publicly labels the behavior and organizes the audience.`,
-            wizard: `The Wizard throws up his hands as the whole class learns the performance has a name. Student's behavior becomes the topic, and the clipboard grows brighter. ABA Anchor: Publicly describing the function can accidentally deliver the function.`,
+            wizard: `The Wizard throws up his hands as the whole class learns the performance has a name. Student's behavior becomes the topic, and the clipboard grows brighter. Publicly describing the function can accidentally deliver the function.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -154,7 +154,7 @@
             text: `Continue planned ignoring and hope the visitor and peers stop reacting quickly.`,
             score: 0,
             feedback: `Developing fidelity. Adult attention is low, but the peer and visitor cues are still active.`,
-            wizard: `The Wizard watches the audience flicker. You are not feeding it directly, but the room still is. Student has not practiced an alternative response yet. ABA Anchor: Planned ignoring works best when reinforcement for the replacement behavior is also available.`,
+            wizard: `The Wizard watches the audience flicker. You are not feeding it directly, but the room still is. Student has not practiced an alternative response yet. Planned ignoring works best when reinforcement for the replacement behavior is also available.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -173,7 +173,7 @@
             text: `Drop the public exchange, move near Student, and privately cue one low-demand task response.`,
             score: 10,
             feedback: `High fidelity repair. You stopped feeding the audience and rebuilt task focus.`,
-            wizard: `The Wizard cuts the stage lights. You do not argue about the visitor or the comment. The task becomes the path out of the spotlight. ABA Anchor: Repair means reducing attention and prompting a replacement response.`,
+            wizard: `The Wizard cuts the stage lights. You do not argue about the visitor or the comment. The task becomes the path out of the spotlight. Repair means reducing attention and prompting a replacement response.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Respond",
@@ -186,7 +186,7 @@
             text: `Turn attention back to the lesson and plan to talk with Student after the visitor leaves.`,
             score: 0,
             feedback: `Developing fidelity. This reduces the exchange, but Student still needs a task cue now.`,
-            wizard: `The Wizard redirects the camera to the lesson. That helps, but Student still holds a tiny microphone unless the task cue arrives soon. ABA Anchor: Delayed problem solving cannot replace in-the-moment replacement practice.`,
+            wizard: `The Wizard redirects the camera to the lesson. That helps, but Student still holds a tiny microphone unless the task cue arrives soon. Delayed problem solving cannot replace in-the-moment replacement practice.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Respond",
@@ -199,7 +199,7 @@
             text: `Tell Student the visitor is here to watch learning, not distracting behavior.`,
             score: -10,
             feedback: `Low fidelity. This increases the visitor's role as an audience and adds public correction.`,
-            wizard: `The Wizard's alarm flashes around the clipboard. The visitor becomes part of the consequence, and the performance becomes more meaningful. ABA Anchor: Public correction linked to the audience can strengthen audience-maintained behavior.`,
+            wizard: `The Wizard's alarm flashes around the clipboard. The visitor becomes part of the consequence, and the performance becomes more meaningful. Public correction linked to the audience can strengthen audience-maintained behavior.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Respond",
@@ -218,7 +218,7 @@
             text: `Privately reinforce the completed first problem and preview the next small step.`,
             score: 10,
             feedback: `High fidelity. You reinforced coping under audience conditions and kept the routine moving.`,
-            wizard: `The Wizard stores the win. Student learns that quiet work with a guest present earns reinforcement without becoming a show. The next problem is small enough to keep the page stronger than the audience. ABA Anchor: Reinforcement plus a clear next step supports fluency and generalization.`,
+            wizard: `The Wizard stores the win. Student learns that quiet work with a guest present earns reinforcement without becoming a show. The next problem is small enough to keep the page stronger than the audience. Reinforcement plus a clear next step supports fluency and generalization.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -231,7 +231,7 @@
             text: `Continue teaching and mention the success later after the visitor leaves.`,
             score: 0,
             feedback: `Developing fidelity. Delayed feedback is weaker for building the coping routine.`,
-            wizard: `The Wizard nods, but the magic is faint. The success is real, yet the reinforcement arrives after the moment has cooled. ABA Anchor: The response should contact reinforcement while the audience cue is still present.`,
+            wizard: `The Wizard nods, but the magic is faint. The success is real, yet the reinforcement arrives after the moment has cooled. The response should contact reinforcement while the audience cue is still present.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -244,7 +244,7 @@
             text: `Tell the visitor, "He is doing much better now than when you came in."`,
             score: -10,
             feedback: `Low fidelity. This brings the visitor back into Student's behavior story.`,
-            wizard: `The Wizard blocks the clipboard too late. Student's behavior becomes visitor commentary again, and the audience cue regains power. ABA Anchor: Adult discussion about Student can function as attention even when it is positive.`,
+            wizard: `The Wizard blocks the clipboard too late. Student's behavior becomes visitor commentary again, and the audience cue regains power. Adult discussion about Student can function as attention even when it is positive.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -263,7 +263,7 @@
             text: `Reinforce quiet task engagement and give the next short academic response.`,
             score: 10,
             feedback: `High fidelity. You reinforced the replacement behavior and moved forward.`,
-            wizard: `The Wizard closes the curtain. Student gets a reward for working, then immediately gets a next step that keeps him in the routine. ABA Anchor: Re-entry plus immediate reinforcement weakens the performance pathway.`,
+            wizard: `The Wizard closes the curtain. Student gets a reward for working, then immediately gets a next step that keeps him in the routine. Re-entry plus immediate reinforcement weakens the performance pathway.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -276,7 +276,7 @@
             text: `Let the calm continue and avoid adding any attention to the moment.`,
             score: 0,
             feedback: `Developing fidelity. The moment stays calm, but the replacement behavior is not strengthened.`,
-            wizard: `The Wizard whispers. The moment survives, but the skill stays underpowered. Student may not know exactly what worked. ABA Anchor: Reinforcement can be quiet and still strengthen the behavior.`,
+            wizard: `The Wizard whispers. The moment survives, but the skill stays underpowered. Student may not know exactly what worked. Reinforcement can be quiet and still strengthen the behavior.`,
             ending: "mixed",
             meta: {
               bipComponent: "Reinforce",
@@ -289,7 +289,7 @@
             text: `Use the calm moment to remind Student not to perform when visitors are in class.`,
             score: -10,
             feedback: `Low fidelity. This reintroduces the visitor as the focus and may restart the behavior.`,
-            wizard: `The Wizard's curtain opens again. The visitor returns to the center of the story, and Student remembers the audience. ABA Anchor: Feedback should focus on the replacement behavior, not the audience trigger.`,
+            wizard: `The Wizard's curtain opens again. The visitor returns to the center of the story, and Student remembers the audience. Feedback should focus on the replacement behavior, not the audience trigger.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -308,7 +308,7 @@
             text: `Give one private task cue and reinforce the first quiet response immediately.`,
             score: 10,
             feedback: `High fidelity repair. You converted partial calm into reinforced engagement.`,
-            wizard: `The Wizard points to the small opening. A private cue plus quick reinforcement gives Student a better way to access attention. The visitor fades into background scenery again. ABA Anchor: Reinforced replacement behavior competes with performance behavior.`,
+            wizard: `The Wizard points to the small opening. A private cue plus quick reinforcement gives Student a better way to access attention. The visitor fades into background scenery again. Reinforced replacement behavior competes with performance behavior.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -321,7 +321,7 @@
             text: `Keep ignoring the visitor-related behavior and continue the lesson.`,
             score: 0,
             feedback: `Developing fidelity. This may prevent adult attention, but peer or visitor cues may still maintain it.`,
-            wizard: `The Wizard watches the room carefully. Adult attention is low, but the peer audience may still be enough to keep the performance alive. ABA Anchor: Ignoring should be paired with prompting and reinforcing the replacement response.`,
+            wizard: `The Wizard watches the room carefully. Adult attention is low, but the peer audience may still be enough to keep the performance alive. Ignoring should be paired with prompting and reinforcing the replacement response.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -334,7 +334,7 @@
             text: `Tell Student he can take a break if he cannot handle having a visitor in class.`,
             score: -10,
             feedback: `Low fidelity. This may reinforce escape from guest-day routines.`,
-            wizard: `The Wizard's alarm returns. The visitor now predicts escape from class expectations. Future observations may become even harder. ABA Anchor: Breaks should follow appropriate requests and include a planned return step.`,
+            wizard: `The Wizard's alarm returns. The visitor now predicts escape from class expectations. Future observations may become even harder. Breaks should follow appropriate requests and include a planned return step.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -353,7 +353,7 @@
             text: `Reduce the audience, cue a low-demand task response, and reinforce quiet re-entry.`,
             score: 10,
             feedback: `High fidelity repair. You lowered the performance value and rebuilt task focus.`,
-            wizard: `The Wizard dims the room and lights the task. The performance loses power as Student gets a quieter route back to success. ABA Anchor: Repair means reducing maintaining consequences and reinforcing the first replacement response.`,
+            wizard: `The Wizard dims the room and lights the task. The performance loses power as Student gets a quieter route back to success. Repair means reducing maintaining consequences and reinforcing the first replacement response.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -366,7 +366,7 @@
             text: `Let Student sit quietly without task demands until the visitor leaves.`,
             score: 0,
             feedback: `Developing fidelity. This may reduce disruption, but escape from task demands is likely reinforced.`,
-            wizard: `The Wizard closes the book halfway. The performance stops, but so does the work. The visitor may now signal a way out of demands. ABA Anchor: Stabilization should be followed by low-demand re-entry.`,
+            wizard: `The Wizard closes the book halfway. The performance stops, but so does the work. The visitor may now signal a way out of demands. Stabilization should be followed by low-demand re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -379,7 +379,7 @@
             text: `Ask the visitor to ignore Student while you explain the expected behavior again.`,
             score: -10,
             feedback: `Low fidelity. This keeps the visitor and behavior in the spotlight.`,
-            wizard: `The Wizard's alarm lights the whole room. The visitor, the behavior, and the expectation all become public. The stage is fully built. ABA Anchor: Extended explanation and audience attention can maintain the very behavior you are trying to reduce.`,
+            wizard: `The Wizard's alarm lights the whole room. The visitor, the behavior, and the expectation all become public. The stage is fully built. Extended explanation and audience attention can maintain the very behavior you are trying to reduce.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
