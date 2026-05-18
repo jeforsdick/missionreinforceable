@@ -354,7 +354,14 @@ function logDecision(nodeId, opt) {
     t: new Date().toISOString(),
     nodeId,
     delta: typeof opt.delta === 'number' ? opt.delta : null,
-    choice: opt.text
+    choice: opt.text,
+    meta: opt.meta || null,
+    mission_id: currentScenario?.id || null,
+    mission_title: currentScenario?.title || null,
+    mission_focus: currentScenario?.focus || null,
+    routine: currentScenario?.routine || null,
+    function_pressure: currentScenario?.functionPressure || null,
+    bip_targets: currentScenario?.bipTargets || null
   });
 }
 /* -------- Same-Day Completion / Return Screen -------- */
@@ -648,16 +655,21 @@ function startDynamicMission(modeLabel, scn) {
 
   for (let stepKey in scn.steps) {
     const step = scn.steps[stepKey];
-    const node = { id: stepIds[stepKey], scenario: modeLabel, text: step.text, options: [] };
-    for (let chKey in step.choices) {
+const node = {
+  id: stepIds[stepKey],
+  scenario: scn.title || modeLabel,
+  text: step.text,
+  options: []
+};    for (let chKey in step.choices) {
       const ch  = step.choices[chKey];
 const opt = {
-  text:        ch.text,
-  delta:       ch.score,
-  feedback:    ch.feedback,
-  wizard:      ch.wizard || '',
+  text:         ch.text,
+  delta:        ch.score,
+  feedback:     ch.feedback,
+  wizard:       ch.wizard || '',
+  meta:         ch.meta || null,
   feedbackType: ch.score > 0 ? 'correct' : 'coach',
-  nextId:      ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
+  nextId:       ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
 };
       node.options.push(opt);
     }
