@@ -38,7 +38,7 @@
             text: `Create space, move nearby peers back, use one brief safety directive, and signal for support.`,
             score: 10,
             feedback: `High fidelity. You prioritized safety, space, minimal language, and support.`,
-            wizard: `The Wizard throws a shield between Student and the line. Peers move out of reach, the audience shrinks, and your words stay short enough for Student to process. The crisis has a chance to slow down. ABA Anchor: During immediate safety risk, reduce access to unsafe contact and lower stimulation before teaching.`,
+            wizard: `The Wizard throws a shield between Student and the line. Peers move out of reach, the audience shrinks, and your words stay short enough for Student to process. The crisis has a chance to slow down. During immediate safety risk, reduce access to unsafe contact and lower stimulation before teaching.`,
             next: "step2_supported",
             meta: {
               bipComponent: "Crisis Respond",
@@ -51,7 +51,7 @@
             text: `Stand close, ask what happened, and remind Student that kicking is unsafe.`,
             score: 0,
             feedback: `Developing fidelity. The concern is valid, but the language and proximity are too much during immediate risk.`,
-            wizard: `The Wizard stiffens. Your intent is supportive, but the questions arrive while Student is still activated. The peer is still close, and Student's body is not ready for a conversation. ABA Anchor: Safety moments call for fewer words and more space.`,
+            wizard: `The Wizard stiffens. Your intent is supportive, but the questions arrive while Student is still activated. The peer is still close, and Student's body is not ready for a conversation. Safety moments call for fewer words and more space.`,
             next: "step2_wobble",
             meta: {
               bipComponent: "Crisis Respond",
@@ -64,7 +64,7 @@
             text: `Tell Student to stop immediately and direct the line to keep moving around him.`,
             score: -10,
             feedback: `Low fidelity. Moving the line around Student may increase crowding, audience, and risk.`,
-            wizard: `The Wizard's alarm flashes down the hallway. Peers are still moving near Student, the audience is larger, and the unsafe moment now has more bodies in motion. ABA Anchor: Safety requires clearing space, not adding movement around the crisis.`,
+            wizard: `The Wizard's alarm flashes down the hallway. Peers are still moving near Student, the audience is larger, and the unsafe moment now has more bodies in motion. Safety requires clearing space, not adding movement around the crisis.`,
             next: "step2_escalated",
             meta: {
               bipComponent: "Crisis Respond",
@@ -83,7 +83,7 @@
             text: `Repeat one brief directive: "Hands down. Space." Then guide toward the reset area with distance.`,
             score: 10,
             feedback: `High fidelity. You kept language low and shifted toward de-escalation.`,
-            wizard: `The Wizard lowers the volume of the scene. Student hears one direction, not a lecture. The reset area becomes the next safe destination without turning the line into a courtroom. ABA Anchor: Minimal directives and space help move from safety risk to recovery.`,
+            wizard: `The Wizard lowers the volume of the scene. Student hears one direction, not a lecture. The reset area becomes the next safe destination without turning the line into a courtroom. Minimal directives and space help move from safety risk to recovery.`,
             next: "step3_strong",
             meta: {
               bipComponent: "Crisis Respond",
@@ -96,7 +96,7 @@
             text: `Tell Student he is safe now and ask him to explain what he needs.`,
             score: 0,
             feedback: `Developing fidelity. The statement is supportive, but explanation may be too demanding during activation.`,
-            wizard: `The Wizard watches Student's breathing. The words are kind, but the expectation to explain may come too early. Regulation is still the first job. ABA Anchor: Replacement language is easier after the body has returned to safety.`,
+            wizard: `The Wizard watches Student's breathing. The words are kind, but the expectation to explain may come too early. Regulation is still the first job. Replacement language is easier after the body has returned to safety.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -109,7 +109,7 @@
             text: `Tell Student the line cannot move until he shows everyone calm behavior.`,
             score: -10,
             feedback: `Low fidelity. This makes Student responsible for the whole group's waiting.`,
-            wizard: `The Wizard points to the watching class. The pressure grows. Student can feel every peer waiting on him, and that audience can fuel the next burst. ABA Anchor: Public pressure can strengthen peer attention and escalation.`,
+            wizard: `The Wizard points to the watching class. The pressure grows. Student can feel every peer waiting on him, and that audience can fuel the next burst. Public pressure can strengthen peer attention and escalation.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -128,7 +128,7 @@
             text: `Stop the discussion, clear peers away, use one safety directive, and call support.`,
             score: 10,
             feedback: `High fidelity repair. You returned to safety instead of continuing the conversation.`,
-            wizard: `The Wizard snaps the shield back up. The story of blame can wait. Bodies move apart, language shrinks, and the crisis loses some fuel. ABA Anchor: Safety is restored by reducing access, audience, and verbal load.`,
+            wizard: `The Wizard snaps the shield back up. The story of blame can wait. Bodies move apart, language shrinks, and the crisis loses some fuel. Safety is restored by reducing access, audience, and verbal load.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Crisis Respond",
@@ -141,7 +141,7 @@
             text: `Tell both students you will solve it after they each calm their bodies.`,
             score: 0,
             feedback: `Developing fidelity. The timing is reasonable, but peer separation still needs to happen immediately.`,
-            wizard: `The Wizard sees the missing piece. The words are reasonable, but the peer is still too close. Safety needs more than a future promise. ABA Anchor: Calm language helps, but immediate space is the active safety ingredient.`,
+            wizard: `The Wizard sees the missing piece. The words are reasonable, but the peer is still too close. Safety needs more than a future promise. Calm language helps, but immediate space is the active safety ingredient.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -154,7 +154,7 @@
             text: `Tell Student he is making it worse and needs to take responsibility now.`,
             score: -10,
             feedback: `Low fidelity. Blame language can intensify crisis behavior.`,
-            wizard: `The Wizard's warning bell rings. Student's face tightens. The crisis shifts from safety to shame, and aggression risk rises again. ABA Anchor: Accountability conversations belong after safety, regulation, and re-entry.`,
+            wizard: `The Wizard's warning bell rings. Student's face tightens. The crisis shifts from safety to shame, and aggression risk rises again. Accountability conversations belong after safety, regulation, and re-entry.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -173,7 +173,7 @@
             text: `Stop the moving line, clear space around Student, reduce language, and wait for support.`,
             score: 10,
             feedback: `High fidelity repair. You reduced movement, crowding, and stimulation.`,
-            wizard: `The Wizard freezes the hallway traffic and opens space around Student. The mission is risky, but removing motion slows the spiral. Support can enter a less chaotic scene. ABA Anchor: Crisis repair often starts by changing the environment, not increasing demands.`,
+            wizard: `The Wizard freezes the hallway traffic and opens space around Student. The mission is risky, but removing motion slows the spiral. Support can enter a less chaotic scene. Crisis repair often starts by changing the environment, not increasing demands.`,
             next: "step3_recovered",
             meta: {
               bipComponent: "Crisis Respond",
@@ -186,7 +186,7 @@
             text: `Stand between Student and peers while repeating that everyone needs to stay calm.`,
             score: 0,
             feedback: `Developing fidelity. You are trying to protect peers, but repeated language may keep activation high.`,
-            wizard: `The Wizard holds the line with effort. Peers are safer, but Student keeps hearing words while his body is still in alarm mode. ABA Anchor: Physical positioning may help, but language should shrink as activation rises.`,
+            wizard: `The Wizard holds the line with effort. Peers are safer, but Student keeps hearing words while his body is still in alarm mode. Physical positioning may help, but language should shrink as activation rises.`,
             next: "step3_mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -199,7 +199,7 @@
             text: `Insist Student walk with you immediately before anyone else moves.`,
             score: -10,
             feedback: `Low fidelity. Insistence during high activation can increase aggression or flight.`,
-            wizard: `The Wizard's red signal flashes. Student sees no exit except escalation. The demand to move now becomes another trigger while his body is still unsafe. ABA Anchor: Immediate compliance demands can intensify crisis behavior.`,
+            wizard: `The Wizard's red signal flashes. Student sees no exit except escalation. The demand to move now becomes another trigger while his body is still unsafe. Immediate compliance demands can intensify crisis behavior.`,
             next: "step3_risk",
             meta: {
               bipComponent: "Crisis Respond",
@@ -218,7 +218,7 @@
             text: `Reinforce safe body quietly and offer one low-demand re-entry plan.`,
             score: 10,
             feedback: `High fidelity. You reinforced recovery and planned a safe return.`,
-            wizard: `The Wizard's shield fades into a doorway. Student learns that calm recovery, not aggression, opens the path back. The next step is small enough to be safe. ABA Anchor: Reinforcing safe recovery helps the crisis end with regulation and access.`,
+            wizard: `The Wizard's shield fades into a doorway. Student learns that calm recovery, not aggression, opens the path back. The next step is small enough to be safe. Reinforcing safe recovery helps the crisis end with regulation and access.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -231,7 +231,7 @@
             text: `Let Student rest quietly and return him once the line has already left.`,
             score: 0,
             feedback: `Developing fidelity. This may preserve safety, but recovery is not clearly reinforced or taught.`,
-            wizard: `The Wizard nods cautiously. The crisis ends, but the recovery skill is quiet and unmarked. Student may calm, yet the plan did not fully teach what worked. ABA Anchor: Safe body and re-entry should contact reinforcement when possible.`,
+            wizard: `The Wizard nods cautiously. The crisis ends, but the recovery skill is quiet and unmarked. Student may calm, yet the plan did not fully teach what worked. Safe body and re-entry should contact reinforcement when possible.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -244,7 +244,7 @@
             text: `Process the kick immediately so Student understands why the reset happened.`,
             score: -10,
             feedback: `Low fidelity. Processing during recovery can reignite escalation.`,
-            wizard: `The Wizard raises both hands. Student's calm is still thin. The discussion pulls him back toward the hot moment before his body is ready. ABA Anchor: Processing belongs after regulation and successful re-entry.`,
+            wizard: `The Wizard raises both hands. Student's calm is still thin. The discussion pulls him back toward the hot moment before his body is ready. Processing belongs after regulation and successful re-entry.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -263,7 +263,7 @@
             text: `Use one calm directive, reinforce the first safe response, and preview a low-demand return.`,
             score: 10,
             feedback: `High fidelity repair. You moved from stabilization to recovery and re-entry.`,
-            wizard: `The Wizard guides the scene toward safety. One calm response becomes the new target, and reinforcement gives Student a reason to stay there. ABA Anchor: Crisis repair strengthens the first safe behavior that replaces escalation.`,
+            wizard: `The Wizard guides the scene toward safety. One calm response becomes the new target, and reinforcement gives Student a reason to stay there. Crisis repair strengthens the first safe behavior that replaces escalation.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -276,7 +276,7 @@
             text: `Maintain space and wait for support without adding more directions.`,
             score: 0,
             feedback: `Developing fidelity. This is safe but incomplete if recovery behavior is not strengthened.`,
-            wizard: `The Wizard stands watch. The scene may stay safe, but Student is not learning the next replacement step yet. ABA Anchor: Waiting can protect safety, but re-entry still needs a plan.`,
+            wizard: `The Wizard stands watch. The scene may stay safe, but Student is not learning the next replacement step yet. Waiting can protect safety, but re-entry still needs a plan.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -289,7 +289,7 @@
             text: `Tell Student he must apologize before returning to any group activity.`,
             score: -10,
             feedback: `Low fidelity. Social demands can restart escalation during crisis recovery.`,
-            wizard: `The Wizard blocks the apology demand. Student's body is barely regulated, and the social pressure risks lighting the crisis again. ABA Anchor: Restorative steps come after safety, regulation, and re-entry are stable.`,
+            wizard: `The Wizard blocks the apology demand. Student's body is barely regulated, and the social pressure risks lighting the crisis again. Restorative steps come after safety, regulation, and re-entry are stable.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -308,7 +308,7 @@
             text: `Prompt one visible safe response and reinforce it immediately when it happens.`,
             score: 10,
             feedback: `High fidelity repair. You turned stabilization into reinforced recovery.`,
-            wizard: `The Wizard points to the first safe spark. Hands down, body still, or one step with space becomes the behavior that matters now. ABA Anchor: Reinforce safety before increasing demands.`,
+            wizard: `The Wizard points to the first safe spark. Hands down, body still, or one step with space becomes the behavior that matters now. Reinforce safety before increasing demands.`,
             ending: "success",
             meta: {
               bipComponent: "Reinforce",
@@ -321,7 +321,7 @@
             text: `Keep monitoring and wait until Student appears fully calm before doing anything else.`,
             score: 0,
             feedback: `Developing fidelity. This may keep safety, but the recovery routine remains vague.`,
-            wizard: `The Wizard waits beside the reset area. The danger may keep fading, but Student may not know which safe response worked. ABA Anchor: Recovery behaviors should be named and reinforced when possible.`,
+            wizard: `The Wizard waits beside the reset area. The danger may keep fading, but Student may not know which safe response worked. Recovery behaviors should be named and reinforced when possible.`,
             ending: "mixed",
             meta: {
               bipComponent: "Respond",
@@ -334,7 +334,7 @@
             text: `Explain that the peer did not mean to bump him and he needs to let it go.`,
             score: -10,
             feedback: `Low fidelity. Reasoning about blame can pull Student back into the conflict.`,
-            wizard: `The Wizard hears the peer story reopen. Student's body tightens as the original trigger returns to center stage. ABA Anchor: Explanation during activation can re-evoke the crisis context.`,
+            wizard: `The Wizard hears the peer story reopen. Student's body tightens as the original trigger returns to center stage. Explanation during activation can re-evoke the crisis context.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
@@ -353,7 +353,7 @@
             text: `Stop all discussion, clear more space, and wait for support while using minimal prompts.`,
             score: 10,
             feedback: `High fidelity repair. You reduced stimulation and protected safety.`,
-            wizard: `The Wizard pulls the mission back from danger. Fewer words and more space remove the fuel. It is not elegant, but it is safer. ABA Anchor: In crisis, reducing risk is the immediate goal before teaching resumes.`,
+            wizard: `The Wizard pulls the mission back from danger. Fewer words and more space remove the fuel. It is not elegant, but it is safer. In crisis, reducing risk is the immediate goal before teaching resumes.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -366,7 +366,7 @@
             text: `Keep Student away from peers and monitor quietly until the group transitions.`,
             score: 0,
             feedback: `Developing fidelity. Safety may be preserved, but active recovery support is limited.`,
-            wizard: `The Wizard keeps one eye on the line. The risk lowers, but Student is mostly contained rather than taught a recovery path. ABA Anchor: Containment may be necessary, but the BIP still needs safe recovery and re-entry later.`,
+            wizard: `The Wizard keeps one eye on the line. The risk lowers, but Student is mostly contained rather than taught a recovery path. Containment may be necessary, but the BIP still needs safe recovery and re-entry later.`,
             ending: "mixed",
             meta: {
               bipComponent: "Crisis Respond",
@@ -379,7 +379,7 @@
             text: `Continue explaining the safety concern until Student acknowledges what happened.`,
             score: -10,
             feedback: `Low fidelity. Extended language can prolong or restart crisis behavior.`,
-            wizard: `The Wizard sounds the final alarm. The explanation becomes another demand. Student's breathing spikes, and the crisis remains alive. ABA Anchor: Acknowledgment is not the priority while safety and regulation are still fragile.`,
+            wizard: `The Wizard sounds the final alarm. The explanation becomes another demand. Student's breathing spikes, and the crisis remains alive. Acknowledgment is not the priority while safety and regulation are still fragile.`,
             ending: "fail",
             meta: {
               bipComponent: "Respond",
