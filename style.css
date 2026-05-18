@@ -108,7 +108,7 @@ h2,
     minmax(320px, 520px)
     max-content;
   grid-template-areas:
-    "teacher points hearts feedback actions";
+    "teacher points hearts feedback progress home";
   justify-content: center;
   align-items: center;
   gap: 12px;
