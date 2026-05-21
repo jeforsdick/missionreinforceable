@@ -58,7 +58,7 @@ button {
   padding:
     clamp(14px, 2vh, 24px)
     clamp(24px, 3vw, 38px)
-    clamp(18px, 3vh, 30px);
+    clamp(10px, 1.8vh, 16px);
   background: var(--panel);
   border: 1px solid rgba(255, 80, 80, .35);
   border-radius: var(--radius);
@@ -191,7 +191,7 @@ h2,
 
 #bottom-action-slot {
   width: 100%;
-  margin-top: 18px;
+  margin-top: 8px;
 }
 
 #bottom-action-slot .utility-actions {
@@ -220,7 +220,7 @@ body.start-screen #bottom-action-slot {
 }
 
 body.start-screen #bottom-action-slot .utility-actions {
-  margin: 18px auto 0;
+  margin: 8px auto 0;
 }
 
 /* ============================================================
