@@ -11,7 +11,7 @@
  *  - Uniform button formatting (item 7)
  *  - Classic UI + wizard pod
  *  - Three modes: Daily Drill / Emergency Sim / Shuffle Quest
- *  - Daily-seeded randomness, shuffled choices
+ *  - Daily-seeded randomness, shuffled choices 
  **********************************************************/
 
 /* -------- Per-teacher config (defaults, overridden by content.js) -------- */
