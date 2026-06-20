@@ -1127,7 +1127,51 @@ body.modal-open {
   opacity: .85;
   font-size: .85rem;
 }
+.dashboard-wizard-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(30, 30, 30, 0.92);
+  border: 3px solid var(--dash-wizard-color);
+  box-shadow: 0 0 18px var(--dash-wizard-glow);
+  margin: 24px 0;
+}
 
+.dashboard-wizard-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.dashboard-wizard-copy h3 {
+  margin: 0 0 10px;
+  color: var(--dash-wizard-color);
+  text-shadow: 0 0 10px var(--dash-wizard-glow);
+}
+
+.dashboard-wizard-copy p {
+  margin: 0;
+  color: #f3f3f3;
+  line-height: 1.5;
+}
+
+.dashboard-wizard-plus {
+  --dash-wizard-color: #20f7ff;
+  --dash-wizard-glow: rgba(32, 247, 255, 0.55);
+}
+
+.dashboard-wizard-meh {
+  --dash-wizard-color: #ffd84d;
+  --dash-wizard-glow: rgba(255, 216, 77, 0.55);
+}
+
+.dashboard-wizard-minus {
+  --dash-wizard-color: #ff4d5e;
+  --dash-wizard-glow: rgba(255, 77, 94, 0.55);
+}
 /* ============================================================
    TABLET
    ============================================================ */
