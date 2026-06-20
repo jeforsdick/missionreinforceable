@@ -49,7 +49,7 @@
           },
           B: {
             text: `Stand close, ask what happened, and remind Student that kicking is unsafe.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The concern is valid, but the language and proximity are too much during immediate risk.`,
             wizard: `The Wizard stiffens. Your intent is supportive, but the questions arrive while Student is still activated. The peer is still close, and Student's body is not ready for a conversation. Safety moments call for fewer words and more space.`,
             next: "step2_wobble",
@@ -62,7 +62,7 @@
           },
           C: {
             text: `Tell Student to stop immediately and direct the line to keep moving around him.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Moving the line around Student may increase crowding, audience, and risk.`,
             wizard: `The Wizard's alarm flashes down the hallway. Peers are still moving near Student, the audience is larger, and the unsafe moment now has more bodies in motion. Safety requires clearing space, not adding movement around the crisis.`,
             next: "step2_escalated",
@@ -94,7 +94,7 @@
           },
           B: {
             text: `Tell Student he is safe now and ask him to explain what he needs.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The statement is supportive, but explanation may be too demanding during activation.`,
             wizard: `The Wizard watches Student's breathing. The words are kind, but the expectation to explain may come too early. Regulation is still the first job. Replacement language is easier after the body has returned to safety.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Tell Student the line cannot move until he shows everyone calm behavior.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This makes Student responsible for the whole group's waiting.`,
             wizard: `The Wizard points to the watching class. The pressure grows. Student can feel every peer waiting on him, and that audience can fuel the next burst. Public pressure can strengthen peer attention and escalation.`,
             next: "step3_risk",
@@ -139,7 +139,7 @@
           },
           B: {
             text: `Tell both students you will solve it after they each calm their bodies.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The timing is reasonable, but peer separation still needs to happen immediately.`,
             wizard: `The Wizard sees the missing piece. The words are reasonable, but the peer is still too close. Safety needs more than a future promise. Calm language helps, but immediate space is the active safety ingredient.`,
             next: "step3_mixed",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Tell Student he is making it worse and needs to take responsibility now.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Blame language can intensify crisis behavior.`,
             wizard: `The Wizard's warning bell rings. Student's face tightens. The crisis shifts from safety to shame, and aggression risk rises again. Accountability conversations belong after safety, regulation, and re-entry.`,
             next: "step3_risk",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Stand between Student and peers while repeating that everyone needs to stay calm.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. You are trying to protect peers, but repeated language may keep activation high.`,
             wizard: `The Wizard holds the line with effort. Peers are safer, but Student keeps hearing words while his body is still in alarm mode. Physical positioning may help, but language should shrink as activation rises.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Insist Student walk with you immediately before anyone else moves.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Insistence during high activation can increase aggression or flight.`,
             wizard: `The Wizard's red signal flashes. Student sees no exit except escalation. The demand to move now becomes another trigger while his body is still unsafe. Immediate compliance demands can intensify crisis behavior.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Let Student rest quietly and return him once the line has already left.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may preserve safety, but recovery is not clearly reinforced or taught.`,
             wizard: `The Wizard nods cautiously. The crisis ends, but the recovery skill is quiet and unmarked. Student may calm, yet the plan did not fully teach what worked. Safe body and re-entry should contact reinforcement when possible.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Process the kick immediately so Student understands why the reset happened.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Processing during recovery can reignite escalation.`,
             wizard: `The Wizard raises both hands. Student's calm is still thin. The discussion pulls him back toward the hot moment before his body is ready. Processing belongs after regulation and successful re-entry.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Maintain space and wait for support without adding more directions.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This is safe but incomplete if recovery behavior is not strengthened.`,
             wizard: `The Wizard stands watch. The scene may stay safe, but Student is not learning the next replacement step yet. Waiting can protect safety, but re-entry still needs a plan.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Tell Student he must apologize before returning to any group activity.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Social demands can restart escalation during crisis recovery.`,
             wizard: `The Wizard blocks the apology demand. Student's body is barely regulated, and the social pressure risks lighting the crisis again. Restorative steps come after safety, regulation, and re-entry are stable.`,
             ending: "fail",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Keep monitoring and wait until Student appears fully calm before doing anything else.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may keep safety, but the recovery routine remains vague.`,
             wizard: `The Wizard waits beside the reset area. The danger may keep fading, but Student may not know which safe response worked. Recovery behaviors should be named and reinforced when possible.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Explain that the peer did not mean to bump him and he needs to let it go.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Reasoning about blame can pull Student back into the conflict.`,
             wizard: `The Wizard hears the peer story reopen. Student's body tightens as the original trigger returns to center stage. Explanation during activation can re-evoke the crisis context.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Keep Student away from peers and monitor quietly until the group transitions.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Safety may be preserved, but active recovery support is limited.`,
             wizard: `The Wizard keeps one eye on the line. The risk lowers, but Student is mostly contained rather than taught a recovery path. Containment may be necessary, but the BIP still needs safe recovery and re-entry later.`,
             ending: "mixed",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Continue explaining the safety concern until Student acknowledges what happened.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Extended language can prolong or restart crisis behavior.`,
             wizard: `The Wizard sounds the final alarm. The explanation becomes another demand. Student's breathing spikes, and the crisis remains alive. Acknowledgment is not the priority while safety and regulation are still fragile.`,
             ending: "fail",
