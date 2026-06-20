@@ -1172,6 +1172,69 @@ body.modal-open {
   --dash-wizard-color: #ff4d5e;
   --dash-wizard-glow: rgba(255, 77, 94, 0.55);
 }
+/* ===== Dashboard Wizard Feedback State Colors ===== */
+
+.wizard-summary-bubble.wizard-summary-plus {
+  border-color: #20f7ff;
+  box-shadow:
+    0 0 18px rgba(32, 247, 255, 0.55),
+    inset 0 0 10px rgba(32, 247, 255, 0.12);
+}
+
+.wizard-summary-bubble.wizard-summary-plus .wizard-summary-icon {
+  border-color: #20f7ff;
+}
+
+.wizard-summary-bubble.wizard-summary-plus .wizard-summary-text h3 {
+  color: #20f7ff;
+  text-shadow: 0 0 10px rgba(32, 247, 255, 0.75);
+}
+
+.wizard-summary-bubble.wizard-summary-plus .wizard-summary-text p {
+  color: #d9fdff;
+}
+
+
+.wizard-summary-bubble.wizard-summary-meh {
+  border-color: #ffd84d;
+  box-shadow:
+    0 0 18px rgba(255, 216, 77, 0.55),
+    inset 0 0 10px rgba(255, 216, 77, 0.12);
+}
+
+.wizard-summary-bubble.wizard-summary-meh .wizard-summary-icon {
+  border-color: #ffd84d;
+}
+
+.wizard-summary-bubble.wizard-summary-meh .wizard-summary-text h3 {
+  color: #ffd84d;
+  text-shadow: 0 0 10px rgba(255, 216, 77, 0.75);
+}
+
+.wizard-summary-bubble.wizard-summary-meh .wizard-summary-text p {
+  color: #fff4c2;
+}
+
+
+.wizard-summary-bubble.wizard-summary-minus {
+  border-color: #ff4d5e;
+  box-shadow:
+    0 0 18px rgba(255, 77, 94, 0.55),
+    inset 0 0 10px rgba(255, 77, 94, 0.12);
+}
+
+.wizard-summary-bubble.wizard-summary-minus .wizard-summary-icon {
+  border-color: #ff4d5e;
+}
+
+.wizard-summary-bubble.wizard-summary-minus .wizard-summary-text h3 {
+  color: #ff4d5e;
+  text-shadow: 0 0 10px rgba(255, 77, 94, 0.75);
+}
+
+.wizard-summary-bubble.wizard-summary-minus .wizard-summary-text p {
+  color: #ffd0d5;
+}
 /* ============================================================
    TABLET
    ============================================================ */
