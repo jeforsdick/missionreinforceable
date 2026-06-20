@@ -49,7 +49,7 @@
           },
           B: {
             text: `Tell Student the work is important and encourage him to try one sentence before taking a break.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The tone is supportive, but the demand is still too large during escalation.`,
             wizard: `The Wizard hears the kindness, but Student hears the whole sentence. His pencil does not move. The writing task still feels too big, and the peer is now watching the struggle. During escalation, the first response must be very small and observable.`,
             next: "step2_wobble",
@@ -62,7 +62,7 @@
           },
           C: {
             text: `Tell Student he cannot leave the task until the writing is finished.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Blocking escape verbally can intensify refusal and make writing more aversive.`,
             wizard: `The Wizard's warning flame rises. The page becomes a locked gate. Student pushes back harder because the only escape route now appears to be escalation. High-pressure language can strengthen escape-maintained refusal.`,
             next: "step2_escalated",
@@ -94,7 +94,7 @@
           },
           B: {
             text: `Let Student reset as long as needed and check back after the rest of the class is working.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may reduce conflict, but the re-entry plan is too loose.`,
             wizard: `The Wizard watches the bridge stretch too far. Student calms, but the writing task drifts away. Without a clear return point, reset can become avoidance. Open-ended breaks can strengthen escape if re-entry is not planned.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Use the reset time to explain why refusing work makes the task take longer.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Teaching during reset can restart escalation and add adult attention.`,
             wizard: `The Wizard's timer cracks. The reset stops feeling like regulation and starts feeling like a lecture. Student's shoulders rise again. Process later, after regulation and successful re-entry.`,
             next: "step3_risk",
@@ -139,7 +139,7 @@
           },
           B: {
             text: `Give Student a little space and say you will come back when he is ready.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Calm space may reduce adult attention, but it can allow avoidance to continue.`,
             wizard: `The Wizard steps back with you. The conflict lowers, but the page remains untouched. Student may calm, or he may learn that waiting makes writing disappear. Space should include a return step when escape is the likely function.`,
             next: "step3_mixed",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Remind Student that refusing now means missing a preferred activity later.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Threats can increase emotional responding around the task.`,
             wizard: `The Wizard darkens the page. Writing now predicts losing something later. The task becomes heavier, and Student's refusal gains emotional fuel. Threats add aversiveness without teaching task re-entry.`,
             next: "step3_risk",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Move the paper aside and wait quietly until Student stops talking.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may lower the exchange, but the writing routine is not repaired yet.`,
             wizard: `The Wizard sees the room quieting, but the page has vanished from the immediate routine. Calm may return, yet writing has not been rebuilt. Reducing interaction should be followed by low-demand re-entry.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Tell Student the comment was disrespectful and must be fixed before work continues.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This adds social pressure and verbal load during escalation.`,
             wizard: `The Wizard's alarm rings. The mission shifts from writing to disrespect. Student now has a bigger conflict to escape, and peers are still watching. Address respect later, after regulation and re-entry are stable.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Let Student stay calm a bit longer before bringing the writing demand back.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Calm is useful, but re-entry may become delayed or unclear.`,
             wizard: `The Wizard waits beside the desk. Calm is valuable, but the task bridge is fading. The longer writing stays away, the harder it may be to return. Regulation should lead into a predictable, low-demand task step.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Ask Student to explain what made the task feel so frustrating before restarting.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Too much verbal processing too soon can restart avoidance.`,
             wizard: `The Wizard raises a hand. Student was almost back. The explanation demand pulls him into talking about the task instead of starting it. Reflection comes after re-entry and reinforcement, not before.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Let Student sit quietly with the paper until he decides what he wants to write.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The task is nearby, but the replacement response is not actively taught.`,
             wizard: `The Wizard waits by the paper. The storm is smaller, but the skill is still thin. Student has proximity to writing, not a reinforced writing response. Quiet is not the same as re-entry.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Use the calm moment to remind him that refusal makes writing take longer.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. The explanation may pull Student back into the refusal loop.`,
             wizard: `The Wizard sees the old doorway reopen. Student was near the page, but now the conversation becomes the task. The pencil waits again. Teach through reinforced action first, then problem solve later.`,
             ending: "mixed",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Let Student observe quietly and try the writing again during the next work period.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may stay calm, but the current avoidance sequence is only partly repaired.`,
             wizard: `The Wizard closes the notebook halfway. The crisis is quieter, but the assignment escaped the moment. Tomorrow may bring the same battle. Re-entry should happen in the current routine when safe and feasible.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Tell Student he can rejoin after he agrees not to refuse the assignment again.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Requiring verbal agreement can restart the power struggle.`,
             wizard: `The Wizard's warning light returns. The task has become a promise Student must make under pressure. The refusal story comes back to life. Recovery should focus on safe action, not verbal compliance.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Stop talking and wait nearby until Student's body is calm enough to continue.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may reduce escalation, but replacement behavior is not yet taught.`,
             wizard: `The Wizard stands quietly. Waiting may prevent more damage, but the routine remains unfinished. Student is contained more than coached. Stabilization is useful, but the plan still needs low-demand re-entry when possible.`,
             ending: "mixed",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Continue explaining the expectation so Student understands that refusal is not an option.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Continued explanation can maintain the escalation cycle.`,
             wizard: `The Wizard's alarm grows louder. The explanation becomes the new demand. Student argues, the task stays gone, and the cycle strengthens. Extended language can function as adult attention and escape from writing.`,
             ending: "fail",
