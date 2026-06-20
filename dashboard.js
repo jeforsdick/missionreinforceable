@@ -4,18 +4,52 @@
  * a teacher-facing progress dashboard inside the game.
  **********************************************************/
 
+const DASH_WIZ = {
+  plus:  "../mr-wizard-plus10.png",
+  meh:   "../mr-wizard-0.png",
+  minus: "../mr-wizard-minus10.png"
+};
+
+function dashboardStateFromAccuracy(accuracy) {
+  const pct = Number(accuracy) || 0;
+
+  if (pct >= 80) {
+    return {
+      state: "plus",
+      img: DASH_WIZ.plus,
+      title: "The Wise Wizard Celebrates!",
+      message: "Strong implementation pattern. Your choices suggest the BIP pathway is becoming more fluent: prevent early, prompt the replacement behavior, and reinforce re-entry quickly."
+    };
+  }
+
+  if (pct >= 50) {
+    return {
+      state: "meh",
+      img: DASH_WIZ.meh,
+      title: "The Wise Wizard Thinks...",
+      message: "The pattern shows some plan-aligned moves, but fidelity is still uneven. Focus on making the first step observable, reducing language during activation, and reinforcing the replacement response sooner."
+    };
+  }
+
+  return {
+    state: "minus",
+    img: DASH_WIZ.minus,
+    title: "The Wise Wizard Sounds the Alarm!",
+    message: "The pattern suggests this plan needs more active support during the earliest signs of escalation. Start with structure, reduce language, and reinforce the replacement response as soon as it appears."
+  };
+}
+
 function dashboardResultLabel(delta) {
   const n = Number(delta);
 
   if (n >= 10) return "Correct";
   if (n >= 5) return "Review";
-  if (n >= 0) return "Missed";
-
-  return "Review";
+  return "Missed";
 }
 
 function dashboardFeedbackFromPercent(percent) {
   const pct = Number(percent) || 0;
+
   if (pct >= 80) return GAME_CONFIG.fidelityHigh || "Strong fidelity.";
   if (pct >= 50) return GAME_CONFIG.fidelityMid || "Getting there.";
   return GAME_CONFIG.fidelityLow || "Not aligned yet.";
@@ -29,9 +63,9 @@ function dashboardMakeCoachSummary(sessions, decisions) {
   const avg = dashboardAveragePercent(sessions);
   const allDecisions = decisions || [];
 
-const incorrect = allDecisions.filter(d => Number(d.delta) < 5).length;
-const neutral = allDecisions.filter(d => Number(d.delta) >= 5 && Number(d.delta) < 10).length;
-const correct = allDecisions.filter(d => Number(d.delta) >= 10).length;
+  const incorrect = allDecisions.filter(d => Number(d.delta) < 5).length;
+  const neutral = allDecisions.filter(d => Number(d.delta) >= 5 && Number(d.delta) < 10).length;
+  const correct = allDecisions.filter(d => Number(d.delta) >= 10).length;
 
   if (avg >= 90 && correct >= neutral + incorrect) {
     return "You are showing strong plan alignment. Your responses are consistently keeping language brief, reducing attention to problem behavior, and reinforcing the replacement behavior quickly.";
@@ -108,6 +142,7 @@ function dashboardCurrentStreak(sessions) {
 
 function dashboardFormatDate(dateString) {
   if (!dateString) return "";
+
   const d = new Date(dateString);
   if (Number.isNaN(d.getTime())) return String(dateString).slice(0, 10);
 
@@ -119,6 +154,7 @@ function dashboardFormatDate(dateString) {
 
 function dashboardFormatTime(dateString) {
   if (!dateString) return "";
+
   const d = new Date(dateString);
   if (Number.isNaN(d.getTime())) return "";
 
@@ -136,6 +172,7 @@ function dashboardEscape(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
 function hideDashboardTopFeedback() {
   const feedbackBox = document.getElementById("feedback");
   if (feedbackBox) feedbackBox.style.display = "none";
@@ -145,6 +182,7 @@ function showDashboardTopFeedback() {
   const feedbackBox = document.getElementById("feedback");
   if (feedbackBox) feedbackBox.style.display = "";
 }
+
 async function dashboardFetchHistory() {
   const endpoint = GAME_CONFIG.resultEndpoint;
 
@@ -198,16 +236,19 @@ function dashboardNormalizeSession(row) {
 }
 
 function dashboardNormalizeDecision(row) {
+  const delta = Number(row.delta ?? row.Delta ?? row.score ?? row.Score ?? 0);
+
   return {
     step: row.step || row.Step || row.choice || row.Choice || "",
-    result: row.result || row.Result || dashboardResultLabel(row.delta ?? row.Delta),
+    result: row.result || row.Result || dashboardResultLabel(delta),
     teacher: row.teacher || row.Teacher || "",
     student: row.student || row.Student || "",
     mode: row.mode || row.Mode || "",
     session_id: String(row.session_id || row.sessionId || row["Session ID"] || ""),
     timestamp: row.timestamp || row.Timestamp || "",
     decision_time: row.decision_time || row["Decision Time"] || row.DecisionTime || "",
-    score: Number(row.delta ?? row.Delta ?? 0),
+    delta: delta,
+    score: delta,
     node_id: row.node_id || row["Node ID"] || ""
   };
 }
@@ -216,9 +257,10 @@ function renderProgressDashboardFromHistory(history) {
   const storyText = document.getElementById("story-text");
   const choicesDiv = document.getElementById("choices");
   const scenarioTitle = document.getElementById("scenario-title");
-hideDashboardTopFeedback();
-  if (!choicesDiv) return;
 
+  hideDashboardTopFeedback();
+
+  if (!choicesDiv) return;
   if (storyText) storyText.style.display = "none";
 
   const oldSummary = document.getElementById("summary-panel");
@@ -241,6 +283,7 @@ hideDashboardTopFeedback();
   const streak = dashboardCurrentStreak(sessions);
   const total = sessions.length;
   const coachSummary = dashboardMakeCoachSummary(sessions, decisions);
+  const wizard = dashboardStateFromAccuracy(avg);
 
   const recentSessionCards = sessions.length
     ? sessions.slice(0, 12).map(session => {
@@ -264,34 +307,34 @@ hideDashboardTopFeedback();
 
   choicesDiv.innerHTML = `
     <div id="progress-dashboard">
-      <div class="wizard-summary-bubble">
+      <div class="wizard-summary-bubble wizard-summary-${dashboardEscape(wizard.state)}">
         <div class="wizard-summary-icon">
-          <img src="../mr-wizard-plus10.png" alt="MR Wizard">
+          <img src="${dashboardEscape(wizard.img)}" alt="MR Wizard">
         </div>
         <div class="wizard-summary-text">
-          <h3>The Wise Wizard Says...</h3>
+          <h3>${dashboardEscape(wizard.title)}</h3>
           <p>${dashboardEscape(coachSummary)}</p>
         </div>
       </div>
 
       <div class="dashboard-grid">
         <div class="dashboard-card">
-          <div class="dashboard-number">${avg}%</div>
+          <div class="dashboard-number">${dashboardEscape(avg)}%</div>
           <div class="dashboard-label">Overall Accuracy</div>
         </div>
 
         <div class="dashboard-card">
-          <div class="dashboard-number">${streak}</div>
+          <div class="dashboard-number">${dashboardEscape(streak)}</div>
           <div class="dashboard-label">School-Day Streak</div>
         </div>
 
         <div class="dashboard-card">
-          <div class="dashboard-number">${total}</div>
+          <div class="dashboard-number">${dashboardEscape(total)}</div>
           <div class="dashboard-label">Missions Completed</div>
         </div>
 
         <div class="dashboard-card">
-          <div class="dashboard-number">${best}%</div>
+          <div class="dashboard-number">${dashboardEscape(best)}%</div>
           <div class="dashboard-label">Best Score</div>
         </div>
       </div>
@@ -310,11 +353,10 @@ hideDashboardTopFeedback();
     </div>
   `;
 
-
   document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
-  showDashboardTopFeedback();
-  renderIntroCards();
-});
+    showDashboardTopFeedback();
+    renderIntroCards();
+  });
 
   document.querySelectorAll(".dashboard-session-card").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -330,23 +372,25 @@ function renderSessionDetails(session, decisions, fullHistory) {
   const storyText = document.getElementById("story-text");
   const choicesDiv = document.getElementById("choices");
   const scenarioTitle = document.getElementById("scenario-title");
-hideDashboardTopFeedback();
-  if (!choicesDiv || !session) return;
 
+  hideDashboardTopFeedback();
+
+  if (!choicesDiv || !session) return;
   if (storyText) storyText.style.display = "none";
   if (scenarioTitle) scenarioTitle.textContent = "Mission Details";
 
   const feedback = session.feedback_message || dashboardFeedbackFromPercent(session.percent);
+  const wizard = dashboardStateFromAccuracy(session.percent);
 
   const decisionRows = decisions.length
     ? decisions.map((d, index) => {
         const label = d.result || dashboardResultLabel(d.delta);
         const score = Number(d.delta);
 
-const className =
-  score >= 10 ? "correct" :
-  score >= 5 ? "meh" :
-  "wrong";
+        const className =
+          score >= 10 ? "correct" :
+          score >= 5 ? "meh" :
+          "wrong";
 
         return `
           <div class="decision-review-card ${className}">
@@ -358,7 +402,7 @@ const className =
               ${dashboardEscape(d.step)}
             </div>
             <div class="decision-review-meta">
-              Score: ${dashboardEscape(d.delta)} 
+              Score: ${dashboardEscape(d.delta)}
               ${d.node_id ? ` | Node: ${dashboardEscape(d.node_id)}` : ""}
             </div>
           </div>
@@ -380,9 +424,9 @@ const className =
         </div>
       </div>
 
-      <div class="wizard-summary-bubble">
+      <div class="wizard-summary-bubble wizard-summary-${dashboardEscape(wizard.state)}">
         <div class="wizard-summary-icon">
-          <img src="../mr-wizard-plus10.png" alt="MR Wizard">
+          <img src="${dashboardEscape(wizard.img)}" alt="MR Wizard">
         </div>
         <div class="wizard-summary-text">
           <h3>Overall Feedback</h3>
@@ -410,7 +454,9 @@ async function openProgressDashboard() {
   const choicesDiv = document.getElementById("choices");
   const storyText = document.getElementById("story-text");
   const scenarioTitle = document.getElementById("scenario-title");
-hideDashboardTopFeedback();
+
+  hideDashboardTopFeedback();
+
   if (storyText) storyText.style.display = "none";
   if (scenarioTitle) scenarioTitle.textContent = "Loading Progress";
 
@@ -423,10 +469,9 @@ hideDashboardTopFeedback();
   }
 
   try {
-  const history = await dashboardFetchHistory();
-  renderProgressDashboardFromHistory(history);
-}
-  catch (err) {
+    const history = await dashboardFetchHistory();
+    renderProgressDashboardFromHistory(history);
+  } catch (err) {
     console.error(err);
 
     if (choicesDiv) {
@@ -440,10 +485,11 @@ hideDashboardTopFeedback();
           </button>
         </div>
       `;
-     document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
-  showDashboardTopFeedback();
-  renderIntroCards();
-});
+
+      document.getElementById("dashboard-back-btn")?.addEventListener("click", () => {
+        showDashboardTopFeedback();
+        renderIntroCards();
+      });
     }
   }
 }
