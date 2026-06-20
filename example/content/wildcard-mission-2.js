@@ -49,7 +49,7 @@
           },
           B: {
             text: `Ignore the comment completely and continue helping another student nearby.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Adult attention stays low, but Student still needs a replacement task cue.`,
             wizard: `The Wizard keeps your attention off the performance, which helps. But the pencil drum still has classmates and a visitor to play for. Student has not yet been shown what to do instead. Ignoring is incomplete when other attention sources remain available and task engagement is not prompted.`,
             next: "step2_wobble",
@@ -62,7 +62,7 @@
           },
           C: {
             text: `Say, "Remember, we have a visitor today, so show them your best work."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This makes the visitor more important and increases the audience value.`,
             wizard: `The Wizard's spotlight snaps onto the clipboard. Student now knows the visitor matters, the class knows the visitor matters, and the math task becomes a stage. Naming the audience can strengthen audience-maintained behavior.`,
             next: "step2_escalated",
@@ -81,7 +81,7 @@
         choices: {
           A: {
             text: `Wait to reinforce until he completes several problems so the visitor does not become a bigger deal.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The instinct to keep it small is good, but the first task response needs reinforcement.`,
             wizard: `The Wizard watches the first success cool on the page. Student did the hard part under audience pressure, but the consequence waits too long. Reinforcement can be private and brief while still happening immediately.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Say loudly, "Great job staying focused even with someone watching."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. The praise is positive, but it makes the audience cue explicit.`,
             wizard: `The Wizard winces as the visitor's chair lights up again. The praise tells Student exactly what made the moment special: someone watching. The task becomes public performance instead of quiet engagement. Positive attention can still strengthen the wrong stimulus control.`,
             next: "step3_mixed",
@@ -139,7 +139,7 @@
           },
           B: {
             text: `Remind the class not to react because Student is trying to get attention.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This publicly labels the behavior and organizes the audience.`,
             wizard: `The Wizard throws up his hands as the whole class learns the performance has a name. Student's behavior becomes the topic, and the clipboard grows brighter. Publicly describing the function can accidentally deliver the function.`,
             next: "step3_risk",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Continue planned ignoring and hope the visitor and peers stop reacting quickly.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Adult attention is low, but the peer and visitor cues are still active.`,
             wizard: `The Wizard watches the audience flicker. You are not feeding it directly, but the room still is. Student has not practiced an alternative response yet. Planned ignoring works best when reinforcement for the replacement behavior is also available.`,
             next: "step3_mixed",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Turn attention back to the lesson and plan to talk with Student after the visitor leaves.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This reduces the exchange, but Student still needs a task cue now.`,
             wizard: `The Wizard redirects the camera to the lesson. That helps, but Student still holds a tiny microphone unless the task cue arrives soon. Delayed problem solving cannot replace in-the-moment replacement practice.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Tell Student the visitor is here to watch learning, not distracting behavior.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This increases the visitor's role as an audience and adds public correction.`,
             wizard: `The Wizard's alarm flashes around the clipboard. The visitor becomes part of the consequence, and the performance becomes more meaningful. Public correction linked to the audience can strengthen audience-maintained behavior.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Continue teaching and mention the success later after the visitor leaves.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Delayed feedback is weaker for building the coping routine.`,
             wizard: `The Wizard nods, but the magic is faint. The success is real, yet the reinforcement arrives after the moment has cooled. The response should contact reinforcement while the audience cue is still present.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Tell the visitor, "He is doing much better now than when you came in."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This brings the visitor back into Student's behavior story.`,
             wizard: `The Wizard blocks the clipboard too late. Student's behavior becomes visitor commentary again, and the audience cue regains power. Adult discussion about Student can function as attention even when it is positive.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Let the calm continue and avoid adding any attention to the moment.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The moment stays calm, but the replacement behavior is not strengthened.`,
             wizard: `The Wizard whispers. The moment survives, but the skill stays underpowered. Student may not know exactly what worked. Reinforcement can be quiet and still strengthen the behavior.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Use the calm moment to remind Student not to perform when visitors are in class.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This reintroduces the visitor as the focus and may restart the behavior.`,
             wizard: `The Wizard's curtain opens again. The visitor returns to the center of the story, and Student remembers the audience. Feedback should focus on the replacement behavior, not the audience trigger.`,
             ending: "mixed",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Keep ignoring the visitor-related behavior and continue the lesson.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may prevent adult attention, but peer or visitor cues may still maintain it.`,
             wizard: `The Wizard watches the room carefully. Adult attention is low, but the peer audience may still be enough to keep the performance alive. Ignoring should be paired with prompting and reinforcing the replacement response.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Tell Student he can take a break if he cannot handle having a visitor in class.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This may reinforce escape from guest-day routines.`,
             wizard: `The Wizard's alarm returns. The visitor now predicts escape from class expectations. Future observations may become even harder. Breaks should follow appropriate requests and include a planned return step.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Let Student sit quietly without task demands until the visitor leaves.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may reduce disruption, but escape from task demands is likely reinforced.`,
             wizard: `The Wizard closes the book halfway. The performance stops, but so does the work. The visitor may now signal a way out of demands. Stabilization should be followed by low-demand re-entry.`,
             ending: "mixed",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Ask the visitor to ignore Student while you explain the expected behavior again.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This keeps the visitor and behavior in the spotlight.`,
             wizard: `The Wizard's alarm lights the whole room. The visitor, the behavior, and the expectation all become public. The stage is fully built. Extended explanation and audience attention can maintain the very behavior you are trying to reduce.`,
             ending: "fail",
