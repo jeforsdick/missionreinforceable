@@ -36,7 +36,7 @@
         choices: {
           A: {
             text: `Explain why the room changed and reassure Student that the art room will be fine.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Reassurance is kind, but extra explanation may increase verbal load during uncertainty.`,
             wizard: `The Wizard unrolls a long scroll, but Student's body is still frozen. The more the explanation grows, the farther away the first step feels. The class waits, and the transition becomes a conversation instead of movement. During uncertainty, the BIP calls for brief predictability and an observable first action.`,
             next: "step2_wobble",
@@ -62,7 +62,7 @@
           },
           C: {
             text: `Tell Student, "There is no time for questions. Get in line now."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Public pressure can increase refusal, adult attention, or flight risk.`,
             wizard: `The Wizard's warning flame lights the doorway. The unexpected change now feels like a public demand, and Student has more reason to resist it. Several students watch to see what happens next. Pressure without predictability can make escape more valuable.`,
             next: "step2_escalated",
@@ -94,7 +94,7 @@
           },
           B: {
             text: `Walk beside him and keep repeating, "You're okay, we're just going to art."`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The support is calm, but repeated reassurance can keep adult attention high.`,
             wizard: `The Wizard walks beside the line, but the reassurance becomes the soundtrack of the change. Student keeps checking your face instead of using the job. Adult support should point Student toward the replacement behavior, not become the whole coping strategy.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Tell the class, "Student is our line checker today, so everyone help him do it right."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This makes Student's role public and may increase the audience.`,
             wizard: `The Wizard sees the job card turn into a spotlight. The whole class now knows Student's performance matters. What could have been quiet structure becomes public pressure. When attention is part of the pathway, jobs should be supportive, not spotlighted.`,
             next: "step3_mixed",
@@ -126,7 +126,7 @@
         choices: {
           A: {
             text: `Answer one more question, then ask Student to show you safe walking.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Safe walking is relevant, but the question loop has already been reinforced again.`,
             wizard: `The Wizard sees the question door open twice. Student receives more explanation, and the hallway waits. Safe walking may still happen, but repeated questions are becoming a way to slow the change. Repeated explanation can maintain delay when uncertainty is high.`,
             next: "step3_mixed",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Tell Student the questions need to stop because the whole class is waiting.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This adds public pressure and may intensify uncertainty or refusal.`,
             wizard: `The Wizard hears the hallway go quiet. Student feels every peer waiting on him, and the transition becomes heavier. The question is no longer about the art room. It is about the audience. Public pressure can strengthen attention and escape pathways.`,
             next: "step3_risk",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Let the class go ahead while you wait nearby for Student to calm.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The audience shrinks, but the transition routine is not actively taught.`,
             wizard: `The Wizard watches the class leave. The audience gets smaller, which helps, but Student also escaped the group transition. The return path still needs rebuilding. Stabilization should be followed by a low-demand re-entry step.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Tell Student he will lose a preferred activity if he refuses the room change.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Threats during uncertainty can intensify refusal or movement away from the routine.`,
             wizard: `The Wizard's red flame rises. The art room now predicts losing something. Student digs in because the transition feels even more dangerous. Threats add pressure without teaching the replacement response.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Keep walking and save praise until the class reaches the art room.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The transition is moving, but the flexible response needs closer reinforcement.`,
             wizard: `The Wizard watches the job success travel down the hall without a signal. Student is doing the hard part now, but the consequence is waiting somewhere else. Reinforce the flexible response while it is happening.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Tell the class, "Student is doing much better with changes today."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Public praise can turn flexibility into a spotlight.`,
             wizard: `The Wizard's hallway lights swing toward Student. The class hears his history with changes, and the quiet job becomes public performance. Reinforcement should be private when public attention can strengthen behavior.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Let him join silently so the transition does not become a bigger deal.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Low attention helps, but the flexible return is not reinforced.`,
             wizard: `The Wizard keeps the hallway quiet, which matters. But Student's successful return slips by without a clear signal. Reinforcement can be private and still be immediate.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Review why he cannot refuse before allowing him to walk with the class.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Processing before re-entry can restart resistance and delay the transition.`,
             wizard: `The Wizard sees the bridge pause just before Student crosses it. The refusal story returns, and the art room waits in the distance. Process later, after regulation and successful re-entry.`,
             ending: "mixed",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Continue reassuring Student until he appears fully comfortable with the change.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Reassurance may keep calm, but adult attention is doing most of the work.`,
             wizard: `The Wizard watches the support stretch. Student stays near the routine, but he keeps borrowing your calm instead of practicing his own transition step. Adult support should fade toward a reinforced replacement behavior.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Remind Student that next time he needs to handle changes faster.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This adds pressure after a difficult transition and may make future changes more aversive.`,
             wizard: `The Wizard's glow dims. The transition ends with pressure, not confidence. Student may dread the next surprise even more. Feedback after difficulty should strengthen the replacement path, not increase aversiveness.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Wait quietly and avoid interaction until Student looks more settled.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may prevent escalation, but the coping path remains unclear.`,
             wizard: `The Wizard keeps the room dim. Nothing gets worse, but nothing is taught yet. The next unexpected change may look the same. Stabilization needs to be followed by replacement practice.`,
             ending: "mixed",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Have Student explain why the transition became difficult before he rejoins.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Explanation demands can restart escalation and delay re-entry.`,
             wizard: `The Wizard sounds the alarm. The new room becomes another conversation about failure. Student moves farther from participation and closer to escape. Reflection belongs after regulation, re-entry, and reinforcement.`,
             ending: "fail",
