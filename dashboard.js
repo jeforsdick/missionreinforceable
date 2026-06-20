@@ -6,8 +6,11 @@
 
 function dashboardResultLabel(delta) {
   const n = Number(delta);
-  if (n > 0) return "Correct";
-  if (n <= 0) return "Missed";
+
+  if (n >= 10) return "Correct";
+  if (n >= 5) return "Review";
+  if (n >= 0) return "Missed";
+
   return "Review";
 }
 
@@ -26,9 +29,9 @@ function dashboardMakeCoachSummary(sessions, decisions) {
   const avg = dashboardAveragePercent(sessions);
   const allDecisions = decisions || [];
 
-  const incorrect = allDecisions.filter(d => Number(d.delta) < 0).length;
-  const neutral = allDecisions.filter(d => Number(d.delta) === 0).length;
-  const correct = allDecisions.filter(d => Number(d.delta) > 0).length;
+const incorrect = allDecisions.filter(d => Number(d.delta) < 5).length;
+const neutral = allDecisions.filter(d => Number(d.delta) >= 5 && Number(d.delta) < 10).length;
+const correct = allDecisions.filter(d => Number(d.delta) >= 10).length;
 
   if (avg >= 90 && correct >= neutral + incorrect) {
     return "You are showing strong plan alignment. Your responses are consistently keeping language brief, reducing attention to problem behavior, and reinforcing the replacement behavior quickly.";
@@ -204,7 +207,7 @@ function dashboardNormalizeDecision(row) {
     session_id: String(row.session_id || row.sessionId || row["Session ID"] || ""),
     timestamp: row.timestamp || row.Timestamp || "",
     decision_time: row.decision_time || row["Decision Time"] || row.DecisionTime || "",
-    delta: Number(row.delta ?? row.Delta ?? 0),
+    score: Number(row.delta ?? row.Delta ?? 0),
     node_id: row.node_id || row["Node ID"] || ""
   };
 }
@@ -338,10 +341,12 @@ hideDashboardTopFeedback();
   const decisionRows = decisions.length
     ? decisions.map((d, index) => {
         const label = d.result || dashboardResultLabel(d.delta);
-        const className =
-          Number(d.delta) > 0 ? "correct" :
-          Number(d.delta) === 0 ? "meh" :
-          "wrong";
+        const score = Number(d.delta);
+
+const className =
+  score >= 10 ? "correct" :
+  score >= 5 ? "meh" :
+  "wrong";
 
         return `
           <div class="decision-review-card ${className}">
@@ -353,7 +358,7 @@ hideDashboardTopFeedback();
               ${dashboardEscape(d.step)}
             </div>
             <div class="decision-review-meta">
-              Delta: ${dashboardEscape(d.delta)} 
+              Score: ${dashboardEscape(d.delta)} 
               ${d.node_id ? ` | Node: ${dashboardEscape(d.node_id)}` : ""}
             </div>
           </div>
