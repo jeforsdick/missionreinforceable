@@ -65,6 +65,12 @@ setWizardSprite('meh');
 let currentScenario = null;
 let currentMode     = null;
 
+function scoreLevel(score) {
+  if (score >= 10) return 'plus';
+  if (score >= 5) return 'meh';
+  return 'minus';
+}
+
 /* -------- Hearts system -------- */
 const HEARTS_START = 3;
 
@@ -129,20 +135,20 @@ function updateHearts(delta, countsForHearts = true) {
 
   const before = hearts;
 
-  if (delta > 0) {
+  if (delta >= 10) {
     // Correct answer: no heart change
     hearts = hearts;
-  } else if (delta === 0) {
-    // Neutral/missed answer: lose 1/2 heart
+  } else if (delta >= 5) {
+    // Neutral/meh answer: lose 1/2 heart
     hearts = Math.max(0, hearts - 0.5);
   } else {
-    // Incorrect/missed answer: lose heart
+    // Incorrect/nope answer: lose whole heart
     hearts = Math.max(0, hearts - 1.0);
   }
 
   hearts = Math.round(hearts * 4) / 4;
 
-  console.log(`HEARTS: ${before} → ${hearts}, score delta: ${delta}`);
+  console.log(`HEARTS: ${before} → ${hearts}, score: ${delta}`);
 
   renderHearts();
 }
@@ -178,7 +184,7 @@ function resetGame() {
 
   setPoints(0);
   renderHearts();
-  showFeedback('', null, 0);
+  showFeedback('', null, 5);
 
   if (scenarioTitle) scenarioTitle.textContent = "Behavior Intervention Simulator";
 
@@ -201,10 +207,17 @@ function fidelityMessage() {
 /* -------- Feedback UI -------- */
 function showFeedback(text, type, scoreHint) {
   if (!feedbackEl || !feedbackTextEl) return;
+
   let state = 'meh';
-  if (typeof scoreHint === 'number') state = scoreHint > 0 ? 'plus' : scoreHint < 0 ? 'minus' : 'meh';
-  else if (type === 'correct') state = 'plus';
+
+  if (typeof scoreHint === 'number') {
+    state = scoreLevel(scoreHint);
+  } else if (type === 'correct') {
+    state = 'plus';
+  }
+
   setWizardSprite(state);
+
   feedbackEl.classList.remove('state-plus', 'state-meh', 'state-minus', 'flash');
   feedbackEl.classList.add(`state-${state}`);
   feedbackTextEl.textContent = text || '';
@@ -222,20 +235,18 @@ function escapeHTML(str) {
 }
 
 function wizardStateFromDelta(delta) {
-  if (delta > 0) return 'plus';
-  if (delta < 0) return 'minus';
-  return 'meh';
+  return scoreLevel(delta);
 }
 
 function wizardTitleFromDelta(delta) {
-  if (delta > 0) return 'The Wizard nods approvingly!';
-  if (delta === 0) return 'The Wizard pauses...';
+  if (delta >= 10) return 'The Wizard nods approvingly!';
+  if (delta >= 5) return 'The Wizard pauses...';
   return 'The Wizard sounds the alarm!';
 }
 
 function wizardButtonTextFromDelta(delta) {
-  if (delta > 0) return 'Lock in the good move ▶';
-  if (delta === 0) return 'I read it. Continue carefully ▶';
+  if (delta >= 10) return 'Lock in the good move ▶';
+  if (delta >= 5) return 'I read it. Continue carefully ▶';
   return 'I read it. Recover the mission ▶';
 }
 
@@ -245,7 +256,7 @@ function buildWizardFeedback(opt) {
   // If you later add custom wizard text in content.js, it will use that first.
   if (opt.wizard) return opt.wizard;
 
-  if (opt.delta > 0) {
+  if (opt.delta >= 10) {
     return `Strong move. The classroom stays steady because you gave the student a clear path forward.
 
 The student knows exactly what to do next, the peer audience stays quiet, and the routine keeps moving.
@@ -253,7 +264,7 @@ The student knows exactly what to do next, the peer audience stays quiet, and th
 ${base}`;
   }
 
-  if (opt.delta === 0) {
+  if (opt.delta >= 5) {
     return `The moment wobbles. The student is not fully escalated, but the support is not strong enough yet.
 
 The student pauses, scans for peer attention, and the routine starts to lose momentum. You still have a chance to tighten the next move.
@@ -787,7 +798,7 @@ const opt = {
   feedback:     ch.feedback,
   wizard:       ch.wizard || '',
   meta:         ch.meta || null,
-  feedbackType: ch.score > 0 ? 'correct' : 'coach',
+feedbackType: ch.score >= 10 ? 'correct' : 'coach',
   nextId:       ch.next ? stepIds[ch.next] : (ch.ending ? endingIds[ch.ending] : 901)
 };
       node.options.push(opt);
@@ -878,15 +889,15 @@ if (node.feedback) {
     let coachLine;
 
     if (pct >= 80) {
-      scoreHint = +10;
-      coachLine = "Mission complete. Results have been sent to the team. Review your overall feedback below.";
-    } else if (pct >= 50) {
-      scoreHint = 0;
-      coachLine = "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
-    } else {
-      scoreHint = -10;
-      coachLine = "Mission failed. Results have been sent to the team. Review your overall feedback below.";
-    }
+  scoreHint = 10;
+  coachLine = "Mission complete. Results have been sent to the team. Review your overall feedback below.";
+} else if (pct >= 50) {
+  scoreHint = 5;
+  coachLine = "Mission incomplete. Results have been sent to the team. Review your overall feedback below.";
+} else {
+  scoreHint = 0;
+  coachLine = "Mission failed. Results have been sent to the team. Review your overall feedback below.";
+}
 
     showFeedback(coachLine, null, scoreHint);
     sendResultsOnce();
@@ -962,7 +973,7 @@ const options = shuffledOptions(node.options);
   if (opt.feedback) {
     showFeedback(opt.feedback, opt.feedbackType || 'coach', opt.delta);
   } else if (!node.feedback) {
-    showFeedback('', null, 0);
+    showFeedback('', null, 5);
   }
 
   const goToNextNode = () => {
