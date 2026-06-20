@@ -49,7 +49,7 @@
           },
           B: {
             text: `Remind the class to be kind and make good choices while you organize the next materials.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The reminder is appropriate, but it is not structured enough for a known trigger.`,
             wizard: `The Wizard hears the reminder float across the room like mist. It is not wrong, but it does not give Student a place, activity, or replacement response. The peer smile is still more concrete than the expectation. General expectations are weaker than specific choices and boundaries during unstructured time.`,
             next: "step2_wobble",
@@ -62,7 +62,7 @@
           },
           C: {
             text: `Call Student over and say, "Stop bothering people. You need to stay away from that peer."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Public correction may increase adult attention and make the peer interaction more powerful.`,
             wizard: `The Wizard's alarm flashes over the peer pair. Student got adult attention, the peer is now named as important, and open time has a new stage. Public correction can strengthen the attention pathway when peer reactions are part of the function.`,
             next: "step2_escalated",
@@ -94,7 +94,7 @@
           },
           B: {
             text: `Let Student transition independently because he already picked an activity.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The choice helped, but the location response is still weak.`,
             wizard: `The Wizard watches Student hover. The activity choice opened the door, but the peer is still pulling like a magnet. Without a location prompt, the choice may not become safe engagement. During known trigger routines, independence may need to be shaped after a reinforced first step.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Tell Student, "You chose drawing, so stop wandering and go do it."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This adds adult attention without teaching the next response.`,
             wizard: `The Wizard winces as the correction keeps wandering in the spotlight. Student hears pressure before he has a clear landing place. The peer interaction still glows nearby. Corrective language does not replace a prompted, reinforced location response.`,
             next: "step3_mixed",
@@ -139,7 +139,7 @@
           },
           B: {
             text: `Tell the peer to ignore it and remind Student to keep his body calm.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Ignoring may help, but the routine still lacks structure.`,
             wizard: `The Wizard sees the peer trying, but the room is still loose. Ignoring helps only if Student has something better to do with his body and attention. Reducing attention should be paired with a replacement activity and reinforcement.`,
             next: "step3_mixed",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Warn Student that one more bump means he loses open-time choice.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Threats add attention and can make the moment more dramatic.`,
             wizard: `The Wizard's red light glows over the open-time choices. The behavior now controls the stakes of the room. Student may push once more just to test the boundary. Threats can increase adult attention without teaching safe engagement.`,
             next: "step3_risk",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Separate Student from the peer and wait silently until the group settles.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Safety may improve, but replacement behavior is not taught clearly.`,
             wizard: `The Wizard steadies the room. The bumping may stop, but Student has not learned what to do during open time instead. Separation can reduce immediate risk, but it needs a re-entry or replacement activity.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Explain publicly that bumping is unsafe and Student needs to apologize now.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Public processing can intensify peer-maintained behavior.`,
             wizard: `The Wizard's alarm rings. The whole room is now part of the consequence. Student has more audience than before, and the peer conflict grows. Apology and processing demands should wait until regulation and re-entry are stable.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Let Student draw quietly and avoid interrupting the calm moment with reinforcement.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Calm is good, but the safe behavior is not strengthened.`,
             wizard: `The Wizard whispers, almost. The quiet is good, but the plan needs the safe behavior to be noticed before it fades into the room's noise. Reinforcement can be brief and private without disrupting calm.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Tell nearby peers to notice that Student is finally making a better choice.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This returns peer attention to Student's behavior.`,
             wizard: `The Wizard blocks the spotlight, but too late. Peers look over again. The safe choice becomes a performance instead of a routine. Reinforcement should not rebuild the peer audience.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Let Student continue the activity and monitor from across the room.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The activity is safer, but support fades before the routine is strong.`,
             wizard: `The Wizard watches from a distance. Student is safer, but the peer magnet is still in the room. The routine may hold, or it may wobble again. Fade support after the replacement behavior contacts reinforcement.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Use the calm moment to explain why bumping peers causes problems.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Processing may pull attention back to the peer behavior.`,
             wizard: `The Wizard raises a warning hand. Student was almost out of the peer loop. The explanation brings the bumping story back to center stage. Process later, after safe engagement and re-entry are stable.`,
             ending: "mixed",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Keep the room calm and wait to see whether Student stays settled.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may preserve calm, but the replacement routine remains weak.`,
             wizard: `The Wizard waits with the room. Nothing explodes, but the skill is still thin. Open time may be hard again tomorrow. Waiting is not the same as teaching safe engagement.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Tell Student the next open time will be removed if this happens again.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Threats may make unstructured time more aversive and do not teach replacement behavior.`,
             wizard: `The Wizard darkens the open-time card. The routine now predicts future loss, not supported success. Student may comply briefly, but the next open time becomes more loaded. Threats add pressure without building safe engagement fluency.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Separate Student and wait quietly until the lunch transition begins.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may prevent more conflict, but replacement behavior is not practiced.`,
             wizard: `The Wizard contains the scene. It may prevent more bumping, but open time became something to survive rather than something to learn. Stabilization should be followed by low-demand re-entry.`,
             ending: "mixed",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Require Student to apologize to the peer before he can do another activity.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity during activation. Social demands can prolong the performance.`,
             wizard: `The Wizard's alarm returns. The peer is now even more central. Student is pulled deeper into the social conflict instead of toward safe engagement. Apology and reflection should wait until regulation and re-entry are stable.`,
             ending: "fail",
