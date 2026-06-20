@@ -36,7 +36,7 @@
         choices: {
           A: {
             text: `From the front, remind Student that respectful learners keep hands and feet to themselves.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Public correction increases the audience and may strengthen the behavior.`,
             wizard: `The Wizard's robe snaps as twenty faces turn. Student's whisper becomes the main event. The sound card disappears from the room's attention, and the peer laugh gets bigger. When peer attention is part of the pathway, public correction can function as reinforcement.`,
             next: "step2_escalated",
@@ -49,7 +49,7 @@
           },
           B: {
             text: `Keep teaching and ignore it because the comment was quiet and you do not want to feed it.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. Adult attention stays low, but peer attention is already starting.`,
             wizard: `The Wizard watches the tiny laugh land. Adult attention stays low, which helps, but the peer payoff is still alive. Student now has room to test whether a slightly bigger move gets a bigger reaction. Planned ignoring is weak when peers continue to reinforce the behavior.`,
             next: "step2_wobble",
@@ -94,7 +94,7 @@
           },
           B: {
             text: `Wait to praise him until he participates for the rest of the lesson.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The first re-entry response needs reinforcement now, not later.`,
             wizard: `The Wizard sees the moment cooling. Student did the hard part, but the signal is delayed. The plan's target behavior is quiet and fragile, so it needs to matter immediately. Reinforce re-entry before expecting sustained engagement.`,
             next: "step3_mixed",
@@ -107,7 +107,7 @@
           },
           C: {
             text: `Tell the nearby peers, "Thank you for not laughing. That helps Student."`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This brings the peer audience back into Student's behavior.`,
             wizard: `The Wizard winces as the audience returns by invitation. Student hears his name linked to peer reactions, and the routine becomes social again instead of instructional. Avoid making peers part of the consequence when peer attention is a maintaining variable.`,
             next: "step3_mixed",
@@ -139,7 +139,7 @@
           },
           B: {
             text: `Pause the lesson and ask Student whether he needs a break from the rug.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. The disruption may produce escape from whole-group instruction.`,
             wizard: `The Wizard sees the rug turn into a trapdoor. Student tapped a peer and the task opened into a break. The sound-card routine loses strength because disruption changed the demand. Breaks should follow appropriate requests, not peer disruption.`,
             next: "step3_risk",
@@ -152,7 +152,7 @@
           },
           C: {
             text: `Continue teaching and monitor him closely for a few more seconds.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The moment stays calm, but the peer-attention pathway is still available.`,
             wizard: `The Wizard keeps one eye on the peer. Nothing has exploded, but Student still has access to the reaction he was testing. The routine is surviving, not strengthening. Monitoring alone does not teach or reinforce the replacement behavior.`,
             next: "step3_mixed",
@@ -184,7 +184,7 @@
           },
           B: {
             text: `Tell him you will talk after the lesson and continue from the front.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This stops the public exchange, but does not prompt re-entry.`,
             wizard: `The Wizard turns the lesson forward, which helps. But Student is still loose at the edge of the routine. The peer audience may fade, or it may wait for the next spark. Stopping attention is useful, but the BIP also requires active re-entry.`,
             next: "step3_mixed",
@@ -197,7 +197,7 @@
           },
           C: {
             text: `Move him away from the rug until he is ready to participate appropriately.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity unless safety requires it. This may reinforce escape and public attention.`,
             wizard: `The Wizard's alarm rings as Student leaves with the whole class watching. The rug demand disappears, the audience is huge, and the disruption has purchased exactly what the BIP is trying to prevent. Removal can strengthen both escape and attention pathways.`,
             next: "step3_risk",
@@ -229,7 +229,7 @@
           },
           B: {
             text: `Give a loud class praise statement about how everyone is doing better now.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. The classwide praise pulls attention back to the previous disruption.`,
             wizard: `The Wizard shields the sound card too late. The class hears that something has been repaired, and Student feels the spotlight flicker back on. Reinforcement should not recreate the audience cue.`,
             ending: "mixed",
@@ -242,7 +242,7 @@
           },
           C: {
             text: `Stay beside him for the whole lesson to make sure he does not start again.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may maintain calm, but it risks making adult proximity necessary.`,
             wizard: `The Wizard stands close, perhaps too close. Student stays quiet, but the adult support is doing more work than the routine itself. Support should fade as soon as the replacement response is stable.`,
             ending: "mixed",
@@ -274,7 +274,7 @@
           },
           B: {
             text: `Let the moment pass without feedback so it does not become a bigger deal.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. The re-entry behavior happened, but it was not strengthened.`,
             wizard: `The Wizard whispers with you, and the room stays calm. But Student may not know which part worked: silence, waiting, or returning to the card. Low-key reinforcement can still be immediate and specific.`,
             ending: "mixed",
@@ -287,7 +287,7 @@
           },
           C: {
             text: `Quietly remind him that the next disruption means he will leave the rug.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. Threats add attention and make the rug feel more aversive.`,
             wizard: `The Wizard's warning light darkens the rug. Student just re-entered, but now the routine carries a threat. The next card feels heavier than it needs to. Consequence threats do not teach the replacement response.`,
             ending: "fail",
@@ -319,7 +319,7 @@
           },
           B: {
             text: `Continue the lesson and hope the peer interest fades on its own.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may work briefly, but the replacement response is still weak.`,
             wizard: `The Wizard watches the peer audience dim but not disappear. The class survives the moment, but Student's participation pathway is still underbuilt. Absence of disruption is not the same as strengthened replacement behavior.`,
             ending: "mixed",
@@ -332,7 +332,7 @@
           },
           C: {
             text: `Ask the peers near him to move away so Student can make better choices.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This publicly centers Student and may increase social attention.`,
             wizard: `The Wizard sees the seating change become a public announcement. Student's behavior rearranges peers, space, and adult action. That is a powerful outcome. Environmental changes should be planned quietly, not delivered as a public consequence.`,
             ending: "fail",
@@ -364,7 +364,7 @@
           },
           B: {
             text: `Have him sit out until he can explain how to participate safely.`,
-            score: -10,
+            score: 0,
             feedback: `Low fidelity. This delays instruction and adds language after escalation.`,
             wizard: `The Wizard closes the lesson gate. Student escapes the hard part and receives an adult conversation instead. The sound-card routine loses more ground. Processing before regulation and re-entry can strengthen escape.`,
             ending: "fail",
@@ -377,7 +377,7 @@
           },
           C: {
             text: `Wait quietly until the class attention returns to the lesson.`,
-            score: 0,
+            score: 5,
             feedback: `Developing fidelity. This may reduce attention, but it does not actively teach re-entry.`,
             wizard: `The Wizard waits for the spotlight to fade. It may fade, but Student still lacks a clear path back to the card, the group, and the routine. Stabilization needs to be followed by replacement practice.`,
             ending: "mixed",
