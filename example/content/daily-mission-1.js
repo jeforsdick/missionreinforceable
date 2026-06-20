@@ -81,7 +81,7 @@
         choices: {
           A: {
             text: `Tell him, "Good choice. Now finish the sentence so we can keep moving."`,
-            score: 5,
+            score: 0,
             feedback: `Developing fidelity. You acknowledged the choice, but the next demand grew too quickly before reinforcement landed.`,
             wizard: `The Wizard sees the doorway widen too fast. Student made one brave move, but now the full sentence rushes back at him. His pencil slows because the task has become large again before the first response was strengthened. Increase task demands gradually after reinforcement, not before.`,
             next: "step3_mixed",
