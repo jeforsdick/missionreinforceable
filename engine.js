@@ -425,19 +425,50 @@ let SESSION_ID  = newSessionId();
 let events      = [];
 let sentThisRun = false;
 
+function resultLabelFromDelta(delta) {
+  if (delta >= 10) return "Correct";
+  if (delta >= 5) return "Partial";
+  return "Incorrect";
+}
+
+function getCorrectAnswerForNode(node) {
+  if (!node || !Array.isArray(node.options)) return "";
+
+  const correct = node.options.find(o => typeof o.delta === "number" && o.delta >= 10);
+  return correct ? correct.text : "";
+}
+
 function logDecision(nodeId, opt) {
+  const node = getNode(nodeId);
+
   events.push({
     t: new Date().toISOString(),
+
+    // Existing fields — keep these so your current sheet does not break
     nodeId,
     delta: typeof opt.delta === 'number' ? opt.delta : null,
     choice: opt.text,
     meta: opt.meta || null,
+
+    // Mission/context fields you already started collecting
     mission_id: currentScenario?.id || null,
     mission_title: currentScenario?.title || null,
     mission_focus: currentScenario?.focus || null,
     routine: currentScenario?.routine || null,
     function_pressure: currentScenario?.functionPressure || null,
-    bip_targets: currentScenario?.bipTargets || null
+    bip_targets: currentScenario?.bipTargets || null,
+
+    // NEW coaching/context fields
+    result_label: resultLabelFromDelta(typeof opt.delta === 'number' ? opt.delta : 0),
+    scenario_title: node?.scenario || currentScenario?.title || "",
+    scenario_text: node?.text || "",
+    scene_text: node?.scene || "",
+    question_prompt: node?.prompt || "",
+    selected_answer: opt.text || "",
+    selected_score: typeof opt.delta === 'number' ? opt.delta : null,
+    correct_answer: getCorrectAnswerForNode(node),
+    wizard_feedback: opt.feedback || "",
+    wizard_narration: buildWizardFeedback(opt) || ""
   });
 }
 /* -------- Same-Day Completion / Return Screen -------- */
